@@ -8,11 +8,11 @@ import torch
 import pymanopt
 from pymanopt.manifolds import Stiefel
 from pymanopt import Problem
-from pymanopt.solvers import SteepestDescent
+#from pymanopt.solvers import SteepestDescent
 
 D1 = None
 D2 = None
-V1 = None
+# V1 = None
 V2 = None
 Cor1 = None
 Cor2 = None

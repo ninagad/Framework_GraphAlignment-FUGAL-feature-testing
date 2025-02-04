@@ -167,7 +167,7 @@ def main(data, iter,simple,mu):
     P1=convex_initTun(A, B, D,K, mu, iter)
     return P1
 import numpy as np
-from scipy.optimize.linesearch import scalar_search_armijo
+from scipy.optimize._linesearch import scalar_search_armijo
 from ot.lp import emd
 from scipy.sparse.csgraph import shortest_path
 def solve_1d_linesearch_quad_funct(a,b,c):

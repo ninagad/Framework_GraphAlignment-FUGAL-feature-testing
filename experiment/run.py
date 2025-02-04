@@ -29,12 +29,12 @@ def format_output(res):
     #     cost = sps.csr_matrix(cost)
 
     if sps.issparse(sim):
-        sim = sim.A
-        # res[0] = sim.A
+        sim = sim.toarray()
+        # res[0] = sim.toarray()
 
     if sps.issparse(cost):
-        cost = cost.A
-        # res[1] = cost.A
+        cost = cost.toarray()
+        # res[1] = cost.toarray()
 
     return sim, cost
 
@@ -150,7 +150,7 @@ def preprocess(Src, Tar, gt, _run, addgt=False):
     gt0 = np.arange(gt[0].size)
 
     L = sps.coo_matrix((np.ones(gt0.size).tolist(
-    ), (gt0.tolist(), gt1.tolist())), shape=(gt0.size, gt0.size)).A
+    ), (gt0.tolist(), gt1.tolist())), shape=(gt0.size, gt0.size)).toarray()
 
     # n = 500
     # x = 30
@@ -266,7 +266,7 @@ def e_to_G(e, n):
     G += G.T
     G.data = G.data.clip(0, 1)
     # return G
-    return G.A
+    return G.toarray()
 
 
 @ ex.capture
