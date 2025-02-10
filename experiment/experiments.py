@@ -371,12 +371,13 @@ def real():
     #run = [1, 2, 3, 4, 5, 6]
     #run = [0,1,2,3,4,5,6,9,10,11,12,13,14,15]
     #run=[12,13,14,15,16,17,18]
-    run=[19]
+    run=[12]
     #run=[1,2,3,4,5,7,8,9,10,11,12,13,14]
     iters = 1
     #print("start")
     graph_names = [             # n     / e
-        "ca-netscience",       # 379   / 914   / connected
+        #"ca-netscience",       # 379   / 914   / connected
+        "barabasi",
         #"voles",
         #"high-school",
         #"yeast",
