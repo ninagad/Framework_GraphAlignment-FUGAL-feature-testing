@@ -238,7 +238,10 @@ _Fugal_args={
     'iter': 15,
     #'iter': 15, for xx dataset.
     #'simple': True,
-    'features': ['deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors'],
+    'features': [#'deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
+                 #'sum_ego_deg', 'var_ego_deg', 'sum_ego_cluster', 'var_ego_cluster',  # Augmented NETSIMILE features
+                 'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
+                 ],
     'mu': 1,#1 MM,are,net --0.1 ce--2 eu
 }
 _Fugal2_args={

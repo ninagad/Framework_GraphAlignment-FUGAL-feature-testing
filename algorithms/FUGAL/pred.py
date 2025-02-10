@@ -10,6 +10,8 @@ from multiprocessing import Pool
 import scipy
 from sklearn.metrics.pairwise import euclidean_distances
 from algorithms.FUGAL.sinkhorn import sinkhorn,sinkhorn_epsilon_scaling,sinkhorn_knopp,sinkhorn_stabilized
+from scipy import stats
+
 
 def plot(graph1, graph2):
     plt.figure(figsize=(12,4))
@@ -35,56 +37,58 @@ def feature_extraction(G,features):
     node_features (float): the Nx7 matrix of node features."""
 
     # necessary data structures
-    node_features = np.zeros(shape=(G.number_of_nodes(), 7))
+    node_features = np.zeros(shape=(G.number_of_nodes(), len(features)))
     node_list = sorted(G.nodes())
     node_degree_dict = dict(G.degree())
     node_clustering_dict = dict(nx.clustering(G))
     egonets = {n: nx.ego_graph(G, n) for n in node_list}
 
+    neighbor_degs = [[node_degree_dict[m] for m in egonets[n].nodes if m != n]
+        if node_degree_dict[n] > 0
+        else 0
+        for n in node_list
+    ]
+
+    neighbor_cluster = [[node_clustering_dict[m] for m in egonets[n].nodes if m != n]
+            if node_degree_dict[n] > 0
+            else 0
+            for n in node_list
+    ]
+
+# NETSIMILE features:
     # node degrees
     if 'deg' in features:
         degs = [node_degree_dict[n] for n in node_list]
 
-        node_features[:, 0] = degs
+        node_features[:, features.index('deg')] = degs
 
     # clustering coefficient
-    
     if 'cluster' in features:
         clusts = [node_clustering_dict[n] for n in node_list]
 
-        node_features[:, 1] = clusts
+        node_features[:, features.index('cluster')] = clusts
 
     # average degree of neighborhood
     if 'avg_ego_deg' in features:
-        neighbor_degs = [
-            np.mean([node_degree_dict[m] for m in egonets[n].nodes if m != n])
-            if node_degree_dict[n] > 0
-            else 0
-            for n in node_list
-        ]
+        avg_neighbor_degs = [np.mean(degs) for degs in neighbor_degs]
 
-        node_features[:, 2] = neighbor_degs
+        node_features[:, features.index('avg_ego_deg')] = avg_neighbor_degs
+
 
     # average clustering coefficient of neighborhood
     if 'avg_ego_cluster' in features:
-        neighbor_clusts = [
-            np.mean([node_clustering_dict[m] for m in egonets[n].nodes if m != n])
-            if node_degree_dict[n] > 0
-            else 0
-            for n in node_list
-        ]
+        neighbor_clusts = [np.mean(cluster_coeffs) for cluster_coeffs in neighbor_cluster]
 
-        node_features[:, 3] = neighbor_clusts
+        node_features[:, features.index('avg_ego_cluster')] = neighbor_clusts
 
     # number of edges in the neighborhood
-
     if 'ego_edges' in features:
         neighbor_edges = [
             egonets[n].number_of_edges() if node_degree_dict[n] > 0 else 0
             for n in node_list
         ]
 
-        node_features[:, 4] = neighbor_edges
+        node_features[:, features.index('ego_edges')] = neighbor_edges
 
     # number of outgoing edges from the neighborhood
     # the sum of neighborhood degrees = 2*(internal edges) + external edges
@@ -101,7 +105,7 @@ def feature_extraction(G,features):
             for i in node_list
         ]
 
-        node_features[:, 5] = neighbor_outgoing_edges
+        node_features[:, features.index('ego_out_edges')] = neighbor_outgoing_edges
 
     # number of neighbors of neighbors (not in neighborhood)
     if 'ego_neighbors' in features:
@@ -116,7 +120,67 @@ def feature_extraction(G,features):
             for n in node_list
         ]
 
-        node_features[:, 6] = neighbors_of_neighbors
+        node_features[:, features.index('ego_neighbors')] = neighbors_of_neighbors
+
+# Augmented NETSIMILE FEATURES
+    # sum of degrees in the neighborhood
+    if 'sum_ego_deg' in features:
+        sum_neighbor_degs = [np.sum(degs) for degs in neighbor_degs]
+
+        node_features[:,features.index('sum_ego_deg')] = sum_neighbor_degs
+
+    if 'var_ego_deg' in features:
+        var_neighbor_degs = [np.var(degs) for degs in neighbor_degs]
+
+        node_features[:, features.index('var_ego_deg')] = var_neighbor_degs
+
+    if 'sum_ego_cluster' in features:
+        sum_neighbor_cluster = [np.sum(cluster_coeffs) for cluster_coeffs in neighbor_cluster]
+
+        node_features[:, features.index('sum_ego_cluster')] = sum_neighbor_cluster
+
+    if 'var_ego_cluster' in features:
+        var_neighbor_cluster = [np.var(cluster_coeffs) for cluster_coeffs in neighbor_cluster]
+
+        node_features[:, features.index('var_ego_cluster')] = var_neighbor_cluster
+
+# OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis)
+    if 'mode_ego_degs' in features:
+        # stats.mode returns the mode and the count. We extract the mode with [0].
+        mode_neighbor_degs = [stats.mode(degs)[0] for degs in neighbor_degs]
+
+        node_features[:, features.index('mode_ego_degs')] = mode_neighbor_degs
+
+    if 'median_ego_degs' in features:
+        median_neighbor_degs = [np.median(degs) for degs in neighbor_degs]
+
+        node_features[:, features.index('median_ego_degs')] = median_neighbor_degs
+
+    if 'min_ego_degs' in features:
+        min_neighbor_degs = [np.min(degs) for degs in neighbor_degs]
+
+        node_features[:, features.index('min_ego_degs')] = min_neighbor_degs
+
+    if 'max_ego_degs' in features:
+        max_neighbor_degs = [np.max(degs) for degs in neighbor_degs]
+
+        node_features[:, features.index('max_ego_degs')] = max_neighbor_degs
+
+    if 'range_ego_degs' in features:
+        range_neighbor_degs = [np.max(degs) - np.min(degs) for degs in neighbor_degs]
+
+        node_features[:, features.index('range_ego_degs')] = range_neighbor_degs
+
+    if 'skewness_ego_degs' in features:
+        skew_neighbor_degs = [stats.skew(degs) for degs in neighbor_degs]
+
+        node_features[:, features.index('skewness_ego_degs')] = skew_neighbor_degs
+
+    if 'kurtosis_ego_degs' in features:
+        kurtosis_neighbor_degs = [stats.kurtosis(degs) for degs in neighbor_degs]
+
+        node_features[:, features.index('kurtosis_ego_degs')] = kurtosis_neighbor_degs
+
 
 
     node_features = np.nan_to_num(node_features)
