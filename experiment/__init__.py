@@ -237,7 +237,8 @@ _GrampaS_args = {
 _Fugal_args={
     'iter': 15,
     #'iter': 15, for xx dataset.
-    'simple': True,
+    #'simple': True,
+    'features': ['deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors'],
     'mu': 1,#1 MM,are,net --0.1 ce--2 eu
 }
 _Fugal2_args={

@@ -21,7 +21,7 @@ def plot(graph1, graph2):
     nx.draw(graph2)
     plt.savefig('x1.png')
 
-def feature_extraction(G,simple):
+def feature_extraction(G,features):
     """Node feature extraction.
 
     Parameters
@@ -42,40 +42,54 @@ def feature_extraction(G,simple):
     egonets = {n: nx.ego_graph(G, n) for n in node_list}
 
     # node degrees
-    degs = [node_degree_dict[n] for n in node_list]
+    if 'deg' in features:
+        degs = [node_degree_dict[n] for n in node_list]
+
+        node_features[:, 0] = degs
 
     # clustering coefficient
     
-    clusts = [node_clustering_dict[n] for n in node_list]
+    if 'cluster' in features:
+        clusts = [node_clustering_dict[n] for n in node_list]
+
+        node_features[:, 1] = clusts
 
     # average degree of neighborhood
-    neighbor_degs = [
-        np.mean([node_degree_dict[m] for m in egonets[n].nodes if m != n])
-        if node_degree_dict[n] > 0
-        else 0
-        for n in node_list
-    ]
+    if 'avg_ego_deg' in features:
+        neighbor_degs = [
+            np.mean([node_degree_dict[m] for m in egonets[n].nodes if m != n])
+            if node_degree_dict[n] > 0
+            else 0
+            for n in node_list
+        ]
+
+        node_features[:, 2] = neighbor_degs
 
     # average clustering coefficient of neighborhood
-    neighbor_clusts = [
-        np.mean([node_clustering_dict[m] for m in egonets[n].nodes if m != n])
-        if node_degree_dict[n] > 0
-        else 0
-        for n in node_list
-    ]
+    if 'avg_ego_cluster' in features:
+        neighbor_clusts = [
+            np.mean([node_clustering_dict[m] for m in egonets[n].nodes if m != n])
+            if node_degree_dict[n] > 0
+            else 0
+            for n in node_list
+        ]
+
+        node_features[:, 3] = neighbor_clusts
 
     # number of edges in the neighborhood
 
-    if simple==False:
+    if 'ego_edges' in features:
         neighbor_edges = [
             egonets[n].number_of_edges() if node_degree_dict[n] > 0 else 0
             for n in node_list
         ]
 
+        node_features[:, 4] = neighbor_edges
+
     # number of outgoing edges from the neighborhood
     # the sum of neighborhood degrees = 2*(internal edges) + external edges
     # node_features[:,5] = node_features[:,0] * node_features[:,2] - 2*node_features[:,4]
-    if simple==False:
+    if 'ego_out_edges' in features:
         neighbor_outgoing_edges = [
             len(
                 [
@@ -85,10 +99,12 @@ def feature_extraction(G,simple):
                 ]
             )
             for i in node_list
-        ]   
+        ]
+
+        node_features[:, 5] = neighbor_outgoing_edges
 
     # number of neighbors of neighbors (not in neighborhood)
-    if simple==False:
+    if 'ego_neighbors' in features:
         neighbors_of_neighbors = [
             len(
                 set([p for m in G.neighbors(n) for p in G.neighbors(m)])
@@ -100,15 +116,8 @@ def feature_extraction(G,simple):
             for n in node_list
         ]
 
-    # assembling the features
-    node_features[:, 0] = degs
-    node_features[:, 1] = clusts
-    node_features[:, 2] = neighbor_degs
-    node_features[:, 3] = neighbor_clusts
-    if (simple==False):
-        node_features[:, 4] = neighbor_edges #create if statement
-        node_features[:, 5] = neighbor_outgoing_edges#
-        node_features[:, 6] = neighbors_of_neighbors#
+        node_features[:, 6] = neighbors_of_neighbors
+
 
     node_features = np.nan_to_num(node_features)
     return np.nan_to_num(node_features)

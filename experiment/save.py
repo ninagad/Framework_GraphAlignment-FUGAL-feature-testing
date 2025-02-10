@@ -89,6 +89,10 @@ def saveexls(res4, dim1, dim2, dim3, dim4, filename):
 
 @ex.capture
 def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1):
+    # dim2 stores the names of evaluation metrics
+    # res2 stores the values of different evaluation measures
+    # dim3 stores the noise-levels
+    # res3
 
     for i1, res2 in enumerate(res3):
         plt.figure()
@@ -96,7 +100,7 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
             if np.all(res1 >= 0):
                 plt.plot(dim3, res1, label=dim2[i2])
         plt.xlabel(xlabel)
-        plt.xticks(dim3)
+        plt.xticks(dim3)  # dim3 is the noise-levels
         if plot_type == 1:
             plt.ylabel("Accuracy")
             plt.ylim([-0.1, 1.1])

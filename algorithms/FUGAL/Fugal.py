@@ -29,7 +29,7 @@ def are_matrices_equal(matrix1, matrix2):
     return True
 
 
-def main(data, iter,simple,mu,EFN=5):
+def main(data, iter, mu, features,EFN=5):
     print("Fugal")
     torch.set_num_threads(40)
     dtype = np.float64
@@ -54,7 +54,7 @@ def main(data, iter,simple,mu,EFN=5):
     Tar1=nx.from_numpy_array(Tar)
     A = torch.tensor((Src), dtype = torch.float64)
     B = torch.tensor((Tar), dtype = torch.float64)
-    simple=True
+    #simple=True
     #
     #
     if (EFN<5):
@@ -62,8 +62,8 @@ def main(data, iter,simple,mu,EFN=5):
         F2 = Degree_Features(Tar1,EFN)*n1
     #EFN 5 equals fugal
     if (EFN==5):
-        F1 = feature_extraction(Src1,simple)
-        F2 = feature_extraction(Tar1,simple)
+        F1 = feature_extraction(Src1, features)
+        F2 = feature_extraction(Tar1, features)
     D = eucledian_dist(F1, F2, n)
     D = torch.tensor(D, dtype = torch.float64)
     
