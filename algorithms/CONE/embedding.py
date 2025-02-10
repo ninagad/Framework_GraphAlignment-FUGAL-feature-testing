@@ -1,15 +1,9 @@
 import numpy as np
 from scipy import sparse
-<<<<<<< HEAD
+
 import pytensor
 from pytensor import tensor as T
 
-=======
-#import theano
-#from theano import tensor as T
-import pytensor
-from pytensor import tensor as T
->>>>>>> upstream/master
 
 # Full NMF matrix (which NMF factorizes with SVD)
 # Taken from MILE code

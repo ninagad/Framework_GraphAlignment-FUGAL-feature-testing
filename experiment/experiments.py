@@ -374,16 +374,20 @@ def real():
     run=[12]
     #run=[1,2,3,4,5,7,8,9,10,11,12,13,14]
     iters = 1
+
+    accs = [0, 6]
+
+    seed = 937
+
     #print("start")
     graph_names = [             # n     / e
         #"ca-netscience",       # 379   / 914   / connected
-        "barabasi",
         #"voles",
         #"high-school",
         #"yeast",
         #"MultiMagna",
         
-        #"bio-celegans",         # 453   / 2k    / connected
+        "bio-celegans",         # 453   / 2k    / connected
         #"in-arenas",            # 1.1k  / 5.4k  / connected
         
         #"arenad",
@@ -421,7 +425,6 @@ def real():
         # 0.03,
         # 0.04,
         # 0.05,
-
         0.00,
         #0.05,
         #0.10,
