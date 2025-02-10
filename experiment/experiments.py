@@ -121,68 +121,23 @@ def alggs(tmp):
 
 @ex.named_config
 def tuning():
+    #features = ['deg','cluster','avg_ego_deg', 'avg_ego_cluster',#,'ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
+                 #'sum_ego_deg', 'var_ego_deg', 'sum_ego_cluster', 'var_ego_cluster',  # Augmented NETSIMILE features
+                 #'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
+                 #]
 
-    # tmp = [
-    #     1,  # CONE
-    #     [
-    #         {'dim': 128 * i} for i in range(1, 17)
-    #     ]
-    # ]
+    seed=937
 
-    # tmp = [
-    #     2,  # grasp
-    #     [
-    #         {'n_eig': x} for x in [128, 512, 1024]
-    #     ]
-    # ]
-    # _algs[2][2][0] = -2
-
-    # tmp = [
-    #     3,  # REGAL
-    #     [
-    #         {'untillayer': x} for x in range(1, 6)
-    #     ]
-    # ]
-
-    # tmp = [
-    #     4,  # LREA
-    #     [
-    #         {'iters': 8 * i} for i in range(1, 9)
-    #     ]
-    # ]
-
-    # tmp = [
-    #     5,  # NSD
-    #     [
-    #         {'iters': x} for x in [15, 20, 25, 30, 35, 40]
-    #     ]
-    # ]
-
-   # tmp = [
-    #    6,  # ISO
-    #    [
-            # {'lalpha': x} for x in [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 99999]
-    #        {'alpha': x} for x in [0.9, 0.91, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.98, 0.99, 0.999, 0.9999]
-    #    ]
-   # ]
-    #tmp = [
-    #    10,  # Grampa
-     #   [
-    #        {'Eigtype': x} for x in [0, 1, 2, 3, 4]
-    #    ]
-    #]
-    #tmp = [
-    #    10, # SGWL
-    #    [
-    #        {'eta': x} for x in [0.2,0.1,0.05]
-            #{'lev': x} for x in [1, 2, 3]
-    #    ]
-    #]
     tmp = [
-        13, # Fugal
+        12, # Fugal
         [
-            {'EFN': x} for x in [0,1,2,3,5]
+            {'features': [x]} for x in ['deg','cluster','avg_ego_deg', 'avg_ego_cluster',#,'ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
+                 #'sum_ego_deg', 'var_ego_deg', 'sum_ego_cluster', 'var_ego_cluster',  # Augmented NETSIMILE features
+                 #'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
+                 ]
+            #{'EFN': x} for x in [0,1,2,3,5]
             #{'lev': x} for x in [1, 2, 3]
+
         ]
     ]
 
@@ -194,13 +149,13 @@ def tuning():
 
     run = list(range(len(tmp[1])))
 
-    iters = 5
+    iters = 2
 
     graph_names = [
         #"bio-dmela",
         #"in-arenas",
         #"inf-euroroad",
-        "ca-netscience",
+        #"ca-netscience",
         "bio-celegans",
        #"inf-power",  
        # "MultiMagna"
@@ -227,14 +182,15 @@ def tuning():
     noises = [
         0.00,
         0.05,
-        0.10,
-        0.15,
-        0.20,
-        0.25,
+        #0.10,
+        #0.15,
+        #0.20,
+        #0.25,
     ]
     #s_trans = (2, 1, 0, 3)
     #s_trans = (0, 2, 1, 3,4)
-    xlabel = list(tmp[1][0].keys())[0]
+    #xlabel = list(tmp[1][0].keys())[0]
+    xlabel="Noise-level"
 
 
 def namess(tmp):

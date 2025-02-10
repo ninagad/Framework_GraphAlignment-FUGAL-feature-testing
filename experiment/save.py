@@ -103,7 +103,7 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
         plt.xticks(dim3)  # dim3 is the noise-levels
         if plot_type == 1:
             plt.ylabel("Accuracy")
-            plt.ylim([-0.1, 1.1])
+            #plt.ylim([-0.1, 1.1])
         else:
             plt.ylabel("Time[s]")
             # plt.yscale('log')
