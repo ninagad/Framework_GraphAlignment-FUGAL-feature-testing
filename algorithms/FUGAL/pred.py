@@ -181,7 +181,69 @@ def feature_extraction(G,features):
 
         node_features[:, features.index('kurtosis_ego_degs')] = kurtosis_neighbor_degs
 
+    # Assortativity of egonet
+    if 'assort_ego' in features:
+        assortativity_neighbors = [nx.degree_assortativity_coefficient(egonets[n]) for n in node_list
+                                   ]
 
+        node_features[:, features.index('assort_ego')] = assortativity_neighbors
+
+
+# Centrality measures
+
+    # Calculate centrality measures for every vertex
+    if 'closeness_centrality' in features:
+        closeness_centrality = [nx.closeness_centrality(G, u=node) for node in G.nodes()]
+
+        node_features[:, features.index('closeness_centrality')] = closeness_centrality
+
+    if 'degree_centrality' in features:
+        dc_dict = nx.degree_centrality(G)
+        degree_centrality = [dc_dict[node] for node in G.nodes()]
+
+        node_features[:, features.index('degree_centrality')] = degree_centrality
+
+    if 'eigenvector_centrality' in features:
+        ec_dict = nx.eigenvector_centrality(G, tol=0.0001, max_iter=10000)
+        eigenvector_centrality = [ec_dict[node] for node in G.nodes()]
+
+        node_features[:, features.index('eigenvector_centrality')] = eigenvector_centrality
+
+    if 'pagerank' in features:
+        pr_dict = nx.pagerank(G, tol=0.0001, max_iter=10000)
+        pagerank = [pr_dict[node] for node in G.nodes()]
+
+        node_features[:, features.index('pagerank')] = pagerank
+
+    if 'laplacian_centrality' in features:
+        laplacian_centrality = list(nx.laplacian_centrality(G).values())
+
+        node_features[:, features.index('laplacian_centrality')] = laplacian_centrality
+
+# Avg effective resistance
+    if 'avg_resist_dist' in features:
+        avg_resist_dists = [np.mean([float(nx.resistance_distance(G, node, other)) for other in G.nodes()]) for node in G.nodes()]
+
+        node_features[:, features.index('avg_resist_dist')] = avg_resist_dists
+
+# Internal vs external connectivity
+    if 'internal_frac_ego' in features:
+        ego_in_edges = [egonets[n].number_of_edges() for n in node_list]
+
+        ego_in_out_edges = [
+            len(
+                [
+                    edge
+                    for edge in set.union(*[set(G.edges(j)) for j in egonets[i].nodes])
+                ]
+            )
+            for i in node_list
+        ]
+
+        frac = [in_edges/in_out_edges if in_out_edges != 0 else 1
+                for in_edges, in_out_edges in zip(ego_in_edges, ego_in_out_edges)]
+
+        node_features[:, features.index('internal_frac_ego')] = frac
 
     node_features = np.nan_to_num(node_features)
     return np.nan_to_num(node_features)

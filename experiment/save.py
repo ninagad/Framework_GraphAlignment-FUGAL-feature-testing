@@ -101,16 +101,18 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
                 plt.plot(dim3, res1, label=dim2[i2])
         plt.xlabel(xlabel)
         plt.xticks(dim3)  # dim3 is the noise-levels
+        plt.title("FUGAL features ablation study 1")
+        plt.grid()
         if plot_type == 1:
             plt.ylabel("Accuracy")
-            #plt.ylim([-0.1, 1.1])
+            plt.ylim([-0.1, 1.1])
         else:
             plt.ylabel("Time[s]")
             # plt.yscale('log')
 
         plt.legend()
         plt.savefig(
-            f"{filename}_{dim1[i1]}.png")
+            f"{filename}_{dim1[i1]}.svg")
 
 
 def squeeze(res, dims, sq):

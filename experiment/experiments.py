@@ -121,20 +121,18 @@ def alggs(tmp):
 
 @ex.named_config
 def tuning():
-    #features = ['deg','cluster','avg_ego_deg', 'avg_ego_cluster',#,'ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
-                 #'sum_ego_deg', 'var_ego_deg', 'sum_ego_cluster', 'var_ego_cluster',  # Augmented NETSIMILE features
-                 #'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
-                 #]
-
     seed=937
 
     tmp = [
         12, # Fugal
         [
-            {'features': [x]} for x in ['deg','cluster','avg_ego_deg', 'avg_ego_cluster',#,'ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
-                 #'sum_ego_deg', 'var_ego_deg', 'sum_ego_cluster', 'var_ego_cluster',  # Augmented NETSIMILE features
+            {'features': [x]} for x in [#'deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
+                 # 'sum_ego_cluster', 'var_ego_cluster',  # Augmented NETSIMILE features
                  #'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
-                 ]
+                 # 'assort_ego',
+                 # 'closeness_centrality', 'degree_centrality', 'eigenvector_centrality', 'pagerank'
+                  'laplacian_centrality','internal_frac_ego'
+                    ]
             #{'EFN': x} for x in [0,1,2,3,5]
             #{'lev': x} for x in [1, 2, 3]
 
@@ -149,7 +147,7 @@ def tuning():
 
     run = list(range(len(tmp[1])))
 
-    iters = 2
+    iters = 4
 
     graph_names = [
         #"bio-dmela",
@@ -182,10 +180,10 @@ def tuning():
     noises = [
         0.00,
         0.05,
-        #0.10,
-        #0.15,
-        #0.20,
-        #0.25,
+        0.10,
+        0.15,
+        0.20,
+        0.25,
     ]
     #s_trans = (2, 1, 0, 3)
     #s_trans = (0, 2, 1, 3,4)
