@@ -8,9 +8,10 @@ def main():
     df = pd.DataFrame()
     dir_path = None
 
-    #runs = [22,23,25,26,28] # bio-celegans, single features
+    runs = [22,23,25,26,28] # bio-celegans, single features
     #runs = [33, 35, 36, 37] # net-science, single features
-    runs = [39, 40, 41, 42] # euroroad, single features
+    #runs = [39, 40, 41, 42] # euroroad, single features
+    #runs = [45, 46, 47, 48] # highschool, single features
     for idx in runs:
         dir_path = os.path.join(os.path.dirname(__file__), f'runs\\{idx}')
         res_path = os.path.join(dir_path, 'res\\acc.xlsx')
@@ -32,7 +33,6 @@ def main():
 
     df.rename(columns={'Unnamed: 0': 'Features', 'Unnamed: 1': 'Noise-level'}, inplace=True)
 
-    print(df)
     # Fill NaN values with the previous row values
     df['Features'] = df['Features'].ffill()
 
