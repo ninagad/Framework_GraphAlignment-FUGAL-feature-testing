@@ -122,16 +122,18 @@ def alggs(tmp):
 @ex.named_config
 def tuning():
     seed=937
+    #mu=2
+
+    #accs = [0,6]
 
     tmp = [
         12, # Fugal
         [
-            {'features': [x]} for x in [#'deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
-                 # 'sum_ego_cluster', 'var_ego_cluster',  # Augmented NETSIMILE features
+            {'features': [x]} for x in ['deg','cluster','avg_ego_deg','avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
+                 # 'sum_ego_cluster', 'var_ego_cluster', 'assortativity_ego', 'internal_frac_ego',  # Augmented NETSIMILE features and others
                  #'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
-                 # 'assort_ego',
-                 # 'closeness_centrality', 'degree_centrality', 'eigenvector_centrality', 'pagerank'
-                  'laplacian_centrality','internal_frac_ego'
+                 # 'closeness_centrality', 'degree_centrality', 'eigenvector_centrality', 'pagerank', #'laplacian_centrality',
+                 #  'eccentricity',
                     ]
             #{'EFN': x} for x in [0,1,2,3,5]
             #{'lev': x} for x in [1, 2, 3]
@@ -147,14 +149,15 @@ def tuning():
 
     run = list(range(len(tmp[1])))
 
-    iters = 4
+    iters = 1
 
     graph_names = [
+        "contacts-prox-high-school-2013_100",
         #"bio-dmela",
         #"in-arenas",
         #"inf-euroroad",
         #"ca-netscience",
-        "bio-celegans",
+        #"bio-celegans",
        #"inf-power",  
        # "MultiMagna"
         #"facebook",
