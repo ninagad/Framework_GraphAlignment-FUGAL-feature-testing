@@ -243,7 +243,7 @@ _Fugal_args={
                  #'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
                  #'assortativity_ego',
                 #],
-    'mu': 1,#1,#1 MM,are,net --0.1 ce--2 eu
+    #'mu': 1,#1,#1 MM,are,net --0.1 ce--2 eu
 }
 _Fugal2_args={
     'iter': 15,
