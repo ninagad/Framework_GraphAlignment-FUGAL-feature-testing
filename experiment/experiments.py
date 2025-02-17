@@ -122,6 +122,9 @@ def alggs(tmp):
 @ex.named_config
 def tuning():
     seed=937
+    #mu=2
+
+    #accs = [0,6]
 
     tmp = [
         12, # Fugal
@@ -152,11 +155,12 @@ def tuning():
     iters = 1
 
     graph_names = [
+        "contacts-prox-high-school-2013_100",
         #"bio-dmela",
         #"in-arenas",
         #"inf-euroroad",
         #"ca-netscience",
-        "bio-celegans",
+        #"bio-celegans",
        #"inf-power",  
        # "MultiMagna"
         #"facebook",

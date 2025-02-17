@@ -93,15 +93,28 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
     # res2 stores the values of different evaluation measures
     # dim3 stores the noise-levels
     # res3
+    print(f'dim1: \n {dim1}')
+    print(f'dim2: \n {dim2}')
+    print(f'dim3: \n {dim3}')
+
 
     for i1, res2 in enumerate(res3):
-        plt.figure()
+        plt.figure(figsize=(10, 6))
         for i2, res1 in enumerate(res2):
             if np.all(res1 >= 0):
-                plt.plot(dim3, res1, label=dim2[i2])
+                label = (dim2[i2]).strip("[']").replace("_", " ")  # Remove [, ', ] and replace _ with whitespace.
+                plt.plot(dim3, res1, label=label)
+
+        # Adjust if running on multiple graphs!
+        graph = dim1[i1]
+
         plt.xlabel(xlabel)
         plt.xticks(dim3)  # dim3 is the noise-levels
-        plt.title("FUGAL features ablation study 1")
+        #plt.title("FUGAL features ablation study")
+        plt.suptitle('Ablation study for FUGAL features', fontsize=24, x=0.43, y=0.97)
+        # TODO: Find out how to get mu dynamically!
+        plt.title(label=f'$\mu$ = 1, graph = {graph}', fontsize=16)
+
         plt.grid()
         if plot_type == 1:
             plt.ylabel("Accuracy")
@@ -110,7 +123,9 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
             plt.ylabel("Time[s]")
             # plt.yscale('log')
 
-        plt.legend()
+        plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+        plt.tight_layout()
+        #plt.legend()
         plt.savefig(
             f"{filename}_{dim1[i1]}.svg")
 

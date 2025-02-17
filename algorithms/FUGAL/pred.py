@@ -182,11 +182,11 @@ def feature_extraction(G,features):
         node_features[:, features.index('kurtosis_ego_degs')] = kurtosis_neighbor_degs
 
     # Assortativity of egonet
-    if 'assort_ego' in features:
+    if 'assortativity_ego' in features:
         assortativity_neighbors = [nx.degree_assortativity_coefficient(egonets[n]) for n in node_list
                                    ]
 
-        node_features[:, features.index('assort_ego')] = assortativity_neighbors
+        node_features[:, features.index('assortativity_ego')] = assortativity_neighbors
 
 
 # Centrality measures
@@ -244,6 +244,15 @@ def feature_extraction(G,features):
                 for in_edges, in_out_edges in zip(ego_in_edges, ego_in_out_edges)]
 
         node_features[:, features.index('internal_frac_ego')] = frac
+
+
+# Distance measures
+    # NOTE: fails if the graph is not connected!
+    if 'eccentricity' in features:
+        ec_dict = nx.eccentricity(G)
+        eccentricity = [ec_dict[node] for node in G.nodes()]
+
+        node_features[:, features.index('eccentricity')] = eccentricity
 
 # Features with 2-hop neighbourhood
 
@@ -354,8 +363,6 @@ def feature_extraction(G,features):
         node_features[:, features.index('assort_two_ego')] = assortativity_neighbors
 
     node_features = np.nan_to_num(node_features)
-    #for row in range(node_features.shape[0]):
-    #    node_features[row,:] /= node_features[row,:].sum()
     return np.nan_to_num(node_features)
 
 def feature_extractionEV(G):
