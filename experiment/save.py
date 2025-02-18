@@ -111,9 +111,11 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
         plt.xlabel(xlabel)
         plt.xticks(dim3)  # dim3 is the noise-levels
         #plt.title("FUGAL features ablation study")
-        plt.suptitle('Ablation study for FUGAL features', fontsize=24, x=0.43, y=0.97)
+        #plt.suptitle('Ablation study for FUGAL features', fontsize=24, x=0.43, y=0.97)
+        plt.suptitle('Ablation study for FUGAL parameter $\mu$', fontsize=24, x=0.43, y=0.97)
         # TODO: Find out how to get mu dynamically!
-        plt.title(label=f'$\mu$ = 1, graph = {graph}', fontsize=16)
+        #plt.title(label=f'$\mu$ = 1, graph = {graph}', fontsize=16)
+        plt.title(label=f'All features, graph: {graph}', fontsize=16)
 
         plt.grid()
         if plot_type == 1:
@@ -123,7 +125,7 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
             plt.ylabel("Time[s]")
             # plt.yscale('log')
 
-        plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+        plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title="$\mu$ values")
         plt.tight_layout()
         #plt.legend()
         plt.savefig(

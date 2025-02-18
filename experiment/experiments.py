@@ -137,7 +137,10 @@ def tuning():
                 #]
             #{'EFN': x} for x in [0,1,2,3,5]
             #{'lev': x} for x in [1, 2, 3]
-		{'mu': x, 'features': ['deg','cluster']} for x in [0.1,0.7,1.3,1.9,2.5]
+		{'mu': x, 'features': ['deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
+                 'sum_ego_cluster', 'var_ego_cluster', 'assortativity_ego', 'internal_frac_ego', # Augmented NETSIMILE features
+                'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
+                  'closeness_centrality', 'degree_centrality', 'eigenvector_centrality', 'pagerank' ]} for x in [0.1,0.7,1.3,1.9,2.5]
         ]
     ]
 
@@ -151,7 +154,7 @@ def tuning():
 
     run = list(range(len(tmp[1])))
 
-    iters = 1
+    iters = 5
 
     graph_names = [
        # "contacts-prox-high-school-2013_100",
