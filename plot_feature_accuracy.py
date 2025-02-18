@@ -67,7 +67,7 @@ def main():
     plt.suptitle('Ablation study for FUGAL features', fontsize=24, x=0.40, y=0.97)
     plt.title(label =f'$\mu$: {mu}, graph: {graph}, each point avg of {iters} runs.', fontsize=12)
 
-    plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+    plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title='Features')
     plt.tight_layout()
     plt.grid(True)
 

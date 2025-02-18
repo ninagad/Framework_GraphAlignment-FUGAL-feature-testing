@@ -97,13 +97,25 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
     print(f'dim2: \n {dim2}')
     print(f'dim3: \n {dim3}')
 
+    # One color hue for each group of features
+    colormaps = ['Blues', 'Greys', 'Greens', 'Purples']
+    group_sizes = [7,4,7,4]
+
+    # Generate colorscale
+    colorscale = np.empty((0,4), float)
+    for group_size, colormap in zip(group_sizes, colormaps):
+        cmap = plt.get_cmap(colormap)  # Get the colormap
+        colors = cmap(np.linspace(0.3, 0.9, group_size))  # Generate shades
+        colorscale = np.vstack((colorscale, colors))
+
 
     for i1, res2 in enumerate(res3):
         plt.figure(figsize=(10, 6))
         for i2, res1 in enumerate(res2):
             if np.all(res1 >= 0):
                 label = (dim2[i2]).strip("[']").replace("_", " ")  # Remove [, ', ] and replace _ with whitespace.
-                plt.plot(dim3, res1, label=label)
+                plt.plot(dim3, res1, color=colorscale[i2], marker='o', label=label)
+                print(f'idx: {i2}')
 
         # Adjust if running on multiple graphs!
         graph = dim1[i1]
