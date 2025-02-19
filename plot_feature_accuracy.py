@@ -20,7 +20,7 @@ def main():
         colors = cmap(np.linspace(0.3, 0.9, group_size))  # Generate shades
         colorscale = np.vstack((colorscale, colors))
 
-    dir_path = os.path.join((os.path.dirname(__file__)), '..', 'Server-runs', f'{idx}')
+    dir_path = os.path.join((os.path.dirname(__file__)), 'Server-runs', f'{idx}')
     res_path = os.path.join(dir_path, 'res', 'acc.xlsx')
 
     # Make sure the excel file is not open in Excel! Otherwise, this fails with Errno 13 permission denied.
@@ -69,7 +69,7 @@ def main():
     plt.tight_layout()
     plt.grid(True)
 
-    path = os.path.join((os.path.dirname(__file__)), '..', 'Server-runs', f'{idx}', f'acc_{graph}.svg')
+    path = os.path.join((os.path.dirname(__file__)), 'Server-runs', f'{idx}', f'acc_{graph}.svg')
     plt.savefig(path)
     #plt.show()
 
