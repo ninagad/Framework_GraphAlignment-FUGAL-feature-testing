@@ -6,8 +6,6 @@ import json
 import numpy as np
 
 def main():
-    dfs = []
-    dir_path = None
     idx = 3
 
     colormaps = ['Blues', 'Greys','Greens', 'Purples'] #OrRd']
@@ -62,7 +60,7 @@ def main():
     plt.ylabel('Accuracy')
     #plt.title('Ablation study for FUGAL features')
 
-    plt.suptitle('Ablation study for FUGAL $\mu$ parameter', fontsize=24, x=0.40, y=0.97)
+    plt.suptitle('Ablation study for FUGAL parameter $\mu$', fontsize=24, x=0.40, y=0.97)
     plt.title(label =f'$\mu$: {mu}, graph: {graph}, each point avg of {iters} runs.', fontsize=12)
 
     plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title='Features')
