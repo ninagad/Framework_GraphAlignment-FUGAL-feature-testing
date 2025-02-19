@@ -21,7 +21,7 @@ def main():
         colorscale = np.vstack((colorscale, colors))
 
     dir_path = os.path.join((os.path.dirname(__file__)), '..', 'Server-runs', f'{idx}')
-    res_path = os.path.join(dir_path, 'res\\acc.xlsx')
+    res_path = os.path.join(dir_path, 'res', 'acc.xlsx')
 
     # Make sure the excel file is not open in Excel! Otherwise, this fails with Errno 13 permission denied.
     df = pd.read_excel(res_path)
@@ -62,14 +62,14 @@ def main():
     plt.ylabel('Accuracy')
     #plt.title('Ablation study for FUGAL features')
 
-    plt.suptitle('Ablation study for FUGAL features', fontsize=24, x=0.40, y=0.97)
+    plt.suptitle('Ablation study for FUGAL $\mu$ parameter', fontsize=24, x=0.40, y=0.97)
     plt.title(label =f'$\mu$: {mu}, graph: {graph}, each point avg of {iters} runs.', fontsize=12)
 
     plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title='Features')
     plt.tight_layout()
     plt.grid(True)
 
-    path = os.path.join((os.path.dirname(__file__)), '..', 'Server-runs', f'{idx}\\acc_{graph}.svg')
+    path = os.path.join((os.path.dirname(__file__)), '..', 'Server-runs', f'{idx}', f'acc_{graph}.svg')
     plt.savefig(path)
     #plt.show()
 
