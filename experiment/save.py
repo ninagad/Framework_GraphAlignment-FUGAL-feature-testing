@@ -114,7 +114,7 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
         for i2, res1 in enumerate(res2):
             if np.all(res1 >= 0):
                 label = (dim2[i2]).strip("[']").replace("_", " ")  # Remove [, ', ] and replace _ with whitespace.
-                plt.plot(dim3, res1, color=colorscale[i2], marker='o', label=label)
+                plt.plot(dim3, res1, color=colorscale[i2], label=label)
                 print(f'idx: {i2}')
 
         # Adjust if running on multiple graphs!
