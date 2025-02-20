@@ -102,7 +102,11 @@ if __name__=="__main__":
     args = list(sys.argv[1:])
 
     for baseline, source in batched(args, n=2):
-        baseline_idx = int(baseline)
+        if baseline != 'None':
+            baseline_idx = int(baseline)
+        else:
+            baseline_idx = None
+
         source_idx = int(source)
 
         plot(baseline_idx, source_idx)
