@@ -15,7 +15,7 @@ def plot(baseline_idx, idx):
 
     colormaps = ['Blues', 'Greys','Greens', 'Purples'] #OrRd']
     group_sizes = [7, 4, 7, 4]
-    marker_options = ['o', '^', 's', '*', 'd', 'P', 'D']
+    marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd']
 
     # Generate colorscale
     colorscale = np.empty((0, 4), float)
