@@ -7,7 +7,7 @@ import numpy as np
 
 def main():
     idx = 15
-    baseline_idx = 19
+    baseline_idx = 14
 
     baseline_df = None
     baseline_color = None
@@ -92,7 +92,7 @@ def main():
     plt.tight_layout()
     plt.grid(True)
 
-    path = os.path.join(res_dir_path, f'acc_{graph}.svg')
+    path = os.path.join(os.path.dirname(__file__), 'plots', 'mu-test', f'{graph}-mu={mu}.svg')
     plt.savefig(path)
     #plt.show()
 
