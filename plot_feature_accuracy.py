@@ -7,6 +7,12 @@ import numpy as np
 
 def main():
     idx = 3
+    baseline_idx = None
+
+    baseline_df = None
+    baseline_color = None
+
+    dfs = []
 
     colormaps = ['Blues', 'Greys','Greens', 'Purples'] #OrRd']
     group_sizes = [7, 4, 7, 4]
@@ -18,14 +24,17 @@ def main():
         colors = cmap(np.linspace(0.3, 0.9, group_size))  # Generate shades
         colorscale = np.vstack((colorscale, colors))
 
-    dir_path = os.path.join((os.path.dirname(__file__)), 'Server-runs', f'{idx}')
-    res_path = os.path.join(dir_path, 'res', 'acc.xlsx')
+    server_runs_path = os.path.join((os.path.dirname(__file__)), 'Server-runs')
+    res_dir_path = os.path.join(server_runs_path, f'{idx}')
+
+    res_path = os.path.join(res_dir_path, 'res', 'acc.xlsx')
 
     # Make sure the excel file is not open in Excel! Otherwise, this fails with Errno 13 permission denied.
     df = pd.read_excel(res_path)
+    dfs.append(df)
 
     # Opening JSON file
-    f = open(os.path.join(dir_path, 'config.json'))
+    f = open(os.path.join(res_dir_path, 'config.json'))
     # returns JSON object as a dictionary
     meta_data = json.load(f)
 
@@ -33,15 +42,31 @@ def main():
     graph = meta_data['graph_names'][0]
     iters = meta_data['iters']
 
-    df.rename(columns={'Unnamed: 0': 'Features', 'Unnamed: 1': 'Noise-level'}, inplace=True)
+    if baseline_idx is not None:
+        # Baseline color
+        baseline_color = plt.get_cmap("Set1")(0)
 
-    # Fill NaN values with the previous row values
-    df['Features'] = df['Features'].ffill()
+        # Load baseline df
+        baseline_path = os.path.join(server_runs_path, f'{baseline_idx}', 'res', 'acc.xlsx')
+        baseline_df = pd.read_excel(baseline_path)
 
-    df['mean'] = df.iloc[:,2:].mean(axis=1)
+        dfs.append(baseline_df)
+
+    for df in dfs:
+        df.rename(columns={'Unnamed: 0': 'Features', 'Unnamed: 1': 'Noise-level'}, inplace=True)
+
+        # Fill NaN values with the previous row values
+        df['Features'] = df['Features'].ffill()
+
+        df['mean'] = df.iloc[:,2:].mean(axis=1)
 
     # Create plot
     plt.figure(figsize=(10, 6))
+
+    if baseline_idx is not None:
+        # Draw baseline
+        label = 'baseline, mu=0'
+        plt.plot(baseline_df['Noise-level'], baseline_df['mean'], color=baseline_color, label=label)
 
     # Loop through unique features and plot each one
     # Define colorscale for this set of features
@@ -67,7 +92,7 @@ def main():
     plt.tight_layout()
     plt.grid(True)
 
-    path = os.path.join((os.path.dirname(__file__)), 'Server-runs', f'{idx}', f'acc_{graph}.svg')
+    path = os.path.join(res_dir_path, f'acc_{graph}.svg')
     plt.savefig(path)
     #plt.show()
 
