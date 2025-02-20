@@ -6,8 +6,8 @@ import json
 import numpy as np
 
 def main():
-    idx = 3
-    baseline_idx = None
+    idx = 27
+    baseline_idx = 20
 
     baseline_df = None
     baseline_color = None
@@ -52,13 +52,13 @@ def main():
 
         dfs.append(baseline_df)
 
-    for df in dfs:
-        df.rename(columns={'Unnamed: 0': 'Features', 'Unnamed: 1': 'Noise-level'}, inplace=True)
+    for df_ in dfs:
+        df_.rename(columns={'Unnamed: 0': 'Features', 'Unnamed: 1': 'Noise-level'}, inplace=True)
 
         # Fill NaN values with the previous row values
-        df['Features'] = df['Features'].ffill()
+        df_['Features'] = df_['Features'].ffill()
 
-        df['mean'] = df.iloc[:,2:].mean(axis=1)
+        df_['mean'] = df_.iloc[:,2:].mean(axis=1)
 
     # Create plot
     plt.figure(figsize=(10, 6))
@@ -71,6 +71,7 @@ def main():
     # Loop through unique features and plot each one
     # Define colorscale for this set of features
     features = df['Features'].unique()
+    print(features)
 
     for i, feature in enumerate(features):
 
