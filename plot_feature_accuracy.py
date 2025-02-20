@@ -4,11 +4,10 @@ import pandas as pd
 import os
 import json
 import numpy as np
+import sys
+from itertools import batched
 
-def main():
-    idx = 30
-    baseline_idx = 20
-
+def plot(baseline_idx, idx):
     baseline_df = None
     baseline_color = None
 
@@ -96,9 +95,16 @@ def main():
     plt.savefig(path)
     #plt.show()
 
-# Using the special variable
+
+# Give list of baseline idx and main idx as argument to script
 # __name__
 if __name__=="__main__":
-    main()
+    args = list(sys.argv[1:])
+
+    for baseline, source in batched(args, n=2):
+        baseline_idx = int(baseline)
+        source_idx = int(source)
+
+        plot(baseline_idx, source_idx)
 
 
