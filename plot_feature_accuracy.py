@@ -6,8 +6,8 @@ import json
 import numpy as np
 
 def main():
-    idx = 15
-    baseline_idx = 14
+    idx = 30
+    baseline_idx = 20
 
     baseline_df = None
     baseline_color = None
