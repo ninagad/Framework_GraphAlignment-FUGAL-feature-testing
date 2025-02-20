@@ -6,8 +6,8 @@ import json
 import numpy as np
 
 def main():
-    idx = 27
-    baseline_idx = 20
+    idx = 15
+    baseline_idx = 19
 
     baseline_df = None
     baseline_color = None
@@ -63,15 +63,9 @@ def main():
     # Create plot
     plt.figure(figsize=(10, 6))
 
-    if baseline_idx is not None:
-        # Draw baseline
-        label = 'baseline, mu=0'
-        plt.plot(baseline_df['Noise-level'], baseline_df['mean'], color=baseline_color, label=label)
-
     # Loop through unique features and plot each one
     # Define colorscale for this set of features
     features = df['Features'].unique()
-    print(features)
 
     for i, feature in enumerate(features):
 
@@ -79,6 +73,11 @@ def main():
 
         label = str(feature).strip("[']").replace("_", " ")  # Remove [, ', ] and replace _ with whitespace.
         plt.plot(subset['Noise-level'], subset['mean'], color=colorscale[i], label=label)
+
+    if baseline_idx is not None:
+        # Draw baseline
+        label = 'baseline mu=0'
+        plt.plot(baseline_df['Noise-level'], baseline_df['mean'], color=baseline_color, label=label)
 
     # Customize plot
     plt.ylim(-0.1, 1.1)
