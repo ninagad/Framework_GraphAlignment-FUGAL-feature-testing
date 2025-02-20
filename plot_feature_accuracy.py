@@ -15,13 +15,17 @@ def plot(baseline_idx, idx):
 
     colormaps = ['Blues', 'Greys','Greens', 'Purples'] #OrRd']
     group_sizes = [7, 4, 7, 4]
+    marker_options = ['o', '^', 's', '*', 'd', 'P', 'D']
 
     # Generate colorscale
     colorscale = np.empty((0, 4), float)
+    markers = []
     for group_size, colormap in zip(group_sizes, colormaps):
         cmap = plt.get_cmap(colormap)  # Get the colormap
         colors = cmap(np.linspace(0.3, 0.9, group_size))  # Generate shades
         colorscale = np.vstack((colorscale, colors))
+
+        markers = markers + marker_options[:group_size]
 
     server_runs_path = os.path.join((os.path.dirname(__file__)), 'Server-runs')
     res_dir_path = os.path.join(server_runs_path, f'{idx}')
@@ -71,7 +75,7 @@ def plot(baseline_idx, idx):
         subset = df[df['Features'] == feature]
 
         label = str(feature).strip("[']").replace("_", " ")  # Remove [, ', ] and replace _ with whitespace.
-        plt.plot(subset['Noise-level'], subset['mean'], color=colorscale[i], label=label)
+        plt.plot(subset['Noise-level'], subset['mean'], color=colorscale[i], marker=markers[i], label=label)
 
     if baseline_idx is not None:
         # Draw baseline
