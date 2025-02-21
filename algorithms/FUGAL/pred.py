@@ -276,91 +276,124 @@ def feature_extraction(G,features):
 
     # NetSimile
     # average degree of 2-hop neighborhood
-    if 'avg_two_ego_deg' in features:
+    if 'avg_2hop_deg' in features:
         avg_two_neighbor_degs = [np.mean(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('avg_two_ego_deg')] = avg_two_neighbor_degs
+        node_features[:, features.index('avg_2hop_deg')] = avg_two_neighbor_degs
 
     # average clustering coefficient of 2-hop neighborhood
-    if 'avg_two_ego_cluster' in features:
+    if 'avg_2hop_cluster' in features:
         two_neighbor_clusts = [np.mean(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
 
-        node_features[:, features.index('avg_two_ego_cluster')] = two_neighbor_clusts
+        node_features[:, features.index('avg_2hop_cluster')] = two_neighbor_clusts
 
         # number of edges in the 2-hop neighborhood
-    if 'two_ego_edges' in features:
+    if '2hop_edges' in features:
         two_neighbor_edges = [
             two_hop_egonets[n].number_of_edges() if node_degree_dict[n] > 0 else 0
             for n in node_list
         ]
 
-        node_features[:, features.index('two_ego_edges')] = two_neighbor_edges
+        node_features[:, features.index('2hop_edges')] = two_neighbor_edges
 
     # sum of degrees in the 2-hop neighborhood
-    if 'sum_two_ego_deg' in features:
+    if 'sum_2hop_deg' in features:
         sum_two_neighbor_degs = [np.sum(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('sum_two_ego_deg')] = sum_two_neighbor_degs
+        node_features[:, features.index('sum_2hop_deg')] = sum_two_neighbor_degs
+
+    if '2hop_neighbors' in features:
+        neighbors_of_2hop = [
+            len(
+                set([p for m in two_hop_neighbor_nodes[n] for p in G.neighbors(m)])
+                - set(two_hop_neighbor_nodes[n])
+                - set([n])
+            )
+            if node_degree_dict[n] > 0
+            else 0
+            for n in node_list
+        ]
+        node_features[:, features.index('2hop_neighbors')] = neighbors_of_2hop
+
 
     # Augmented NetSimile
-    if 'var_two_ego_deg' in features:
+    if 'var_2hop_deg' in features:
         var_two_neighbor_degs = [np.var(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('var_two_ego_deg')] = var_two_neighbor_degs
+        node_features[:, features.index('var_2hop_deg')] = var_two_neighbor_degs
 
-    if 'sum_two_ego_cluster' in features:
+    if 'sum_2hop_cluster' in features:
         sum_two_neighbor_cluster = [np.sum(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
 
-        node_features[:, features.index('sum_two_ego_cluster')] = sum_two_neighbor_cluster
+        node_features[:, features.index('sum_2hop_cluster')] = sum_two_neighbor_cluster
 
-    if 'var_two_ego_cluster' in features:
+    if 'var_2hop_cluster' in features:
         var_two_neighbor_cluster = [np.var(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
 
-        node_features[:, features.index('var_two_ego_cluster')] = var_two_neighbor_cluster
+        node_features[:, features.index('var_2hop_cluster')] = var_two_neighbor_cluster
+
+
+    if 'internal_frac_2hop' in features:
+        two_hop_in_edges = [two_hop_egonets[n].number_of_edges() for n in node_list]
+
+        two_hop_in_out_edges = [
+            len(
+                [
+                    edge
+                    for edge in set.union(*[set(G.edges(j)) for j in two_hop_egonets[i].nodes])
+                ]
+            )
+            for i in node_list
+        ]
+
+        frac = [in_edges / in_out_edges if in_out_edges != 0 else 1
+                for in_edges, in_out_edges in zip(two_hop_in_edges, two_hop_in_out_edges)]
+
+        node_features[:, features.index('internal_frac_2hop')] = frac
 
     # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis)
-    if 'mode_two_ego_degs' in features:
+    if 'mode_2hop_degs' in features:
         # stats.mode returns the mode and the count. We extract the mode with [0].
         mode_two_neighbor_degs = [stats.mode(degs)[0] for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('mode_two_ego_degs')] = mode_two_neighbor_degs
+        node_features[:, features.index('mode_2hop_degs')] = mode_two_neighbor_degs
 
-    if 'median_two_ego_degs' in features:
+    if 'median_2hop_degs' in features:
         median_two_neighbor_degs = [np.median(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('median_two_ego_degs')] = median_two_neighbor_degs
+        node_features[:, features.index('median_2hop_degs')] = median_two_neighbor_degs
 
-    if 'min_two_ego_degs' in features:
+    if 'min_2hop_degs' in features:
         min_neighbor_degs = [np.min(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('min_two_ego_degs')] = min_neighbor_degs
+        node_features[:, features.index('min_2hop_degs')] = min_neighbor_degs
 
-    if 'max_two_ego_degs' in features:
+    if 'max_2hop_degs' in features:
         max_neighbor_degs = [np.max(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('max_two_ego_degs')] = max_neighbor_degs
+        node_features[:, features.index('max_2hop_degs')] = max_neighbor_degs
 
-    if 'range_two_ego_degs' in features:
+    if 'range_2hop_degs' in features:
         range_neighbor_degs = [np.max(degs) - np.min(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('range_two_ego_degs')] = range_neighbor_degs
+        node_features[:, features.index('range_2hop_degs')] = range_neighbor_degs
 
-    if 'skewness_two_ego_degs' in features:
+    if 'skewness_2hop_degs' in features:
         skew_neighbor_degs = [stats.skew(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('skewness_two_ego_degs')] = skew_neighbor_degs
+        node_features[:, features.index('skewness_2hop_degs')] = skew_neighbor_degs
 
-    if 'kurtosis_two_hop_ego_degs' in features:
+    if 'kurtosis_2hop_degs' in features:
         kurtosis_neighbor_degs = [stats.kurtosis(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('kurtosis_two_ego_degs')] = kurtosis_neighbor_degs
+        node_features[:, features.index('kurtosis_2hop_degs')] = kurtosis_neighbor_degs
 
     # Assortativity of 2-hop neighbourhood
-    if 'assort_two_ego' in features:
+    if 'assortativity_2hop' in features:
         assortativity_neighbors = [nx.degree_assortativity_coefficient(two_hop_egonets[n]) for n in node_list
                                     ]
 
-        node_features[:, features.index('assort_two_ego')] = assortativity_neighbors
+        node_features[:, features.index('assortativity_2hop')] = assortativity_neighbors
 
     node_features = np.nan_to_num(node_features)
     return np.nan_to_num(node_features)
