@@ -99,7 +99,7 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
 
     # One color hue for each group of features
     colormaps = ['Blues', 'Greys', 'Greens', 'Purples']
-    group_sizes = [7,4,7,4]
+    group_sizes = [7,7,7,4]
 
     # Generate colorscale
     colorscale = np.empty((0,4), float)
@@ -127,7 +127,7 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
         plt.suptitle('Ablation study for FUGAL parameter $\mu$', fontsize=24, x=0.43, y=0.97)
         # TODO: Find out how to get mu dynamically!
         #plt.title(label=f'$\mu$ = 1, graph = {graph}', fontsize=16)
-        plt.title(label=f'$\mu$: 0.1, graph: {graph}', fontsize=16)
+        plt.title(label=f'$\mu$: 2.5, graph: {graph}', fontsize=16)
 
         plt.grid()
         if plot_type == 1:

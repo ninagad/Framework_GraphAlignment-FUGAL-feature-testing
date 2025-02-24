@@ -144,6 +144,43 @@ def feature_extraction(G,features):
 
         node_features[:, features.index('var_ego_cluster')] = var_neighbor_cluster
 
+    if 'avg_ego_edges' in features:
+        avg_neighbor_edges = [
+            egonets[n].number_of_edges()/egonets[n].number_of_nodes() if node_degree_dict[n] > 0 else 0
+            for n in node_list
+        ]
+
+        node_features[:, features.index('avg_ego_edges')] = avg_neighbor_edges
+
+    if 'avg_ego_out_edges' in features:
+        avg_neighbor_outgoing_edges = [
+            len(
+                [
+                    edge
+                    for edge in set.union(*[set(G.edges(j)) for j in egonets[i].nodes])
+                    if not egonets[i].has_edge(*edge)
+                ]
+            ) / node_degree_dict[i]
+            for i in node_list
+        ]
+
+        node_features[:, features.index('avg_ego_out_edges')] = avg_neighbor_outgoing_edges
+
+    if 'avg_ego_neighbors' in features:
+        avg_neighbors_of_neighbors = [
+            len(
+                set([p for m in G.neighbors(n) for p in G.neighbors(m)])
+                - set(G.neighbors(n))
+                - set([n])
+            ) / node_degree_dict[n]
+            if node_degree_dict[n] > 0
+            else 0
+            for n in node_list
+        ]
+
+        node_features[:, features.index('avg_ego_neighbors')] = avg_neighbors_of_neighbors
+
+
 # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis)
     if 'mode_ego_degs' in features:
         # stats.mode returns the mode and the count. We extract the mode with [0].
