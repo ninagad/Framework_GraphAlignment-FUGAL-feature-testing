@@ -63,6 +63,19 @@ def plot(baseline_idx, idx):
 
         df_['mean'] = df_.iloc[:,2:].mean(axis=1)
 
+    twohop_colors = {'avg_2hop_deg': 2,
+                     'avg_2hop_cluster': 3,
+                     '2hop_edges': 4,
+                     '2hop_neighbors': 6,
+                     'sum_2hop_cluster': 7,
+                     'var_2hop_cluster': 8,
+                     'assortativity_2hop': 9,
+                     'internal_frac_2hop': 10,
+                     'median_2hop_degs': 12,
+                     'max_2hop_degs': 14,
+                     'range_2hop_degs': 15,
+                     'skewness_2hop_degs': 16}
+
     # Create plot
     plt.figure(figsize=(10, 6))
 
@@ -74,8 +87,17 @@ def plot(baseline_idx, idx):
 
         subset = df[df['Features'] == feature]
 
+        # Align 2hop colors with ego colors
+        if '2hop' in str(feature).lower():
+            idx = twohop_colors[feature.strip("[']")]
+            color = colorscale[idx]
+            marker = markers[idx]
+        else:
+            color = colorscale[i]
+            marker = markers[i]
+
         label = str(feature).strip("[']").replace("_", " ")  # Remove [, ', ] and replace _ with whitespace.
-        plt.plot(subset['Noise-level'], subset['mean'], color=colorscale[i], marker=markers[i], label=label)
+        plt.plot(subset['Noise-level'], subset['mean'], color=color, marker=marker, label=label)
 
     if baseline_idx is not None:
         # Draw baseline
@@ -95,7 +117,7 @@ def plot(baseline_idx, idx):
     plt.tight_layout()
     plt.grid(True)
 
-    path = os.path.join(os.path.dirname(__file__), 'plots', 'mu-test', f'{graph}-mu={mu}.svg')
+    path = os.path.join(os.path.dirname(__file__), 'plots', '2hop-features', f'{graph}-mu={mu}.svg')
     plt.savefig(path)
     #plt.show()
 
