@@ -117,7 +117,7 @@ def plot(baseline_idx, idx):
     plt.tight_layout()
     plt.grid(True)
 
-    path = os.path.join(os.path.dirname(__file__), 'plots', '2hop-features', f'{graph}-mu={mu}.svg')
+    path = os.path.join(os.path.dirname(__file__), 'plots', 'mu-test', f'{graph}-mu={mu}.svg')
     plt.savefig(path)
     #plt.show()
 

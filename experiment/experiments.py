@@ -128,10 +128,10 @@ def tuning():
     tmp = [
         12, # Fugal
         [
-            {'features': [x], 'mu': 2.5} for x in [#'deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
-                 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', #'sum_ego_cluster', 'var_ego_cluster', 'assortativity_ego', 'internal_frac_ego', # Augmented NETSIMILE features
-                 #'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
-                 #'closeness_centrality', 'degree_centrality', 'eigenvector_centrality', 'pagerank' , #'laplacian_centrality'
+            {'features': [x], 'mu': 2.5} for x in ['deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
+                 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', 'sum_ego_cluster', 'var_ego_cluster', 'assortativity_ego', 'internal_frac_ego', # Augmented NETSIMILE features
+                 'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
+                 'closeness_centrality', 'degree_centrality', 'eigenvector_centrality', 'pagerank' , #'laplacian_centrality'
                 #'avg_2hop_deg', 'avg_2hop_cluster','2hop_edges', '2hop_neighbors',
                  #'sum_2hop_cluster', 'var_2hop_cluster', 'assortativity_2hop', 'internal_frac_2hop',
                 #'mode_2hop_degs', 'min_2hop_degs', 'kurtosis_2hop_degs',
@@ -161,11 +161,12 @@ def tuning():
 
     graph_names = [
        # "contacts-prox-high-school-2013_100",
+        "mammalia-voles-plj-trapping_100",
         #"bio-dmela",
         #"in-arenas",
         #"inf-euroroad",
         #"ca-netscience",
-        "bio-celegans",
+        #"bio-celegans",
        #"inf-power",  
        # "MultiMagna"
         #"facebook",
