@@ -9,7 +9,7 @@ class PlotUtils:
     def __init__(self):
         self.colorscale_dict = {}
         self.markers_dict = {}
-        self.marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd', '>', 'p', '1', 'v']
+        self.marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd', '>', 'p', '1', 'v', '<']
 
         self.init_single_feature()
         self.init_combination_features()
@@ -42,22 +42,23 @@ class PlotUtils:
             [Feature.DEG, Feature.EGO_EDGES],
             [Feature.DEG, Feature.MAX_EGO_DEGS],
             [Feature.EGO_EDGES, Feature.MAX_EGO_DEGS],
-            #[Feature.DEG, Feature.EGO_EDGES, Feature.MAX_EGO_DEGS],
+            [Feature.DEG, Feature.EGO_EDGES, Feature.MAX_EGO_DEGS],
             # Netscience
             [Feature.DEG, Feature.SUM_EGO_CLUSTER],
             [Feature.EGO_EDGES, Feature.SUM_EGO_CLUSTER],
-            #[Feature.DEG, Feature.SUM_EGO_CLUSTER, Feature.EGO_EDGES],
-            # socfb-Bowdoin47
-            [Feature.DEG, Feature.CLUSTER],
-            [Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
-            #[Feature.DEG, Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
+            [Feature.DEG, Feature.SUM_EGO_CLUSTER, Feature.EGO_EDGES],
             # Voles
+            [Feature.DEG, Feature.CLUSTER],
             [Feature.CLUSTER, Feature.EGO_EDGES],
+            [Feature.DEG, Feature.CLUSTER, Feature.EGO_EDGES],
+            # socfb-Bowdoin47
+            [Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
+            [Feature.DEG, Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
         ]
 
-        combination_colormap = 'pink'
+        combination_colormap = 'pink_r'
         cmap = plt.get_cmap(combination_colormap)  # Get the colormap
-        colors = cmap(np.linspace(0.1, 0.7, len(combination_features)))  # Generate shades
+        colors = cmap(np.linspace(0.3, 0.9, len(combination_features)))  # Generate shades
 
         for idx, feature_comb in enumerate(combination_features):
             name = FE.to_labels(feature_comb)
