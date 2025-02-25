@@ -1,3 +1,5 @@
+import argparse
+
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import pandas as pd
@@ -7,28 +9,19 @@ import numpy as np
 import sys
 from itertools import batched
 
-def plot(baseline_idx, idx):
+from feature import FeatureExtensions as FE
+from plot_utils import PlotUtils as PU
+
+def plot(baseline, source, title, outputdir):
+    pu = PU()  # Instantiate Plot Utils object
+
     baseline_df = None
     baseline_color = None
 
     dfs = []
 
-    colormaps = ['Blues', 'Greys','Greens', 'Purples'] #OrRd']
-    group_sizes = [7, 4, 7, 4]
-    marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd']
-
-    # Generate colorscale
-    colorscale = np.empty((0, 4), float)
-    markers = []
-    for group_size, colormap in zip(group_sizes, colormaps):
-        cmap = plt.get_cmap(colormap)  # Get the colormap
-        colors = cmap(np.linspace(0.3, 0.9, group_size))  # Generate shades
-        colorscale = np.vstack((colorscale, colors))
-
-        markers = markers + marker_options[:group_size]
-
     server_runs_path = os.path.join((os.path.dirname(__file__)), 'Server-runs')
-    res_dir_path = os.path.join(server_runs_path, f'{idx}')
+    res_dir_path = os.path.join(server_runs_path, f'{source}')
 
     res_path = os.path.join(res_dir_path, 'res', 'acc.xlsx')
 
@@ -45,12 +38,12 @@ def plot(baseline_idx, idx):
     graph = meta_data['graph_names'][0]
     iters = meta_data['iters']
 
-    if baseline_idx is not None:
+    if baseline is not None:
         # Baseline color
         baseline_color = plt.get_cmap("Set1")(0)
 
         # Load baseline df
-        baseline_path = os.path.join(server_runs_path, f'{baseline_idx}', 'res', 'acc.xlsx')
+        baseline_path = os.path.join(server_runs_path, f'{baseline}', 'res', 'acc.xlsx')
         baseline_df = pd.read_excel(baseline_path)
 
         dfs.append(baseline_df)
@@ -88,18 +81,24 @@ def plot(baseline_idx, idx):
         subset = df[df['Features'] == feature]
 
         # Align 2hop colors with ego colors
-        if '2hop' in str(feature).lower():
-            idx = twohop_colors[feature.strip("[']")]
-            color = colorscale[idx]
-            marker = markers[idx]
-        else:
-            color = colorscale[i]
-            marker = markers[i]
+        #if '2hop' in str(feature).lower():
+            #idx = twohop_colors[feature.strip("[']")]
+            #color = colorscale[idx]
+            #marker = markers[idx]
+        #else:
 
-        label = str(feature).strip("[']").replace("_", " ")  # Remove [, ', ] and replace _ with whitespace.
+        if ',' not in feature: # It is a single feature
+            feature = FE.to_feature(feature)
+            color = pu.to_color(feature)
+            marker = pu.to_marker(feature)
+
+            label = FE.to_label(feature)
+        else:
+            raise NotImplementedError
+
         plt.plot(subset['Noise-level'], subset['mean'], color=color, marker=marker, label=label)
 
-    if baseline_idx is not None:
+    if baseline is not None:
         # Draw baseline
         label = 'baseline mu=0'
         plt.plot(baseline_df['Noise-level'], baseline_df['mean'], color=baseline_color, label=label)
@@ -110,14 +109,15 @@ def plot(baseline_idx, idx):
     plt.ylabel('Accuracy')
     #plt.title('Ablation study for FUGAL features')
 
-    plt.suptitle('Ablation study for FUGAL parameter $\mu$', fontsize=24, x=0.40, y=0.97)
+    #plt.suptitle('Ablation study for FUGAL parameter $\mu$', fontsize=24, x=0.40, y=0.97)
+    plt.suptitle(title, fontsize=24, x=0.40, y=0.97)
     plt.title(label =f'$\mu$: {mu}, graph: {graph}, each point avg of {iters} runs.', fontsize=12)
 
     plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title='Features')
     plt.tight_layout()
     plt.grid(True)
 
-    path = os.path.join(os.path.dirname(__file__), 'plots', 'mu-test', f'{graph}-mu={mu}.svg')
+    path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}.svg')
     plt.savefig(path)
     #plt.show()
 
@@ -125,16 +125,54 @@ def plot(baseline_idx, idx):
 # Give list of baseline idx and main idx as argument to script
 # __name__
 if __name__=="__main__":
-    args = list(sys.argv[1:])
+    parser = argparse.ArgumentParser()
 
-    for baseline, source in batched(args, n=2):
-        if baseline != 'None':
-            baseline_idx = int(baseline)
-        else:
-            baseline_idx = None
+    parser.add_argument('--baseline',
+                        type=int,
+                        help='The index of the file used for the baseline')
 
-        source_idx = int(source)
+    parser.add_argument('--source',
+                        type=int,
+                        help='The index of the file used for the main plot')
 
-        plot(baseline_idx, source_idx)
+    parser.add_argument('--title',
+                        type=str,
+                        default='Ablation study for FUGAL features$',
+                        help='The title of the plot, remember to use " " ')
+
+    parser.add_argument('--outputdir',
+                        type=str,
+                        default='',
+                        help='The directory the plot should be saved in')
+
+    args = parser.parse_args()
+
+    plot(baseline=args.baseline, source=args.source, title=args.title, outputdir=args.outputdir)
+
+
+    #args = list(sys.argv[1:])
+
+    #if len(args) > 0:
+    #    source = args[0]
+    #    source_idx = int(source)
+
+    #if len(args) > 1:
+    #    baseline = args[1]
+    #    baseline_idx = int(baseline)
+
+    #if len(args) > 2:
+    #    title = args[2]
+
+
+
+    #for baseline, source in batched(args, n=2):
+    #    if baseline != 'None':
+    #        baseline_idx = int(baseline)
+    #    else:
+    #        baseline_idx = None
+
+
+
+    #   plot(baseline_idx, source_idx)
 
 
