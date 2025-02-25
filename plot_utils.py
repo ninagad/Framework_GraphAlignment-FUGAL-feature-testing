@@ -9,7 +9,7 @@ class PlotUtils:
     def __init__(self):
         self.colorscale_dict = {}
         self.markers_dict = {}
-        self.marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd', '>', 'p', '1']
+        self.marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd', '>', 'p', '1', 'v']
 
         self.init_single_feature()
         self.init_combination_features()
@@ -42,15 +42,17 @@ class PlotUtils:
             [Feature.DEG, Feature.EGO_EDGES],
             [Feature.DEG, Feature.MAX_EGO_DEGS],
             [Feature.EGO_EDGES, Feature.MAX_EGO_DEGS],
-            [Feature.DEG, Feature.EGO_EDGES, Feature.MAX_EGO_DEGS],
+            #[Feature.DEG, Feature.EGO_EDGES, Feature.MAX_EGO_DEGS],
             # Netscience
             [Feature.DEG, Feature.SUM_EGO_CLUSTER],
             [Feature.EGO_EDGES, Feature.SUM_EGO_CLUSTER],
-            [Feature.DEG, Feature.SUM_EGO_CLUSTER, Feature.EGO_EDGES],
+            #[Feature.DEG, Feature.SUM_EGO_CLUSTER, Feature.EGO_EDGES],
             # socfb-Bowdoin47
             [Feature.DEG, Feature.CLUSTER],
             [Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
-            [Feature.DEG, Feature.CLUSTER, Feature.SUM_EGO_CLUSTER]
+            #[Feature.DEG, Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
+            # Voles
+            [Feature.CLUSTER, Feature.EGO_EDGES],
         ]
 
         combination_colormap = 'pink'
