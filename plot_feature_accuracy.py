@@ -75,6 +75,7 @@ def plot(baseline, source, title, outputdir):
     # Loop through unique features and plot each one
     # Define colorscale for this set of features
     features = df['Features'].unique()
+    single_feature_indices = []
 
     for i, feature in enumerate(features):
 
@@ -89,12 +90,20 @@ def plot(baseline, source, title, outputdir):
 
         if ',' not in feature: # It is a single feature
             feature = FE.to_feature(feature)
+
+            single_feature_indices.append(feature.value)
+
             color = pu.to_color(feature)
             marker = pu.to_marker(feature)
 
             label = FE.to_label(feature)
         else:
-            raise NotImplementedError
+            features_in_combination = feature.replace(' ', '').split(',')
+            features = [FE.to_feature(name) for name in features_in_combination]
+
+            color = pu.to_colors(features)
+            marker = pu.to_markers(features)
+            label = FE.to_labels(features)
 
         plt.plot(subset['Noise-level'], subset['mean'], color=color, marker=marker, label=label)
 
@@ -122,8 +131,6 @@ def plot(baseline, source, title, outputdir):
     #plt.show()
 
 
-# Give list of baseline idx and main idx as argument to script
-# __name__
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
 
@@ -137,7 +144,7 @@ if __name__=="__main__":
 
     parser.add_argument('--title',
                         type=str,
-                        default='Ablation study for FUGAL features$',
+                        default='Ablation study for FUGAL features',
                         help='The title of the plot, remember to use " " ')
 
     parser.add_argument('--outputdir',
@@ -148,31 +155,4 @@ if __name__=="__main__":
     args = parser.parse_args()
 
     plot(baseline=args.baseline, source=args.source, title=args.title, outputdir=args.outputdir)
-
-
-    #args = list(sys.argv[1:])
-
-    #if len(args) > 0:
-    #    source = args[0]
-    #    source_idx = int(source)
-
-    #if len(args) > 1:
-    #    baseline = args[1]
-    #    baseline_idx = int(baseline)
-
-    #if len(args) > 2:
-    #    title = args[2]
-
-
-
-    #for baseline, source in batched(args, n=2):
-    #    if baseline != 'None':
-    #        baseline_idx = int(baseline)
-    #    else:
-    #        baseline_idx = None
-
-
-
-    #   plot(baseline_idx, source_idx)
-
 

@@ -48,6 +48,12 @@ class FeatureExtensions:
         }
 
         return label_dict[feature]
+    @staticmethod
+    def to_labels(features: list['Feature']) -> str:
+        labels = [FeatureExtensions.to_label(feature) for feature in features]
+        label = ", ".join(labels)
+
+        return label
 
 @unique
 class Feature(Enum):
