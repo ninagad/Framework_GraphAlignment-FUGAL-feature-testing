@@ -2,6 +2,7 @@ import subprocess
 from enum import Enum, auto
 import os
 import sys
+import argparse
 
 
 class GraphEnums(Enum):
@@ -15,7 +16,7 @@ class GraphEnums(Enum):
     SBM = auto()
 
 
-def generate_all_plots():
+def generate_all_plots(include_mu: bool, include_combinations: bool, include_2hop: bool):
     """Run the script using the virtual environment's Python."""
     venv_python = activate_venv()
 
@@ -29,9 +30,14 @@ def generate_all_plots():
                  GraphEnums.SBM: None,  # TODO
                  }
 
-    generate_top_tree_combinations(venv_python, baselines)
+    if include_mu:
+        generate_mu_test(venv_python, baselines)
 
-    generate_mu_test(venv_python, baselines)
+    if include_combinations:
+        generate_top_tree_combinations(venv_python, baselines)
+
+    if include_2hop:
+        generate_2hop_features(venv_python, baselines)
 
 
 def activate_venv():
@@ -110,6 +116,16 @@ def generate_mu_test(venv_python, baselines):
         generate_plots(venv_python, baselines, source_dict, outputdir)
 
 
+def generate_2hop_features(venv_ptyhon, baselines):
+    source_dict = {GraphEnums.INF_EUROROAD: 39,
+                   GraphEnums.CA_NETSCIENCE: 38,
+                   GraphEnums.BIO_CELEGANS: 37}
+
+    outputdir = '2hop-features'
+
+    generate_plots(venv_ptyhon, baselines, source_dict, outputdir)
+
+
 def generate_density_test(venv_python, baselines):
     source_dict = {GraphEnums.NWS: -1,
                    GraphEnums.SBM: -1}
@@ -117,4 +133,20 @@ def generate_density_test(venv_python, baselines):
 
 
 if __name__ == "__main__":
-    generate_all_plots()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--twohop',
+                        action='store_true',
+                        help='Using this flag generates the twohop feature plots')
+
+    parser.add_argument('--mu',
+                        action='store_true',
+                        help='Using this flag generates the mu-test plots')
+
+    parser.add_argument('--combinations',
+                        action='store_true',
+                        help='Using this flag generates top-3-combinations of features')
+
+    args = parser.parse_args()
+
+    generate_all_plots(args.mu, args.combinations, args.twohop)

@@ -1,4 +1,4 @@
-from enum import Enum, auto, unique
+from enum import Enum, auto
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -18,8 +18,12 @@ class FeatureExtensions:
         try:
             return Feature[name.upper()]
         except:
-            print(f'Feature: {name} is not an ENUM -> excluded from plot')
-            return
+            try:  # 2hop_edges and 2hop_neighbors
+                name = name.replace('2', 'TWO').upper()
+                return Feature[name]
+            except:
+                print(f'Feature: {name} is not an ENUM -> excluded from plot')
+                return
 
     @staticmethod
     def to_label(feature: 'Feature') -> str:
@@ -52,7 +56,21 @@ class FeatureExtensions:
             Feature.CLOSENESS_CENTRALITY: "closeness centrality",
             Feature.DEGREE_CENTRALITY: "degree centrality",
             Feature.EIGENVECTOR_CENTRALITY: "eigenvector centrality",
-            Feature.PAGERANK: "pagerank"
+            Feature.PAGERANK: "pagerank",
+
+            # 2 hop features
+            Feature.AVG_2HOP_DEG: 'avg 2hop deg',
+            Feature.AVG_2HOP_CLUSTER: 'avg 2hop cluster coeff',
+            Feature.TWOHOP_EDGES: '2hop edges',
+            Feature.TWOHOP_NEIGHBORS: '2hop neighbors',
+            Feature.SUM_2HOP_CLUSTER: 'sum 2hop cluster coeff',
+            Feature.VAR_2HOP_CLUSTER: 'var 2hop cluster coeff',
+            Feature.ASSORTATIVITY_2HOP: '2hop assortativity',
+            Feature.INTERNAL_FRAC_2HOP: '2hop internal frac',
+            Feature.MEDIAN_2HOP_DEGS: 'median 2hop degs',
+            Feature.MAX_2HOP_DEGS: 'max 2hop degs',
+            Feature.RANGE_2HOP_DEGS: 'range 2hop degs',
+            Feature.SKEWNESS_2HOP_DEGS: 'skewness 2hop degs'
         }
 
         return label_dict[feature]
@@ -65,7 +83,6 @@ class FeatureExtensions:
         return label
 
 
-@unique
 class Feature(Enum):
     # NETSIMILE
     DEG = 0  # Force enums to start from 0
@@ -96,3 +113,17 @@ class Feature(Enum):
     DEGREE_CENTRALITY = auto()
     EIGENVECTOR_CENTRALITY = auto()
     PAGERANK = auto()
+
+    # 2-hop features
+    AVG_2HOP_DEG = AVG_EGO_DEG
+    AVG_2HOP_CLUSTER = AVG_EGO_CLUSTER
+    TWOHOP_EDGES = EGO_EDGES
+    TWOHOP_NEIGHBORS = EGO_NEIGHBORS
+    SUM_2HOP_CLUSTER = SUM_EGO_CLUSTER
+    VAR_2HOP_CLUSTER = VAR_EGO_CLUSTER
+    ASSORTATIVITY_2HOP = ASSORTATIVITY_EGO
+    INTERNAL_FRAC_2HOP = INTERNAL_FRAC_EGO
+    MEDIAN_2HOP_DEGS = MEDIAN_EGO_DEGS
+    MAX_2HOP_DEGS = MAX_EGO_DEGS
+    RANGE_2HOP_DEGS = RANGE_EGO_DEGS
+    SKEWNESS_2HOP_DEGS = SKEWNESS_EGO_DEGS
