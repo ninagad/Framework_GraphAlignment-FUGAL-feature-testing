@@ -184,37 +184,37 @@ def feature_extraction(G,features):
 # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis)
     if 'mode_ego_degs' in features:
         # stats.mode returns the mode and the count. We extract the mode with [0].
-        mode_neighbor_degs = [stats.mode(degs)[0] for degs in neighbor_degs]
+        mode_neighbor_degs = [stats.mode(degs)[0] if len(degs) > 0 else 0 for degs in neighbor_degs]
 
         node_features[:, features.index('mode_ego_degs')] = mode_neighbor_degs
 
     if 'median_ego_degs' in features:
-        median_neighbor_degs = [np.median(degs) for degs in neighbor_degs]
+        median_neighbor_degs = [np.median(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
         node_features[:, features.index('median_ego_degs')] = median_neighbor_degs
 
     if 'min_ego_degs' in features:
-        min_neighbor_degs = [np.min(degs) for degs in neighbor_degs]
+        min_neighbor_degs = [np.min(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
         node_features[:, features.index('min_ego_degs')] = min_neighbor_degs
 
     if 'max_ego_degs' in features:
-        max_neighbor_degs = [np.max(degs) for degs in neighbor_degs]
+        max_neighbor_degs = [np.max(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
         node_features[:, features.index('max_ego_degs')] = max_neighbor_degs
 
     if 'range_ego_degs' in features:
-        range_neighbor_degs = [np.max(degs) - np.min(degs) for degs in neighbor_degs]
+        range_neighbor_degs = [np.max(degs) - np.min(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
         node_features[:, features.index('range_ego_degs')] = range_neighbor_degs
 
     if 'skewness_ego_degs' in features:
-        skew_neighbor_degs = [stats.skew(degs) for degs in neighbor_degs]
+        skew_neighbor_degs = [stats.skew(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
         node_features[:, features.index('skewness_ego_degs')] = skew_neighbor_degs
 
     if 'kurtosis_ego_degs' in features:
-        kurtosis_neighbor_degs = [stats.kurtosis(degs) for degs in neighbor_degs]
+        kurtosis_neighbor_degs = [stats.kurtosis(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
         node_features[:, features.index('kurtosis_ego_degs')] = kurtosis_neighbor_degs
 
