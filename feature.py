@@ -1,17 +1,25 @@
 from enum import Enum, auto, unique
 import numpy as np
 import matplotlib.pyplot as plt
+
+
 class FeatureExtensions:
     @staticmethod
     def to_str(feature: 'Feature') -> str:
         return feature.name.lower()
+
     @staticmethod
     def to_feature_combination(left_feature: 'Feature', right_feature: 'Feature') -> str:
         return f"{right_feature},{left_feature}"
+
     @staticmethod
-    def to_feature(name: str) -> 'Feature':
+    def to_feature(name: str):  #-> 'Feature' | None:
         name = name.replace('[', '').replace('\'', '').replace(']', '')  # Remove brackets and '.
-        return Feature[name.upper()]
+        try:
+            return Feature[name.upper()]
+        except:
+            print(f'Feature: {name} is not an ENUM -> excluded from plot')
+            return
 
     @staticmethod
     def to_label(feature: 'Feature') -> str:
@@ -48,6 +56,7 @@ class FeatureExtensions:
         }
 
         return label_dict[feature]
+
     @staticmethod
     def to_labels(features: list['Feature']) -> str:
         labels = [FeatureExtensions.to_label(feature) for feature in features]
@@ -55,10 +64,11 @@ class FeatureExtensions:
 
         return label
 
+
 @unique
 class Feature(Enum):
     # NETSIMILE
-    DEG = 0 # Force enums to start from 0
+    DEG = 0  # Force enums to start from 0
     CLUSTER = auto()
     AVG_EGO_DEG = auto()
     AVG_EGO_CLUSTER = auto()
@@ -86,6 +96,3 @@ class Feature(Enum):
     DEGREE_CENTRALITY = auto()
     EIGENVECTOR_CENTRALITY = auto()
     PAGERANK = auto()
-
-
-

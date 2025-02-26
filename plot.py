@@ -91,6 +91,10 @@ def get_color_marker_label(feature: str):
     if ',' not in feature:  # It is a single feature
         feature = FE.to_feature(feature)
 
+        # to_feature returns None, if the feature is not an ENUM option.
+        if feature is None:
+            return None, None, None
+
         color = pu.to_color(feature)
         marker = pu.to_marker(feature)
 
@@ -137,6 +141,10 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
         subset = df[df['Features'] == feature]
 
         color, marker, label = get_color_marker_label(feature)
+
+        # Don't plot feature if it is not an ENUM feature
+        if label is None:
+            continue
 
         plt.plot(subset[xname], subset['mean'], color=color, marker=marker, label=label)
 

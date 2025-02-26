@@ -46,7 +46,7 @@ class PlotUtils:
             # Netscience
             [Feature.DEG, Feature.SUM_EGO_CLUSTER],
             [Feature.EGO_EDGES, Feature.SUM_EGO_CLUSTER],
-            [Feature.DEG, Feature.SUM_EGO_CLUSTER, Feature.EGO_EDGES],
+            [Feature.DEG, Feature.EGO_EDGES, Feature.SUM_EGO_CLUSTER],
             # Voles
             [Feature.DEG, Feature.CLUSTER],
             [Feature.CLUSTER, Feature.EGO_EDGES],
