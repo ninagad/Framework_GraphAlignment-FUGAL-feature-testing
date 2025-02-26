@@ -81,3 +81,16 @@ class PlotUtils:
     def to_markers(self, features: list[Feature]) -> str:
         name = FE.to_labels(features)
         return self.markers_dict[name]
+
+    def to_column_name(self, plottype: str) -> str:
+        column_name_dict = {
+            'p': 'p',
+            'External p': 'p',
+            'Noise-level': 'Noise-level',
+        }
+
+        return column_name_dict[plottype]
+
+
+
+
