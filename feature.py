@@ -1,17 +1,7 @@
-from enum import Enum, auto
-import numpy as np
-import matplotlib.pyplot as plt
+from aenum import Enum, NoAlias
 
 
 class FeatureExtensions:
-    @staticmethod
-    def to_str(feature: 'Feature') -> str:
-        return feature.name.lower()
-
-    @staticmethod
-    def to_feature_combination(left_feature: 'Feature', right_feature: 'Feature') -> str:
-        return f"{right_feature},{left_feature}"
-
     @staticmethod
     def to_feature(name: str):  #-> 'Feature' | None:
         name = name.replace('[', '').replace('\'', '').replace(']', '')  # Remove brackets and '.
@@ -84,46 +74,48 @@ class FeatureExtensions:
 
 
 class Feature(Enum):
+    _settings_ = NoAlias
+
     # NETSIMILE
     DEG = 0  # Force enums to start from 0
-    CLUSTER = auto()
-    AVG_EGO_DEG = auto()
-    AVG_EGO_CLUSTER = auto()
-    EGO_EDGES = auto()
-    EGO_OUT_EDGES = auto()
-    EGO_NEIGHBORS = auto()
+    CLUSTER = 1
+    AVG_EGO_DEG = 2
+    AVG_EGO_CLUSTER = 3
+    EGO_EDGES = 4
+    EGO_OUT_EDGES = 5
+    EGO_NEIGHBORS = 6
 
     # MISCELLANEOUS
-    SUM_EGO_CLUSTER = auto()
-    VAR_EGO_CLUSTER = auto()
-    ASSORTATIVITY_EGO = auto()
-    INTERNAL_FRAC_EGO = auto()
+    SUM_EGO_CLUSTER = 7
+    VAR_EGO_CLUSTER = 8
+    ASSORTATIVITY_EGO = 9
+    INTERNAL_FRAC_EGO = 10
 
     # STATISTICAL
-    MODE_EGO_DEGS = auto()
-    MEDIAN_EGO_DEGS = auto()
-    MIN_EGO_DEGS = auto()
-    MAX_EGO_DEGS = auto()
-    RANGE_EGO_DEGS = auto()
-    SKEWNESS_EGO_DEGS = auto()
-    KURTOSIS_EGO_DEGS = auto()
+    MODE_EGO_DEGS = 11
+    MEDIAN_EGO_DEGS = 12
+    MIN_EGO_DEGS = 13
+    MAX_EGO_DEGS = 14
+    RANGE_EGO_DEGS = 15
+    SKEWNESS_EGO_DEGS = 16
+    KURTOSIS_EGO_DEGS = 17
 
     # CENTRALITY
-    CLOSENESS_CENTRALITY = auto()
-    DEGREE_CENTRALITY = auto()
-    EIGENVECTOR_CENTRALITY = auto()
-    PAGERANK = auto()
+    CLOSENESS_CENTRALITY = 18
+    DEGREE_CENTRALITY = 19
+    EIGENVECTOR_CENTRALITY = 20
+    PAGERANK = 21
 
     # 2-hop features
-    AVG_2HOP_DEG = AVG_EGO_DEG
-    AVG_2HOP_CLUSTER = AVG_EGO_CLUSTER
-    TWOHOP_EDGES = EGO_EDGES
-    TWOHOP_NEIGHBORS = EGO_NEIGHBORS
-    SUM_2HOP_CLUSTER = SUM_EGO_CLUSTER
-    VAR_2HOP_CLUSTER = VAR_EGO_CLUSTER
-    ASSORTATIVITY_2HOP = ASSORTATIVITY_EGO
-    INTERNAL_FRAC_2HOP = INTERNAL_FRAC_EGO
-    MEDIAN_2HOP_DEGS = MEDIAN_EGO_DEGS
-    MAX_2HOP_DEGS = MAX_EGO_DEGS
-    RANGE_2HOP_DEGS = RANGE_EGO_DEGS
-    SKEWNESS_2HOP_DEGS = SKEWNESS_EGO_DEGS
+    AVG_2HOP_DEG = 2
+    AVG_2HOP_CLUSTER = 3
+    TWOHOP_EDGES = 4
+    TWOHOP_NEIGHBORS = 6
+    SUM_2HOP_CLUSTER = 7
+    VAR_2HOP_CLUSTER = 8
+    ASSORTATIVITY_2HOP = 9
+    INTERNAL_FRAC_2HOP = 10
+    MEDIAN_2HOP_DEGS = 12
+    MAX_2HOP_DEGS = 14
+    RANGE_2HOP_DEGS = 15
+    SKEWNESS_2HOP_DEGS = 16

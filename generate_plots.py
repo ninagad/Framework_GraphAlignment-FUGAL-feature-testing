@@ -84,6 +84,7 @@ class PlotGenerator():
                      "--outputdir", output_dir,
                      "--plottype", plot_type])
 
+            # Baseline not defined -> run without baseline
             except KeyError:
                 print(70 * '-')
                 print(f'Running WITHOUT baseline, source: {source}, outputdir: {output_dir}, plottype: {plot_type}')
