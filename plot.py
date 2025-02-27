@@ -157,7 +157,7 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
         # Check that graph name and #iterations match source
         if (graph != b_graph) or (iters != b_iters):
             raise Exception(
-                f"The baseline does not have the same meta data {b_graph, b_iters} as the main source {graph, iters} :(")
+                f"The baseline does not have the same meta data graph: {b_graph}, iterations: {b_iters} as the main source graph:{graph}, iterations: {iters} :(")
 
         # Baseline trace color (red)
         baseline_color = plt.get_cmap("Set1")(0)
