@@ -7,7 +7,7 @@ import json
 
 from feature import FeatureExtensions as FE
 from plot_utils import PlotUtils as PU
-
+import numpy as np
 
 def load_data(source: int, plottype: str) -> (pd.DataFrame, int, str, int):
     """
@@ -33,12 +33,18 @@ def load_data(source: int, plottype: str) -> (pd.DataFrame, int, str, int):
         # Get the p value from the sheet name and add it as a new column in the dfs
 
         if plottype == 'p':
-            p = sheet_name.split('p=')[1]
-            df['p'] = float(p)
+            var = sheet_name.split('p=')[1]
+            df['variable'] = float(var)
 
         elif plottype == 'External p':
-            p = sheet_name.split('extp=')[1]
-            df['p'] = float(p)
+            var = sheet_name.split('extp=')[1]
+            df['variable'] = float(var)
+
+        elif plottype == 'k':
+            var = sheet_name.split('k=')[1].split('_')[0]
+            df['variable'] = float(var)
+
+
 
 
     df = pd.concat(list(sheet_dict.values()), axis=0, ignore_index=True)
@@ -72,7 +78,9 @@ def transform_df(df: pd.DataFrame) -> pd.DataFrame:
     # Fill NaN values with the previous row values
     df['Features'] = df['Features'].ffill()
 
-    df['mean'] = df.iloc[:, (df.columns != 'Features') & (df.columns != 'Noise-level') & (df.columns != 'p')].mean(axis=1)
+    df = df.replace(-1, np.nan)  # Replace numeric errors with NaN, so they are excluded from the mean calculation.
+
+    df['mean'] = df.iloc[:, (df.columns != 'Features') & (df.columns != 'Noise-level') & (df.columns != 'variable')].mean(axis=1)
 
     return df
 
@@ -180,12 +188,20 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
         graph_info = graph
     else:
         if plottype == 'p':  # NWS graph
-            split_val = '_p='
+            remove_val = '_p='
             graph = graph.replace('_str', 's') # Reformat graph name nw_str -> nws
-        else:  # Stochastic block model
-            split_val = '_extp='
+        elif plottype == 'External p':  # Stochastic block model
+            remove_val = '_extp='
+        elif plottype == 'k':
+            remove_val = '_k='
+            graph = graph.replace('_str', 's')  # Reformat graph name nw_str -> nws
+        else:
+            remove_val = None
 
-        graph_info = (graph.split(split_val)[0]  # Remove p value
+        info_split = graph.split(remove_val)
+        graph = info_split[0] + ('_' + info_split[1].split('_')[1] if '_' in info_split[1] else '')  # Remove variable value
+
+        graph_info = (graph
                       .replace('_', ', ')
                       .replace('=', ': '))  # Reformat = -> :
         graph_info += ', noise-level: ' + str(df.at[0, 'Noise-level'])  #  Add noise-level
@@ -207,7 +223,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--plottype',
-                        choices=['External p', 'p', 'Noise-level'],
+                        choices=['External p', 'p', 'k', 'Noise-level'],
                         default='Noise-level')
 
     parser.add_argument('--baseline',

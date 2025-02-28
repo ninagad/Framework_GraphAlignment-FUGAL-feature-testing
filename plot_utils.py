@@ -9,7 +9,7 @@ class PlotUtils:
     def __init__(self):
         self.colorscale_dict = {}
         self.markers_dict = {}
-        self.marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd', '>', 'p', '1', 'v', '<']
+        self.marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd', '>', 'p', 'v', '1', '<']
 
         self.init_single_feature()
         self.init_combination_features()
@@ -84,8 +84,9 @@ class PlotUtils:
 
     def to_column_name(self, plottype: str) -> str:
         column_name_dict = {
-            'p': 'p',
-            'External p': 'p',
+            'p': 'variable',
+            'External p': 'variable',
+            'k': 'variable',
             'Noise-level': 'Noise-level',
         }
 

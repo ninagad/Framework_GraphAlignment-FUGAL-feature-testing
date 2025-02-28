@@ -14,8 +14,12 @@ class GraphEnums(Enum):
     MULTIMAGMA = auto()
     NWS_K7 = auto()
     NWS_K70 = auto()
+    NWS_P_0_point_5 = auto()
     SBM = auto()
+    SBM_INTP_5_PERCENT = auto()
+    SBM_INTP_15_PERCENT = auto()
     ER = auto()
+
 
 
 class PlotGenerator():
@@ -37,6 +41,7 @@ class PlotGenerator():
         noise = "Noise-level"
         non_community = 'p'
         community = 'External p'
+        nws_k = 'k'
 
         self.plot_type_dict = {}
 
@@ -47,6 +52,10 @@ class PlotGenerator():
         self.plot_type_dict[GraphEnums.NWS_K70] = non_community
         self.plot_type_dict[GraphEnums.ER] = non_community
         self.plot_type_dict[GraphEnums.SBM] = community
+        self.plot_type_dict[GraphEnums.SBM_INTP_5_PERCENT] = community
+        self.plot_type_dict[GraphEnums.SBM_INTP_15_PERCENT] = community
+        self.plot_type_dict[GraphEnums.NWS_P_0_point_5] = nws_k
+
 
     @staticmethod
     def activate_venv():
@@ -164,7 +173,10 @@ class PlotGenerator():
         source_dict2 = {GraphEnums.NWS_K70: 97
                         }
 
-        source_dict3 = {GraphEnums.NWS_K70: 113
+        source_dict3 = {GraphEnums.NWS_K70: 113,
+                        GraphEnums.NWS_P_0_point_5: 114,
+                        GraphEnums.SBM_INTP_5_PERCENT: 117,
+                        GraphEnums.SBM_INTP_15_PERCENT: 120,
                         }
 
         source_dicts = [source_dict1, source_dict2, source_dict3]
