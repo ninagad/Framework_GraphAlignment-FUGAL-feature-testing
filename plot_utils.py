@@ -88,6 +88,7 @@ class PlotUtils:
             'External p': 'variable',
             'k': 'variable',
             'Noise-level': 'Noise-level',
+            'n': 'variable'
         }
 
         return column_name_dict[plottype]

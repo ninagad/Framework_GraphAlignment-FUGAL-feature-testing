@@ -44,8 +44,9 @@ def load_data(source: int, plottype: str) -> (pd.DataFrame, int, str, int):
             var = sheet_name.split('k=')[1].split('_')[0]
             df['variable'] = float(var)
 
-
-
+        elif plottype == 'n':
+            var = sheet_name.split('n=')[1].split('_')[0]
+            df['variable'] = int(var)
 
     df = pd.concat(list(sheet_dict.values()), axis=0, ignore_index=True)
 
@@ -55,10 +56,10 @@ def load_data(source: int, plottype: str) -> (pd.DataFrame, int, str, int):
     meta_data = json.load(f)
 
     mu = meta_data['algs'][0][1]['mu']
-    graph = meta_data['graph_names'][0]
+    graphs = meta_data['graph_names']
     iters = meta_data['iters']
 
-    return df, mu, graph, iters
+    return df, mu, graphs, iters
 
 
 def transform_df(df: pd.DataFrame) -> pd.DataFrame:
@@ -132,7 +133,7 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
     Returns:
 
     """
-    df, mu, graph, iters = load_data(source, plottype)
+    df, mu, graphs, iters = load_data(source, plottype)
     df = transform_df(df)
 
     xname = PU().to_column_name(plottype)
@@ -159,13 +160,13 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
     # Draw baseline
     if baseline is not None:
         # Load baseline df
-        baseline_df, b_mu, b_graph, b_iters = load_data(baseline, plottype)
+        baseline_df, b_mu, b_graphs, b_iters = load_data(baseline, plottype)
         baseline_df = transform_df(baseline_df)
 
         # Check that graph name and #iterations match source
-        if (graph != b_graph) or (iters != b_iters):
+        if (graphs[0] != b_graphs[0]) or (iters != b_iters):
             raise Exception(
-                f"The baseline does not have the same meta data graph: {b_graph}, iterations: {b_iters} as the main source graph:{graph}, iterations: {iters} :(")
+                f"The baseline does not have the same meta data graphs: {b_graphs}, iterations: {b_iters} as the main source graphs:{graphs}, iterations: {iters} :(")
 
         # Baseline trace color (red)
         baseline_color = plt.get_cmap("Set1")(0)
@@ -183,6 +184,7 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
 
     plt.suptitle(title, fontsize=24, x=0.40, y=0.97)
 
+    graph = graphs[0]
     # Format graph info in subtitle
     if plottype == 'Noise-level':
         graph_info = graph
@@ -195,6 +197,17 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
         elif plottype == 'k':
             remove_val = '_k='
             graph = graph.replace('_str', 's')  # Reformat graph name nw_str -> nws
+        elif plottype == 'n':
+            remove_val = '_n='
+            graph = graph.replace('_str', 's')  # Reformat graph name nw_str -> nws
+
+            k_0 = graphs[0].split('_k=')[1].split('_')[0]
+            k_1 = graphs[1].split('_k=')[1].split('_')[0]
+
+            if k_0 != k_1:
+                n_0 = graphs[0].split('_n=')[1].split('_')[0]
+                k = float(n_0) / float(k_0)
+                graph = graph.replace('_k='+str(k_0), '_k='+str(int(k))+'divn')
         else:
             remove_val = None
 
@@ -203,7 +216,8 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
 
         graph_info = (graph
                       .replace('_', ', ')
-                      .replace('=', ': '))  # Reformat = -> :
+                      .replace('=', ': ')  # Reformat = -> :
+                      .replace('div', '/'))
         graph_info += ', noise-level: ' + str(df.at[0, 'Noise-level'])  #  Add noise-level
 
 
@@ -223,7 +237,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--plottype',
-                        choices=['External p', 'p', 'k', 'Noise-level'],
+                        choices=['External p', 'p', 'k', 'Noise-level', 'n'],
                         default='Noise-level')
 
     parser.add_argument('--baseline',
