@@ -192,11 +192,14 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
         if plottype == 'p':  # NWS graph
             remove_val = '_p='
             graph = graph.replace('_str', 's') # Reformat graph name nw_str -> nws
+
         elif plottype == 'External p':  # Stochastic block model
             remove_val = '_extp='
+
         elif plottype == 'k':
             remove_val = '_k='
             graph = graph.replace('_str', 's')  # Reformat graph name nw_str -> nws
+
         elif plottype == 'n':
             remove_val = '_n='
             graph = graph.replace('_str', 's')  # Reformat graph name nw_str -> nws
@@ -208,11 +211,14 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
                 n_0 = graphs[0].split('_n=')[1].split('_')[0]
                 k = float(n_0) / float(k_0)
                 graph = graph.replace('_k='+str(k_0), '_k='+str(int(k))+'divn')
+
         else:
             remove_val = None
 
         info_split = graph.split(remove_val)
-        graph = info_split[0] + ('_' + info_split[1].split('_')[1] if '_' in info_split[1] else '')  # Remove variable value
+        print('infosplit: ', info_split)
+        graph = info_split[0] + ('_' + info_split[1].split('_', 1)[1] if '_' in info_split[1] else '')  # Remove variable value
+        print('graph after split:', graph)
 
         graph_info = (graph
                       .replace('_', ', ')
