@@ -257,6 +257,12 @@ def feature_extraction(G,features):
 
         node_features[:, features.index('laplacian_centrality')] = laplacian_centrality
 
+    if 'katz' in features:
+        katz_dict = nx.pagerank(G, tol=0.0001, max_iter=10000)
+        katz = [katz_dict[node] for node in G.nodes()]
+
+        node_features[:, features.index('katz')] = katz
+
 # Avg effective resistance
     if 'avg_resist_dist' in features:
         avg_resist_dists = [np.mean([float(nx.resistance_distance(G, node, other)) for other in G.nodes()]) for node in G.nodes()]
