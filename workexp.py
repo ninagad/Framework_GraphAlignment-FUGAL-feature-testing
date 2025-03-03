@@ -1,4 +1,6 @@
 # from algorithms import regal, eigenalign, conealign, netalign, NSD, klaus, gwl, grasp2 as grasp, isorank2 as isorank
+import pandas as pd
+
 import algorithms
 # from experiment import ex, _CONE_args, _GRASP_args, _GW_args, _ISO_args, _KLAU_args, _LREA_args, _NET_args, _NSD_args, _REGAL_args
 from experiment import ex, _algs, _acc_names
@@ -268,6 +270,7 @@ def main(_run, _log, verbose=False, load=[], plot=[], nice=12, mon=False):
     if len(load) > 2:
         time5 = np.load(f"{load_path(load[2])}/_time5.npy")
         res6 = np.load(f"{load_path(load[2])}/_res6.npy")
+        components_df = pd.DataFrame()
         # time = np.load(f"{load_path(load[2])}/_time4.npy")
         # time = np.expand_dims(time, axis=0)
         # time6 = np.expand_dims(time, axis=0)
@@ -275,13 +278,14 @@ def main(_run, _log, verbose=False, load=[], plot=[], nice=12, mon=False):
         # res = np.expand_dims(res, axis=0)
         # res6 = np.expand_dims(res, axis=0)
     else:
-        time5, res6 = run_exp(G, path)
+        time5, res6, components_df = run_exp(G, path)
 
     np.save(f"{path}/_time5", time5)
     np.save(f"{path}/_res6", res6)
 
     os.makedirs(f"{path}/res")
     save(time5, res6, f"{path}/res")
+    components_df.to_csv(f"{path}/res/components.csv")
 
     # if mon:
     #     proc.send_signal(signal.SIGINT)

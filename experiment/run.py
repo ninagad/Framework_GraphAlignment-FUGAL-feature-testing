@@ -9,6 +9,7 @@ import copy
 import time
 import gc
 # from memory_profiler import profile
+import pandas as pd
 
 import signal
 import subprocess
@@ -270,11 +271,14 @@ def e_to_G(e, n):
 
 
 @ ex.capture
-def run_exp(G, output_path, _log):
+def run_exp(G, output_path, noises, _log):
     time2 = time3 = time4 = None
     time5 = []
     res3 = res4 = res5 = None
     res6 = []
+
+    no_connected_components = []
+
     try:
         # os.mkdir(f'{output_path}/graphs')
 
@@ -295,6 +299,11 @@ def run_exp(G, output_path, _log):
 
                     time2, res3 = run_algs(g)
 
+                    target_e = g[1]
+                    target_g = nx.Graph(target_e.tolist())
+                    connected_components = nx.number_connected_components(target_g)
+                    no_connected_components.append([noises[noise_level], i, connected_components])
+
                     with np.printoptions(suppress=True, precision=4):
                         _log.info("\n%s", res3.astype(float))
 
@@ -308,6 +317,7 @@ def run_exp(G, output_path, _log):
                 time4.append(time3)
                 res5.append(res4)
 
+            components_df = pd.DataFrame(no_connected_components, columns=['Noise-level', 'Iteration', 'Connected-components'])
             time4 = np.array(time4)
             res5 = np.array(res5)
             time5.append(time4)
@@ -324,4 +334,4 @@ def run_exp(G, output_path, _log):
         # _log.exception("")
         raise
 
-    return np.array(time5), np.array(res6)  # (g,n,i,alg,mt,acc)
+    return np.array(time5), np.array(res6), components_df  # (g,n,i,alg,mt,acc)

@@ -216,9 +216,7 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
             remove_val = None
 
         info_split = graph.split(remove_val)
-        print('infosplit: ', info_split)
         graph = info_split[0] + ('_' + info_split[1].split('_', 1)[1] if '_' in info_split[1] else '')  # Remove variable value
-        print('graph after split:', graph)
 
         graph_info = (graph
                       .replace('_', ', ')
