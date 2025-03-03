@@ -210,7 +210,7 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
             if k_0 != k_1:
                 n_0 = graphs[0].split('_n=')[1].split('_')[0]
                 k = float(n_0) / float(k_0)
-                graph = graph.replace('_k='+str(k_0), '_k='+str(int(k))+'divn')
+                graph = graph.replace('_k='+str(k_0), '_k='+'ndiv'+str(int(k)))
 
         else:
             remove_val = None
