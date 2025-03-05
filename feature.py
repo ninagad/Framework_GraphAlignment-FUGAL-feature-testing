@@ -85,6 +85,9 @@ class FeatureExtensions:
 class Feature(Enum):
     _settings_ = NoAlias
 
+    def __repr__(self):
+        return self.name
+
     # NETSIMILE
     DEG = 0  # Force enums to start from 0
     CLUSTER = 1

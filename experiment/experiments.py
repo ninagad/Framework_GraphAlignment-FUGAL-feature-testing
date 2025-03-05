@@ -3,7 +3,7 @@ from generation import generate as gen
 from algorithms import regal, eigenalign, conealign, netalign, NSD, klaus, gwl, Fugal, isorank2 as isorank,Grampa,Fugal,GrampaS,Fugal
 import networkx as nx
 import numpy as np
-
+from feature import Feature
 # mprof run workexp.py with playground run=[1,2,3,4,5] iters=2 win
 
 
@@ -128,14 +128,17 @@ def tuning():
     tmp = [
         12, # Fugal
         [
-            {'features': [x], 'mu': 2.5} for x in ['deg', 'cluster',  #'avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
-                                                   #'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', 'sum_ego_cluster', 'var_ego_cluster', 'assortativity_ego', 'internal_frac_ego', # Augmented NETSIMILE features
-                                                   #'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
-                                                   #'closeness_centrality', 'degree_centrality', 'eigenvector_centrality', 'pagerank' , #'laplacian_centrality'
-                                                   #'avg_2hop_deg', 'avg_2hop_cluster','2hop_edges', '2hop_neighbors',
-                                                   #'sum_2hop_cluster', 'var_2hop_cluster', 'assortativity_2hop', 'internal_frac_2hop',
+            {'features': [x], 'mu': 2.5} for x in [Feature.DEG, #Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER, Feature.EGO_EDGES, Feature.EGO_OUT_EDGES, Feature.EGO_NEIGHBORS, # NetSimile
+                                                   #'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
+                                                   #Feature.SUM_EGO_CLUSTER, Feature.VAR_EGO_CLUSTER, Feature.ASSORTATIVITY_EGO, Feature.INTERNAL_FRAC_EGO, # Other features
+                                                   #Feature.MODE_EGO_DEGS, Feature.MEDIAN_EGO_DEGS, Feature.MIN_EGO_DEGS, Feature.MAX_EGO_DEGS, Feature.RANGE_EGO_DEGS, Feature.SKEWNESS_EGO_DEGS, Feature.KURTOSIS_EGO_DEGS,  # Statistical features
+                                                   #'laplacian_centrality',
+                                                   #Feature.CLOSENESS_CENTRALITY, Feature.DEGREE_CENTRALITY, Feature.EIGENVECTOR_CENTRALITY, Feature.PAGERANK, Feature.KATZ_CENTRALITY,  # Centrality measures
+                                                   #Feature.AVG_2HOP_DEG, Feature.AVG_2HOP_CLUSTER, Feature.TWOHOP_EDGES, Feature.TWOHOP_NEIGHBORS,  # 2-hop
+                                                   #Feature.SUM_2HOP_CLUSTER, Feature.VAR_2HOP_CLUSTER, Feature.ASSORTATIVITY_2HOP, Feature.INTERNAL_FRAC_2HOP,  # 2-hop
                                                    #'mode_2hop_degs', 'min_2hop_degs', 'kurtosis_2hop_degs',
-                                                   #'median_2hop_degs', 'max_2hop_degs', 'range_2hop_degs', 'skewness_2hop_degs',
+                                                   #'median_2hop_degs', 'max_2hop_degs',
+                                                   #Feature.RANGE_2HOP_DEGS, Feature.SKEWNESS_2HOP_DEGS,
                                                    #['deg'], ['degree_centrality'], ['pagerank'], ['katz'], ['deg', 'degree_centrality'], ['deg', 'pagerank'], ['deg', 'katz'], ['deg', 'cluster', 'avg_ego_deg', 'avg_ego_cluster']  # ca_netscience
                                                    ]
             #{'EFN': x} for x in [0,1,2,3,5]
