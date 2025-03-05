@@ -6,6 +6,8 @@ import argparse
 
 
 class GraphEnums(Enum):
+
+
     INF_EUROROAD = auto()
     CA_NETSCIENCE = auto()
     BIO_CELEGANS = auto()
@@ -15,6 +17,8 @@ class GraphEnums(Enum):
     NWS_K7 = auto()
     NWS_K70 = auto()
     NWS_P_0_point_5 = auto()
+    NWS_N_K7 = auto()
+    NWS_N_PROP_K = auto()
     SBM = auto()
     SBM_INTP_5_PERCENT = auto()
     SBM_INTP_15_PERCENT = auto()
@@ -42,19 +46,22 @@ class PlotGenerator():
         non_community = 'p'
         community = 'External p'
         nws_k = 'k'
+        nws_n = 'n'
 
-        self.plot_type_dict = {}
+        self.xaxis_dict = {}
 
         for graph in GraphEnums:
-            self.plot_type_dict[graph] = noise
+            self.xaxis_dict[graph] = noise
 
-        self.plot_type_dict[GraphEnums.NWS_K7] = non_community
-        self.plot_type_dict[GraphEnums.NWS_K70] = non_community
-        self.plot_type_dict[GraphEnums.ER] = non_community
-        self.plot_type_dict[GraphEnums.SBM] = community
-        self.plot_type_dict[GraphEnums.SBM_INTP_5_PERCENT] = community
-        self.plot_type_dict[GraphEnums.SBM_INTP_15_PERCENT] = community
-        self.plot_type_dict[GraphEnums.NWS_P_0_point_5] = nws_k
+        self.xaxis_dict[GraphEnums.NWS_K7] = non_community
+        self.xaxis_dict[GraphEnums.NWS_K70] = non_community
+        self.xaxis_dict[GraphEnums.ER] = non_community
+        self.xaxis_dict[GraphEnums.SBM] = community
+        self.xaxis_dict[GraphEnums.SBM_INTP_5_PERCENT] = community
+        self.xaxis_dict[GraphEnums.SBM_INTP_15_PERCENT] = community
+        self.xaxis_dict[GraphEnums.NWS_P_0_point_5] = nws_k
+        self.xaxis_dict[GraphEnums.NWS_N_K7] = nws_n
+        self.xaxis_dict[GraphEnums.NWS_N_PROP_K] = nws_n
 
 
     @staticmethod
@@ -76,7 +83,7 @@ class PlotGenerator():
     def generate_plots(self, source_dict: dict, output_dir: str):
         for graph, source in source_dict.items():
 
-            plot_type = self.plot_type_dict[graph]
+            xaxis = self.xaxis_dict[graph]
 
             # Add baseline if it exists, otherwise no baseline
             try:
@@ -84,25 +91,25 @@ class PlotGenerator():
 
                 print(70 * '-')
                 print(
-                    f'Running with baseline: {baseline}, source: {source}, outputdir: {output_dir}, plottype: {plot_type}')
+                    f'Running with baseline: {baseline}, source: {source}, outputdir: {output_dir}, xaxis: {xaxis}')
                 print(70 * '-')
                 subprocess.run(
                     [self.venv_python, "plot.py",
                      "--baseline", str(baseline),
                      "--source", str(source),
                      "--outputdir", output_dir,
-                     "--plottype", plot_type])
+                     "--xaxis", xaxis])
 
             # Baseline not defined -> run without baseline
             except KeyError:
                 print(70 * '-')
-                print(f'Running WITHOUT baseline, source: {source}, outputdir: {output_dir}, plottype: {plot_type}')
+                print(f'Running WITHOUT baseline, source: {source}, outputdir: {output_dir}, xaxis: {xaxis}')
                 print(70 * '-')
                 subprocess.run(
                     [self.venv_python, "plot.py",
                      "--source", str(source),
                      "--outputdir", output_dir,
-                     "--plottype", plot_type])
+                     "--xaxis", xaxis])
 
 
 
@@ -173,13 +180,18 @@ class PlotGenerator():
         source_dict2 = {GraphEnums.NWS_K70: 97
                         }
 
-        source_dict3 = {GraphEnums.NWS_K70: 113,
+        source_dict3 = {#GraphEnums.NWS_K70: 113,
                         GraphEnums.NWS_P_0_point_5: 114,
                         GraphEnums.SBM_INTP_5_PERCENT: 117,
                         GraphEnums.SBM_INTP_15_PERCENT: 120,
                         }
 
-        source_dicts = [source_dict1, source_dict2, source_dict3]
+        source_dict4 = {GraphEnums.NWS_N_K7: 116,
+                        GraphEnums.NWS_N_PROP_K: 115,
+
+        }
+
+        source_dicts = [source_dict1, source_dict2, source_dict3, source_dict4]
 
         output_dir = 'density-test'
 

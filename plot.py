@@ -160,7 +160,7 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
     # Draw baseline
     if baseline is not None:
         # Load baseline df
-        baseline_df, b_mu, b_graphs, b_iters = load_data(baseline, xaxis)
+        baseline_df, b_mu, b_graphs, b_iters = load_data(baseline, xaxis, yaxis)
         baseline_df = transform_df(baseline_df)
 
         # Check that graph name and #iterations match source
