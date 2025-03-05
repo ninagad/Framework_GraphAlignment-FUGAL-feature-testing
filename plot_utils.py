@@ -16,7 +16,7 @@ class PlotUtils:
 
     def init_single_feature(self):
         colormaps = ['Blues', 'Greys', 'Greens', 'Purples']  # OrRd']
-        group_sizes = [7, 4, 7, 4]
+        group_sizes = [7, 4, 7, 5]
 
         # Generate colorscale
         colorscale = np.empty((0, 4), float)
@@ -54,16 +54,34 @@ class PlotUtils:
             # socfb-Bowdoin47
             [Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
             [Feature.DEG, Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
+
         ]
-
         combination_colormap = 'pink_r'
-        cmap = plt.get_cmap(combination_colormap)  # Get the colormap
-        colors = cmap(np.linspace(0.3, 0.9, len(combination_features)))  # Generate shades
 
-        for idx, feature_comb in enumerate(combination_features):
-            name = FE.to_labels(feature_comb)
-            self.colorscale_dict[name] = colors[idx]
-            self.markers_dict[name] = self.marker_options[idx]
+        centrality_combinations = [
+            [Feature.DEG, Feature.DEGREE_CENTRALITY],
+            [Feature.DEG, Feature.PAGERANK],
+            [Feature.DEG, Feature.KATZ_CENTRALITY]
+        ]
+        centrality_combinations_colormap = 'copper_r'
+
+        colormaps = [combination_colormap, centrality_combinations_colormap]
+        feature_combinations = [combination_features, centrality_combinations]
+
+        for colormap, combinations in zip(colormaps, feature_combinations):
+            cmap = plt.get_cmap(colormap)  # Get the colormap
+            colors = cmap(np.linspace(0.3, 0.9, len(combinations)))  # Generate shades
+
+            for idx, feature_comb in enumerate(combinations):
+                name = FE.to_labels(feature_comb)
+                self.colorscale_dict[name] = colors[idx]
+                self.markers_dict[name] = self.marker_options[idx]
+
+        FUGAL_combination = (
+            [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
+        )
+        fugal_name = FE.to_labels(FUGAL_combination)
+        self.colorscale_dict[fugal_name] = plt.get_cmap("Set1")(4)
 
     def to_color(self, feature: Feature) -> str:
         name = FE.to_label(feature)
@@ -78,9 +96,12 @@ class PlotUtils:
         name = FE.to_label(feature)
         return self.markers_dict[name]
 
-    def to_markers(self, features: list[Feature]) -> str:
+    def to_markers(self, features: list[Feature]) -> str | None:
         name = FE.to_labels(features)
-        return self.markers_dict[name]
+        try:
+            return self.markers_dict[name]
+        except:  # No marker defined, none returned
+            return None
 
     def to_column_name(self, plottype: str) -> str:
         column_name_dict = {

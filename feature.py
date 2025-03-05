@@ -8,6 +8,9 @@ class FeatureExtensions:
         try:
             return Feature[name.upper()]
         except:
+            if name == 'katz': # Katz centrality
+                return Feature['KATZ_CENTRALITY']
+
             try:  # 2hop_edges and 2hop_neighbors
                 name = name.replace('2', 'TWO').upper()
                 return Feature[name]
@@ -47,6 +50,7 @@ class FeatureExtensions:
             Feature.DEGREE_CENTRALITY: "degree centrality",
             Feature.EIGENVECTOR_CENTRALITY: "eigenvector centrality",
             Feature.PAGERANK: "pagerank",
+            Feature.KATZ_CENTRALITY: "katz centrality",
 
             # 2 hop features
             Feature.AVG_2HOP_DEG: 'avg 2hop deg',
@@ -70,6 +74,11 @@ class FeatureExtensions:
         labels = [FeatureExtensions.to_label(feature) for feature in features]
         label = ", ".join(labels)
 
+        fugal_features = [Feature['DEG'], Feature['CLUSTER'], Feature['AVG_EGO_DEG'], Feature['AVG_EGO_CLUSTER']]
+        fugal_label = ", ".join([FeatureExtensions.to_label(feature) for feature in fugal_features])
+
+        if label == fugal_label:
+            return 'FUGAL'
         return label
 
 
@@ -105,6 +114,7 @@ class Feature(Enum):
     DEGREE_CENTRALITY = 19
     EIGENVECTOR_CENTRALITY = 20
     PAGERANK = 21
+    KATZ_CENTRALITY = 22
 
     # 2-hop features
     AVG_2HOP_DEG = 2

@@ -9,7 +9,7 @@ from feature import FeatureExtensions as FE
 from plot_utils import PlotUtils as PU
 import numpy as np
 
-def load_data(source: int, plottype: str) -> (pd.DataFrame, int, str, int):
+def load_data(source: int, xaxis: str, yaxis: str) -> (pd.DataFrame, int, str, int):
     """
     Loads data from excel file
 
@@ -24,7 +24,7 @@ def load_data(source: int, plottype: str) -> (pd.DataFrame, int, str, int):
     server_runs_path = os.path.join((os.path.dirname(__file__)), 'Server-runs')
     res_dir_path = os.path.join(server_runs_path, f'{source}')
 
-    res_path = os.path.join(res_dir_path, 'res', 'acc.xlsx')
+    res_path = os.path.join(res_dir_path, 'res', f'{yaxis}.xlsx')
 
     # Make sure the excel file is not open in Excel! Otherwise, this fails with Errno 13 permission denied.
     sheet_dict = pd.read_excel(res_path, sheet_name=None)  # sheet_name = None -> all sheets are loaded
@@ -32,19 +32,19 @@ def load_data(source: int, plottype: str) -> (pd.DataFrame, int, str, int):
     for sheet_name, df in sheet_dict.items():
         # Get the p value from the sheet name and add it as a new column in the dfs
 
-        if plottype == 'p':
+        if xaxis == 'p':
             var = sheet_name.split('p=')[1]
             df['variable'] = float(var)
 
-        elif plottype == 'External p':
+        elif xaxis == 'External p':
             var = sheet_name.split('extp=')[1]
             df['variable'] = float(var)
 
-        elif plottype == 'k':
+        elif xaxis == 'k':
             var = sheet_name.split('k=')[1].split('_')[0]
             df['variable'] = float(var)
 
-        elif plottype == 'n':
+        elif xaxis == 'n':
             var = sheet_name.split('n=')[1].split('_')[0]
             df['variable'] = int(var)
 
@@ -120,7 +120,7 @@ def get_color_marker_label(feature: str):
     return color, marker, label
 
 
-def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
+def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputdir: str):
     """
 
     Args:
@@ -133,10 +133,10 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
     Returns:
 
     """
-    df, mu, graphs, iters = load_data(source, plottype)
+    df, mu, graphs, iters = load_data(source, xaxis, yaxis)
     df = transform_df(df)
 
-    xname = PU().to_column_name(plottype)
+    xname = PU().to_column_name(xaxis)
 
     # Create plot
     plt.figure(figsize=(10, 6))
@@ -160,7 +160,7 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
     # Draw baseline
     if baseline is not None:
         # Load baseline df
-        baseline_df, b_mu, b_graphs, b_iters = load_data(baseline, plottype)
+        baseline_df, b_mu, b_graphs, b_iters = load_data(baseline, xaxis)
         baseline_df = transform_df(baseline_df)
 
         # Check that graph name and #iterations match source
@@ -176,31 +176,36 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
         plt.plot(baseline_df[xname], baseline_df['mean'], color=baseline_color, label=label)
 
     # Layout plot
-    plt.ylim(-0.1, 1.1)
+    if yaxis == 'acc':
+        plt.ylim(-0.1, 1.1)
+        plt.ylabel('Accuracy')
 
-    plt.xlabel(plottype)
+    elif yaxis == 'frob':
+        plt.ylabel('Frobenius norm')
+    else:
+        raise NotImplementedError
 
-    plt.ylabel('Accuracy')
+    plt.xlabel(xaxis)
 
     plt.suptitle(title, fontsize=24, x=0.40, y=0.97)
 
     graph = graphs[0]
     # Format graph info in subtitle
-    if plottype == 'Noise-level':
+    if xaxis == 'Noise-level':
         graph_info = graph
     else:
-        if plottype == 'p':  # NWS graph
+        if xaxis == 'p':  # NWS graph
             remove_val = '_p='
             graph = graph.replace('_str', 's') # Reformat graph name nw_str -> nws
 
-        elif plottype == 'External p':  # Stochastic block model
+        elif xaxis == 'External p':  # Stochastic block model
             remove_val = '_extp='
 
-        elif plottype == 'k':
+        elif xaxis == 'k':
             remove_val = '_k='
             graph = graph.replace('_str', 's')  # Reformat graph name nw_str -> nws
 
-        elif plottype == 'n':
+        elif xaxis == 'n':
             remove_val = '_n='
             graph = graph.replace('_str', 's')  # Reformat graph name nw_str -> nws
 
@@ -232,7 +237,7 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
     plt.grid(True)
 
     # Save plot
-    path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}.svg')
+    path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}.svg')
     plt.savefig(path)
 
 
@@ -240,9 +245,13 @@ def plot(plottype: str, baseline: int, source: int, title: str, outputdir: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--plottype',
+    parser.add_argument('--xaxis',
                         choices=['External p', 'p', 'k', 'Noise-level', 'n'],
                         default='Noise-level')
+
+    parser.add_argument('--yaxis',
+                        choices=['acc', 'frob'],
+                        default='acc')
 
     parser.add_argument('--baseline',
                         type=int,
@@ -268,11 +277,12 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    plottype = args.plottype
+    xaxis = args.xaxis
+    yaxis = args.yaxis
 
     baseline = args.baseline
     source = args.source
     title = args.title
     outputdir = args.outputdir
 
-    plot(plottype=plottype, baseline=baseline, source=source, title=title, outputdir=outputdir)
+    plot(xaxis=xaxis, yaxis=yaxis, baseline=baseline, source=source, title=title, outputdir=outputdir)
