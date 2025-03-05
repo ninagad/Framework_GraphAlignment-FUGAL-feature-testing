@@ -161,8 +161,13 @@ def trans(res, dims, T):
 
 def save_rec(res, dims, filename, plot_type=1):
     if len(res.shape) > 4:
-        for _dim, _res in zip(dims[0], res):
-            save_rec(_res, dims[1:], f"{filename}_{_dim}", plot_type)
+        split_dim = 2
+        res_lst = np.split(res, indices_or_sections=len(dims[split_dim]), axis=split_dim)
+
+        for _dim, _res in zip(dims[split_dim], res_lst):
+            _res = np.squeeze(_res, axis=split_dim)
+            filename = filename.replace('acc', f'{_dim}')
+            save_rec(_res, dims[:split_dim] + dims[split_dim+1:], f"{filename}", plot_type)
     else:
         saveexls(res, filename=filename,
                  dim1=dims[0],
