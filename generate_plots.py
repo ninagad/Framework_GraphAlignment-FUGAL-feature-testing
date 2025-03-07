@@ -98,10 +98,12 @@ class PlotGenerator():
                      "--baseline", str(baseline),
                      "--source", str(source),
                      "--outputdir", output_dir,
-                     "--xaxis", xaxis])
+                     "--xaxis", xaxis,
+                     "--yaxis", self.yaxis], capture_output=True, check=True)
 
             # Baseline not defined -> run without baseline
-            except KeyError:
+            # subprocess.SubprocessError -> FileNotFoundError, catches the cases where the baseline does not have a frob file.
+            except (KeyError, subprocess.SubprocessError) as e:
                 print(70 * '-')
                 print(f'Running WITHOUT baseline, source: {source}, outputdir: {output_dir}, xaxis: {xaxis}')
                 print(70 * '-')
@@ -109,18 +111,26 @@ class PlotGenerator():
                     [self.venv_python, "plot.py",
                      "--source", str(source),
                      "--outputdir", output_dir,
-                     "--xaxis", xaxis])
+                     "--xaxis", xaxis,
+                     "--yaxis", self.yaxis])
 
 
 
 
 
     def generate_top_tree_combinations(self):
-        top_three_comb_sources = {GraphEnums.INF_EUROROAD: 73,
-                                  GraphEnums.CA_NETSCIENCE: 71,
-                                  GraphEnums.SOCFB_BOWDOIN47: 74,
-                                  GraphEnums.VOLES: 72,
+        #top_three_comb_sources = {GraphEnums.INF_EUROROAD: 73,
+        #                          GraphEnums.CA_NETSCIENCE: 71,
+        #                          GraphEnums.SOCFB_BOWDOIN47: 74,
+        #                          GraphEnums.VOLES: 72,
+        #                          }
+
+        top_three_comb_sources = {GraphEnums.INF_EUROROAD: 158,
+                                  GraphEnums.CA_NETSCIENCE: 157,
+                                  #GraphEnums.SOCFB_BOWDOIN47: 161,
+                                  GraphEnums.VOLES: 160,
                                   }
+
         output_dir = 'top-3-combinations'
 
         # Generate top-3-combinations plots
@@ -198,9 +208,12 @@ class PlotGenerator():
         for source_dict in source_dicts:
             self.generate_plots(source_dict, output_dir)
 
-    def generate_all_plots(self, include_mu: bool, include_combinations: bool, include_2hop: bool,
+    def generate_all_plots(self, yaxis: str, include_mu: bool, include_combinations: bool, include_2hop: bool,
                            include_density: bool):
         """Run the script using the virtual environment's Python."""
+
+        self.yaxis = yaxis
+
         if include_mu:
             self.generate_mu_test()
 
@@ -233,8 +246,13 @@ if __name__ == "__main__":
                         action='store_true',
                         help='Using this flag generates density plots')
 
+
+    parser.add_argument('--yaxis',
+                        choices=['acc', 'frob'],
+                        default='acc')
+
     args = parser.parse_args()
 
     pg = PlotGenerator()
 
-    pg.generate_all_plots(args.mu, args.combinations, args.twohop, args.density)
+    pg.generate_all_plots(args.yaxis, args.mu, args.combinations, args.twohop, args.density)
