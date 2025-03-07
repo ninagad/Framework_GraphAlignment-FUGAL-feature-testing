@@ -114,10 +114,6 @@ class PlotGenerator():
                      "--xaxis", xaxis,
                      "--yaxis", self.yaxis])
 
-
-
-
-
     def generate_top_tree_combinations(self):
         #top_three_comb_sources = {GraphEnums.INF_EUROROAD: 73,
         #                          GraphEnums.CA_NETSCIENCE: 71,
@@ -208,8 +204,26 @@ class PlotGenerator():
         for source_dict in source_dicts:
             self.generate_plots(source_dict, output_dir)
 
-    def generate_all_plots(self, yaxis: str, include_mu: bool, include_combinations: bool, include_2hop: bool,
-                           include_density: bool):
+    def generate_centrality_combinations(self):
+        source_dict = {GraphEnums.INF_EUROROAD: 153,
+                       GraphEnums.CA_NETSCIENCE: 152,
+                       GraphEnums.BIO_CELEGANS: 154,
+                       GraphEnums.VOLES: 155,
+                       GraphEnums.SOCFB_BOWDOIN47: 156,
+                       GraphEnums.MULTIMAGMA: 162,
+        }
+
+        output_dir = 'centrality-combinations'
+
+        self.generate_plots(source_dict, output_dir)
+
+    def generate_all_plots(self,
+                           yaxis: str,
+                           include_mu: bool,
+                           include_top_3_combinations: bool,
+                           include_2hop: bool,
+                           include_density: bool,
+                           include_centrality_comb: bool):
         """Run the script using the virtual environment's Python."""
 
         self.yaxis = yaxis
@@ -217,7 +231,7 @@ class PlotGenerator():
         if include_mu:
             self.generate_mu_test()
 
-        if include_combinations:
+        if include_top_3_combinations:
             self.generate_top_tree_combinations()
 
         if include_2hop:
@@ -225,6 +239,9 @@ class PlotGenerator():
 
         if include_density:
             self.generate_density_test()
+
+        if include_centrality_comb:
+            self.generate_centrality_combinations()
 
 
 if __name__ == "__main__":
@@ -238,7 +255,7 @@ if __name__ == "__main__":
                         action='store_true',
                         help='Using this flag generates the mu-test plots')
 
-    parser.add_argument('--combinations',
+    parser.add_argument('--top_3_combinations',
                         action='store_true',
                         help='Using this flag generates top-3-combinations of features')
 
@@ -246,6 +263,9 @@ if __name__ == "__main__":
                         action='store_true',
                         help='Using this flag generates density plots')
 
+    parser.add_argument('--centrality_combinations',
+                        action='store_true',
+                        help='Using this flag generates centrality combination plots')
 
     parser.add_argument('--yaxis',
                         choices=['acc', 'frob'],
@@ -255,4 +275,4 @@ if __name__ == "__main__":
 
     pg = PlotGenerator()
 
-    pg.generate_all_plots(args.yaxis, args.mu, args.combinations, args.twohop, args.density)
+    pg.generate_all_plots(args.yaxis, args.mu, args.top_3_combinations, args.twohop, args.density, args.centrality_combinations)

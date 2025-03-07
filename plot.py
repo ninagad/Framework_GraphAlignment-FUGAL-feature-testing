@@ -155,6 +155,11 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
         if label is None:
             continue
 
+        # If the label is more than 22 characters, split it into two lines
+        max_label_len = 22
+        if len(label) > max_label_len:
+            label = ',\n'.join(label.rsplit(', ', 1))
+
         plt.plot(subset[xname], subset['mean'], color=color, marker=marker, label=label)
 
     # Draw baseline
