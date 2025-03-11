@@ -76,11 +76,10 @@ def main(data, features, **args) -> object:
 
     Src1 = nx.from_numpy_array(Src)
     Tar1 = nx.from_numpy_array(Tar)
-    features1 = np.array([[1, 0], [0, 0]], dtype=np.int8)
-    features1 = np.kron(features1, feature_extraction(Src1, features))
-    features2 = np.array([[0, 0], [0, 1]], dtype=np.int8)
-    features2 = np.kron(features2, feature_extraction(Tar1, features))
-    combined_features = features1 + features2
+    features1 = feature_extraction(Src1, features)
+    features2 = feature_extraction(Tar1, features)
+    combined_features = np.vstack((features1, features2))
+
 
     print("first row of combined features: ", combined_features[0,:])
     print("shape of combined features: ", combined_features.shape)

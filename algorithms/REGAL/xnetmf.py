@@ -170,8 +170,6 @@ def compute_similarity(graph, rep_method, vec1, vec2, node_attributes=None, node
         # just trying to isert our distance matrix
         F1 = graph.node_attributes[node_indices[0],:]
         F2 = graph.node_attributes[node_indices[1],:]
-        print("type of F1: ", type(F1))
-        print("F1 is: ", F1)
         attr_dist = np.linalg.norm(F1 - F2)
         dist += rep_method.gammaattr * attr_dist
     # convert distances (weighted by coefficients on structure and attributes) to similarities
