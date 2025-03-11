@@ -188,7 +188,7 @@ def seigh(A):
   l = l[idx]
   u = u[:,idx]
   return l, u
-def main(data, eta,lalpha,initSim,Eigtype):
+def main(data, eta,lalpha,initSim,Eigtype, features):
     print("GrampaNL")
     os.environ["MKL_NUM_THREADS"] = "30"
     Src = data['Src']
@@ -231,8 +231,8 @@ def main(data, eta,lalpha,initSim,Eigtype):
         #L = calculate_similarity_scores_from_matrices(Src,Tar)
         Src1=nx.from_numpy_array(Src)
         Tar1=nx.from_numpy_array(Tar)
-        F1= feature_extraction(Src1,[Feature.DEG])
-        F2= feature_extraction(Tar1,[Feature.DEG])
+        F1= feature_extraction(Src1,features)
+        F2= feature_extraction(Tar1,features)
         K = eucledian_dist(F1, F2, n)
         L=np.max(K)-K
         #L = calculate_similarity_scores_from_matrices(Src,Tar)
