@@ -2,6 +2,10 @@ import numpy as np
 from numpy import inf, nan
 import scipy.sparse as sps
 import scipy
+import networkx as nx
+from algorithms.FUGAL.pred import feature_extraction, eucledian_dist
+
+
 
 # from algorithms import bipartiteMatching
 # from algorithms.NSD.NSD import fast2, findnz1
@@ -74,12 +78,17 @@ def create_L(A, B, lalpha=1, mind=None, weighted=True):
 # def main(A, B, L=None, alpha=0.5, tol=1e-12, maxiter=1, verbose=True):
 
 
-def main(data, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=None, weighted=True):
+def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=None, weighted=True):
     print("Isorank")
     dtype = np.float32
     Src = data['Src']
     Tar = data['Tar']
     L = data['L']
+    Src1 = nx.from_numpy_array(Src)
+    Tar1 = nx.from_numpy_array(Tar)
+    F1 = feature_extraction(Src1, features)
+    F2 = feature_extraction(Tar1, features)
+    D = eucledian_dist(F1, F2, Src.shape[0])
 
     if lalpha is not None:
         L = create_L(Src, Tar, lalpha=lalpha,
@@ -110,7 +119,7 @@ def main(data, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=None, weigh
         if alpha is None:
             S = W2.T.dot(S).dot(W1)
         else:
-            S = W2aT.dot(S).dot(W1) + K
+            S = W2aT.dot(S).dot(W1) + K + D
         delta = np.linalg.norm(S.flatten()-prev, 2)
         #if verbose:
         #    print("Iteration: ", it, " with delta = ", delta)

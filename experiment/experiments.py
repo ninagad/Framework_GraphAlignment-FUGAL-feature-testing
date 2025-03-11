@@ -169,6 +169,7 @@ def tuning():
     graph_names = [
        # "contacts-prox-high-school-2013_100",
         #"mammalia-voles-plj-trapping_100",
+        #"yeast25_Y2H1",
         #"bio-dmela",
         #"in-arenas",
         #"inf-euroroad",
