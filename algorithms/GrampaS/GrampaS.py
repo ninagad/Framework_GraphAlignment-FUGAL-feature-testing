@@ -19,6 +19,8 @@ import time
 #from lapsolver import solve_dense
 import scipy as sci
 #from lapsolver import solve_dense
+from feature import Feature
+
 def calculate_similarity_scores_from_matrices(G_A, G_B):
     # Step 1: Calculate degrees and normalize
     degrees_A = np.sum(G_A, axis=1)
@@ -229,8 +231,8 @@ def main(data, eta,lalpha,initSim,Eigtype):
         #L = calculate_similarity_scores_from_matrices(Src,Tar)
         Src1=nx.from_numpy_array(Src)
         Tar1=nx.from_numpy_array(Tar)
-        F1= feature_extraction(Src1,True)
-        F2= feature_extraction(Tar1,True)
+        F1= feature_extraction(Src1,[Feature.DEG])
+        F2= feature_extraction(Tar1,[Feature.DEG])
         K = eucledian_dist(F1, F2, n)
         L=np.max(K)-K
         #L = calculate_similarity_scores_from_matrices(Src,Tar)

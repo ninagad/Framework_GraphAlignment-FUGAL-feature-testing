@@ -121,14 +121,15 @@ def alggs(tmp):
 
 @ex.named_config
 def tuning():
-    seed=937
+    #seed=937
 
     #accs = [0,6]
 
     tmp = [
-        12, # Fugal
+        #12, # Fugal
+        20, # GrampaS (Grampa: 10)
         [
-            {'features': [x], 'mu': 2.5} for x in [Feature.DEG, #Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER, Feature.EGO_EDGES, Feature.EGO_OUT_EDGES, Feature.EGO_NEIGHBORS, # NetSimile
+            #{'features': [x], 'mu': 2.5} for x in [Feature.DEG, #Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER, Feature.EGO_EDGES, Feature.EGO_OUT_EDGES, Feature.EGO_NEIGHBORS, # NetSimile
                                                    #'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
                                                    #Feature.SUM_EGO_CLUSTER, Feature.VAR_EGO_CLUSTER, Feature.ASSORTATIVITY_EGO, Feature.INTERNAL_FRAC_EGO, # Other features
                                                    #Feature.MODE_EGO_DEGS, Feature.MEDIAN_EGO_DEGS, Feature.MIN_EGO_DEGS, Feature.MAX_EGO_DEGS, Feature.RANGE_EGO_DEGS, Feature.SKEWNESS_EGO_DEGS, Feature.KURTOSIS_EGO_DEGS,  # Statistical features
@@ -140,7 +141,7 @@ def tuning():
                                                    #'median_2hop_degs', 'max_2hop_degs',
                                                    #Feature.RANGE_2HOP_DEGS, Feature.SKEWNESS_2HOP_DEGS,
                                                    #['deg'], ['degree_centrality'], ['pagerank'], ['katz'], ['deg', 'degree_centrality'], ['deg', 'pagerank'], ['deg', 'katz'], ['deg', 'cluster', 'avg_ego_deg', 'avg_ego_cluster']  # ca_netscience
-                                                   ]
+                                                   #]
             #{'EFN': x} for x in [0,1,2,3,5]
             #{'lev': x} for x in [1, 2, 3]
 		#{'mu': x, 'features': ['deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
@@ -161,7 +162,7 @@ def tuning():
 
     run = list(range(len(tmp[1])))
 
-    iters = 2
+    iters = 1
 
     graph_names = [
        # "contacts-prox-high-school-2013_100",
