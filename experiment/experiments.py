@@ -128,6 +128,7 @@ def tuning():
     tmp = [
         #12, # Fugal
         20, # GrampaS (Grampa: 10)
+        6, # IsoRank
         [
             #{'features': [x], 'mu': 2.5} for x in [Feature.DEG, #Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER, Feature.EGO_EDGES, Feature.EGO_OUT_EDGES, Feature.EGO_NEIGHBORS, # NetSimile
                                                    #'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
@@ -142,7 +143,7 @@ def tuning():
                                                    #Feature.RANGE_2HOP_DEGS, Feature.SKEWNESS_2HOP_DEGS,
                                                    #['deg'], ['degree_centrality'], ['pagerank'], ['katz'], ['deg', 'degree_centrality'], ['deg', 'pagerank'], ['deg', 'katz'], ['deg', 'cluster', 'avg_ego_deg', 'avg_ego_cluster']  # ca_netscience
                                                    #]
-            {'features': x} for x in [[]#, [Feature.DEG], [Feature.EGO_EDGES], [Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES], [Feature.DEG, Feature.PAGERANK], [Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
+            {'features': x} for x in [[Feature.DEG], [Feature.EGO_EDGES], [Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES], [Feature.DEG, Feature.PAGERANK], [Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
                                        ]
             #{'EFN': x} for x in [0,1,2,3,5]
             #{'lev': x} for x in [1, 2, 3]

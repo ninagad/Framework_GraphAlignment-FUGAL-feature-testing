@@ -636,7 +636,7 @@ def Degree_Features(G,EFN):
     return np.nan_to_num(node_features)
 
 
-def eucledian_dist(F1, F2, n):
+def eucledian_dist(F1, F2, n=None):
     D = euclidean_distances(F1, F2)
     return D
 
