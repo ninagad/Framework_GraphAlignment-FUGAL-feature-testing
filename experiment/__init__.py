@@ -230,7 +230,7 @@ _Grampa_args = {
 _GrampaS_args = {
    'eta': 0.1,
    'lalpha':10000,
-   'initSim':1,
+   'initSim':1, # 0, if no features
    'Eigtype':100 #any other than 0,2,3 is NL
 }
 

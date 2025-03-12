@@ -122,7 +122,7 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=N
         if alpha is None:
             S = W2.T.dot(S).dot(W1)
         else:
-            S = W2aT.dot(S).dot(W1) + K + D
+            S = W2aT.dot(S).dot(W1) + K
         delta = np.linalg.norm(S.flatten()-prev, 2)
         #if verbose:
         #    print("Iteration: ", it, " with delta = ", delta)

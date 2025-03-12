@@ -195,9 +195,6 @@ def main(data, eta,lalpha,initSim,Eigtype, features):
     Tar = data['Tar']
     #Tar=data['Src']
     n = Src.shape[0]
-    print("test")
-    Eigtype=0
-    initSim=1
         #Adjancency
     if Eigtype==0:
         l,U =eigh(Src)
