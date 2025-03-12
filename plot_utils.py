@@ -36,6 +36,9 @@ class PlotUtils:
             self.markers_dict[name] = markers[idx]
 
     def init_combination_features(self):
+        feature_combinations = []
+        colormaps = []
+
         # Feature combinations
         combination_features = [
             # Euroroad combinations
@@ -57,6 +60,8 @@ class PlotUtils:
 
         ]
         combination_colormap = 'pink_r'
+        feature_combinations.append(combination_features)
+        colormaps.append(combination_colormap)
 
         centrality_combinations = [
             [Feature.DEG, Feature.DEGREE_CENTRALITY],
@@ -65,12 +70,25 @@ class PlotUtils:
         ]
         centrality_combinations_colormap = 'copper_r'
 
-        colormaps = [combination_colormap, centrality_combinations_colormap]
-        feature_combinations = [combination_features, centrality_combinations]
+        feature_combinations.append(centrality_combinations)
+        colormaps.append(centrality_combinations_colormap)
+
+        other_algo_combinations = [
+            [Feature.EGO_EDGES, Feature.PAGERANK],
+            [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK]
+        ]
+        other_algo_combinations_colormap = 'YlOrBr'
+        feature_combinations.append(other_algo_combinations)
+        colormaps.append(other_algo_combinations_colormap)
 
         for colormap, combinations in zip(colormaps, feature_combinations):
+            if colormap == other_algo_combinations_colormap:
+                upper = 0.5
+            else:
+                upper = 0.9
+
             cmap = plt.get_cmap(colormap)  # Get the colormap
-            colors = cmap(np.linspace(0.3, 0.9, len(combinations)))  # Generate shades
+            colors = cmap(np.linspace(0.3, upper, len(combinations)))  # Generate shades
 
             for idx, feature_comb in enumerate(combinations):
                 name = FE.to_labels(feature_comb)

@@ -29,15 +29,30 @@ def sqrt_eig(x):
     return np.dot(U, np.dot(np.diag(np.sqrt(s)), VT))
 
 
-def align(X, Y, R, lr=1.0, bsz=10, nepoch=5, niter=10,
+def align(X, Y, R, sim_matrix, lr=1.0, bsz=10, nepoch=5, niter=10,
           nmax=10, reg=0.05, verbose=True, project_every=True):
     for epoch in range(1, nepoch + 1):
-        for _it in range(1, niter + 1):
+        nmax = X.shape[0]
+        x_perm = np.random.permutation(nmax)
+        y_perm = np.random.permutation(nmax)
+
+        for _it in range(niter):
             # sample mini-batch
-            xt = X[np.random.permutation(nmax)[:bsz], :]
-            yt = Y[np.random.permutation(nmax)[:bsz], :]
+            start, end = _it*bsz, (_it+1)*bsz
+
+            x_indices = x_perm[start:end]
+            y_indices = y_perm[start:end]
+
+            xt = X[x_indices,:]
+            yt = X[y_indices,:]
+            # Select rows and columns in similarity matrix corresponding
+            # to the x and y rows selected in mini-batch
+            if sim_matrix is not None:
+                dt = sim_matrix[np.ix_(x_indices, y_indices)]
+            else:
+                dt = 0
             # compute OT on minibatch
-            C = -np.dot(np.dot(xt, R), yt.T)
+            C = -np.dot(np.dot(xt, R), yt.T) + dt
             # print bsz, C.shape
             P = ot.sinkhorn(np.ones(bsz), np.ones(bsz), C, reg, stopThr=1e-3)
             # print P.shape, C.shape

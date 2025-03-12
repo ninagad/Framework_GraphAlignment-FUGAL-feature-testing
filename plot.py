@@ -55,7 +55,12 @@ def load_data(source: int, xaxis: str, yaxis: str) -> (pd.DataFrame, int, str, i
     # returns JSON object as a dictionary
     meta_data = json.load(f)
 
-    mu = meta_data['algs'][0][1]['mu']
+    try:
+        mu = meta_data['algs'][0][1]['mu']
+    # Other algorithms than FUGAL
+    except KeyError:
+        mu = None
+
     graphs = meta_data['graph_names']
     iters = meta_data['iters']
 
@@ -176,6 +181,9 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
         # Baseline trace color (red)
         baseline_color = plt.get_cmap("Set1")(0)
 
+        # If there are multiple traces in the baseline file -> use the first one only
+        baseline_df = baseline_df[(baseline_df['Features'] == baseline_df['Features'].iloc[0])]
+
         label = 'baseline (no features)'
 
         plt.plot(baseline_df[xname], baseline_df['mean'], color=baseline_color, label=label)
@@ -234,15 +242,20 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
                       .replace('div', '/'))
         graph_info += ', noise-level: ' + str(df.at[0, 'Noise-level'])  #  Add noise-level
 
-
-    plt.title(label=f'$\mu$: {mu}, graph: {graph_info}', fontsize=12)
+    if mu is not None:
+        plt.title(label=f'$\mu$: {mu}, graph: {graph_info}', fontsize=12)
+    else:
+        plt.title(label=f'graph: {graph_info}', fontsize=12)
 
     plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title='Features')
     plt.tight_layout()
     plt.grid(True)
 
     # Save plot
-    path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}.svg')
+    if mu is not None:
+        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}.svg')
+    else:  # For other algorithms than FUGAL
+        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-{yaxis}.svg')
     plt.savefig(path)
 
 

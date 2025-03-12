@@ -28,6 +28,7 @@ class GraphEnums(Enum):
 
 class PlotGenerator():
     def __init__(self):
+        self.title = None
         self.venv_python = self.activate_venv()
 
         self.baseline_dict = {GraphEnums.INF_EUROROAD: 20,
@@ -85,21 +86,29 @@ class PlotGenerator():
 
             xaxis = self.xaxis_dict[graph]
 
+            args = []
+            args.extend([self.venv_python, "plot.py",])
+            args.extend(["--source", str(source)])
+            args.extend(["--outputdir", output_dir])
+            args.extend(["--xaxis", xaxis])
+            args.extend(["--yaxis", self.yaxis])
+
+            if self.title is not None:
+                args.extend(["--title", self.title])
+
             # Add baseline if it exists, otherwise no baseline
             try:
                 baseline = self.baseline_dict[graph]
+
+                # Do not use args.extend, since it changes args in-place and this is not reversed if an exception is caught!
+                arguments = args + ["--baseline", str(baseline)]
 
                 print(70 * '-')
                 print(
                     f'Running with baseline: {baseline}, source: {source}, outputdir: {output_dir}, xaxis: {xaxis}')
                 print(70 * '-')
-                subprocess.run(
-                    [self.venv_python, "plot.py",
-                     "--baseline", str(baseline),
-                     "--source", str(source),
-                     "--outputdir", output_dir,
-                     "--xaxis", xaxis,
-                     "--yaxis", self.yaxis], capture_output=True, check=True)
+                subprocess.run(args=arguments,
+                               capture_output=True, check=True)
 
             # Baseline not defined -> run without baseline
             # subprocess.SubprocessError -> FileNotFoundError, catches the cases where the baseline does not have a frob file.
@@ -107,12 +116,7 @@ class PlotGenerator():
                 print(70 * '-')
                 print(f'Running WITHOUT baseline, source: {source}, outputdir: {output_dir}, xaxis: {xaxis}')
                 print(70 * '-')
-                subprocess.run(
-                    [self.venv_python, "plot.py",
-                     "--source", str(source),
-                     "--outputdir", output_dir,
-                     "--xaxis", xaxis,
-                     "--yaxis", self.yaxis])
+                subprocess.run(args=args)
 
     def generate_top_tree_combinations(self):
         #top_three_comb_sources = {GraphEnums.INF_EUROROAD: 73,
@@ -218,13 +222,79 @@ class PlotGenerator():
 
         self.generate_plots(source_dict, output_dir)
 
+    def generate_other_algos(self):
+        base_dir = 'Other-algorithms'
+        # GRAMPA
+        grampa_baseline_dict = {GraphEnums.BIO_CELEGANS: 213,
+                                GraphEnums.CA_NETSCIENCE: 225,
+                                GraphEnums.INF_EUROROAD: 224,
+                                GraphEnums.VOLES: 227,
+                                GraphEnums.MULTIMAGMA: 226
+                                }
+        grampa_source_dict = {GraphEnums.BIO_CELEGANS: 179,
+                              GraphEnums.CA_NETSCIENCE: 180,
+                              GraphEnums.INF_EUROROAD: 181,
+                              GraphEnums.VOLES: 182,
+                              GraphEnums.MULTIMAGMA: 183
+        }
+        outputdir = base_dir + '/GRAMPA'
+
+        self.title = "GRAMPA"
+        self.baseline_dict = grampa_baseline_dict
+        self.generate_plots(grampa_source_dict, outputdir)
+
+        # REGAL
+        regal_baseline_dict = {GraphEnums.BIO_CELEGANS: 209,
+                               GraphEnums.CA_NETSCIENCE: 216,
+                               GraphEnums.INF_EUROROAD: 217,
+                               GraphEnums.VOLES: 218,
+                               GraphEnums.MULTIMAGMA: 219,
+        }
+        regal_source_dict = {GraphEnums.BIO_CELEGANS: 212,
+                             GraphEnums.CA_NETSCIENCE: 215,
+                             GraphEnums.INF_EUROROAD: 223,
+                             GraphEnums.VOLES: 221,
+                             GraphEnums.MULTIMAGMA: 222,
+                             }
+
+        outputdir = base_dir + '/REGAL'
+
+        self.title = "REGAL"
+        self.baseline_dict = regal_baseline_dict
+        self.generate_plots(regal_source_dict, outputdir)
+
+        # IsoRank
+        isorank_baseline_dict = {GraphEnums.BIO_CELEGANS: 235,
+                                 GraphEnums.CA_NETSCIENCE: 236,
+                                 GraphEnums.INF_EUROROAD: 237,
+                                 GraphEnums.VOLES: 238,
+                                 GraphEnums.MULTIMAGMA: 239
+                                 }
+
+        isorank_source_dict = {GraphEnums.BIO_CELEGANS: 228,
+                               GraphEnums.CA_NETSCIENCE: 229,
+                               GraphEnums.INF_EUROROAD: 230,
+                               GraphEnums.VOLES: 231,
+                               GraphEnums.MULTIMAGMA: 232
+                               }
+
+        outputdir = base_dir + "/IsoRank"
+
+        self.title = 'IsoRank'
+        self.baseline_dict = isorank_baseline_dict
+        # TODO: remove comment when isorank is done running
+        #self.generate_plots(isorank_source_dict, outputdir)
+
+
+
     def generate_all_plots(self,
                            yaxis: str,
                            include_mu: bool,
                            include_top_3_combinations: bool,
                            include_2hop: bool,
                            include_density: bool,
-                           include_centrality_comb: bool):
+                           include_centrality_comb: bool,
+                           include_other_algos: bool):
         """Run the script using the virtual environment's Python."""
 
         self.yaxis = yaxis
@@ -243,6 +313,12 @@ class PlotGenerator():
 
         if include_centrality_comb:
             self.generate_centrality_combinations()
+
+        if include_other_algos:
+            self.generate_other_algos()
+
+        # TODO: REMEMBER THAT generate_other_algos CHANGES THE BASELINE DICT AND TITLE,
+        # TODO: DO NOT GENERATE MORE PLOTS AFTER THIS!
 
 
 if __name__ == "__main__":
@@ -268,6 +344,10 @@ if __name__ == "__main__":
                         action='store_true',
                         help='Using this flag generates centrality combination plots')
 
+    parser.add_argument('--other_algos',
+                        action='store_true',
+                        help='Using this flag generates plots for other algorithms')
+
     parser.add_argument('--yaxis',
                         choices=['acc', 'frob'],
                         default='acc')
@@ -276,4 +356,4 @@ if __name__ == "__main__":
 
     pg = PlotGenerator()
 
-    pg.generate_all_plots(args.yaxis, args.mu, args.top_3_combinations, args.twohop, args.density, args.centrality_combinations)
+    pg.generate_all_plots(args.yaxis, args.mu, args.top_3_combinations, args.twohop, args.density, args.centrality_combinations, args.other_algos)
