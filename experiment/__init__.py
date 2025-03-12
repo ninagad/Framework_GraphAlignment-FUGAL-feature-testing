@@ -181,7 +181,7 @@ _REGAL_args = {
     'untillayer': 2,    # k
     'alpha': 0.01,      # delta
     'gammastruc': 1.0,
-    'gammaattr': 1.0,
+    'gammaattr': 0.25,
     'numtop': 10,
     'buckets': 2
 }

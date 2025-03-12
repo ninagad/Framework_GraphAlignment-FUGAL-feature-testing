@@ -72,19 +72,19 @@ def main(data, features, **args) -> object:
 
     if args['attributes'] is not None:
         # load vector of attributes in from file
-        args['attributes'] = np.load(args['attributes'])
+        # args['attributes'] = np.load(args['attributes'])
 
-    Src1 = nx.from_numpy_array(Src)
-    Tar1 = nx.from_numpy_array(Tar)
-    features1 = feature_extraction(Src1, features)
-    features2 = feature_extraction(Tar1, features)
-    combined_features = np.vstack((features1, features2))
+        # get features from the features list
+        Src1 = nx.from_numpy_array(Src)
+        Tar1 = nx.from_numpy_array(Tar)
+        features1 = feature_extraction(Src1, features)
+        features2 = feature_extraction(Tar1, features)
+        combined_features = np.vstack((features1, features2))
 
+        print("first row of combined features: ", combined_features[0,:])
+        print("shape of combined features: ", combined_features.shape)
 
-    print("first row of combined features: ", combined_features[0,:])
-    print("shape of combined features: ", combined_features.shape)
-
-    args['attributes'] = combined_features
+        args['attributes'] = combined_features
 
     embed = learn_representations(adj, args)
     emb1, emb2 = get_embeddings(embed)

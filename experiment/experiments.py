@@ -129,6 +129,7 @@ def tuning():
         #12, # Fugal
         20, # GrampaS (Grampa: 10)
         6, # IsoRank
+        3, # REGAL
         [
             #{'features': [x], 'mu': 2.5} for x in [Feature.DEG, #Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER, Feature.EGO_EDGES, Feature.EGO_OUT_EDGES, Feature.EGO_NEIGHBORS, # NetSimile
                                                    #'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
