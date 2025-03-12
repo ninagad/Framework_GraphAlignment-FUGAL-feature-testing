@@ -209,7 +209,8 @@ class PlotGenerator():
                        GraphEnums.CA_NETSCIENCE: 152,
                        GraphEnums.BIO_CELEGANS: 154,
                        GraphEnums.VOLES: 155,
-                       GraphEnums.SOCFB_BOWDOIN47: 156,
+                       GraphEnums.SOCFB_BOWDOIN47: 156,  # mu = 2.5
+                       #GraphEnums.SOCFB_BOWDOIN47: 163,   # mu = 0.1
                        GraphEnums.MULTIMAGMA: 162,
         }
 
