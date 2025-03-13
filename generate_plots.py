@@ -282,8 +282,7 @@ class PlotGenerator():
 
         self.title = 'IsoRank'
         self.baseline_dict = isorank_baseline_dict
-        # TODO: remove comment when isorank is done running
-        #self.generate_plots(isorank_source_dict, outputdir)
+        self.generate_plots(isorank_source_dict, outputdir)
 
 
 

@@ -118,8 +118,15 @@ def get_color_marker_label(feature: str):
         features_in_combination = feature.replace(' ', '').split(',')
         features = [FE.to_feature(name) for name in features_in_combination]
 
-        color = pu.to_colors(features)
-        marker = pu.to_markers(features)
+        try:
+            color = pu.to_colors(features)
+        except KeyError:
+            color = None
+        try:
+            marker = pu.to_markers(features)
+        except KeyError:
+            marker = None
+
         label = FE.to_labels(features)
 
     return color, marker, label
@@ -255,7 +262,7 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
     if mu is not None:
         path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}.svg')
     else:  # For other algorithms than FUGAL
-        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-{yaxis}.svg')
+        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{title}-{graph}-{yaxis}.svg')
     plt.savefig(path)
 
 

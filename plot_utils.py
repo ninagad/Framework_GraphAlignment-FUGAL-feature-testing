@@ -83,7 +83,7 @@ class PlotUtils:
 
         for colormap, combinations in zip(colormaps, feature_combinations):
             if colormap == other_algo_combinations_colormap:
-                upper = 0.5
+                upper = 0.4
             else:
                 upper = 0.9
 
