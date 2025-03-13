@@ -229,6 +229,7 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
             remove_val = '_n='
             graph = graph.replace('_str', 's')  # Reformat graph name nw_str -> nws
 
+            # Reformat if k is variable
             k_0 = graphs[0].split('_k=')[1].split('_')[0]
             k_1 = graphs[1].split('_k=')[1].split('_')[0]
 
@@ -249,9 +250,9 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
                       .replace('div', '/'))
         graph_info += ', noise-level: ' + str(df.at[0, 'Noise-level'])  #  Add noise-level
 
-    if mu is not None:
+    if mu is not None:  # It is FUGAL
         plt.title(label=f'$\mu$: {mu}, graph: {graph_info}', fontsize=12)
-    else:
+    else:  # Other algorithms than FUGAL
         plt.title(label=f'graph: {graph_info}', fontsize=12)
 
     plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left', title='Features')
@@ -262,7 +263,7 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
     if mu is not None:
         path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}.svg')
     else:  # For other algorithms than FUGAL
-        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{title}-{graph}-{yaxis}.svg')
+        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-{yaxis}.svg')
     plt.savefig(path)
 
 
