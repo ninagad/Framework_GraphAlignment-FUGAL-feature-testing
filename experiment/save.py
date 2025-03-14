@@ -74,6 +74,12 @@ def plot_G(G):
 
 @ ex.capture
 def saveexls(res4, dim1, dim2, dim3, dim4, filename):
+    print('saveexls')
+    print('res4, \n', res4)
+    print('dim1: ', dim1)
+    print('dim2: ', dim2)
+    print('dim3: ', dim3)
+    print(f'dim4: {dim4}')
 
     with pd.ExcelWriter(f"{filename}.xlsx") as writer:
         for i1, res3 in enumerate(res4):

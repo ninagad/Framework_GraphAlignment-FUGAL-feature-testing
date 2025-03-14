@@ -264,11 +264,19 @@ class PlotGenerator():
         self.generate_plots(regal_source_dict, outputdir)
 
         # IsoRank
-        isorank_baseline_dict = {GraphEnums.BIO_CELEGANS: 235,
-                                 GraphEnums.CA_NETSCIENCE: 236,
-                                 GraphEnums.INF_EUROROAD: 237,
-                                 GraphEnums.VOLES: 238,
-                                 GraphEnums.MULTIMAGMA: 239
+        # Baselines without degree similarity
+        #isorank_baseline_dict = {GraphEnums.BIO_CELEGANS: 235,
+        #                         GraphEnums.CA_NETSCIENCE: 236,
+        #                         GraphEnums.INF_EUROROAD: 237,
+        #                         GraphEnums.VOLES: 238,
+        #                         GraphEnums.MULTIMAGMA: 239
+        #                         }
+        # Baselines with degree similarity
+        isorank_baseline_dict = {GraphEnums.BIO_CELEGANS: 264,
+                                 GraphEnums.CA_NETSCIENCE: 265,
+                                 GraphEnums.INF_EUROROAD: 266,
+                                 GraphEnums.VOLES: 267,
+                                 GraphEnums.MULTIMAGMA: 268
                                  }
 
         isorank_source_dict = {GraphEnums.BIO_CELEGANS: 228,

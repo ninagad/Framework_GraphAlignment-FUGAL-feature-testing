@@ -145,7 +145,7 @@ def tuning():
                                                    #Feature.RANGE_2HOP_DEGS, Feature.SKEWNESS_2HOP_DEGS,
                                                    #['deg'], ['degree_centrality'], ['pagerank'], ['katz'], ['deg', 'degree_centrality'], ['deg', 'pagerank'], ['deg', 'katz'], ['deg', 'cluster', 'avg_ego_deg', 'avg_ego_cluster']  # ca_netscience
                                                    #]
-            {'features': x} for x in [None, #[Feature.DEG], [Feature.EGO_EDGES], [Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES], [Feature.DEG, Feature.PAGERANK], [Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
+            {'features': x} for x in [[Feature.DEG], [Feature.EGO_EDGES], # [Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES], [Feature.DEG, Feature.PAGERANK], [Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
                                        ]
             #{'EFN': x} for x in [0,1,2,3,5]
             #{'lev': x} for x in [1, 2, 3]
@@ -167,7 +167,7 @@ def tuning():
 
     run = list(range(len(tmp[1])))
 
-    iters = 1
+    iters = 2
 
     graph_names = [
        # "contacts-prox-high-school-2013_100",
