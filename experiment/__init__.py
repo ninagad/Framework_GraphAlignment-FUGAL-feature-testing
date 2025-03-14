@@ -174,7 +174,7 @@ _GRASPB_args = {
 }
 
 _REGAL_args = {
-    'attributes': None,
+    'attributes': None, # None, if no features
     'attrvals': 2,
     'dimensions': 128,  # useless
     'k': 10,            # d = klogn
@@ -202,7 +202,7 @@ _ISO_args = {
     'alpha': 0.9,
     'tol': 1e-12,
     'maxiter': 100,
-    'lalpha': 10000,
+    'lalpha': None, # 10000 if include degree sim
     'weighted': True
 }
 

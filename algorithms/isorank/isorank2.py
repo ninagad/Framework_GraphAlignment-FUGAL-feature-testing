@@ -89,7 +89,6 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=N
     F1 = feature_extraction(Src1, features)
     F2 = feature_extraction(Tar1, features)
     D = eucledian_dist(F1, F2, Src.shape[0])
-    #D = np.max(D) - D
 
     if lalpha is not None:
         L = create_L(Src, Tar, lalpha=lalpha,
