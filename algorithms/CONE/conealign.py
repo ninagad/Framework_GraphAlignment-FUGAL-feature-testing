@@ -35,7 +35,7 @@ def align_embeddings(embed1, embed2, CONE_args, adj1=None, adj2=None, struc_embe
         if not sps.issparse(adj2):
             adj2 = sps.csr_matrix(adj2)
         init_sim, corr_mat = unsup_align.convex_init_sparse(
-            embed1, embed2, K_X=adj1, K_Y=adj2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
+            embed1, embed2, sim_matrix=CONE_args['similarity'], K_X=adj1, K_Y=adj2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
     else:
         init_sim, corr_mat = unsup_align.convex_init(
             embed1, embed2, sim_matrix=CONE_args['similarity'], apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
