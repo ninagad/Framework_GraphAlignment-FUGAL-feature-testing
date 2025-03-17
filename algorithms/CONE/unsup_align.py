@@ -28,8 +28,44 @@ def sqrt_eig(x):
     U, s, VT = np.linalg.svd(x, full_matrices=False)
     return np.dot(U, np.dot(np.diag(np.sqrt(s)), VT))
 
+def align(X, Y, R, lr=1.0, bsz=10, nepoch=5, niter=10,
+          nmax=10, reg=0.05, verbose=True, project_every=True):
+    for epoch in range(1, nepoch + 1):
+        for _it in range(1, niter + 1):
+            # sample mini-batch
+            xt = X[np.random.permutation(nmax)[:bsz], :]
+            yt = Y[np.random.permutation(nmax)[:bsz], :]
+            # compute OT on minibatch
+            C = -np.dot(np.dot(xt, R), yt.T)
+            # print bsz, C.shape
+            P = ot.sinkhorn(np.ones(bsz), np.ones(bsz), C, reg, stopThr=1e-3)
+            # print P.shape, C.shape
+            # compute gradient
+            # print "random values from embeddings:", xt, yt
+            # print "sinkhorn", np.isnan(P).any(), np.isinf(P).any()
+            #Pyt = np.dot(P, yt)
+            # print "Pyt", np.isnan(Pyt).any(), np.isinf(Pyt).any()
+            G = - np.dot(xt.T, np.dot(P, yt))
+            # print "G", np.isnan(G).any(), np.isinf(G).any()
+            update = lr / bsz * G
+            print(("Update: %.3f (norm G %.3f)" %
+                   (np.linalg.norm(update), np.linalg.norm(G))))
+            R -= update
 
-def align(X, Y, R, sim_matrix, lr=1.0, bsz=10, nepoch=5, niter=10,
+            # project on orthogonal matrices
+            if project_every:
+                U, s, VT = np.linalg.svd(R)
+                R = np.dot(U, VT)
+        niter //= 4
+        if verbose:
+            print(("epoch: %d  obj: %.3f" % (epoch, objective(X, Y, R))))
+    if not project_every:
+        U, s, VT = np.linalg.svd(R)
+        R = np.dot(U, VT)
+    return R, P
+
+
+def align_with_features(X, Y, R, sim_matrix, lr=1.0, bsz=10, nepoch=5, niter=10,
           nmax=10, reg=0.05, verbose=True, project_every=True):
     for epoch in range(1, nepoch + 1):
         nmax = X.shape[0]
@@ -81,7 +117,7 @@ def align(X, Y, R, sim_matrix, lr=1.0, bsz=10, nepoch=5, niter=10,
     return R, P
 
 
-def convex_init(X, Y, niter=10, reg=1.0, apply_sqrt=False):
+def convex_init(X, Y, sim_matrix, niter=10, reg=1.0, apply_sqrt=False):
     n, d = X.shape
     if apply_sqrt:
         X, Y = sqrt_eig(X), sqrt_eig(Y)
@@ -89,8 +125,11 @@ def convex_init(X, Y, niter=10, reg=1.0, apply_sqrt=False):
     K_Y *= np.linalg.norm(K_X) / np.linalg.norm(K_Y)
     K2_X, K2_Y = np.dot(K_X, K_X), np.dot(K_Y, K_Y)
     P = np.ones([n, n]) / float(n)
+
+    print("was here in convex init!")
+
     for it in range(1, niter + 1):
-        G = np.dot(P, K2_X) + np.dot(K2_Y, P) - 2 * np.dot(K_Y, np.dot(P, K_X))
+        G = np.dot(P, K2_X) + np.dot(K2_Y, P) - 2 * np.dot(K_Y, np.dot(P, K_X)) + sim_matrix
         q = ot.sinkhorn(np.ones(n), np.ones(n), G, reg, stopThr=1e-3)
         alpha = 2.0 / float(2.0 + it)
         P = alpha * q + (1.0 - alpha) * P

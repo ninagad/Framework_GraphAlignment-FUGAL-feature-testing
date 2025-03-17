@@ -38,10 +38,11 @@ def align_embeddings(embed1, embed2, CONE_args, adj1=None, adj2=None, struc_embe
             embed1, embed2, K_X=adj1, K_Y=adj2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
     else:
         init_sim, corr_mat = unsup_align.convex_init(
-            embed1, embed2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
+            embed1, embed2, sim_matrix=CONE_args['similarity'], apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
 
     dim_align_matrix, corr_mat = unsup_align.align(
-        embed1, embed2, init_sim, sim_matrix=CONE_args['similarity'], lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
+        embed1, embed2, init_sim, lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
+        #embed1, embed2, init_sim, sim_matrix=CONE_args['similarity'], lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
  
     aligned_embed1 = embed1.dot(dim_align_matrix)
 
