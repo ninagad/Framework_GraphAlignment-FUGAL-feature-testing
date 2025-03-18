@@ -210,21 +210,33 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
     # np.savetxt(f"{prefix}_Gt.txt", Gt_m, fmt='%d')
 
     src = nx.Graph(Src_e.tolist())
-    src_cc = len(max(nx.connected_components(src), key=len))
-    src_disc = src_cc < n
+    src_smallest_cc = len(min(nx.connected_components(src), key=len))
+    src_largest_cc = len(max(nx.connected_components(src), key=len))
+    src_median_cc = np.median([len(cc) for cc in nx.connected_components(src)])
+
+    src_disc = src_largest_cc < n
 
     tar = nx.Graph(Tar_e.tolist())
-    tar_cc = len(max(nx.connected_components(tar), key=len))
-    tar_disc = tar_cc < n
+    tar_largest_cc = len(max(nx.connected_components(tar), key=len))
+    tar_smallest_cc = len(min(nx.connected_components(tar), key=len))
+    tar_median_cc = np.median([len(cc) for cc in nx.connected_components(tar)])
+
+    tar_disc = tar_largest_cc < n
 
     if (src_disc):
-        _log.warning("Disc. Source: %s < %s", src_cc, n)
+        _log.warning("Disc. Source: %s < %s", src_largest_cc, n)
+        _log.warning("Smallest connected component in Source has %s nodes", src_smallest_cc)
+        _log.warning("The median of the size of the connected components in Source are %s nodes", src_median_cc)
+
     _run.log_scalar("graph.Source.disc", src_disc)
     _run.log_scalar("graph.Source.n", n)
     _run.log_scalar("graph.Source.e", Src_e.shape[0])
 
     if (tar_disc):
-        _log.warning("Disc. Target: %s < %s", tar_cc, n)
+        _log.warning("Disc. Target: %s < %s", tar_largest_cc, n)
+        _log.warning("Smallest connected component in Target has %s nodes", tar_smallest_cc)
+        _log.warning("The median of the size of the connected components in Target are %s nodes", tar_median_cc)
+
     _run.log_scalar("graph.Target.disc", tar_disc)
     _run.log_scalar("graph.Target.n", n)
     _run.log_scalar("graph.Target.e", Tar_e.shape[0])
@@ -268,7 +280,6 @@ def e_to_G(e, n):
     G.data = G.data.clip(0, 1)
     # return G
     return G.toarray()
-
 
 @ ex.capture
 def run_exp(G, output_path, noises, _log):

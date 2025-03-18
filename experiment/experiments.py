@@ -131,20 +131,22 @@ def tuning():
     # seed=937
 
     # accs = [0,6]
+    use_largest_connected_component = True
 
     tmp = [
-        # 12, # Fugal
+        12, # Fugal
         # 20, # GrampaS (Grampa: 10)
         # 6, # IsoRank
         # 3, # REGAL
-        1,  # CONE
+        #1,  # CONE
         [
-            # {'features': [x], 'mu': 2.5} for x in [Feature.DEG, #Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER, Feature.EGO_EDGES, Feature.EGO_OUT_EDGES, Feature.EGO_NEIGHBORS, # NetSimile
+            {'features': x, 'mu': 2.5} for x in [[Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [Feature.EGO_NEIGHBORS], # NetSimile
             # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
-            # Feature.SUM_EGO_CLUSTER, Feature.VAR_EGO_CLUSTER, Feature.ASSORTATIVITY_EGO, Feature.INTERNAL_FRAC_EGO, # Other features
-            # Feature.MODE_EGO_DEGS, Feature.MEDIAN_EGO_DEGS, Feature.MIN_EGO_DEGS, Feature.MAX_EGO_DEGS, Feature.RANGE_EGO_DEGS, Feature.SKEWNESS_EGO_DEGS, Feature.KURTOSIS_EGO_DEGS,  # Statistical features
+            [Feature.SUM_EGO_CLUSTER], [Feature.VAR_EGO_CLUSTER], [Feature.ASSORTATIVITY_EGO], [Feature.INTERNAL_FRAC_EGO], # Other features
+            [Feature.MODE_EGO_DEGS], [Feature.MEDIAN_EGO_DEGS], [Feature.MIN_EGO_DEGS], [Feature.MAX_EGO_DEGS], [Feature.RANGE_EGO_DEGS], [Feature.SKEWNESS_EGO_DEGS], [Feature.KURTOSIS_EGO_DEGS],  # Statistical features
             # 'laplacian_centrality',
-            # Feature.CLOSENESS_CENTRALITY, Feature.DEGREE_CENTRALITY, Feature.EIGENVECTOR_CENTRALITY, Feature.PAGERANK, Feature.KATZ_CENTRALITY,  # Centrality measures
+            [Feature.CLOSENESS_CENTRALITY], [Feature.DEGREE_CENTRALITY], [Feature.EIGENVECTOR_CENTRALITY], [Feature.PAGERANK], [Feature.KATZ_CENTRALITY],  # Centrality measures
+            #[Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER] # Fugal
             # Feature.AVG_2HOP_DEG, Feature.AVG_2HOP_CLUSTER, Feature.TWOHOP_EDGES, Feature.TWOHOP_NEIGHBORS,  # 2-hop
             # Feature.SUM_2HOP_CLUSTER, Feature.VAR_2HOP_CLUSTER, Feature.ASSORTATIVITY_2HOP, Feature.INTERNAL_FRAC_2HOP,  # 2-hop
             # 'mode_2hop_degs', 'min_2hop_degs', 'kurtosis_2hop_degs',
@@ -152,7 +154,7 @@ def tuning():
             # Feature.RANGE_2HOP_DEGS, Feature.SKEWNESS_2HOP_DEGS,
             # ['deg'], ['degree_centrality'], ['pagerank'], ['katz'], ['deg', 'degree_centrality'], ['deg', 'pagerank'], ['deg', 'katz'], ['deg', 'cluster', 'avg_ego_deg', 'avg_ego_cluster']  # ca_netscience
             # ]
-            {'features': x} for x in [None, # [Feature.DEG], [Feature.EGO_EDGES], [Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES], [Feature.DEG, Feature.PAGERANK], [Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
+            #{'features': x} for x in [[Feature.DEG], [Feature.EGO_EDGES], #[Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES], [Feature.DEG, Feature.PAGERANK], [Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
                                       # [Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [F>
                                       # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
                                       # [Feature.SUM_EGO_CLUSTER], [Feature.VAR_EGO_CLUSTER], [Feature.ASSORTATIVITY_EGO], [Feature.INTERNAL_FRAC_EGO], # Other features
@@ -180,7 +182,7 @@ def tuning():
 
     run = list(range(len(tmp[1])))
 
-    iters = 1
+    iters = 5
 
     graph_names = [
         # "contacts-prox-high-school-2013_100",
@@ -188,9 +190,9 @@ def tuning():
         # "yeast25_Y2H1",
         # "bio-dmela",
         # "in-arenas",
-        # "inf-euroroad",
-        # "ca-netscience",
-        "bio-celegans",
+         "inf-euroroad",
+        #"ca-netscience",
+        #"bio-celegans",
         # "inf-power",
         # "MultiMagna"
         # "facebook",
@@ -223,10 +225,10 @@ def tuning():
     noises = [
         0.00,
         0.05,
-        # 0.10,
-        # 0.15,
-        # 0.20,
-        # 0.25,
+        0.10,
+        0.15,
+        0.20,
+        0.25,
     ]
     # s_trans = (2, 1, 0, 3)
     # s_trans = (0, 2, 1, 3,4)

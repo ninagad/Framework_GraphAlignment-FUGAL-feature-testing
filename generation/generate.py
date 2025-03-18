@@ -66,10 +66,33 @@ def load_as_nx(path):
     print("Just checking",nx.is_directed(G))
     return np.array(G.edges)
 
+def get_largest_connected_component(G: nx.Graph) -> nx.Graph:
+    """
+    Args:
+        G: networkx Graph
 
-def loadnx(path):
+    Returns: The largest connected component as a networkx Graph that is reindexed s.t. the node labels are consecutive and start from 0.
+
+    """
+    # Get largest connected component
+    largest_cc = max(nx.connected_components(G), key=len)
+    largest_cc_graph = G.subgraph(largest_cc).copy()
+    reindexed_graph = nx.convert_node_labels_to_integers(largest_cc_graph, first_label=0, ordering='sorted')
+
+    return reindexed_graph
+
+
+@ex.capture
+def loadnx(path, use_largest_connected_component: bool):
     G_e = np.loadtxt(path, int)
-    return nx.Graph(G_e.tolist())
+    G = nx.Graph(G_e.tolist())
+
+    if use_largest_connected_component:
+        largest_cc = get_largest_connected_component(G)
+        print('Using largest connected component')
+        return largest_cc
+    else:
+        return G
 
 
 @ ex.capture

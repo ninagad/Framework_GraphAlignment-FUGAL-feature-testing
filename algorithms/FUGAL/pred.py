@@ -13,6 +13,8 @@ from algorithms.FUGAL.sinkhorn import sinkhorn,sinkhorn_epsilon_scaling,sinkhorn
 from scipy import stats
 from feature import Feature
 
+from sklearn.preprocessing import StandardScaler
+
 def plot(graph1, graph2):
     plt.figure(figsize=(12,4))
     plt.subplot(121)
@@ -439,7 +441,27 @@ def feature_extraction(G,features):
         node_features[:, features.index(Feature.ASSORTATIVITY_2HOP)] = assortativity_neighbors
 
     node_features = np.nan_to_num(node_features)
-    return np.nan_to_num(node_features)
+
+    # Standardization
+    #scaler = StandardScaler()
+    #standardized_features = scaler.fit_transform(node_features)
+
+    # Min max normalization to 0-range range
+    #range = 1#G.number_of_nodes()//2
+    #max_values = np.max(node_features, axis=0)
+    #min_values = np.min(node_features, axis=0)
+    #normalized_features = (node_features - min_values) / ((max_values-min_values)/range)
+
+    #print('before norm: \n', node_features[:5, :])
+    #print('max values: ', max_values[:5])
+    #print('min values: ', min_values[:5])
+
+    #print('normalized features: \n', normalized_features[:5, :])
+
+    #'shape of maxvalues: ', max_values.shape)
+    #print('shape of minvalues: ', min_values.shape)
+    #print('shape of normalized: ', normalized_features.shape)
+    return node_features
 
 def feature_extractionEV(G):
     """Node feature extraction.
@@ -707,6 +729,10 @@ def convex_init(A, B, D, mu, niter):
             q = sinkhorn(ones, ones, G, reg, maxIter = 500, stopThr = 1e-3)
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
+    #QAP_term = np.trace((A@P@B.T@P.T))
+    #LAP_term = mu*np.trace(P.T@D)
+    #print('QAP term af optimization: ', QAP_term)
+    #print('LAP term after optimization: ', LAP_term)
     return P
 def convex_initQAP(A, B, niter):
     n = len(A)

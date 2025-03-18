@@ -26,6 +26,8 @@ import pickle
 @ex.config
 def global_config():
 
+    use_largest_connected_component = False
+
     run = [
         0,      # gwl
         1,      # conealign
