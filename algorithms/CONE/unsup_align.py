@@ -117,7 +117,7 @@ def align_with_features(X, Y, R, sim_matrix, lr=1.0, bsz=10, nepoch=5, niter=10,
     return R, P
 
 
-def convex_init(X, Y, sim_matrix, niter=10, reg=1.0, apply_sqrt=False):
+def convex_init(X, Y, niter=10, reg=1.0, apply_sqrt=False):
     n, d = X.shape
     if apply_sqrt:
         X, Y = sqrt_eig(X), sqrt_eig(Y)
@@ -129,7 +129,7 @@ def convex_init(X, Y, sim_matrix, niter=10, reg=1.0, apply_sqrt=False):
     print("was here in convex init!")
 
     for it in range(1, niter + 1):
-        G = np.dot(P, K2_X) + np.dot(K2_Y, P) - 2 * np.dot(K_Y, np.dot(P, K_X)) + sim_matrix
+        G = np.dot(P, K2_X) + np.dot(K2_Y, P) - 2 * np.dot(K_Y, np.dot(P, K_X))
         q = ot.sinkhorn(np.ones(n), np.ones(n), G, reg, stopThr=1e-3)
         alpha = 2.0 / float(2.0 + it)
         P = alpha * q + (1.0 - alpha) * P
@@ -154,8 +154,6 @@ def convex_init_sparse(X, Y, sim_matrix, K_X=None, K_Y=None, niter=10, reg=1.0, 
     # print K_X, K_Y, K2_X, K2_Y
     K_X, K_Y, K2_X, K2_Y = K_X.toarray(), K_Y.toarray(), K2_X.toarray(), K2_Y.toarray()
     P = np.ones([n, n]) / float(n)
-
-    print("was here in convex init sparse!")
 
     for it in range(1, niter + 1):
         # if it % 10 == 0:
