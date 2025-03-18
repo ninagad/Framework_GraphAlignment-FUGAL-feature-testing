@@ -86,18 +86,29 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=N
     L = data['L']
     Src1 = nx.from_numpy_array(Src)
     Tar1 = nx.from_numpy_array(Tar)
+    n1 = Tar.shape[0]
+    n2 = Src.shape[0]
     F1 = feature_extraction(Src1, features)
     F2 = feature_extraction(Tar1, features)
-    D = eucledian_dist(F1, F2, Src.shape[0])
+    Sim = np.ones((n1,n2))
+
+    for i in range(n1):
+        for j in range(n2):
+            Sim[i,j] = eucledian_dist(F1[i,:], F2[j,:], 1) / np.max(np.sum(F1[i,:],F2[j,:]))
+            # Sim[i,j] = np.sum(np.absolute(F1[i,:] - F2[j,:]) / np.max(np.vstack((F1[i,:],F2[j,:])), axis=0))
+            # Sim[i,j] = 1 - (np.sum(np.absolute(F1[i,:] - F2[j,:])) / np.max([np.sum(F1[i,:]),np.sum(F2[j,:])]))
+            # Sim[i, j] = np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0))) / nr_of_features
+            # Sim[i,j] = 1- (np.sum(np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)) / nr_of_features)
+            #Sim[i, j] = np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)))
+
+    #D = eucledian_dist(F1, F2, Src.shape[0])
 
     if lalpha is not None:
         L = create_L(Src, Tar, lalpha=lalpha,
                      weighted=weighted).toarray().astype(dtype)
 
-    L = np.max(D) - D
-
-    n1 = Tar.shape[0]
-    n2 = Src.shape[0]
+    #L = np.max(D) - D
+    L = Sim
 
     # normalize the adjacency matrices
     d1 = 1 / Tar.sum(axis=1)
