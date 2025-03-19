@@ -6,7 +6,7 @@ from algorithms import regal, eigenalign, conealign, netalign, NSD, klaus, gwl, 
 import networkx as nx
 import numpy as np
 from feature import Feature
-
+from enums.normalizationEnums import NormalizationEnums
 
 # mprof run workexp.py with playground run=[1,2,3,4,5] iters=2 win
 
@@ -131,7 +131,7 @@ def tuning():
     # seed=937
 
     # accs = [0,6]
-    use_largest_connected_component = True
+    #use_largest_connected_component = True
 
     tmp = [
         12, # Fugal
@@ -140,7 +140,11 @@ def tuning():
         # 3, # REGAL
         #1,  # CONE
         [
-            {'features': x, 'mu': 2.5} for x in [[Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [Feature.EGO_NEIGHBORS], # NetSimile
+            {'features': x,
+             'mu': 2.5,
+             'normalization': NormalizationEnums.NORMALIZE_DIFFERENCES,
+             }
+            for x in [[Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [Feature.EGO_NEIGHBORS], # NetSimile
             # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
             [Feature.SUM_EGO_CLUSTER], [Feature.VAR_EGO_CLUSTER], [Feature.ASSORTATIVITY_EGO], [Feature.INTERNAL_FRAC_EGO], # Other features
             [Feature.MODE_EGO_DEGS], [Feature.MEDIAN_EGO_DEGS], [Feature.MIN_EGO_DEGS], [Feature.MAX_EGO_DEGS], [Feature.RANGE_EGO_DEGS], [Feature.SKEWNESS_EGO_DEGS], [Feature.KURTOSIS_EGO_DEGS],  # Statistical features
@@ -185,14 +189,15 @@ def tuning():
     iters = 5
 
     graph_names = [
+        #"test-graph",
         # "contacts-prox-high-school-2013_100",
         # "mammalia-voles-plj-trapping_100",
         # "yeast25_Y2H1",
         # "bio-dmela",
         # "in-arenas",
-         "inf-euroroad",
+        # "inf-euroroad",
         #"ca-netscience",
-        #"bio-celegans",
+        "bio-celegans",
         # "inf-power",
         # "MultiMagna"
         # "facebook",
@@ -217,8 +222,8 @@ def tuning():
 
     graphs = rgraphs(graph_names)
 
-    # graphs = [
-    #   (nx.newman_watts_strogatz_graph, (1000,7,0.5))
+    #graphs = [
+        #(nx.newman_watts_strogatz_graph, (5,3,0.5)),
     #   (nx.stochastic_block_model, ([250,250,250,250],[[0.01,0.01,0.01,0.01],[0.01,0.01,0.01,0.01],[0.01,0.01,0.01,0.01],[0.01,0.01,0.01,0.01]]))
     # ]
 

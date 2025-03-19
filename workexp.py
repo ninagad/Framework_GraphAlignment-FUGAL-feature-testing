@@ -26,7 +26,7 @@ import pickle
 @ex.config
 def global_config():
 
-    use_largest_connected_component = False
+    use_largest_connected_component: bool = False
 
     run = [
         0,      # gwl

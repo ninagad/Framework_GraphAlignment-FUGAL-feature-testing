@@ -11,8 +11,10 @@ import time
 import matplotlib.pyplot as plt
 from multiprocessing import Pool
 from sklearn.metrics.pairwise import euclidean_distances
-from algorithms.FUGAL.pred import feature_extraction,eucledian_dist,convex_init,Degree_Features
+from sklearn.preprocessing import StandardScaler
 
+from algorithms.FUGAL.pred import feature_extraction,eucledian_dist,convex_init,Degree_Features
+from enums.normalizationEnums import NormalizationEnums
 
 def are_matrices_equal(matrix1, matrix2):
     # Check if dimensions are the same
@@ -29,7 +31,7 @@ def are_matrices_equal(matrix1, matrix2):
     return True
 
 
-def main(data, iter, mu, features,EFN=5):
+def main(data, iter, mu, features, normalization: NormalizationEnums, EFN=5):
     print("Fugal")
     torch.set_num_threads(40)
     dtype = np.float64
@@ -62,9 +64,43 @@ def main(data, iter, mu, features,EFN=5):
         F2 = Degree_Features(Tar1,EFN)*n1
     #EFN 5 equals fugal
     if (EFN==5):
-        F1 = feature_extraction(Src1, features)
-        F2 = feature_extraction(Tar1, features)
-    D = eucledian_dist(F1, F2, n)
+        F1 = feature_extraction(Src1, features, normalization)
+        F2 = feature_extraction(Tar1, features, normalization)
+
+    # Normalization before squaring must be computed manually.
+    if normalization == NormalizationEnums.NORMALIZE_DIFFERENCES:
+        no_of_features = F1.shape[1]
+        D = np.ones((n1, n2, no_of_features))
+        #print(f'{F1=}')
+        #print(f'{F2=}')
+        # Compute pairwise differences for all nodes
+        for i in range(n1):
+            for j in range(n2):
+                # D is a (n x n x #features) matrix after this
+                D[i, j] = abs(F1[i, :] - F2[j, :])
+        #print(f'{D.shape=}')
+        #print(f'{D=}')
+
+        # Select the min and max values over all combinations of nodes for each feature dimension
+        mins = np.min(D, axis=(0,1))
+        maxes = np.max(D, axis=(0,1))
+
+        #print(f'{mins=}')
+        #print(f'{maxes=}')
+
+        # Min-max normalize differences
+        D = (D-mins)/(maxes-mins)
+        #print('D shape after normalization: ', D.shape)
+        #print('D after min-max norm: \n', D)
+
+        D = np.linalg.norm(D, axis=2)
+
+        #print('D shape after linalg.norm: ', D.shape)
+        #print('D after linalg.norm: \n', D)
+
+    else: # Otherwise use library function
+        D = eucledian_dist(F1, F2, n)
+
     D = torch.tensor(D, dtype = torch.float64)
     
     P = convex_init(A, B, D, mu, iter)
