@@ -9,7 +9,7 @@ class PlotUtils:
     def __init__(self):
         self.colorscale_dict = {}
         self.markers_dict = {}
-        self.marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd', '>', 'p', 'v', '1', '<']
+        self.marker_options = ['o', '^', 's', 'x', 'D', 'P', 'd', '>', 'p', 'v', '1', '<', 'X']
 
         self.init_single_feature()
         self.init_combination_features()
@@ -55,8 +55,9 @@ class PlotUtils:
             [Feature.CLUSTER, Feature.EGO_EDGES],
             [Feature.DEG, Feature.CLUSTER, Feature.EGO_EDGES],
             # socfb-Bowdoin47
-            [Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
-            [Feature.DEG, Feature.CLUSTER, Feature.SUM_EGO_CLUSTER],
+            [Feature.DEG, Feature.INTERNAL_FRAC_EGO],
+            [Feature.SUM_EGO_CLUSTER, Feature.INTERNAL_FRAC_EGO],
+            [Feature.DEG, Feature.SUM_EGO_CLUSTER, Feature.INTERNAL_FRAC_EGO],
 
         ]
         combination_colormap = 'pink_r'

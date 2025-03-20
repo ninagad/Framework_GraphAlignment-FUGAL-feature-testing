@@ -127,7 +127,7 @@ class PlotGenerator():
 
         top_three_comb_sources = {GraphEnums.INF_EUROROAD: 158,
                                   GraphEnums.CA_NETSCIENCE: 157,
-                                  #GraphEnums.SOCFB_BOWDOIN47: 161,
+                                  GraphEnums.SOCFB_BOWDOIN47: 164,
                                   GraphEnums.VOLES: 160,
                                   }
 
