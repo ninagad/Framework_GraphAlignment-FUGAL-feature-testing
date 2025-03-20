@@ -149,7 +149,7 @@ def tuning():
             [Feature.SUM_EGO_CLUSTER], [Feature.VAR_EGO_CLUSTER], [Feature.ASSORTATIVITY_EGO], [Feature.INTERNAL_FRAC_EGO], # Other features
             [Feature.MODE_EGO_DEGS], [Feature.MEDIAN_EGO_DEGS], [Feature.MIN_EGO_DEGS], [Feature.MAX_EGO_DEGS], [Feature.RANGE_EGO_DEGS], [Feature.SKEWNESS_EGO_DEGS], [Feature.KURTOSIS_EGO_DEGS],  # Statistical features
             # 'laplacian_centrality',
-            [Feature.CLOSENESS_CENTRALITY], [Feature.DEGREE_CENTRALITY], [Feature.EIGENVECTOR_CENTRALITY], [Feature.PAGERANK], [Feature.KATZ_CENTRALITY],  # Centrality measures
+            [Feature.CLOSENESS_CENTRALITY], [Feature.DEGREE_CENTRALITY], [Feature.EIGENVECTOR_CENTRALITY], [Feature.PAGERANK], # [Feature.KATZ_CENTRALITY], Centrality measures
             #[Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER] # Fugal
             # Feature.AVG_2HOP_DEG, Feature.AVG_2HOP_CLUSTER, Feature.TWOHOP_EDGES, Feature.TWOHOP_NEIGHBORS,  # 2-hop
             # Feature.SUM_2HOP_CLUSTER, Feature.VAR_2HOP_CLUSTER, Feature.ASSORTATIVITY_2HOP, Feature.INTERNAL_FRAC_2HOP,  # 2-hop
@@ -157,6 +157,7 @@ def tuning():
             # 'median_2hop_degs', 'max_2hop_degs',
             # Feature.RANGE_2HOP_DEGS, Feature.SKEWNESS_2HOP_DEGS,
             # ['deg'], ['degree_centrality'], ['pagerank'], ['katz'], ['deg', 'degree_centrality'], ['deg', 'pagerank'], ['deg', 'katz'], ['deg', 'cluster', 'avg_ego_deg', 'avg_ego_cluster']  # ca_netscience
+            [Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.SUM_EGO_CLUSTER], [Feature.INTERNAL_FRAC_EGO], [Feature.MAX_EGO_DEGS], [Feature.CLOSENESS_CENTRALITY], [Feature.DEGREE_CENTRALITY], [Feature.EIGENVECTOR_CENTRALITY], [Feature.PAGERANK],
             # ]
             #{'features': x} for x in [[Feature.DEG], [Feature.EGO_EDGES], #[Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES], [Feature.DEG, Feature.PAGERANK], [Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
                                       # [Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [F>

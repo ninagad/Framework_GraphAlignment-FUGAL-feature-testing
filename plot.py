@@ -163,9 +163,12 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
 
         color, marker, label = get_color_marker_label(feature)
 
-        # Don't plot feature if it is not an ENUM feature
-        if label is None:
+        if (label is None) or (label is FE.to_label(FE.to_feature("KATZ_CENTRALITY"))):
             continue
+
+        # Don't plot feature if it is not an ENUM feature
+        #if label is None:
+            #continue
 
         # If the label is more than 22 characters, split it into two lines
         max_label_len = 22
