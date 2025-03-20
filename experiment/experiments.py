@@ -183,11 +183,11 @@ def tuning():
         #"inf-euroroad",
         #"socfb-Bowdoin47",
         #"contacts-prox-high-school-2013_100",
-        #"nws_n=1000_k = 10_p = 0.2",
-        #"nws_n = 1000_k = 10_p = 0.4",
-        #"nws_n = 1000_k = 10_p = 0.6",
-        #"nws_n = 1000_k = 10_p = 0.8",
-        #"nws_n = 1000_k = 10_p = 1",
+        #"nws_n=1000_k=10_p=0.2",
+        #"nws_n=1000_k=10_p=0.4",
+        #"nws_n=1000_k=10_p=0.6",
+        #"nws_n=1000_k=10_p=0.8",
+        #"nws_n=1000_k=10_p=1",
     ]
 
     # graphs = [
