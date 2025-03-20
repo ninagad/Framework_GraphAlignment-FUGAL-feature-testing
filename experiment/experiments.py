@@ -142,7 +142,7 @@ def tuning():
         [
             {'features': x,
              'mu': 2.5,
-             'normalization': NormalizationEnums.NORMALIZE_DIFFERENCES,
+             'normalization': NormalizationEnums.NO_NORMALIZATION,
              }
             for x in [[Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [Feature.EGO_NEIGHBORS], # NetSimile
             # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
@@ -153,31 +153,17 @@ def tuning():
             #[Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER] # Fugal
             # Feature.AVG_2HOP_DEG, Feature.AVG_2HOP_CLUSTER, Feature.TWOHOP_EDGES, Feature.TWOHOP_NEIGHBORS,  # 2-hop
             # Feature.SUM_2HOP_CLUSTER, Feature.VAR_2HOP_CLUSTER, Feature.ASSORTATIVITY_2HOP, Feature.INTERNAL_FRAC_2HOP,  # 2-hop
-            # 'mode_2hop_degs', 'min_2hop_degs', 'kurtosis_2hop_degs',
-            # 'median_2hop_degs', 'max_2hop_degs',
+            # 'mode_2hop_degs', 'min_2hop_degs', 'kurtosis_2hop_degs', 'median_2hop_degs', 'max_2hop_degs',
             # Feature.RANGE_2HOP_DEGS, Feature.SKEWNESS_2HOP_DEGS,
             # ['deg'], ['degree_centrality'], ['pagerank'], ['katz'], ['deg', 'degree_centrality'], ['deg', 'pagerank'], ['deg', 'katz'], ['deg', 'cluster', 'avg_ego_deg', 'avg_ego_cluster']  # ca_netscience
             [Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.SUM_EGO_CLUSTER], [Feature.INTERNAL_FRAC_EGO], [Feature.MAX_EGO_DEGS], [Feature.CLOSENESS_CENTRALITY], [Feature.DEGREE_CENTRALITY], [Feature.EIGENVECTOR_CENTRALITY], [Feature.PAGERANK],
-            # ]
-            #{'features': x} for x in [[Feature.DEG], [Feature.EGO_EDGES], #[Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES], [Feature.DEG, Feature.PAGERANK], [Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK], [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
-                                      # [Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [F>
-                                      # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
-                                      # [Feature.SUM_EGO_CLUSTER], [Feature.VAR_EGO_CLUSTER], [Feature.ASSORTATIVITY_EGO], [Feature.INTERNAL_FRAC_EGO], # Other features
-                                      # [Feature.MODE_EGO_DEGS], [Feature.MEDIAN_EGO_DEGS], [Feature.MIN_EGO_DEGS], [Feature.MAX_EGO_DEGS], [Feature.RANGE_EGO_DEGS], [Featu>
-                                      # [Feature.CLOSENESS_CENTRALITY], [Feature.DEGREE_CENTRALITY], [Feature.EIGENVECTOR_CENTRALITY], [Feature.PAGERANK], [Feature.KATZ_CEN>
-                                      # [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER] # Fugal
-                                      ]
-            # {'EFN': x} for x in [0,1,2,3,5]
-            # {'lev': x} for x in [1, 2, 3]
+             ]
             # {'mu': x, 'features': ['deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
             #        'sum_ego_cluster', 'var_ego_cluster', 'assortativity_ego', 'internal_frac_ego', # Augmented NETSIMILE features
             #      'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
             #       'closeness_centrality', 'degree_centrality', 'eigenvector_centrality', 'pagerank' ]} for x in [0, 0.1,0.7,1.3,1.9,2.5]
         ]
     ]
-
-    # tmp[1].append({'features': ['deg','cluster']})
-    # new comment
 
     # _ISO_args["alpha"] = 0.8
     # _ISO_args["lalpha"] = 40
@@ -190,26 +176,18 @@ def tuning():
     iters = 5
 
     graph_names = [
-        #"test-graph",
-        # "contacts-prox-high-school-2013_100",
-        # "mammalia-voles-plj-trapping_100",
-        # "yeast25_Y2H1",
-        # "bio-dmela",
-        # "in-arenas",
-        # "inf-euroroad",
-        #"ca-netscience",
         "bio-celegans",
-        # "inf-power",
-        # "MultiMagna"
-        # "facebook",
-        # "astro",
-        # "gnp"
-        # "soc-hamsterster",
-        # "socfb-Bowdoin47",
-        # "socfb-Hamilton46",
-        # "socfb-Haverford76",
-        # "socfb-Swarthmore42",
-        # "soc-facebook",
+        #"ca-netscience",
+        #"mammalia-voles-plj-trapping_100",
+        #"yeast25_Y2H1",
+        #"inf-euroroad",
+        #"socfb-Bowdoin47",
+        #"contacts-prox-high-school-2013_100",
+        #"nws_n=1000_k = 10_p = 0.2",
+        #"nws_n = 1000_k = 10_p = 0.4",
+        #"nws_n = 1000_k = 10_p = 0.6",
+        #"nws_n = 1000_k = 10_p = 0.8",
+        #"nws_n = 1000_k = 10_p = 1",
     ]
 
     # graphs = [
@@ -224,6 +202,11 @@ def tuning():
     graphs = rgraphs(graph_names)
 
     #graphs = [
+        #(nx.newman_watts_strogatz_graph, (1000, 10, 0.2)),
+        #(nx.newman_watts_strogatz_graph, (1000, 10, 0.4)),
+        #(nx.newman_watts_strogatz_graph, (1000, 10, 0.6)),
+        #(nx.newman_watts_strogatz_graph, (1000, 10, 0.8)),
+        #(nx.newman_watts_strogatz_graph, (1000, 10, 1)),
         #(nx.newman_watts_strogatz_graph, (5,3,0.5)),
     #   (nx.stochastic_block_model, ([250,250,250,250],[[0.01,0.01,0.01,0.01],[0.01,0.01,0.01,0.01],[0.01,0.01,0.01,0.01],[0.01,0.01,0.01,0.01]]))
     # ]
