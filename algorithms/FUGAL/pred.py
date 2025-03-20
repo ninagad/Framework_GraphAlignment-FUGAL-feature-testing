@@ -26,7 +26,7 @@ def plot(graph1, graph2):
     plt.savefig('x1.png')
 
 
-def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums) -> np.array:
+def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = ScalingEnums.NO_SCALING) -> np.array:
     """Node feature extraction.
 
     Parameters
