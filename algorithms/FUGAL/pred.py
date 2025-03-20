@@ -12,8 +12,8 @@ from sklearn.metrics.pairwise import euclidean_distances
 from algorithms.FUGAL.sinkhorn import sinkhorn,sinkhorn_epsilon_scaling,sinkhorn_knopp,sinkhorn_stabilized
 from scipy import stats
 from feature import Feature
-from enums.normalizationEnums import NormalizationEnums
-from sklearn.preprocessing import StandardScaler
+from enums.scalingEnums import ScalingEnums
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 
 def plot(graph1, graph2):
     plt.figure(figsize=(12,4))
@@ -26,7 +26,7 @@ def plot(graph1, graph2):
     plt.savefig('x1.png')
 
 
-def feature_extraction(G: nx.Graph, features: list, normalization: NormalizationEnums) -> np.array:
+def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums) -> np.array:
     """Node feature extraction.
 
     Parameters
@@ -443,19 +443,22 @@ def feature_extraction(G: nx.Graph, features: list, normalization: Normalization
 
     node_features = np.nan_to_num(node_features)
 
-    if normalization == NormalizationEnums.STANDARDIZE_FEATURES:
+    if scaling == ScalingEnums.STANDARDIZE_FEATURES:
         # Standardization
         scaler = StandardScaler()
         standardized_features = scaler.fit_transform(node_features)
         node_features = standardized_features
 
-    if normalization == NormalizationEnums.NORMALIZE_FEATURES:
+    if scaling == ScalingEnums.NORMALIZE_FEATURES:
         # Min max normalization to 0-1 range
-        max_values = np.max(node_features, axis=0)
-        min_values = np.min(node_features, axis=0)
-        normalized_features = (node_features - min_values) / (max_values-min_values)
-
+        scaler = MinMaxScaler()
+        normalized_features = scaler.fit_transform(node_features)
         node_features = normalized_features
+
+    if scaling == ScalingEnums.ROBUST_NORMALIZE_FEATURES:
+        scaler = RobustScaler()
+        robust_normalized_features = scaler.fit_transform(node_features)
+        node_features = robust_normalized_features
 
     #print('before norm: \n', node_features[:5, :])
     #print('max values: ', max_values[:5])

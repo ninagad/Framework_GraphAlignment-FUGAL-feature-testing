@@ -14,7 +14,7 @@ from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import StandardScaler
 
 from algorithms.FUGAL.pred import feature_extraction,eucledian_dist,convex_init,Degree_Features
-from enums.normalizationEnums import NormalizationEnums
+from enums.scalingEnums import ScalingEnums
 
 def are_matrices_equal(matrix1, matrix2):
     # Check if dimensions are the same
@@ -31,7 +31,7 @@ def are_matrices_equal(matrix1, matrix2):
     return True
 
 
-def main(data, iter, mu, features, normalization: NormalizationEnums, EFN=5):
+def main(data, iter, mu, features, scaling: ScalingEnums, EFN=5):
     print("Fugal")
     torch.set_num_threads(40)
     dtype = np.float64
@@ -64,11 +64,11 @@ def main(data, iter, mu, features, normalization: NormalizationEnums, EFN=5):
         F2 = Degree_Features(Tar1,EFN)*n1
     #EFN 5 equals fugal
     if (EFN==5):
-        F1 = feature_extraction(Src1, features, normalization)
-        F2 = feature_extraction(Tar1, features, normalization)
+        F1 = feature_extraction(Src1, features, scaling)
+        F2 = feature_extraction(Tar1, features, scaling)
 
     # Normalization before squaring must be computed manually.
-    if normalization == NormalizationEnums.NORMALIZE_DIFFERENCES:
+    if scaling == ScalingEnums.NORMALIZE_DIFFERENCES:
         no_of_features = F1.shape[1]
         D = np.ones((n1, n2, no_of_features))
         #print(f'{F1=}')

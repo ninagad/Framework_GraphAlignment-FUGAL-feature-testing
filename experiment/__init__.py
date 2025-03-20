@@ -4,7 +4,7 @@ import logging
 from algorithms import gwl, conealign, grasp as grasp, regal, eigenalign, NSD, isorank2 as isorank, netalign, klaus, sgwl,Grampa,GraspB,GrampaS,Fugal,Fugal2,QAP
 from algorithms import Parrot,Path,got,fgot,Dspp,Mds
 #GraspBafter Grampa
-from enums.normalizationEnums import NormalizationEnums
+from enums.scalingEnums import ScalingEnums
 
 ex = Experiment("ex")
 
@@ -237,7 +237,7 @@ _GrampaS_args = {
 
 _Fugal_args={
     'iter': 15,
-    'normalization': NormalizationEnums.NO_NORMALIZATION,
+    'scaling': ScalingEnums.NO_SCALING,
     #'iter': 15, for xx dataset.
     #'simple': True,
     #'features': [#'deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
