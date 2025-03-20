@@ -175,14 +175,14 @@ _GRASPB_args = {
 }
 
 _REGAL_args = {
-    'attributes': None, # None, if no features
+    'attributes': 1, # None, if no features
     'attrvals': 2,
     'dimensions': 128,  # useless
     'k': 10,            # d = klogn
     'untillayer': 2,    # k
     'alpha': 0.01,      # delta
     'gammastruc': 1.0,
-    'gammaattr': 0.25,
+    'gammaattr': 0.01,
     'numtop': 10,
     'buckets': 2
 }
@@ -230,9 +230,9 @@ _Grampa_args = {
 }
 _GrampaS_args = {
    'eta': 0.1,
-   'lalpha':10000,
-   'initSim':1, # 0, if no features
-   'Eigtype':100 #any other than 0,2,3 is NL
+   'lalpha': 10000,
+   'initSim': 1,  # 0, if no features
+   'Eigtype': 0  # any other than 0,2,3 is NL
 }
 
 _Fugal_args={
