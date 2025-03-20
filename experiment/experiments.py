@@ -6,7 +6,7 @@ from algorithms import regal, eigenalign, conealign, netalign, NSD, klaus, gwl, 
 import networkx as nx
 import numpy as np
 from feature import Feature
-from enums.normalizationEnums import NormalizationEnums
+from enums.scalingEnums import ScalingEnums
 
 # mprof run workexp.py with playground run=[1,2,3,4,5] iters=2 win
 
@@ -142,7 +142,7 @@ def tuning():
         [
             {'features': x,
              'mu': 2.5,
-             'normalization': NormalizationEnums.NO_NORMALIZATION,
+             'scaling': ScalingEnums.NO_SCALING,
              }
             for x in [[Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [Feature.EGO_NEIGHBORS], # NetSimile
             # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
