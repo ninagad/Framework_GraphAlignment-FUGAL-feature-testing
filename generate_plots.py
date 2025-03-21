@@ -1,29 +1,8 @@
 import subprocess
-from enum import Enum, auto
 import os
 import sys
 import argparse
-
-
-class GraphEnums(Enum):
-
-
-    INF_EUROROAD = auto()
-    CA_NETSCIENCE = auto()
-    BIO_CELEGANS = auto()
-    SOCFB_BOWDOIN47 = auto()
-    VOLES = auto()
-    MULTIMAGMA = auto()
-    NWS_K7 = auto()
-    NWS_K70 = auto()
-    NWS_P_0_point_5 = auto()
-    NWS_N_K7 = auto()
-    NWS_N_PROP_K = auto()
-    SBM = auto()
-    SBM_INTP_5_PERCENT = auto()
-    SBM_INTP_15_PERCENT = auto()
-    ER = auto()
-
+from enums.graphEnums import GraphEnums
 
 
 class PlotGenerator():
@@ -36,7 +15,7 @@ class PlotGenerator():
                               GraphEnums.BIO_CELEGANS: 36,
                               GraphEnums.SOCFB_BOWDOIN47: 44,
                               GraphEnums.VOLES: 60,
-                              GraphEnums.MULTIMAGMA: 59,
+                              GraphEnums.MULTIMAGNA: 59,
                               GraphEnums.NWS_K7: 110,
                               GraphEnums.SBM: 111,
                               GraphEnums.ER: 112
@@ -64,7 +43,6 @@ class PlotGenerator():
         self.xaxis_dict[GraphEnums.NWS_N_K7] = nws_n
         self.xaxis_dict[GraphEnums.NWS_N_PROP_K] = nws_n
 
-
     @staticmethod
     def activate_venv():
         """Activate the virtual environment in a cross-platform way."""
@@ -87,7 +65,7 @@ class PlotGenerator():
             xaxis = self.xaxis_dict[graph]
 
             args = []
-            args.extend([self.venv_python, "plot.py",])
+            args.extend([self.venv_python, "plot.py", ])
             args.extend(["--source", str(source)])
             args.extend(["--outputdir", output_dir])
             args.extend(["--xaxis", xaxis])
@@ -119,7 +97,7 @@ class PlotGenerator():
                 subprocess.run(args=args)
 
     def generate_top_tree_combinations(self):
-        #top_three_comb_sources = {GraphEnums.INF_EUROROAD: 73,
+        # top_three_comb_sources = {GraphEnums.INF_EUROROAD: 73,
         #                          GraphEnums.CA_NETSCIENCE: 71,
         #                          GraphEnums.SOCFB_BOWDOIN47: 74,
         #                          GraphEnums.VOLES: 72,
@@ -159,7 +137,7 @@ class PlotGenerator():
                               GraphEnums.CA_NETSCIENCE: 18,
                               GraphEnums.BIO_CELEGANS: 32,
                               GraphEnums.VOLES: 49,
-                              GraphEnums.MULTIMAGMA: 58}
+                              GraphEnums.MULTIMAGNA: 58}
 
         source_dicts = [_0_point_1_sources,
                         _0_point_7_sources,
@@ -190,16 +168,16 @@ class PlotGenerator():
         source_dict2 = {GraphEnums.NWS_K70: 97
                         }
 
-        source_dict3 = {#GraphEnums.NWS_K70: 113,
-                        GraphEnums.NWS_P_0_point_5: 114,
-                        GraphEnums.SBM_INTP_5_PERCENT: 117,
-                        GraphEnums.SBM_INTP_15_PERCENT: 120,
-                        }
+        source_dict3 = {  # GraphEnums.NWS_K70: 113,
+            GraphEnums.NWS_P_0_point_5: 114,
+            GraphEnums.SBM_INTP_5_PERCENT: 117,
+            GraphEnums.SBM_INTP_15_PERCENT: 120,
+        }
 
         source_dict4 = {GraphEnums.NWS_N_K7: 116,
                         GraphEnums.NWS_N_PROP_K: 115,
 
-        }
+                        }
 
         source_dicts = [source_dict1, source_dict2, source_dict3, source_dict4]
 
@@ -214,14 +192,13 @@ class PlotGenerator():
                        GraphEnums.BIO_CELEGANS: 154,
                        GraphEnums.VOLES: 155,
                        GraphEnums.SOCFB_BOWDOIN47: 156,  # mu = 2.5
-                       #GraphEnums.SOCFB_BOWDOIN47: 163,   # mu = 0.1
-                       GraphEnums.MULTIMAGMA: 162,
-        }
+                       # GraphEnums.SOCFB_BOWDOIN47: 163,   # mu = 0.1
+                       GraphEnums.MULTIMAGNA: 162,
+                       }
 
         output_dir = 'centrality-combinations'
 
         self.generate_plots(source_dict, output_dir)
-
 
     def generate_scaling_tests(self):
         # TODO: run for all graphs, when tests are done (i.e. remove comments)
@@ -231,8 +208,8 @@ class PlotGenerator():
         # Min-max normalized features
         norm_feat_source_dict = {GraphEnums.BIO_CELEGANS: 333,
                                  GraphEnums.CA_NETSCIENCE: 334,
-                                 #GraphEnums.VOLES: 335,
-        }
+                                 # GraphEnums.VOLES: 335,
+                                 }
 
         self.title = "Min-max normalization on features"
         output_dir = base_dir + "Feature-normalization"
@@ -242,8 +219,8 @@ class PlotGenerator():
         # Min-max normalized distances
         norm_dist_source_dict = {GraphEnums.BIO_CELEGANS: 330,
                                  GraphEnums.CA_NETSCIENCE: 331,
-                                 #GraphEnums.INF_EUROROAD: 346,
-                                 #GraphEnums.VOLES: 329,
+                                 # GraphEnums.INF_EUROROAD: 346,
+                                 # GraphEnums.VOLES: 329,
                                  }
 
         self.title = "Min-max normalization on distances"
@@ -254,7 +231,7 @@ class PlotGenerator():
         # Standardized features
         standardized_feat_source_dict = {GraphEnums.BIO_CELEGANS: 337,
                                          GraphEnums.CA_NETSCIENCE: 338,
-                                         #GraphEnums.VOLES: 336,
+                                         # GraphEnums.VOLES: 336,
                                          }
 
         self.title = "Standardization of features"
@@ -272,9 +249,7 @@ class PlotGenerator():
         self.title = "Robust scaling of features"
         output_dir = base_dir + "Feature-robust-scaling"
 
-        #self.generate_plots(robust_scale_feat_source_dict, output_dir)
-
-
+        # self.generate_plots(robust_scale_feat_source_dict, output_dir)
 
     def generate_other_algos(self):
         base_dir = 'Other-algorithms'
@@ -283,14 +258,14 @@ class PlotGenerator():
                                 GraphEnums.CA_NETSCIENCE: 225,
                                 GraphEnums.INF_EUROROAD: 224,
                                 GraphEnums.VOLES: 227,
-                                GraphEnums.MULTIMAGMA: 226
+                                GraphEnums.MULTIMAGNA: 226
                                 }
         grampa_source_dict = {GraphEnums.BIO_CELEGANS: 179,
                               GraphEnums.CA_NETSCIENCE: 180,
                               GraphEnums.INF_EUROROAD: 181,
                               GraphEnums.VOLES: 182,
-                              GraphEnums.MULTIMAGMA: 183
-        }
+                              GraphEnums.MULTIMAGNA: 183
+                              }
         outputdir = base_dir + '/GRAMPA'
 
         self.title = "GRAMPA"
@@ -302,13 +277,13 @@ class PlotGenerator():
                                GraphEnums.CA_NETSCIENCE: 216,
                                GraphEnums.INF_EUROROAD: 217,
                                GraphEnums.VOLES: 218,
-                               GraphEnums.MULTIMAGMA: 219,
-        }
+                               GraphEnums.MULTIMAGNA: 219,
+                               }
         regal_source_dict = {GraphEnums.BIO_CELEGANS: 212,
                              GraphEnums.CA_NETSCIENCE: 215,
                              GraphEnums.INF_EUROROAD: 223,
                              GraphEnums.VOLES: 221,
-                             GraphEnums.MULTIMAGMA: 222,
+                             GraphEnums.MULTIMAGNA: 222,
                              }
 
         outputdir = base_dir + '/REGAL'
@@ -319,25 +294,25 @@ class PlotGenerator():
 
         # IsoRank
         # Baselines without degree similarity
-        #isorank_baseline_dict = {GraphEnums.BIO_CELEGANS: 235,
+        # isorank_baseline_dict = {GraphEnums.BIO_CELEGANS: 235,
         #                         GraphEnums.CA_NETSCIENCE: 236,
         #                         GraphEnums.INF_EUROROAD: 237,
         #                         GraphEnums.VOLES: 238,
-        #                         GraphEnums.MULTIMAGMA: 239
+        #                         GraphEnums.MULTIMAGNA: 239
         #                         }
         # Baselines with degree similarity
         isorank_baseline_dict = {GraphEnums.BIO_CELEGANS: 264,
                                  GraphEnums.CA_NETSCIENCE: 265,
                                  GraphEnums.INF_EUROROAD: 266,
                                  GraphEnums.VOLES: 267,
-                                 GraphEnums.MULTIMAGMA: 268
+                                 GraphEnums.MULTIMAGNA: 268
                                  }
 
         isorank_source_dict = {GraphEnums.BIO_CELEGANS: 228,
                                GraphEnums.CA_NETSCIENCE: 229,
                                GraphEnums.INF_EUROROAD: 230,
                                GraphEnums.VOLES: 231,
-                               GraphEnums.MULTIMAGMA: 232
+                               GraphEnums.MULTIMAGNA: 232
                                }
 
         outputdir = base_dir + "/IsoRank"
@@ -345,8 +320,6 @@ class PlotGenerator():
         self.title = 'IsoRank'
         self.baseline_dict = isorank_baseline_dict
         self.generate_plots(isorank_source_dict, outputdir)
-
-
 
     def generate_all_plots(self,
                            yaxis: str,
@@ -425,4 +398,5 @@ if __name__ == "__main__":
 
     pg = PlotGenerator()
 
-    pg.generate_all_plots(args.yaxis, args.mu, args.top_3_combinations, args.twohop, args.density, args.centrality_combinations, args.scaling, args.other_algos)
+    pg.generate_all_plots(args.yaxis, args.mu, args.top_3_combinations, args.twohop, args.density,
+                          args.centrality_combinations, args.scaling, args.other_algos)
