@@ -222,6 +222,60 @@ class PlotGenerator():
 
         self.generate_plots(source_dict, output_dir)
 
+
+    def generate_scaling_tests(self):
+        # TODO: run for all graphs, when tests are done (i.e. remove comments)
+        # Base dir
+        base_dir = "Scaling/"
+
+        # Min-max normalized features
+        norm_feat_source_dict = {GraphEnums.BIO_CELEGANS: 333,
+                                 GraphEnums.CA_NETSCIENCE: 334,
+                                 #GraphEnums.VOLES: 335,
+        }
+
+        self.title = "Min-max normalization on features"
+        output_dir = base_dir + "Feature-normalization"
+
+        self.generate_plots(norm_feat_source_dict, output_dir)
+
+        # Min-max normalized distances
+        norm_dist_source_dict = {GraphEnums.BIO_CELEGANS: 330,
+                                 GraphEnums.CA_NETSCIENCE: 331,
+                                 #GraphEnums.INF_EUROROAD: 346,
+                                 #GraphEnums.VOLES: 329,
+                                 }
+
+        self.title = "Min-max normalization on distances"
+        output_dir = base_dir + "Distance-normalization"
+
+        self.generate_plots(norm_dist_source_dict, output_dir)
+
+        # Standardized features
+        standardized_feat_source_dict = {GraphEnums.BIO_CELEGANS: 337,
+                                         GraphEnums.CA_NETSCIENCE: 338,
+                                         #GraphEnums.VOLES: 336,
+                                         }
+
+        self.title = "Standardization of features"
+        output_dir = base_dir + "Feature-standardization"
+
+        self.generate_plots(standardized_feat_source_dict, output_dir)
+
+        # Robust scaling features
+        robust_scale_feat_source_dict = {GraphEnums.BIO_CELEGANS: 342,
+                                         GraphEnums.CA_NETSCIENCE: 342,
+                                         GraphEnums.INF_EUROROAD: 345,
+                                         GraphEnums.VOLES: 344,
+                                         }
+
+        self.title = "Robust scaling of features"
+        output_dir = base_dir + "Feature-robust-scaling"
+
+        #self.generate_plots(robust_scale_feat_source_dict, output_dir)
+
+
+
     def generate_other_algos(self):
         base_dir = 'Other-algorithms'
         # GRAMPA
@@ -301,6 +355,7 @@ class PlotGenerator():
                            include_2hop: bool,
                            include_density: bool,
                            include_centrality_comb: bool,
+                           include_scaling: bool,
                            include_other_algos: bool):
         """Run the script using the virtual environment's Python."""
 
@@ -320,6 +375,9 @@ class PlotGenerator():
 
         if include_centrality_comb:
             self.generate_centrality_combinations()
+
+        if include_scaling:
+            self.generate_scaling_tests()
 
         if include_other_algos:
             self.generate_other_algos()
@@ -351,6 +409,10 @@ if __name__ == "__main__":
                         action='store_true',
                         help='Using this flag generates centrality combination plots')
 
+    parser.add_argument('--scaling',
+                        action='store_true',
+                        help='Using this flag generates scaling test plots')
+
     parser.add_argument('--other_algos',
                         action='store_true',
                         help='Using this flag generates plots for other algorithms')
@@ -363,4 +425,4 @@ if __name__ == "__main__":
 
     pg = PlotGenerator()
 
-    pg.generate_all_plots(args.yaxis, args.mu, args.top_3_combinations, args.twohop, args.density, args.centrality_combinations, args.other_algos)
+    pg.generate_all_plots(args.yaxis, args.mu, args.top_3_combinations, args.twohop, args.density, args.centrality_combinations, args.scaling, args.other_algos)
