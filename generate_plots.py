@@ -94,6 +94,7 @@ class PlotGenerator():
                 print(70 * '-')
                 print(f'Running WITHOUT baseline, source: {source}, outputdir: {output_dir}, xaxis: {xaxis}')
                 print(70 * '-')
+                print("Exception caught: ", e)
                 subprocess.run(args=args)
 
     def generate_top_tree_combinations(self):
@@ -259,6 +260,8 @@ class PlotGenerator():
                                 GraphEnums.VOLES: 227,
                                 GraphEnums.MULTIMAGNA: 226
                                 }
+        self.baseline_dict = grampa_baseline_dict
+
         grampa_source_dict = {GraphEnums.BIO_CELEGANS: 179,
                               GraphEnums.CA_NETSCIENCE: 180,
                               GraphEnums.INF_EUROROAD: 181,
@@ -268,7 +271,6 @@ class PlotGenerator():
         outputdir = base_dir + '/GRAMPA'
 
         self.title = "GRAMPA"
-        self.baseline_dict = grampa_baseline_dict
         self.generate_plots(grampa_source_dict, outputdir)
 
         # REGAL
@@ -278,6 +280,8 @@ class PlotGenerator():
                                GraphEnums.VOLES: 218,
                                GraphEnums.MULTIMAGNA: 219,
                                }
+        self.baseline_dict = regal_baseline_dict
+
         regal_source_dict = {GraphEnums.BIO_CELEGANS: 212,
                              GraphEnums.CA_NETSCIENCE: 215,
                              GraphEnums.INF_EUROROAD: 223,
@@ -288,7 +292,6 @@ class PlotGenerator():
         outputdir = base_dir + '/REGAL'
 
         self.title = "REGAL"
-        self.baseline_dict = regal_baseline_dict
         self.generate_plots(regal_source_dict, outputdir)
 
         # IsoRank
@@ -306,6 +309,7 @@ class PlotGenerator():
                                  GraphEnums.VOLES: 267,
                                  GraphEnums.MULTIMAGNA: 268
                                  }
+        self.baseline_dict = isorank_baseline_dict
 
         isorank_source_dict = {GraphEnums.BIO_CELEGANS: 228,
                                GraphEnums.CA_NETSCIENCE: 229,
@@ -317,8 +321,46 @@ class PlotGenerator():
         outputdir = base_dir + "/IsoRank"
 
         self.title = 'IsoRank'
-        self.baseline_dict = isorank_baseline_dict
         self.generate_plots(isorank_source_dict, outputdir)
+
+        # CONE
+        cone_baseline_dict = {GraphEnums.BIO_CELEGANS: 281,
+                              GraphEnums.CA_NETSCIENCE: 282,
+                              GraphEnums.INF_EUROROAD: 283,
+                              GraphEnums.VOLES: 284,
+                              GraphEnums.MULTIMAGNA: 285}
+        self.baseline_dict = cone_baseline_dict
+
+        # CONE - aligment implementation results
+        cone_source_dict = {GraphEnums.BIO_CELEGANS: 276,
+                            GraphEnums.CA_NETSCIENCE: 277,
+                            GraphEnums.INF_EUROROAD: 280,
+                            GraphEnums.VOLES: 278,
+                            GraphEnums.MULTIMAGNA: 279}
+
+        outputdir = base_dir + "/CONE/Alignment-implementation"
+        self.title = "CONE"
+
+        self.generate_plots(cone_source_dict, outputdir)
+
+
+        # CONE - convex init results
+        cone_dist_source_dict = {GraphEnums.BIO_CELEGANS: 293,
+                            GraphEnums.CA_NETSCIENCE: 361}
+        outputdir = base_dir + "/CONE/Convex-init-implementation"
+
+        self.title = "CONE with feature distance"
+
+        self.generate_plots(cone_dist_source_dict, outputdir)
+
+        # Test with similarity
+        cone_sim_source_dict = {GraphEnums.BIO_CELEGANS: 321}
+        self.title = "CONE with feature similarity"
+        self.generate_plots(cone_sim_source_dict, outputdir)
+
+
+
+
 
     def generate_all_plots(self,
                            yaxis: str,

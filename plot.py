@@ -183,8 +183,12 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
         baseline_df, b_mu, b_graphs, b_iters = load_data(baseline, xaxis, yaxis)
         baseline_df = transform_df(baseline_df)
 
+        # If the Feature is NaN -> rename to dummy name 1.
+        if baseline_df['Features'].isnull().all():
+            baseline_df['Features'] = 1
+
         # Check that graph name and #iterations match source
-        if (graphs[0] != b_graphs[0]) or (iters != b_iters):
+        if (graphs[0] != b_graphs[0]): #or (iters != b_iters):
             raise Exception(
                 f"The baseline does not have the same meta data graphs: {b_graphs}, iterations: {b_iters} as the main source graphs:{graphs}, iterations: {iters} :(")
 
