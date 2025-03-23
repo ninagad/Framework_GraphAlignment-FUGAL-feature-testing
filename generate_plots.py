@@ -201,14 +201,13 @@ class PlotGenerator():
         self.generate_plots(source_dict, output_dir)
 
     def generate_scaling_tests(self):
-        # TODO: run for all graphs, when tests are done (i.e. remove comments)
         # Base dir
         base_dir = "Scaling/"
 
         # Min-max normalized features
         norm_feat_source_dict = {GraphEnums.BIO_CELEGANS: 333,
                                  GraphEnums.CA_NETSCIENCE: 334,
-                                 # GraphEnums.VOLES: 335,
+                                 GraphEnums.VOLES: 335,
                                  }
 
         self.title = "Min-max normalization on features"
@@ -219,8 +218,8 @@ class PlotGenerator():
         # Min-max normalized distances
         norm_dist_source_dict = {GraphEnums.BIO_CELEGANS: 330,
                                  GraphEnums.CA_NETSCIENCE: 331,
-                                 # GraphEnums.INF_EUROROAD: 346,
-                                 # GraphEnums.VOLES: 329,
+                                 GraphEnums.INF_EUROROAD: 346,
+                                 GraphEnums.VOLES: 329,
                                  }
 
         self.title = "Min-max normalization on distances"
@@ -231,7 +230,7 @@ class PlotGenerator():
         # Standardized features
         standardized_feat_source_dict = {GraphEnums.BIO_CELEGANS: 337,
                                          GraphEnums.CA_NETSCIENCE: 338,
-                                         # GraphEnums.VOLES: 336,
+                                         GraphEnums.VOLES: 336,
                                          }
 
         self.title = "Standardization of features"
@@ -241,7 +240,7 @@ class PlotGenerator():
 
         # Robust scaling features
         robust_scale_feat_source_dict = {GraphEnums.BIO_CELEGANS: 342,
-                                         GraphEnums.CA_NETSCIENCE: 342,
+                                         GraphEnums.CA_NETSCIENCE: 343,
                                          GraphEnums.INF_EUROROAD: 345,
                                          GraphEnums.VOLES: 344,
                                          }
@@ -249,7 +248,7 @@ class PlotGenerator():
         self.title = "Robust scaling of features"
         output_dir = base_dir + "Feature-robust-scaling"
 
-        # self.generate_plots(robust_scale_feat_source_dict, output_dir)
+        self.generate_plots(robust_scale_feat_source_dict, output_dir)
 
     def generate_other_algos(self):
         base_dir = 'Other-algorithms'
