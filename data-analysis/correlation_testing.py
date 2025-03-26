@@ -12,7 +12,7 @@ from enums.scalingEnums import ScalingEnums
 from algorithms.FUGAL.pred import feature_extraction
 
 current_dir = (os.path.dirname(__file__))
-data_dir = 'data'
+data_dir = '../data'
 
 graph_dict = {GraphEnums.INF_EUROROAD: 'inf-euroroad.txt',
               GraphEnums.CA_NETSCIENCE: 'ca-netscience.txt',

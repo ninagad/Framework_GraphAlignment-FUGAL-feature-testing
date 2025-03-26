@@ -4,7 +4,7 @@ import os
 
 
 current_dir = (os.path.dirname(__file__))
-local_runs_dir = "runs"
+local_runs_dir = "../runs"
 
 source_idx = 89
 
