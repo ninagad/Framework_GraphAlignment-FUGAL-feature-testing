@@ -142,7 +142,7 @@ def tuning():
         [
             {'features': x,
              'mu': 2.5,
-             'scaling': ScalingEnums.NO_SCALING,
+             'scaling': ScalingEnums.NORMALIZE_DIFFERENCES,
              }
             for x in [[Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [Feature.EGO_NEIGHBORS], # NetSimile
             # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
@@ -156,7 +156,7 @@ def tuning():
             # 'mode_2hop_degs', 'min_2hop_degs', 'kurtosis_2hop_degs', 'median_2hop_degs', 'max_2hop_degs',
             # Feature.RANGE_2HOP_DEGS, Feature.SKEWNESS_2HOP_DEGS,
             # ['deg'], ['degree_centrality'], ['pagerank'], ['katz'], ['deg', 'degree_centrality'], ['deg', 'pagerank'], ['deg', 'katz'], ['deg', 'cluster', 'avg_ego_deg', 'avg_ego_cluster']  # ca_netscience
-            [Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.SUM_EGO_CLUSTER], [Feature.INTERNAL_FRAC_EGO], [Feature.MAX_EGO_DEGS], [Feature.CLOSENESS_CENTRALITY], [Feature.DEGREE_CENTRALITY], [Feature.EIGENVECTOR_CENTRALITY], [Feature.PAGERANK],
+            # [Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.SUM_EGO_CLUSTER], [Feature.INTERNAL_FRAC_EGO], [Feature.MAX_EGO_DEGS], [Feature.CLOSENESS_CENTRALITY], [Feature.DEGREE_CENTRALITY], [Feature.EIGENVECTOR_CENTRALITY], [Feature.PAGERANK],
              ]
             # {'mu': x, 'features': ['deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
             #        'sum_ego_cluster', 'var_ego_cluster', 'assortativity_ego', 'internal_frac_ego', # Augmented NETSIMILE features

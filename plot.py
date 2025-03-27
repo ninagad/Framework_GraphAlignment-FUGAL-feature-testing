@@ -23,7 +23,6 @@ def load_data(source: int, xaxis: str, yaxis: str) -> (pd.DataFrame, int, str, i
 
     server_runs_path = os.path.join((os.path.dirname(__file__)), 'Server-runs')
     res_dir_path = os.path.join(server_runs_path, f'{source}')
-
     res_path = os.path.join(res_dir_path, 'res', f'{yaxis}.xlsx')
 
     # Make sure the excel file is not open in Excel! Otherwise, this fails with Errno 13 permission denied.

@@ -101,6 +101,8 @@ def main(data, iter, mu, features, scaling: ScalingEnums, EFN=5):
     else: # Otherwise use library function
         D = eucledian_dist(F1, F2, n)
 
+    D = (D - np.min(D)) / (np.max(D) - np.min(D))
+
     D = torch.tensor(D, dtype = torch.float64)
     
     P = convex_init(A, B, D, mu, iter)

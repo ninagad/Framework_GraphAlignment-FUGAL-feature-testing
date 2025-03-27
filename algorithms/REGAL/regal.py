@@ -81,9 +81,6 @@ def main(data, features, **args) -> object:
         features2 = feature_extraction(Tar1, features)
         combined_features = np.vstack((features1, features2))
 
-        print("first row of combined features: ", combined_features[0,:])
-        print("shape of combined features: ", combined_features.shape)
-
         args['attributes'] = combined_features
 
     embed = learn_representations(adj, args)
