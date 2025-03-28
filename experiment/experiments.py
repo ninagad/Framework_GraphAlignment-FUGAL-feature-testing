@@ -141,8 +141,8 @@ def tuning():
         #1,  # CONE
         [
             {'features': x,
-             'mu': 2.5,
-             'scaling': ScalingEnums.COLLECTIVE_MM_NORMALIZATION,
+             'mu': 1,
+             'scaling': ScalingEnums.COLLECTIVE_STANDARDIZATION,
              }
             for x in [[Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [Feature.EGO_NEIGHBORS], # NetSimile
             # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
