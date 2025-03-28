@@ -74,12 +74,6 @@ def plot_G(G):
 
 @ ex.capture
 def saveexls(res4, dim1, dim2, dim3, dim4, filename):
-    print('saveexls')
-    print('res4, \n', res4)
-    print('dim1: ', dim1)
-    print('dim2: ', dim2)
-    print('dim3: ', dim3)
-    print(f'dim4: {dim4}')
 
     with pd.ExcelWriter(f"{filename}.xlsx") as writer:
         for i1, res3 in enumerate(res4):
@@ -99,9 +93,6 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
     # res2 stores the values of different evaluation measures
     # dim3 stores the noise-levels
     # res3
-    print(f'dim1: \n {dim1}')
-    print(f'dim2: \n {dim2}')
-    print(f'dim3: \n {dim3}')
 
     # One color hue for each group of features
     colormaps = ['Blues', 'Greys', 'Greens', 'Purples']
@@ -121,7 +112,6 @@ def plotrees(res3, dim1, dim2, dim3, filename, xlabel="Noise level", plot_type=1
             if np.all(res1 >= 0):
                 label = (dim2[i2]).strip("[']").replace("_", " ")  # Remove [, ', ] and replace _ with whitespace.
                 plt.plot(dim3, res1, color=colorscale[i2], label=label)
-                print(f'idx: {i2}')
 
         # Adjust if running on multiple graphs!
         graph = dim1[i1]
@@ -230,10 +220,6 @@ def save(time5, res6, output_path, noises, iters, algs, acc_names, graph_names, 
         res, dims = trans(res, dims, s_trans)  # (g,alg,n,i)
         time_alg, ta_dims = trans(time_alg, ta_dims, s_trans)  # (g,alg,n,i)
         time_m, tm_dims = trans(time_m, tm_dims, s_trans)  # (g,alg,n,i)
-
-    print(res.shape, dims)
-    print(time_alg.shape, ta_dims)
-    print(time_m.shape, tm_dims)
 
     save_rec(res, dims, f"{output_path}/acc")
     save_rec(time_alg, ta_dims, f"{output_path}/time_alg", plot_type=2)

@@ -142,7 +142,7 @@ def tuning():
         [
             {'features': x,
              'mu': 2.5,
-             'scaling': ScalingEnums.NORMALIZE_DIFFERENCES,
+             'scaling': ScalingEnums.COLLECTIVE_MM_NORMALIZATION,
              }
             for x in [[Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_DEG], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.EGO_OUT_EDGES], [Feature.EGO_NEIGHBORS], # NetSimile
             # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features

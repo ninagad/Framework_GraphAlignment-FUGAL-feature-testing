@@ -443,22 +443,23 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
     node_features = np.nan_to_num(node_features)
 
-    if scaling == ScalingEnums.STANDARDIZE_FEATURES:
+    if scaling == ScalingEnums.INDIVIDUAL_STANDARDIZATION:
         # Standardization
         scaler = StandardScaler()
         standardized_features = scaler.fit_transform(node_features)
         node_features = standardized_features
 
-    if scaling == ScalingEnums.NORMALIZE_FEATURES:
+    if scaling == ScalingEnums.INDIVIDUAL_MM_NORMALIZATION:
         # Min max normalization to 0-1 range
         scaler = MinMaxScaler()
         normalized_features = scaler.fit_transform(node_features)
         node_features = normalized_features
 
-    if scaling == ScalingEnums.ROBUST_NORMALIZE_FEATURES:
+    if scaling == ScalingEnums.INDIVIDUAL_ROBUST_NORMALIZATION:
         scaler = RobustScaler()
         robust_normalized_features = scaler.fit_transform(node_features)
         node_features = robust_normalized_features
+
 
     #print('before norm: \n', node_features[:5, :])
     #print('max values: ', max_values[:5])

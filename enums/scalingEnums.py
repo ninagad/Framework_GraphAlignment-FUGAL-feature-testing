@@ -5,11 +5,14 @@ class ScalingEnums(Enum):
     NO_SCALING = auto()
 
     # Normalization
-    NORMALIZE_FEATURES = auto()
+    INDIVIDUAL_MM_NORMALIZATION = auto()
+    COLLECTIVE_MM_NORMALIZATION = auto()
     NORMALIZE_DIFFERENCES = auto()
 
     # Standardization
-    STANDARDIZE_FEATURES = auto()
+    INDIVIDUAL_STANDARDIZATION = auto()
+    COLLECTIVE_STANDARDIZATION = auto()
 
     # Robust normalization
-    ROBUST_NORMALIZE_FEATURES = auto()
+    INDIVIDUAL_ROBUST_NORMALIZATION = auto()
+    COLLECTIVE_ROBUST_NORMALIZATION = auto()
