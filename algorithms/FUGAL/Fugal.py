@@ -122,12 +122,7 @@ def main(data, iter, mu, features, scaling: ScalingEnums, EFN=5):
     else: # Otherwise use library function
         D = eucledian_dist(F1, F2, n)
 
-    print("max value before: ", np.max(D))
-    print("len of features: ", len(features))
-
     D /= np.sqrt(len(features))
-
-    print("max value: ", np.max(D))
 
     D = torch.tensor(D, dtype = torch.float64)
     
