@@ -22,6 +22,11 @@ import sys
 import os
 import pickle
 
+# Get root of the project from git and set it as current directory.
+# Necessary when running workexp.py from different directories
+project_root = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).strip().decode("utf-8")
+os.chdir(project_root)
+
 
 @ex.config
 def global_config():

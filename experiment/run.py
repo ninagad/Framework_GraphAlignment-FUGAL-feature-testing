@@ -14,9 +14,17 @@ import pandas as pd
 import signal
 import subprocess
 
+import wandb
+import json
+
+# Global variables used when tuning hyperparameter mu in FUGAL
+artifact: wandb.Artifact | None = None
+wandb_graph: str | None = None
+wandb_noiselvl: float | None = None
+wandb_iteration: int | None = None
+
 
 def format_output(res):
-
     if isinstance(res, tuple):
         sim, cost = res
     else:
@@ -46,9 +54,8 @@ def alg_exe(alg, data, args):
     return alg.main(data=data, **args)
 
 
-@ ex.capture
+@ex.capture
 def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
-
     # random.seed(_seed)
     # np.random.seed(_seed)
 
@@ -85,7 +92,7 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
         time.sleep(2)
     start = time.time()
     res = alg_exe(alg, data, args)
-    time1.append(time.time()-start)
+    time1.append(time.time() - start)
     if mon:
         proc.send_signal(signal.SIGINT)
     # gc.enable()
@@ -115,7 +122,7 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
 
             start = time.time()
             ma, mb = matching.getmatching(sim, cost, mt)
-            elapsed = time.time()-start
+            elapsed = time.time() - start
 
             res1 = evaluation.evall(ma, mb, _data['Src'],
                                     _data['Tar'], Gt, alg=alg)
@@ -140,7 +147,7 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
 
 
 # @profile
-@ ex.capture
+@ex.capture
 def preprocess(Src, Tar, gt, _run, addgt=False):
     start = time.time()
     # L = similarities_preprocess.create_L(Tar, Src)
@@ -183,22 +190,21 @@ def preprocess(Src, Tar, gt, _run, addgt=False):
 
     # L, _ = regal.main({"Src": Src, "Tar": Tar}, **REGAL_args)
     # L, _ = conealign.main({"Src": Src, "Tar": Tar}, **CONE_args)
-    _run.log_scalar("graph.prep.L", time.time()-start)
+    _run.log_scalar("graph.prep.L", time.time() - start)
 
     start = time.time()
     # S = similarities_preprocess.create_S(Tar, Src, L)
     S = similarities_preprocess.create_S(
         sps.csr_matrix(Src), sps.csr_matrix(Tar), L)
-    _run.log_scalar("graph.prep.S", time.time()-start)
+    _run.log_scalar("graph.prep.S", time.time() - start)
 
     li, lj, w = sps.find(L)
 
     return L, S, li, lj, w
 
 
-@ ex.capture
+@ex.capture
 def run_algs(g, algs, _log, _run, prep=False, circular=False):
-
     Src_e, Tar_e, Gt = g
     n = Gt[0].size
 
@@ -268,6 +274,23 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
         time2.append(time1)
         res3.append(res2)
 
+        if wandb.run is not None:
+            mu = alg[1]['mu']
+            features = alg[1]['features']
+
+            summary_dict = {'mu': mu,
+                            'accuracy': res2.item(),
+                            'features': [feature.name for feature in features],
+                            'graph': wandb_graph,
+                            'noise-level': wandb_noiselvl,
+                            'iteration': wandb_iteration}
+
+            file_name = f'{wandb_graph}-noise={wandb_noiselvl}-iter={wandb_iteration}'
+
+            # Artifact is defined as a global variable and is initialized in hyperparam_tuning.py
+            with artifact.new_file(file_name + '.json', mode='w') as file:
+                json.dump(summary_dict, file)
+
     return np.array(time2), np.array(res3)
 
 
@@ -281,8 +304,9 @@ def e_to_G(e, n):
     # return G
     return G.toarray()
 
-@ ex.capture
-def run_exp(G, output_path, noises, _log):
+
+@ex.capture
+def run_exp(G, output_path, noises, _log, graph_names):
     time2 = time3 = time4 = None
     time5 = []
     res3 = res4 = res5 = None
@@ -297,16 +321,25 @@ def run_exp(G, output_path, noises, _log):
 
             _log.info("Graph:(%s/%s)", graph_number + 1, len(G))
 
+            if wandb.run is not None:
+                wandb_graph = graph_names[graph_number]
+
             time4 = []
             res5 = []
             for noise_level, g_it in enumerate(g_n):
 
                 _log.info("Noise_level:(%s/%s)", noise_level + 1, len(g_n))
 
+                if wandb.run is not None:
+                    wandb_noiselvl = noises[noise_level]
+
                 time3 = []
                 res4 = []
                 for i, g in enumerate(g_it):
-                    _log.info("iteration:(%s/%s)", i+1, len(g_it))
+                    _log.info("iteration:(%s/%s)", i + 1, len(g_it))
+
+                    if wandb.run is not None:
+                        wandb_iteration = i + 1
 
                     time2, res3 = run_algs(g)
 
@@ -328,7 +361,8 @@ def run_exp(G, output_path, noises, _log):
                 time4.append(time3)
                 res5.append(res4)
 
-            components_df = pd.DataFrame(no_connected_components, columns=['Noise-level', 'Iteration', 'Connected-components'])
+            components_df = pd.DataFrame(no_connected_components,
+                                         columns=['Noise-level', 'Iteration', 'Connected-components'])
             time4 = np.array(time4)
             res5 = np.array(res5)
             time5.append(time4)

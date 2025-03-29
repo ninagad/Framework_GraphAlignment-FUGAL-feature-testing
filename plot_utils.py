@@ -1,7 +1,7 @@
-from feature import Feature
+from enums.featureEnums import FeatureEnums
 import matplotlib.pyplot as plt
 import numpy as np
-from feature import FeatureExtensions as FE
+from enums.featureEnums import FeatureExtensions as FE
 
 
 
@@ -28,7 +28,7 @@ class PlotUtils:
 
             markers = markers + self.marker_options[:group_size]
 
-        for feature in Feature:
+        for feature in FeatureEnums:
             name = FE.to_label(feature)
             idx = feature.value
             self.colorscale_dict[name] = colorscale[idx]
@@ -42,22 +42,22 @@ class PlotUtils:
         # Feature combinations
         combination_features = [
             # Euroroad combinations
-            [Feature.DEG, Feature.EGO_EDGES],
-            [Feature.DEG, Feature.MAX_EGO_DEGS],
-            [Feature.EGO_EDGES, Feature.MAX_EGO_DEGS],
-            [Feature.DEG, Feature.EGO_EDGES, Feature.MAX_EGO_DEGS],
+            [FeatureEnums.DEG, FeatureEnums.EGO_EDGES],
+            [FeatureEnums.DEG, FeatureEnums.MAX_EGO_DEGS],
+            [FeatureEnums.EGO_EDGES, FeatureEnums.MAX_EGO_DEGS],
+            [FeatureEnums.DEG, FeatureEnums.EGO_EDGES, FeatureEnums.MAX_EGO_DEGS],
             # Netscience
-            [Feature.DEG, Feature.SUM_EGO_CLUSTER],
-            [Feature.EGO_EDGES, Feature.SUM_EGO_CLUSTER],
-            [Feature.DEG, Feature.EGO_EDGES, Feature.SUM_EGO_CLUSTER],
+            [FeatureEnums.DEG, FeatureEnums.SUM_EGO_CLUSTER],
+            [FeatureEnums.EGO_EDGES, FeatureEnums.SUM_EGO_CLUSTER],
+            [FeatureEnums.DEG, FeatureEnums.EGO_EDGES, FeatureEnums.SUM_EGO_CLUSTER],
             # Voles
-            [Feature.DEG, Feature.CLUSTER],
-            [Feature.CLUSTER, Feature.EGO_EDGES],
-            [Feature.DEG, Feature.CLUSTER, Feature.EGO_EDGES],
+            [FeatureEnums.DEG, FeatureEnums.CLUSTER],
+            [FeatureEnums.CLUSTER, FeatureEnums.EGO_EDGES],
+            [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.EGO_EDGES],
             # socfb-Bowdoin47
-            [Feature.DEG, Feature.INTERNAL_FRAC_EGO],
-            [Feature.SUM_EGO_CLUSTER, Feature.INTERNAL_FRAC_EGO],
-            [Feature.DEG, Feature.SUM_EGO_CLUSTER, Feature.INTERNAL_FRAC_EGO],
+            [FeatureEnums.DEG, FeatureEnums.INTERNAL_FRAC_EGO],
+            [FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.INTERNAL_FRAC_EGO],
+            [FeatureEnums.DEG, FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.INTERNAL_FRAC_EGO],
 
         ]
         combination_colormap = 'pink_r'
@@ -65,9 +65,9 @@ class PlotUtils:
         colormaps.append(combination_colormap)
 
         centrality_combinations = [
-            [Feature.DEG, Feature.DEGREE_CENTRALITY],
-            [Feature.DEG, Feature.PAGERANK],
-            [Feature.DEG, Feature.KATZ_CENTRALITY]
+            [FeatureEnums.DEG, FeatureEnums.DEGREE_CENTRALITY],
+            [FeatureEnums.DEG, FeatureEnums.PAGERANK],
+            [FeatureEnums.DEG, FeatureEnums.KATZ_CENTRALITY]
         ]
         centrality_combinations_colormap = 'copper_r'
 
@@ -75,8 +75,8 @@ class PlotUtils:
         colormaps.append(centrality_combinations_colormap)
 
         other_algo_combinations = [
-            [Feature.EGO_EDGES, Feature.PAGERANK],
-            [Feature.DEG, Feature.EGO_EDGES, Feature.PAGERANK]
+            [FeatureEnums.EGO_EDGES, FeatureEnums.PAGERANK],
+            [FeatureEnums.DEG, FeatureEnums.EGO_EDGES, FeatureEnums.PAGERANK]
         ]
         other_algo_combinations_colormap = 'YlOrBr'
         feature_combinations.append(other_algo_combinations)
@@ -97,25 +97,25 @@ class PlotUtils:
                 self.markers_dict[name] = self.marker_options[idx]
 
         FUGAL_combination = (
-            [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER]
+            [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER]
         )
         fugal_name = FE.to_labels(FUGAL_combination)
         self.colorscale_dict[fugal_name] = plt.get_cmap("Set1")(4)
 
-    def to_color(self, feature: Feature) -> str:
+    def to_color(self, feature: FeatureEnums) -> str:
         name = FE.to_label(feature)
         return self.colorscale_dict[name]
 
-    def to_colors(self, features: list[Feature]) -> str:
+    def to_colors(self, features: list[FeatureEnums]) -> str:
         name = FE.to_labels(features)
         return self.colorscale_dict[name]
 
 
-    def to_marker(self, feature: Feature) -> str:
+    def to_marker(self, feature: FeatureEnums) -> str:
         name = FE.to_label(feature)
         return self.markers_dict[name]
 
-    def to_markers(self, features: list[Feature]) -> str | None:
+    def to_markers(self, features: list[FeatureEnums]) -> str | None:
         name = FE.to_labels(features)
         try:
             return self.markers_dict[name]

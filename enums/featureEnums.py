@@ -6,75 +6,75 @@ class FeatureExtensions:
     def to_feature(name: str):  #-> 'Feature' | None:
         name = name.replace('[', '').replace('\'', '').replace(']', '')  # Remove brackets and '.
         try:
-            return Feature[name.upper()]
+            return FeatureEnums[name.upper()]
         except:
             if name == 'katz': # Katz centrality
-                return Feature['KATZ_CENTRALITY']
+                return FeatureEnums['KATZ_CENTRALITY']
 
             try:  # 2hop_edges and 2hop_neighbors
                 name = name.replace('2', 'TWO').upper()
-                return Feature[name]
+                return FeatureEnums[name]
             except:
                 print(f'Feature: {name} is not an ENUM -> excluded from plot')
                 return
 
     @staticmethod
-    def to_label(feature: 'Feature') -> str:
+    def to_label(feature: 'FeatureEnums') -> str:
         label_dict = {
             # NetSimile
-            Feature.DEG: 'degree',
-            Feature.CLUSTER: 'cluster coeff',
-            Feature.AVG_EGO_DEG: 'avg ego deg',
-            Feature.AVG_EGO_CLUSTER: 'avg ego cluster coeff',
-            Feature.EGO_EDGES: 'ego edges',
-            Feature.EGO_OUT_EDGES: 'ego out edges',
-            Feature.EGO_NEIGHBORS: 'ego neighbors',
+            FeatureEnums.DEG: 'degree',
+            FeatureEnums.CLUSTER: 'cluster coeff',
+            FeatureEnums.AVG_EGO_DEG: 'avg ego deg',
+            FeatureEnums.AVG_EGO_CLUSTER: 'avg ego cluster coeff',
+            FeatureEnums.EGO_EDGES: 'ego edges',
+            FeatureEnums.EGO_OUT_EDGES: 'ego out edges',
+            FeatureEnums.EGO_NEIGHBORS: 'ego neighbors',
 
             # Miscellaneous
-            Feature.SUM_EGO_CLUSTER: "sum ego cluster coeff",
-            Feature.VAR_EGO_CLUSTER: "var ego cluster coeff",
-            Feature.ASSORTATIVITY_EGO: "ego assortativity",
-            Feature.INTERNAL_FRAC_EGO: "ego internal frac",
+            FeatureEnums.SUM_EGO_CLUSTER: "sum ego cluster coeff",
+            FeatureEnums.VAR_EGO_CLUSTER: "var ego cluster coeff",
+            FeatureEnums.ASSORTATIVITY_EGO: "ego assortativity",
+            FeatureEnums.INTERNAL_FRAC_EGO: "ego internal frac",
 
             # STATISTICAL
-            Feature.MODE_EGO_DEGS: "mode ego degs",
-            Feature.MEDIAN_EGO_DEGS: "median ego degs",
-            Feature.MIN_EGO_DEGS: "min ego degs",
-            Feature.MAX_EGO_DEGS: "max ego degs",
-            Feature.RANGE_EGO_DEGS: "range ego degs",
-            Feature.SKEWNESS_EGO_DEGS: "skewness ego degs",
-            Feature.KURTOSIS_EGO_DEGS: "kurtosis ego degs",
+            FeatureEnums.MODE_EGO_DEGS: "mode ego degs",
+            FeatureEnums.MEDIAN_EGO_DEGS: "median ego degs",
+            FeatureEnums.MIN_EGO_DEGS: "min ego degs",
+            FeatureEnums.MAX_EGO_DEGS: "max ego degs",
+            FeatureEnums.RANGE_EGO_DEGS: "range ego degs",
+            FeatureEnums.SKEWNESS_EGO_DEGS: "skewness ego degs",
+            FeatureEnums.KURTOSIS_EGO_DEGS: "kurtosis ego degs",
 
             # CENTRALITY
-            Feature.CLOSENESS_CENTRALITY: "closeness centrality",
-            Feature.DEGREE_CENTRALITY: "degree centrality",
-            Feature.EIGENVECTOR_CENTRALITY: "eigenvector centrality",
-            Feature.PAGERANK: "pagerank",
-            Feature.KATZ_CENTRALITY: "katz centrality",
+            FeatureEnums.CLOSENESS_CENTRALITY: "closeness centrality",
+            FeatureEnums.DEGREE_CENTRALITY: "degree centrality",
+            FeatureEnums.EIGENVECTOR_CENTRALITY: "eigenvector centrality",
+            FeatureEnums.PAGERANK: "pagerank",
+            FeatureEnums.KATZ_CENTRALITY: "katz centrality",
 
             # 2 hop features
-            Feature.AVG_2HOP_DEG: 'avg 2hop deg',
-            Feature.AVG_2HOP_CLUSTER: 'avg 2hop cluster coeff',
-            Feature.TWOHOP_EDGES: '2hop edges',
-            Feature.TWOHOP_NEIGHBORS: '2hop neighbors',
-            Feature.SUM_2HOP_CLUSTER: 'sum 2hop cluster coeff',
-            Feature.VAR_2HOP_CLUSTER: 'var 2hop cluster coeff',
-            Feature.ASSORTATIVITY_2HOP: '2hop assortativity',
-            Feature.INTERNAL_FRAC_2HOP: '2hop internal frac',
-            Feature.MEDIAN_2HOP_DEGS: 'median 2hop degs',
-            Feature.MAX_2HOP_DEGS: 'max 2hop degs',
-            Feature.RANGE_2HOP_DEGS: 'range 2hop degs',
-            Feature.SKEWNESS_2HOP_DEGS: 'skewness 2hop degs'
+            FeatureEnums.AVG_2HOP_DEG: 'avg 2hop deg',
+            FeatureEnums.AVG_2HOP_CLUSTER: 'avg 2hop cluster coeff',
+            FeatureEnums.TWOHOP_EDGES: '2hop edges',
+            FeatureEnums.TWOHOP_NEIGHBORS: '2hop neighbors',
+            FeatureEnums.SUM_2HOP_CLUSTER: 'sum 2hop cluster coeff',
+            FeatureEnums.VAR_2HOP_CLUSTER: 'var 2hop cluster coeff',
+            FeatureEnums.ASSORTATIVITY_2HOP: '2hop assortativity',
+            FeatureEnums.INTERNAL_FRAC_2HOP: '2hop internal frac',
+            FeatureEnums.MEDIAN_2HOP_DEGS: 'median 2hop degs',
+            FeatureEnums.MAX_2HOP_DEGS: 'max 2hop degs',
+            FeatureEnums.RANGE_2HOP_DEGS: 'range 2hop degs',
+            FeatureEnums.SKEWNESS_2HOP_DEGS: 'skewness 2hop degs'
         }
 
         return label_dict[feature]
 
     @staticmethod
-    def to_labels(features: list['Feature']) -> str:
+    def to_labels(features: list['FeatureEnums']) -> str:
         labels = [FeatureExtensions.to_label(feature) for feature in features]
         label = ", ".join(labels)
 
-        fugal_features = [Feature['DEG'], Feature['CLUSTER'], Feature['AVG_EGO_DEG'], Feature['AVG_EGO_CLUSTER']]
+        fugal_features = [FeatureEnums['DEG'], FeatureEnums['CLUSTER'], FeatureEnums['AVG_EGO_DEG'], FeatureEnums['AVG_EGO_CLUSTER']]
         fugal_label = ", ".join([FeatureExtensions.to_label(feature) for feature in fugal_features])
 
         if label == fugal_label:
@@ -82,7 +82,7 @@ class FeatureExtensions:
         return label
 
 
-class Feature(Enum):
+class FeatureEnums(Enum):
     _settings_ = NoAlias
 
     def __repr__(self):

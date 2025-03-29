@@ -7,3 +7,4 @@ data
 venv/
 Server-runs
 /wandb/
+/artifacts/

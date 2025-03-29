@@ -1,17 +1,13 @@
 #Fugal Algorithm was provided by anonymous authors.
 import numpy as np
-import math
 import torch
-from tqdm.auto import tqdm
 import networkx as nx
-import time
 import matplotlib.pyplot as plt
-from multiprocessing import Pool
 import scipy
 from sklearn.metrics.pairwise import euclidean_distances
-from algorithms.FUGAL.sinkhorn import sinkhorn,sinkhorn_epsilon_scaling,sinkhorn_knopp,sinkhorn_stabilized
+from algorithms.FUGAL.sinkhorn import sinkhorn
 from scipy import stats
-from feature import Feature
+from enums.featureEnums import FeatureEnums
 from enums.scalingEnums import ScalingEnums
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 
@@ -60,43 +56,43 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
 # NETSIMILE features:
     # node degrees
-    if Feature.DEG in features:
+    if FeatureEnums.DEG in features:
         degs = [node_degree_dict[n] for n in node_list]
 
-        node_features[:, features.index(Feature.DEG)] = degs
+        node_features[:, features.index(FeatureEnums.DEG)] = degs
 
     # clustering coefficient
-    if Feature.CLUSTER in features:
+    if FeatureEnums.CLUSTER in features:
         clusts = [node_clustering_dict[n] for n in node_list]
 
-        node_features[:, features.index(Feature.CLUSTER)] = clusts
+        node_features[:, features.index(FeatureEnums.CLUSTER)] = clusts
 
     # average degree of neighborhood
-    if Feature.AVG_EGO_DEG in features:
+    if FeatureEnums.AVG_EGO_DEG in features:
         avg_neighbor_degs = [np.mean(degs) for degs in neighbor_degs]
 
-        node_features[:, features.index(Feature.AVG_EGO_DEG)] = avg_neighbor_degs
+        node_features[:, features.index(FeatureEnums.AVG_EGO_DEG)] = avg_neighbor_degs
 
 
     # average clustering coefficient of neighborhood
-    if Feature.AVG_EGO_CLUSTER in features:
+    if FeatureEnums.AVG_EGO_CLUSTER in features:
         neighbor_clusts = [np.mean(cluster_coeffs) for cluster_coeffs in neighbor_cluster]
 
-        node_features[:, features.index(Feature.AVG_EGO_CLUSTER)] = neighbor_clusts
+        node_features[:, features.index(FeatureEnums.AVG_EGO_CLUSTER)] = neighbor_clusts
 
     # number of edges in the neighborhood
-    if Feature.EGO_EDGES in features:
+    if FeatureEnums.EGO_EDGES in features:
         neighbor_edges = [
             egonets[n].number_of_edges() if node_degree_dict[n] > 0 else 0
             for n in node_list
         ]
 
-        node_features[:, features.index(Feature.EGO_EDGES)] = neighbor_edges
+        node_features[:, features.index(FeatureEnums.EGO_EDGES)] = neighbor_edges
 
     # number of outgoing edges from the neighborhood
     # the sum of neighborhood degrees = 2*(internal edges) + external edges
     # node_features[:,5] = node_features[:,0] * node_features[:,2] - 2*node_features[:,4]
-    if Feature.EGO_OUT_EDGES in features:
+    if FeatureEnums.EGO_OUT_EDGES in features:
         neighbor_outgoing_edges = [
             len(
                 [
@@ -108,10 +104,10 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
             for i in node_list
         ]
 
-        node_features[:, features.index(Feature.EGO_OUT_EDGES)] = neighbor_outgoing_edges
+        node_features[:, features.index(FeatureEnums.EGO_OUT_EDGES)] = neighbor_outgoing_edges
 
     # number of neighbors of neighbors (not in neighborhood)
-    if Feature.EGO_NEIGHBORS in features:
+    if FeatureEnums.EGO_NEIGHBORS in features:
         neighbors_of_neighbors = [
             len(
                 set([p for m in G.neighbors(n) for p in G.neighbors(m)])
@@ -123,7 +119,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
             for n in node_list
         ]
 
-        node_features[:, features.index(Feature.EGO_NEIGHBORS)] = neighbors_of_neighbors
+        node_features[:, features.index(FeatureEnums.EGO_NEIGHBORS)] = neighbors_of_neighbors
 
 # Augmented NETSIMILE FEATURES
     # sum of degrees in the neighborhood
@@ -137,15 +133,15 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index('var_ego_deg')] = var_neighbor_degs
 
-    if Feature.SUM_EGO_CLUSTER in features:
+    if FeatureEnums.SUM_EGO_CLUSTER in features:
         sum_neighbor_cluster = [np.sum(cluster_coeffs) for cluster_coeffs in neighbor_cluster]
 
-        node_features[:, features.index(Feature.SUM_EGO_CLUSTER)] = sum_neighbor_cluster
+        node_features[:, features.index(FeatureEnums.SUM_EGO_CLUSTER)] = sum_neighbor_cluster
 
-    if Feature.VAR_EGO_CLUSTER in features:
+    if FeatureEnums.VAR_EGO_CLUSTER in features:
         var_neighbor_cluster = [np.var(cluster_coeffs) for cluster_coeffs in neighbor_cluster]
 
-        node_features[:, features.index(Feature.VAR_EGO_CLUSTER)] = var_neighbor_cluster
+        node_features[:, features.index(FeatureEnums.VAR_EGO_CLUSTER)] = var_neighbor_cluster
 
     if 'avg_ego_edges' in features:
         avg_neighbor_edges = [
@@ -185,86 +181,86 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
 
 # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis)
-    if Feature.MODE_EGO_DEGS in features:
+    if FeatureEnums.MODE_EGO_DEGS in features:
         # stats.mode returns the mode and the count. We extract the mode with [0].
         mode_neighbor_degs = [stats.mode(degs)[0] if len(degs) > 0 else 0 for degs in neighbor_degs]
 
-        node_features[:, features.index(Feature.MODE_EGO_DEGS)] = mode_neighbor_degs
+        node_features[:, features.index(FeatureEnums.MODE_EGO_DEGS)] = mode_neighbor_degs
 
-    if Feature.MEDIAN_EGO_DEGS in features:
+    if FeatureEnums.MEDIAN_EGO_DEGS in features:
         median_neighbor_degs = [np.median(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
-        node_features[:, features.index(Feature.MEDIAN_EGO_DEGS)] = median_neighbor_degs
+        node_features[:, features.index(FeatureEnums.MEDIAN_EGO_DEGS)] = median_neighbor_degs
 
-    if Feature.MIN_EGO_DEGS in features:
+    if FeatureEnums.MIN_EGO_DEGS in features:
         min_neighbor_degs = [np.min(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
-        node_features[:, features.index(Feature.MIN_EGO_DEGS)] = min_neighbor_degs
+        node_features[:, features.index(FeatureEnums.MIN_EGO_DEGS)] = min_neighbor_degs
 
-    if Feature.MAX_EGO_DEGS in features:
+    if FeatureEnums.MAX_EGO_DEGS in features:
         max_neighbor_degs = [np.max(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
-        node_features[:, features.index(Feature.MAX_EGO_DEGS)] = max_neighbor_degs
+        node_features[:, features.index(FeatureEnums.MAX_EGO_DEGS)] = max_neighbor_degs
 
-    if Feature.RANGE_EGO_DEGS in features:
+    if FeatureEnums.RANGE_EGO_DEGS in features:
         range_neighbor_degs = [np.max(degs) - np.min(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
-        node_features[:, features.index(Feature.RANGE_EGO_DEGS)] = range_neighbor_degs
+        node_features[:, features.index(FeatureEnums.RANGE_EGO_DEGS)] = range_neighbor_degs
 
-    if Feature.SKEWNESS_EGO_DEGS in features:
+    if FeatureEnums.SKEWNESS_EGO_DEGS in features:
         skew_neighbor_degs = [stats.skew(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
-        node_features[:, features.index(Feature.SKEWNESS_EGO_DEGS)] = skew_neighbor_degs
+        node_features[:, features.index(FeatureEnums.SKEWNESS_EGO_DEGS)] = skew_neighbor_degs
 
-    if Feature.KURTOSIS_EGO_DEGS in features:
+    if FeatureEnums.KURTOSIS_EGO_DEGS in features:
         kurtosis_neighbor_degs = [stats.kurtosis(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
-        node_features[:, features.index(Feature.KURTOSIS_EGO_DEGS)] = kurtosis_neighbor_degs
+        node_features[:, features.index(FeatureEnums.KURTOSIS_EGO_DEGS)] = kurtosis_neighbor_degs
 
     # Assortativity of egonet
-    if Feature.ASSORTATIVITY_EGO in features:
+    if FeatureEnums.ASSORTATIVITY_EGO in features:
         assortativity_neighbors = [nx.degree_assortativity_coefficient(egonets[n]) for n in node_list
                                    ]
 
-        node_features[:, features.index(Feature.ASSORTATIVITY_EGO)] = assortativity_neighbors
+        node_features[:, features.index(FeatureEnums.ASSORTATIVITY_EGO)] = assortativity_neighbors
 
 
 # Centrality measures
 
     # Calculate centrality measures for every vertex
-    if Feature.CLOSENESS_CENTRALITY in features:
+    if FeatureEnums.CLOSENESS_CENTRALITY in features:
         closeness_centrality = [nx.closeness_centrality(G, u=node) for node in G.nodes()]
 
-        node_features[:, features.index(Feature.CLOSENESS_CENTRALITY)] = closeness_centrality
+        node_features[:, features.index(FeatureEnums.CLOSENESS_CENTRALITY)] = closeness_centrality
 
-    if Feature.DEGREE_CENTRALITY in features:
+    if FeatureEnums.DEGREE_CENTRALITY in features:
         dc_dict = nx.degree_centrality(G)
         degree_centrality = [dc_dict[node] for node in G.nodes()]
 
-        node_features[:, features.index(Feature.DEGREE_CENTRALITY)] = degree_centrality
+        node_features[:, features.index(FeatureEnums.DEGREE_CENTRALITY)] = degree_centrality
 
-    if Feature.EIGENVECTOR_CENTRALITY in features:
+    if FeatureEnums.EIGENVECTOR_CENTRALITY in features:
         ec_dict = nx.eigenvector_centrality(G, tol=0.0001, max_iter=10000)
         eigenvector_centrality = [ec_dict[node] for node in G.nodes()]
 
-        node_features[:, features.index(Feature.EIGENVECTOR_CENTRALITY)] = eigenvector_centrality
+        node_features[:, features.index(FeatureEnums.EIGENVECTOR_CENTRALITY)] = eigenvector_centrality
 
-    if Feature.PAGERANK in features:
+    if FeatureEnums.PAGERANK in features:
         pr_dict = nx.pagerank(G, tol=0.0001, max_iter=10000)
         pagerank = [pr_dict[node] for node in G.nodes()]
 
-        node_features[:, features.index(Feature.PAGERANK)] = pagerank
+        node_features[:, features.index(FeatureEnums.PAGERANK)] = pagerank
 
     if 'laplacian_centrality' in features:
         laplacian_centrality = list(nx.laplacian_centrality(G).values())
 
         node_features[:, features.index('laplacian_centrality')] = laplacian_centrality
 
-    if Feature.KATZ_CENTRALITY in features:
+    if FeatureEnums.KATZ_CENTRALITY in features:
         katz_dict = nx.pagerank(G, tol=0.0001, max_iter=10000)
         katz = [katz_dict[node] for node in G.nodes()]
 
-        node_features[:, features.index(Feature.KATZ_CENTRALITY)] = katz
+        node_features[:, features.index(FeatureEnums.KATZ_CENTRALITY)] = katz
 
 # Avg effective resistance
     if 'avg_resist_dist' in features:
@@ -273,7 +269,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         node_features[:, features.index('avg_resist_dist')] = avg_resist_dists
 
 # Internal vs external connectivity
-    if Feature.INTERNAL_FRAC_EGO in features:
+    if FeatureEnums.INTERNAL_FRAC_EGO in features:
         ego_in_edges = [egonets[n].number_of_edges() for n in node_list]
 
         ego_in_out_edges = [
@@ -289,7 +285,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         frac = [in_edges/in_out_edges if in_out_edges != 0 else 1
                 for in_edges, in_out_edges in zip(ego_in_edges, ego_in_out_edges)]
 
-        node_features[:, features.index(Feature.INTERNAL_FRAC_EGO)] = frac
+        node_features[:, features.index(FeatureEnums.INTERNAL_FRAC_EGO)] = frac
 
 
 # Distance measures
@@ -322,25 +318,25 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
     # NetSimile
     # average degree of 2-hop neighborhood
-    if Feature.AVG_2HOP_DEG in features:
+    if FeatureEnums.AVG_2HOP_DEG in features:
         avg_two_neighbor_degs = [np.mean(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index(Feature.AVG_2HOP_DEG)] = avg_two_neighbor_degs
+        node_features[:, features.index(FeatureEnums.AVG_2HOP_DEG)] = avg_two_neighbor_degs
 
     # average clustering coefficient of 2-hop neighborhood
-    if Feature.AVG_2HOP_CLUSTER in features:
+    if FeatureEnums.AVG_2HOP_CLUSTER in features:
         two_neighbor_clusts = [np.mean(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
 
-        node_features[:, features.index(Feature.AVG_2HOP_CLUSTER)] = two_neighbor_clusts
+        node_features[:, features.index(FeatureEnums.AVG_2HOP_CLUSTER)] = two_neighbor_clusts
 
         # number of edges in the 2-hop neighborhood
-    if Feature.TWOHOP_EDGES in features:
+    if FeatureEnums.TWOHOP_EDGES in features:
         two_neighbor_edges = [
             two_hop_egonets[n].number_of_edges() if node_degree_dict[n] > 0 else 0
             for n in node_list
         ]
 
-        node_features[:, features.index(Feature.TWOHOP_EDGES)] = two_neighbor_edges
+        node_features[:, features.index(FeatureEnums.TWOHOP_EDGES)] = two_neighbor_edges
 
     # sum of degrees in the 2-hop neighborhood
     if 'sum_2hop_deg' in features:
@@ -348,7 +344,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index('sum_2hop_deg')] = sum_two_neighbor_degs
 
-    if Feature.TWOHOP_NEIGHBORS in features:
+    if FeatureEnums.TWOHOP_NEIGHBORS in features:
         neighbors_of_2hop = [
             len(
                 set([p for m in two_hop_neighbor_nodes[n] for p in G.neighbors(m)])
@@ -359,7 +355,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
             else 0
             for n in node_list
         ]
-        node_features[:, features.index(Feature.TWOHOP_NEIGHBORS)] = neighbors_of_2hop
+        node_features[:, features.index(FeatureEnums.TWOHOP_NEIGHBORS)] = neighbors_of_2hop
 
 
     # Augmented NetSimile
@@ -368,18 +364,18 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index('var_2hop_deg')] = var_two_neighbor_degs
 
-    if Feature.SUM_2HOP_CLUSTER in features:
+    if FeatureEnums.SUM_2HOP_CLUSTER in features:
         sum_two_neighbor_cluster = [np.sum(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
 
-        node_features[:, features.index(Feature.SUM_2HOP_CLUSTER)] = sum_two_neighbor_cluster
+        node_features[:, features.index(FeatureEnums.SUM_2HOP_CLUSTER)] = sum_two_neighbor_cluster
 
-    if Feature.VAR_2HOP_CLUSTER in features:
+    if FeatureEnums.VAR_2HOP_CLUSTER in features:
         var_two_neighbor_cluster = [np.var(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
 
-        node_features[:, features.index(Feature.VAR_2HOP_CLUSTER)] = var_two_neighbor_cluster
+        node_features[:, features.index(FeatureEnums.VAR_2HOP_CLUSTER)] = var_two_neighbor_cluster
 
 
-    if Feature.INTERNAL_FRAC_2HOP in features:
+    if FeatureEnums.INTERNAL_FRAC_2HOP in features:
         two_hop_in_edges = [two_hop_egonets[n].number_of_edges() for n in node_list]
 
         two_hop_in_out_edges = [
@@ -395,7 +391,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         frac = [in_edges / in_out_edges if in_out_edges != 0 else 1
                 for in_edges, in_out_edges in zip(two_hop_in_edges, two_hop_in_out_edges)]
 
-        node_features[:, features.index(Feature.INTERNAL_FRAC_2HOP)] = frac
+        node_features[:, features.index(FeatureEnums.INTERNAL_FRAC_2HOP)] = frac
 
     # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis)
     if 'mode_2hop_degs' in features:
@@ -404,30 +400,30 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index('mode_2hop_degs')] = mode_two_neighbor_degs
 
-    if Feature.MEDIAN_2HOP_DEGS in features:
+    if FeatureEnums.MEDIAN_2HOP_DEGS in features:
         median_two_neighbor_degs = [np.median(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index(Feature.MEDIAN_2HOP_DEGS)] = median_two_neighbor_degs
+        node_features[:, features.index(FeatureEnums.MEDIAN_2HOP_DEGS)] = median_two_neighbor_degs
 
     if 'min_2hop_degs' in features:
         min_neighbor_degs = [np.min(degs) for degs in two_hop_neighbor_degs]
 
         node_features[:, features.index('min_2hop_degs')] = min_neighbor_degs
 
-    if Feature.MAX_2HOP_DEGS in features:
+    if FeatureEnums.MAX_2HOP_DEGS in features:
         max_neighbor_degs = [np.max(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index(Feature.MAX_2HOP_DEGS)] = max_neighbor_degs
+        node_features[:, features.index(FeatureEnums.MAX_2HOP_DEGS)] = max_neighbor_degs
 
-    if Feature.RANGE_2HOP_DEGS in features:
+    if FeatureEnums.RANGE_2HOP_DEGS in features:
         range_neighbor_degs = [np.max(degs) - np.min(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index(Feature.RANGE_2HOP_DEGS)] = range_neighbor_degs
+        node_features[:, features.index(FeatureEnums.RANGE_2HOP_DEGS)] = range_neighbor_degs
 
-    if Feature.SKEWNESS_2HOP_DEGS in features:
+    if FeatureEnums.SKEWNESS_2HOP_DEGS in features:
         skew_neighbor_degs = [stats.skew(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index(Feature.SKEWNESS_2HOP_DEGS)] = skew_neighbor_degs
+        node_features[:, features.index(FeatureEnums.SKEWNESS_2HOP_DEGS)] = skew_neighbor_degs
 
     if 'kurtosis_2hop_degs' in features:
         kurtosis_neighbor_degs = [stats.kurtosis(degs) for degs in two_hop_neighbor_degs]
@@ -435,11 +431,11 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         node_features[:, features.index('kurtosis_2hop_degs')] = kurtosis_neighbor_degs
 
     # Assortativity of 2-hop neighbourhood
-    if Feature.ASSORTATIVITY_2HOP in features:
+    if FeatureEnums.ASSORTATIVITY_2HOP in features:
         assortativity_neighbors = [nx.degree_assortativity_coefficient(two_hop_egonets[n]) for n in node_list
                                     ]
 
-        node_features[:, features.index(Feature.ASSORTATIVITY_2HOP)] = assortativity_neighbors
+        node_features[:, features.index(FeatureEnums.ASSORTATIVITY_2HOP)] = assortativity_neighbors
 
     node_features = np.nan_to_num(node_features)
 

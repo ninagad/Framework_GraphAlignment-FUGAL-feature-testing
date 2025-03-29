@@ -1,13 +1,16 @@
 import pandas as pd
 import os
-import pickle
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import networkx as nx
+import sys
+
+# Add the parent directory (project root) to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from enums.graphEnums import GraphEnums
-from feature import Feature, FeatureExtensions
+from enums.featureEnums import FeatureEnums, FeatureExtensions
 from enums.scalingEnums import ScalingEnums
 from algorithms.FUGAL.pred import feature_extraction
 
@@ -23,13 +26,13 @@ graph_dict = {GraphEnums.INF_EUROROAD: 'inf-euroroad.txt',
               }
 scaling = ScalingEnums.NO_SCALING
 
-features = [Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER, Feature.EGO_EDGES,
-            Feature.EGO_OUT_EDGES, Feature.EGO_NEIGHBORS,  # NetSimile
-            Feature.SUM_EGO_CLUSTER, Feature.VAR_EGO_CLUSTER, Feature.ASSORTATIVITY_EGO, Feature.INTERNAL_FRAC_EGO,
+features = [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER, FeatureEnums.EGO_EDGES,
+            FeatureEnums.EGO_OUT_EDGES, FeatureEnums.EGO_NEIGHBORS,  # NetSimile
+            FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.VAR_EGO_CLUSTER, FeatureEnums.ASSORTATIVITY_EGO, FeatureEnums.INTERNAL_FRAC_EGO,
             # Other features
-            Feature.MODE_EGO_DEGS, Feature.MEDIAN_EGO_DEGS, Feature.MIN_EGO_DEGS, Feature.MAX_EGO_DEGS,
-            Feature.RANGE_EGO_DEGS, Feature.SKEWNESS_EGO_DEGS, Feature.KURTOSIS_EGO_DEGS,  # Statistical features
-            Feature.CLOSENESS_CENTRALITY, Feature.DEGREE_CENTRALITY, Feature.EIGENVECTOR_CENTRALITY, Feature.PAGERANK,
+            FeatureEnums.MODE_EGO_DEGS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.MIN_EGO_DEGS, FeatureEnums.MAX_EGO_DEGS,
+            FeatureEnums.RANGE_EGO_DEGS, FeatureEnums.SKEWNESS_EGO_DEGS, FeatureEnums.KURTOSIS_EGO_DEGS,  # Statistical features
+            FeatureEnums.CLOSENESS_CENTRALITY, FeatureEnums.DEGREE_CENTRALITY, FeatureEnums.EIGENVECTOR_CENTRALITY, FeatureEnums.PAGERANK,
             # [Feature.KATZ_CENTRALITY], Centrality measures
             ]
 
@@ -72,5 +75,6 @@ for graph_enum, filename in graph_dict.items():
 
     plt.title(graph_name, fontsize=12)
     plt.tight_layout()
-    path = os.path.join(os.path.dirname(__file__), 'plots', 'correlation-test', f'{graph_name}.svg')
+    plt.show()
+    path = os.path.join(os.path.dirname(__file__), '..', 'plots', 'correlation-test', f'{graph_name}.svg')
     plt.savefig(path)

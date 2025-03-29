@@ -5,7 +5,7 @@ import pandas as pd
 import os
 import json
 
-from feature import FeatureExtensions as FE
+from enums.featureEnums import FeatureExtensions as FE
 from plot_utils import PlotUtils as PU
 import numpy as np
 
