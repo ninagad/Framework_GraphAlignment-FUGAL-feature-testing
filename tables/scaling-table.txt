@@ -1,0 +1,30 @@
+{'ifn': ['377', '378', '379', '380'], 'ifs': ['385', '386', '387', '388'], 'irfn': ['381', '382', '383', '384'], 'cfn': ['365', '366', '367', '368'], 'cfs': ['373', '374', '375', '376'], 'crfn': ['369', '370', '371', '372'], 'baselines': ['36', '19', '20', '60']}
+
+\begin{tabular}{lrrrrrrl}
+\toprule
+ Features                 &   individual\_mm\_norm &   individual\_stand &   individual\_rob\_norm &   collective\_mm\_norm &   collective\_stand &   collective\_rob\_norm & max                 \\
+\midrule
+ [ASSORTATIVITY\_EGO]      &              -0.0046 &            -0.0073 &               -0.0311 &              -0.0046 &             0.0045 &               -0.0108 & collective\_stand    \\
+ [AVG\_EGO\_CLUSTER]        &              -0.0246 &             0.0137 &                0.0105 &              -0.002  &             0.0051 &               -0.0021 & individual\_stand    \\
+ [AVG\_EGO\_DEG]            &               0.0217 &             0.0452 &                0.0503 &               0.0283 &             0.0428 &                0.0367 & individual\_rob\_norm \\
+ [CLOSENESS\_CENTRALITY]   &              -0.0253 &             0.0081 &                0.0029 &              -0.0013 &             0.0026 &               -0.0188 & individual\_stand    \\
+ [CLUSTER]                &              -0.0232 &            -0.0028 &               -0.0019 &              -0.0232 &            -0.0207 &                0.0157 & collective\_rob\_norm \\
+ [DEGREE\_CENTRALITY]      &               0.0518 &             0.0763 &                0.0848 &               0.0848 &             0.1056 &                0.123  & collective\_rob\_norm \\
+ [DEG]                    &               0.0146 &             0.0385 &                0.0488 &               0.0459 &             0.0672 &                0.0867 & collective\_rob\_norm \\
+ [EGO\_EDGES]              &               0.0422 &             0.0477 &                0.0199 &               0.0491 &             0.0795 &                0.0804 & collective\_rob\_norm \\
+ [EGO\_NEIGHBORS]          &               0.0514 &             0.062  &                0.0309 &               0.073  &             0.0703 &                0.0719 & collective\_mm\_norm  \\
+ [EGO\_OUT\_EDGES]          &               0.0145 &             0.0489 &                0.0468 &               0.068  &             0.0745 &                0.0786 & collective\_rob\_norm \\
+ [EIGENVECTOR\_CENTRALITY] &               0.0291 &             0.0306 &                0.0069 &               0.0302 &             0.0247 &                0.0067 & individual\_stand    \\
+ [INTERNAL\_FRAC\_EGO]      &              -0.0315 &             0.0053 &                0.0029 &              -0.0126 &             0.013  &                0.0218 & collective\_rob\_norm \\
+ [KURTOSIS\_EGO\_DEGS]      &              -0.0199 &            -0.0158 &               -0.0286 &              -0.0176 &             0.0074 &               -0.0159 & collective\_stand    \\
+ [MAX\_EGO\_DEGS]           &              -0.0182 &            -0.0241 &               -0.0791 &               0.0288 &             0.0244 &                0.0168 & collective\_mm\_norm  \\
+ [MEDIAN\_EGO\_DEGS]        &               0.0319 &             0.0752 &                0.0613 &               0.0503 &             0.0607 &                0.0717 & individual\_stand    \\
+ [MIN\_EGO\_DEGS]           &               0.0087 &             0.0508 &                0.0245 &               0.0073 &             0.0343 &                0.0296 & individual\_stand    \\
+ [MODE\_EGO\_DEGS]          &              -0.0196 &             0.0094 &               -0.0629 &               0.0006 &            -0.018  &               -0.071  & individual\_stand    \\
+ [PAGERANK]               &              -0.0018 &             0.0167 &                0.0238 &              -0.0203 &             0.0243 &                0.0322 & collective\_rob\_norm \\
+ [RANGE\_EGO\_DEGS]         &              -0.0013 &            -0.005  &                0.0048 &               0.0326 &             0.0428 &                0.0377 & collective\_stand    \\
+ [SKEWNESS\_EGO\_DEGS]      &              -0.0175 &             0.0139 &               -0.0243 &              -0.0102 &             0.0301 &                0.0195 & collective\_stand    \\
+ [SUM\_EGO\_CLUSTER]        &              -0.0088 &            -0.0007 &                0.0043 &              -0.0096 &            -0.0076 &               -0.0255 & individual\_rob\_norm \\
+ [VAR\_EGO\_CLUSTER]        &              -0.0492 &            -0.0486 &               -0.0686 &              -0.0396 &            -0.021  &               -0.0101 & collective\_rob\_norm \\
+\bottomrule
+\end{tabular}

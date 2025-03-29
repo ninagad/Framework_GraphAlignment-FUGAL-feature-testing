@@ -155,7 +155,12 @@ if __name__ == "__main__":
                           'collective_stand',
                           'collective_rob_norm']
 
-    scaling_df = scaling_df.drop(['[KATZ_CENTRALITY]'])
+    # Remove Katz centrality if it is there
+    try:
+        scaling_df = scaling_df.drop('[KATZ_CENTRALITY]')
+    except KeyError:
+        pass
+
     # Find the scaling method for each feature that has the maximum average distance to baseline
     scaling_df['max'] = scaling_df.idxmax(axis=1)
 
