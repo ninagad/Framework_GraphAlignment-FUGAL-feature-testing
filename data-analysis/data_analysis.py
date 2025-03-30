@@ -48,18 +48,24 @@ class DataAnalysis:
         fe = FeatureExtensions()
         df['Feature'] = df['Feature'].apply(lambda x: fe.to_label(fe.to_feature(x)))
 
-        print(pd.Series.to_latex(df, index=False))
-
-        return max_feature
+        return df, max_feature
 
     def forward_feature_selection(self):
-        # TODO: correct indices to new runs for correct scaling
-        # Single feature for distance normalization
-        sources = [330, 331, 346, 329]  # bio-celegans, netscience, euroroad, voles.
+        # Collective robust scaling
+        sources = [369, 370, 371, 372]  # Bio-celegans, netscience, euroroad, voles.
 
-        feature_1 = self.top_performing_feature(sources)
+        df_1, feature_1 = self.top_performing_feature(sources)
 
-        print(feature_1)
+        latex_table = pd.Series.to_latex(df_1, index=False)
+
+        # Write to file
+        file_path = os.path.join('..', 'tables', "feature-forward-selection-single-features.txt")
+        with open(file_path, "w") as file:
+            file.write(f'sources used for computation: {sources}')
+            file.write('\n\n')
+            file.write(f'Best feature: {feature_1}')
+            file.write('\n\n')
+            file.write(latex_table)
 
 
 if __name__ == "__main__":
