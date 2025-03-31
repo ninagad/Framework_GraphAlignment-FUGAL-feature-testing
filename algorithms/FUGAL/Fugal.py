@@ -12,8 +12,10 @@ import matplotlib.pyplot as plt
 from multiprocessing import Pool
 from sklearn.metrics.pairwise import euclidean_distances
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.decomposition import PCA
 
 from algorithms.FUGAL.pred import feature_extraction,eucledian_dist,convex_init,Degree_Features
+from enums.pcaEnums import PCAEnums
 from enums.scalingEnums import ScalingEnums
 
 def are_matrices_equal(matrix1, matrix2):
@@ -31,7 +33,7 @@ def are_matrices_equal(matrix1, matrix2):
     return True
 
 
-def main(data, iter, mu, features, scaling: ScalingEnums, EFN=5):
+def main(data, iter, mu, features, scaling: ScalingEnums, pca: PCAEnums, EFN=5):
     print("Fugal")
     torch.set_num_threads(40)
     dtype = np.float64
@@ -56,20 +58,21 @@ def main(data, iter, mu, features, scaling: ScalingEnums, EFN=5):
     Tar1=nx.from_numpy_array(Tar)
     A = torch.tensor((Src), dtype = torch.float64)
     B = torch.tensor((Tar), dtype = torch.float64)
-    #simple=True
-    #
-    #
-    #if (EFN<5):
-    #   F1 = Degree_Features(Src1,EFN)*n1
-    #   F2 = Degree_Features(Tar1,EFN)*n1
-    #EFN 5 equals fugal
-    #if (EFN==5):
-    #   F1 = feature_extraction(Src1, features, scaling)
-    #   F2 = feature_extraction(Tar1, features, scaling)
+
+    if pca != PCAEnums.NO_PCA:
+        # Override scaling to have no scaling bc we standardize before applying PCA
+        scaling = ScalingEnums.NO_SCALING
 
     F1 = feature_extraction(Src1, features, scaling)
     F2 = feature_extraction(Tar1, features, scaling)
     combined_features = np.vstack((F1,F2))
+
+    if pca != PCAEnums.NO_PCA:
+        scaler = StandardScaler()
+        standardized_features = scaler.fit_transform(combined_features)
+        pca_obj = PCA(n_components=pca.value)
+        principal_components = pca_obj.fit_transform(standardized_features)
+        combined_features = principal_components
 
     if scaling == ScalingEnums.COLLECTIVE_STANDARDIZATION:
         # Standardization

@@ -5,6 +5,7 @@ from algorithms import gwl, conealign, grasp as grasp, regal, eigenalign, NSD, i
 from algorithms import Parrot,Path,got,fgot,Dspp,Mds
 #GraspBafter Grampa
 from enums.scalingEnums import ScalingEnums
+from enums.pcaEnums import PCAEnums
 
 ex = Experiment("ex")
 
@@ -238,6 +239,7 @@ _GrampaS_args = {
 _Fugal_args={
     'iter': 15,
     'scaling': ScalingEnums.NO_SCALING,
+    'pca': PCAEnums.NO_PCA,
     #'iter': 15, for xx dataset.
     #'simple': True,
     #'features': [#'deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
