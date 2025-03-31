@@ -11,7 +11,7 @@ import time
 import matplotlib.pyplot as plt
 from multiprocessing import Pool
 from sklearn.metrics.pairwise import euclidean_distances
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 
 from algorithms.FUGAL.pred import feature_extraction,eucledian_dist,convex_init,Degree_Features
 from enums.scalingEnums import ScalingEnums
@@ -59,13 +59,34 @@ def main(data, iter, mu, features, scaling: ScalingEnums, EFN=5):
     #simple=True
     #
     #
-    if (EFN<5):
-        F1 = Degree_Features(Src1,EFN)*n1
-        F2 = Degree_Features(Tar1,EFN)*n1
+    #if (EFN<5):
+    #   F1 = Degree_Features(Src1,EFN)*n1
+    #   F2 = Degree_Features(Tar1,EFN)*n1
     #EFN 5 equals fugal
-    if (EFN==5):
-        F1 = feature_extraction(Src1, features, scaling)
-        F2 = feature_extraction(Tar1, features, scaling)
+    #if (EFN==5):
+    #   F1 = feature_extraction(Src1, features, scaling)
+    #   F2 = feature_extraction(Tar1, features, scaling)
+
+    F1 = feature_extraction(Src1, features, scaling)
+    F2 = feature_extraction(Tar1, features, scaling)
+    combined_features = np.vstack((F1,F2))
+
+    if scaling == ScalingEnums.COLLECTIVE_STANDARDIZATION:
+        # Standardization
+        scaler = StandardScaler()
+        combined_features = scaler.fit_transform(combined_features)
+
+    if scaling == ScalingEnums.COLLECTIVE_MM_NORMALIZATION:
+        # Min max normalization to 0-1 range
+        scaler = MinMaxScaler()
+        combined_features = scaler.fit_transform(combined_features)
+
+    if scaling == ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION:
+        scaler = RobustScaler()
+        combined_features = scaler.fit_transform(combined_features)
+
+    F1 = combined_features[:n,:]
+    F2 = combined_features[n:,:]
 
     # Normalization before squaring must be computed manually.
     if scaling == ScalingEnums.NORMALIZE_DIFFERENCES:
@@ -101,7 +122,7 @@ def main(data, iter, mu, features, scaling: ScalingEnums, EFN=5):
     else: # Otherwise use library function
         D = eucledian_dist(F1, F2, n)
 
-    D = (D - np.min(D)) / (np.max(D) - np.min(D))
+    D /= np.sqrt(len(features))
 
     D = torch.tensor(D, dtype = torch.float64)
     

@@ -205,51 +205,93 @@ class PlotGenerator():
         # Base dir
         base_dir = "Scaling/"
 
-        # Min-max normalized features
-        norm_feat_source_dict = {GraphEnums.BIO_CELEGANS: 333,
-                                 GraphEnums.CA_NETSCIENCE: 334,
-                                 GraphEnums.VOLES: 335,
+        # Individual Min-max normalized features
+        collective_mm_norm_source_dict = {GraphEnums.BIO_CELEGANS: 377,
+                                 GraphEnums.CA_NETSCIENCE: 378,
+                                 GraphEnums.INF_EUROROAD: 379,
+                                 GraphEnums.VOLES: 380,
                                  }
 
-        self.title = "Min-max normalization on features"
-        output_dir = base_dir + "Feature-normalization"
+        self.title = "Individual Min-max normalization"
+        output_dir = base_dir + "Individual-MM-normalization"
 
-        self.generate_plots(norm_feat_source_dict, output_dir)
+        self.generate_plots(collective_mm_norm_source_dict, output_dir)
 
+        
         # Min-max normalized distances
-        norm_dist_source_dict = {GraphEnums.BIO_CELEGANS: 330,
-                                 GraphEnums.CA_NETSCIENCE: 331,
-                                 GraphEnums.INF_EUROROAD: 346,
-                                 GraphEnums.VOLES: 329,
-                                 }
+        #norm_dist_source_dict = {GraphEnums.BIO_CELEGANS: 330,
+        #                         GraphEnums.CA_NETSCIENCE: 331,
+        #                         GraphEnums.INF_EUROROAD: 346,
+        #                         GraphEnums.VOLES: 329,
+        #                         }
 
-        self.title = "Min-max normalization on distances"
-        output_dir = base_dir + "Distance-normalization"
+        #self.title = "Min-max normalization on distances"
+        #output_dir = base_dir + "Distance-normalization"
 
-        self.generate_plots(norm_dist_source_dict, output_dir)
+        #self.generate_plots(norm_dist_source_dict, output_dir)
 
-        # Standardized features
-        standardized_feat_source_dict = {GraphEnums.BIO_CELEGANS: 337,
-                                         GraphEnums.CA_NETSCIENCE: 338,
-                                         GraphEnums.VOLES: 336,
+        # Individual feature standardization
+        collective_standardization_source_dict = {GraphEnums.BIO_CELEGANS: 385,
+                                         GraphEnums.CA_NETSCIENCE: 386,
+                                                  GraphEnums.INF_EUROROAD: 387,
+                                         GraphEnums.VOLES: 388,
                                          }
 
-        self.title = "Standardization of features"
-        output_dir = base_dir + "Feature-standardization"
+        self.title = "Individual feature standardization"
+        output_dir = base_dir + "Individual-standardization"
 
-        self.generate_plots(standardized_feat_source_dict, output_dir)
+        self.generate_plots(collective_standardization_source_dict, output_dir)
 
-        # Robust scaling features
-        robust_scale_feat_source_dict = {GraphEnums.BIO_CELEGANS: 342,
-                                         GraphEnums.CA_NETSCIENCE: 343,
-                                         GraphEnums.INF_EUROROAD: 345,
-                                         GraphEnums.VOLES: 344,
+        # Individual robust scaling features
+        collective_robust_source_dict = {GraphEnums.BIO_CELEGANS: 381,
+                                         GraphEnums.CA_NETSCIENCE: 382,
+                                         GraphEnums.INF_EUROROAD: 383,
+                                         GraphEnums.VOLES: 384,
                                          }
 
-        self.title = "Robust scaling of features"
-        output_dir = base_dir + "Feature-robust-scaling"
+        self.title = "Individual robust scaling"
+        output_dir = base_dir + "Individual-robust-scaling"
 
-        self.generate_plots(robust_scale_feat_source_dict, output_dir)
+        self.generate_plots(collective_robust_source_dict, output_dir)
+
+        #
+        # Collective Min-max normalized features
+        collective_mm_norm_source_dict = {GraphEnums.BIO_CELEGANS: 365,
+                                          GraphEnums.CA_NETSCIENCE: 366,
+                                          GraphEnums.INF_EUROROAD: 367,
+                                          GraphEnums.VOLES: 368,
+                                          }
+
+        self.title = "Collective Min-max normalization"
+        output_dir = base_dir + "Collective-MM-normalization"
+
+        self.generate_plots(collective_mm_norm_source_dict, output_dir)
+
+        #
+        # Collective feature standardization
+        collective_standardization_source_dict = {GraphEnums.BIO_CELEGANS: 373,
+                                                  GraphEnums.CA_NETSCIENCE: 374,
+                                                  GraphEnums.INF_EUROROAD: 375,
+                                                  GraphEnums.VOLES: 376,
+                                                  }
+
+        self.title = "Collective feature standardization"
+        output_dir = base_dir + "Collective-standardization"
+
+        self.generate_plots(collective_standardization_source_dict, output_dir)
+
+        #
+        # Collective robust scaling features
+        collective_robust_source_dict = {GraphEnums.BIO_CELEGANS: 369,
+                                         GraphEnums.CA_NETSCIENCE: 370,
+                                         GraphEnums.INF_EUROROAD: 371,
+                                         GraphEnums.VOLES: 372,
+                                         }
+
+        self.title = "Collective robust scaling"
+        output_dir = base_dir + "Collective-robust-scaling"
+
+        self.generate_plots(collective_robust_source_dict, output_dir)
 
     def generate_other_algos(self):
         base_dir = 'Other-algorithms'

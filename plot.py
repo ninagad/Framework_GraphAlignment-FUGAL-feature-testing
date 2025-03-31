@@ -267,9 +267,9 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
 
     # Save plot
     if mu is not None:
-        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}.svg')
+        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}-run={source}.svg')
     else:  # For other algorithms than FUGAL
-        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{title}-{graph}-{yaxis}.svg')
+        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{title}-{graph}-{yaxis}-run={source}.svg')
     plt.savefig(path)
 
 
