@@ -5,6 +5,7 @@ import networkx as nx
 import numpy as np
 from enums.featureEnums import FeatureEnums
 from enums.scalingEnums import ScalingEnums
+from enums.pcaEnums import PCAEnums
 
 # mprof run workexp.py with playground run=[1,2,3,4,5] iters=2 win
 
@@ -141,6 +142,7 @@ def tuning():
             {'features': x,
              'mu': 1,
              'scaling': ScalingEnums.COLLECTIVE_STANDARDIZATION,
+             'pca': PCAEnums.NO_PCA,
              }
             for x in [[FeatureEnums.DEG], [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
                       # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
