@@ -13,6 +13,7 @@ from enums.scalingEnums import ScalingEnums
 from enums.featureEnums import FeatureEnums
 from experiment import run as run_file
 
+
 def train(all_algs: list):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
     config = run.config
@@ -27,9 +28,7 @@ def train(all_algs: list):
     graph_names = ["bio-celegans",
                    "ca-netscience",
                    "mammalia-voles-plj-trapping_100",
-                   "yeast25_Y2H1",
                    "inf-euroroad",
-                   "socfb-Bowdoin47",
                    ]
 
     noises = [0, 0.05, 0.10, 0.15, 0.20, 0.25]
@@ -78,6 +77,9 @@ def train(all_algs: list):
     # Read the file from the artifact
     artifact_dir = f"{artifact_dir}"
 
+    # Detect if there has been any numeric errors and log the sweep as failed if so.
+    numeric_errors: int = 0
+
     # Compute avg accuracy across all runs and log
     acc_sum = 0
     artifact_files = os.listdir(artifact_dir)
@@ -85,15 +87,23 @@ def train(all_algs: list):
 
         with open(os.path.join(artifact_dir, file), 'r') as f:
             summary_dict = json.load(f)
+            acc = summary_dict['accuracy']
 
-            acc_sum += summary_dict['accuracy']
+            if acc == -1:  # Signals failed run
+                numeric_errors += 1
+            else:
+                acc_sum += acc
 
-    acc_avg = acc_sum / len(artifact_files)
+    avg_acc = acc_sum / (len(artifact_files) - numeric_errors)
 
     run.log({'mu': mu,
-             'Avg. accuracy': acc_avg})
+             'Avg. accuracy': avg_acc})
 
-    run.finish()
+    if numeric_errors == 0:
+        run.finish()
+    else:
+        # Log the sweep as failed if numeric errors occurred in any run of FUGAL
+        run.finish(exit_code=1)
 
 
 if __name__ == "__main__":
@@ -105,19 +115,15 @@ if __name__ == "__main__":
         "parameters": {
             "mu": {"min": 0.01,
                    "max": 10000.0,
-                   'distribution': 'q_uniform', # Rounded uniform distribution
+                   # Rounded log uniform distribution (more values for small mu)
+                   'distribution': 'q_log_uniform_values',
                    "q": 0.01  # Restrict to 2 decimal precision for mu
                    },
         }
         # TODO: try hyperband (bayesian bandits) optimization instead should run faster
         #  -> we can't since we only log one value per hyperparameter setting,
         #  so early stopping is not possible?
-
-        # TODO: try log/exp scaled distribution for mu
     }
-    # TODO: ENSURE THAT IT TERMINATES IMMEDIATELY IF A NUMERIC ERROR OCCURS
-    #  -> this is extremely harmful and should never happen in a setting where
-    #  you actually want to use the algorithm to align graphs.
 
     sweep_id = wandb.sweep(sweep_config, project="mu-hyperparameter-tuning")
 
