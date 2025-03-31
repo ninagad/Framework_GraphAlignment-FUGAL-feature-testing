@@ -1,3 +1,5 @@
+import sys
+
 from . import ex
 from generation import similarities_preprocess
 from evaluation import matching, evaluation
@@ -277,9 +279,15 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
         if wandb.run is not None:
             mu = alg[1]['mu']
             features = alg[1]['features']
+            acc = res2.item()
+            if acc == -1:
+                # Mark run as failed
+                wandb.finish(exit_code=1)
+                # Terminate script immediately so the next value of mu is used
+                sys.exit(1)
 
             summary_dict = {'mu': mu,
-                            'accuracy': res2.item(),
+                            'accuracy': acc,
                             'features': [feature.name for feature in features],
                             'graph': wandb_graph,
                             'noise-level': wandb_noiselvl,
