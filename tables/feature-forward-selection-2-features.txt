@@ -1,0 +1,31 @@
+sources used for computation: [389, 390, 392, 391]
+
+Best feature: [DEG, EGO_EDGES]
+
+\begin{tabular}{lr}
+\toprule
+Feature & avg accuracy \\
+\midrule
+degree, ego edges & 0.706283 \\
+degree, ego neighbors & 0.705399 \\
+degree, min ego degs & 0.703299 \\
+degree, sum ego cluster coeff & 0.703292 \\
+degree, median ego degs & 0.702625 \\
+degree, avg ego cluster coeff & 0.702347 \\
+degree, cluster coeff & 0.699131 \\
+degree, ego out edges & 0.698929 \\
+degree, ego internal frac & 0.698009 \\
+degree, avg ego deg & 0.697930 \\
+degree, max ego degs & 0.696810 \\
+degree, degree centrality & 0.696376 \\
+degree, ego assortativity & 0.694673 \\
+degree, range ego degs & 0.690442 \\
+degree, var ego cluster coeff & 0.690433 \\
+degree, skewness ego degs & 0.685865 \\
+degree, kurtosis ego degs & 0.681551 \\
+degree, mode ego degs & 0.671167 \\
+degree, pagerank & 0.668549 \\
+degree, closeness centrality & 0.649575 \\
+degree, eigenvector centrality & 0.649440 \\
+\bottomrule
+\end{tabular}

@@ -9,9 +9,18 @@ from enums.featureEnums import FeatureExtensions
 
 
 class DataAnalysis:
+    def transform_feature_str_to_label(self, feature: str):
+        fe = FeatureExtensions()
 
-    @staticmethod
-    def top_performing_feature(sources):
+        if ',' not in feature:
+            return fe.to_label(fe.to_feature(feature))
+        else:
+            features_in_combination = feature.replace(' ', '').split(',')
+            features = [fe.to_feature(name) for name in features_in_combination]
+            return fe.to_labels(features)
+
+
+    def top_performing_feature(self, sources):
         current_dir = (os.path.dirname(__file__))
         runs_dir = "../Server-runs"
 
@@ -45,27 +54,34 @@ class DataAnalysis:
         df = df.reset_index()
 
         # Convert feature names to labels
-        fe = FeatureExtensions()
-        df['Feature'] = df['Feature'].apply(lambda x: fe.to_label(fe.to_feature(x)))
+        df['Feature'] = df['Feature'].apply(lambda x: self.transform_feature_str_to_label(x))
 
         return df, max_feature
 
-    def forward_feature_selection(self):
-        # Collective robust scaling
-        sources = [369, 370, 371, 372]  # Bio-celegans, netscience, euroroad, voles.
-
-        df_1, feature_1 = self.top_performing_feature(sources)
-
-        latex_table = pd.Series.to_latex(df_1, index=False)
+    @staticmethod
+    def save_to_file(df, feature, sources, round):
+        latex_table = pd.Series.to_latex(df, index=False)
 
         # Write to file
-        file_path = os.path.join('..', 'tables', "feature-forward-selection-single-features.txt")
+        file_path = os.path.join('..', 'tables', f"feature-forward-selection-{round}-features.txt")
         with open(file_path, "w") as file:
             file.write(f'sources used for computation: {sources}')
             file.write('\n\n')
-            file.write(f'Best feature: {feature_1}')
+            file.write(f'Best feature: {feature}')
             file.write('\n\n')
             file.write(latex_table)
+
+    def forward_feature_selection(self):
+
+        # Collective robust scaling
+        sources_1 = [369, 370, 371, 372]  # Bio-celegans, netscience, euroroad, voles
+        df_1, feature_1 = self.top_performing_feature(sources_1)
+        self.save_to_file(df_1, feature_1, sources_1, 1)
+
+        # Second feature
+        sources_2 = [389, 390, 392, 391]
+        df_2, feature_2 = self.top_performing_feature(sources_2)
+        self.save_to_file(df_2, feature_2, sources_2, 2)
 
 
 if __name__ == "__main__":
