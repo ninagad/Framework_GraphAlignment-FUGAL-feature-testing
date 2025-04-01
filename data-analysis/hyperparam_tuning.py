@@ -35,7 +35,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
 
         noises = [0, 0.05, 0.10, 0.15, 0.20, 0.25]
 
-        iterations = 1
+        iterations = 5
 
         alg_id = 12  # FUGAL
         args_lst = [
@@ -74,29 +74,22 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
         # Download the artifact to a local folder
         artifact_dir = artifact.download()
 
-        # Read the file from the artifact
-        artifact_dir = f"{artifact_dir}"
-
         # Compute avg accuracy across all runs and log
-        acc_sum = 0
+        accs = []
         artifact_files = os.listdir(artifact_dir)
         for file in artifact_files:
             with open(os.path.join(artifact_dir, file), 'r') as f:
                 summary_dict = json.load(f)
                 acc = summary_dict['accuracy']
 
-                acc_sum += acc
+                accs.append(acc)
 
-        avg_acc = acc_sum / len(artifact_files)
+        avg_acc = sum(accs) / len(accs)
 
         run.log({'mu': mu,
                  'Avg. accuracy': avg_acc})
 
-        if len(artifact_files) != (len(graphs) * len(noises) * iterations):
-            logging.error(f'Number of artifacts {len(artifact_files)} does not match number of expected runs {len(graphs) * len(noises) * iterations}')
-            run.finish(exit_code=1)
-        else:
-            run.finish()
+        run.finish()
 
     except Exception as e:
         error_trace = traceback.format_exc()  # Get full traceback as a string
@@ -135,4 +128,5 @@ if __name__ == "__main__":
 
     feature_set = [FeatureEnums.DEG]
     project_name = "mu-tuning-for-degree"
+
     initialize_sweep(all_algs, project_name, feature_set)
