@@ -282,8 +282,11 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
             features = alg[1]['features']
             acc = res2.item()
             if acc == -1:
-                # Mark run as failed
+                # Log run as failed
                 logging.error(f'numeric error occurred')
+                # Log avg. accuracy as 0 to steer optimization away from this value of mu
+                wandb.run.log({'mu': mu,
+                         'Avg. accuracy': 0})
                 wandb.finish(exit_code=1)
                 # Terminate script immediately so the next value of mu is used
                 sys.exit(1)

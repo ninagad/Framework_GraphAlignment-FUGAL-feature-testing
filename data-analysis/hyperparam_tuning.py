@@ -101,7 +101,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
 def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureEnums]):
     sweep_config = {
         "method": "bayes",  # Bayesian optimization for mu
-        "metric": {"name": "accuracy", "goal": "maximize"},
+        "metric": {"name": "Avg. accuracy", "goal": "maximize"},
         "parameters": {
             "mu": {"min": 0.01,
                    "max": 200.0,
