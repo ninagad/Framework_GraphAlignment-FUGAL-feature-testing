@@ -18,6 +18,7 @@ from experiment import run as run_file
 
 def train(all_algs: list, feature_set: list[FeatureEnums]):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
+    graph_accs = {}
     try:
         config = run.config
         mu = config.mu
@@ -52,6 +53,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
         _algs[:] = get_run_list([alg_id, args_lst])
 
         for graph, baseline in graphs:
+            graph_accs[graph] = []  # Used for logging accuracy later
             graph_wrapper = get_graph_paths([graph])
 
             workexp.ex.run(
@@ -80,14 +82,23 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
         for file in artifact_files:
             with open(os.path.join(artifact_dir, file), 'r') as f:
                 summary_dict = json.load(f)
+                graph = summary_dict['graph']
                 acc = summary_dict['accuracy']
+                # Append to acc list for specific graph
+                graph_accs[graph].append(acc)
 
+                # Append to all accs
                 accs.append(acc)
 
         avg_acc = sum(accs) / len(accs)
 
         run.log({'mu': mu,
                  'Avg. accuracy': avg_acc})
+
+        for graph, acc_lst in graph_accs.items():
+            graph_avg_acc = sum(acc_lst) / len(acc_lst)
+            run.log({'mu': mu,
+                     f'{graph} avg. acc': graph_avg_acc})
 
         run.finish()
 
