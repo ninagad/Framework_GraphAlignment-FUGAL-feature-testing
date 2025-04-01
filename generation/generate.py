@@ -84,8 +84,17 @@ def get_largest_connected_component(G: nx.Graph) -> nx.Graph:
 
 @ex.capture
 def loadnx(path, use_largest_connected_component: bool):
-    G_e = np.loadtxt(path, int)
-    G = nx.Graph(G_e.tolist())
+    #G_e = np.loadtxt(path, int)
+    #G = nx.Graph(G_e.tolist())
+
+    try:
+        G_e = np.loadtxt(path, int)
+        graph_rep = G_e.tolist()
+    except:
+        from scipy.io import mmread
+        graph_rep = mmread('matname.mtx')
+
+    G = nx.Graph(graph_rep)
 
     if use_largest_connected_component:
         largest_cc = get_largest_connected_component(G)
