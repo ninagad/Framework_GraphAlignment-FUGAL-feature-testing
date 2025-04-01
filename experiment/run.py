@@ -17,6 +17,7 @@ import signal
 import subprocess
 
 import wandb
+import logging
 import json
 
 # Global variables used when tuning hyperparameter mu in FUGAL
@@ -282,6 +283,7 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
             acc = res2.item()
             if acc == -1:
                 # Mark run as failed
+                logging.error(f'numeric error occurred')
                 wandb.finish(exit_code=1)
                 # Terminate script immediately so the next value of mu is used
                 sys.exit(1)

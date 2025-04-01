@@ -1,6 +1,8 @@
 import copy
 import json
 import wandb
+import traceback
+import logging
 import sys
 import os
 
@@ -16,83 +18,91 @@ from experiment import run as run_file
 
 def train(all_algs: list, feature_set: list[FeatureEnums]):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
-    config = run.config
-    mu = config.mu
+    try:
+        config = run.config
+        mu = config.mu
 
-    artifact_name = f'{mu}'
+        artifact_name = f'{mu}'
 
-    # Initialize global variable artifact from run.py
-    run_file.artifact = wandb.Artifact(name=artifact_name, type='run-summary')
+        # Initialize global variable artifact from run.py
+        run_file.artifact = wandb.Artifact(name=artifact_name, type='run-summary')
 
-    graphs = [("bio-celegans", 36),
-              ("ca-netscience", 19),
-              ("mammalia-voles-plj-trapping_100", 60),
-              ("inf-euroroad", 20),
-              ]
+        graphs = [("bio-celegans", 36),
+                  ("ca-netscience", 19),
+                  ("mammalia-voles-plj-trapping_100", 60),
+                  ("inf-euroroad", 20),
+                  ]
 
-    noises = [0, 0.05, 0.10, 0.15, 0.20, 0.25]
+        noises = [0, 0.05, 0.10, 0.15, 0.20, 0.25]
 
-    iterations = 5
+        iterations = 1
 
-    alg_id = 12  # FUGAL
-    args_lst = [
-        {'features': feature_set,
-         'mu': mu,
-         'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
-         }
-    ]
+        alg_id = 12  # FUGAL
+        args_lst = [
+            {'features': feature_set,
+             'mu': mu,
+             'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
+             }
+        ]
 
-    run_lst = list(range(len(args_lst)))
+        run_lst = list(range(len(args_lst)))
 
-    # Ensure _algs contains all algorithms before selecting algorithm
-    _algs[:] = all_algs
-    _algs[:] = get_run_list([alg_id, args_lst])
+        # Ensure _algs contains all algorithms before selecting algorithm
+        _algs[:] = all_algs
+        _algs[:] = get_run_list([alg_id, args_lst])
 
-    for graph, baseline in graphs:
-        graph_wrapper = get_graph_paths([graph])
+        for graph, baseline in graphs:
+            graph_wrapper = get_graph_paths([graph])
 
-        workexp.ex.run(
-            config_updates={'noises': noises,
-                            'run': run_lst,
-                            'graph_names': [graph],
-                            'load': [baseline, baseline],
-                            'graphs': graph_wrapper,
-                            'iters': iterations,
-                            'xlabel': 'Noise-level',
-                            #'verbose': True
-                            })
+            workexp.ex.run(
+                config_updates={'noises': noises,
+                                'run': run_lst,
+                                'graph_names': [graph],
+                                'load': [baseline, baseline],
+                                'graphs': graph_wrapper,
+                                'iters': iterations,
+                                'xlabel': 'Noise-level',
+                                #'verbose': True
+                                })
 
-    # run summaries are logged as files in the Artifact object in run.py
-    wandb.run.log_artifact(run_file.artifact).wait()
+        # run summaries are logged as files in the Artifact object in run.py
+        wandb.run.log_artifact(run_file.artifact).wait()
 
-    # Access the logged artifact
-    artifact = wandb.run.use_artifact(f'{artifact_name}:latest')
+        # Access the logged artifact
+        artifact = wandb.run.use_artifact(f'{artifact_name}:latest')
 
-    # Download the artifact to a local folder
-    artifact_dir = artifact.download()
+        # Download the artifact to a local folder
+        artifact_dir = artifact.download()
 
-    # Read the file from the artifact
-    artifact_dir = f"{artifact_dir}"
+        # Read the file from the artifact
+        artifact_dir = f"{artifact_dir}"
 
-    # Compute avg accuracy across all runs and log
-    acc_sum = 0
-    artifact_files = os.listdir(artifact_dir)
-    for file in artifact_files:
-        with open(os.path.join(artifact_dir, file), 'r') as f:
-            summary_dict = json.load(f)
-            acc = summary_dict['accuracy']
+        # Compute avg accuracy across all runs and log
+        acc_sum = 0
+        artifact_files = os.listdir(artifact_dir)
+        for file in artifact_files:
+            with open(os.path.join(artifact_dir, file), 'r') as f:
+                summary_dict = json.load(f)
+                acc = summary_dict['accuracy']
 
-            acc_sum += acc
+                acc_sum += acc
 
-    if len(artifact_files) != (len(graphs) * len(noises) * iterations):
-        raise Exception(f'Number of artifacts {len(artifact_files)} does not match number of expected runs {len(graphs) * len(noises) * iterations}')
+        avg_acc = acc_sum / len(artifact_files)
 
-    avg_acc = acc_sum / len(artifact_files)
+        run.log({'mu': mu,
+                 'Avg. accuracy': avg_acc})
 
-    run.log({'mu': mu,
-             'Avg. accuracy': avg_acc})
+        if len(artifact_files) != (len(graphs) * len(noises) * iterations):
+            logging.error(f'Number of artifacts {len(artifact_files)} does not match number of expected runs {len(graphs) * len(noises) * iterations}')
+            run.finish(exit_code=1)
+        else:
+            run.finish()
 
-    run.finish()
+    except Exception as e:
+        error_trace = traceback.format_exc()  # Get full traceback as a string
+        logging.error(f'{e} \n {error_trace}')
+        run.finish(exit_code=1)
+
 
 
 def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureEnums]):
@@ -101,7 +111,7 @@ def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureE
         "metric": {"name": "accuracy", "goal": "maximize"},
         "parameters": {
             "mu": {"min": 0.01,
-                   "max": 10000.0,
+                   "max": 200.0,
                    # Rounded log uniform distribution (more values for small mu)
                    'distribution': 'q_log_uniform_values',
                    "q": 0.01  # Restrict to 2 decimal precision for mu
