@@ -330,6 +330,7 @@ def run_exp(G, output_path, noises, _log, graph_names):
             _log.info("Graph:(%s/%s)", graph_number + 1, len(G))
 
             if wandb.run is not None:
+                global wandb_graph
                 wandb_graph = graph_names[graph_number]
 
             time4 = []
@@ -339,6 +340,7 @@ def run_exp(G, output_path, noises, _log, graph_names):
                 _log.info("Noise_level:(%s/%s)", noise_level + 1, len(g_n))
 
                 if wandb.run is not None:
+                    global wandb_noiselvl
                     wandb_noiselvl = noises[noise_level]
 
                 time3 = []
@@ -347,6 +349,7 @@ def run_exp(G, output_path, noises, _log, graph_names):
                     _log.info("iteration:(%s/%s)", i + 1, len(g_it))
 
                     if wandb.run is not None:
+                        global wandb_iteration
                         wandb_iteration = i + 1
 
                     time2, res3 = run_algs(g)

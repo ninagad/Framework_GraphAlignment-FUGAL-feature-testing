@@ -14,7 +14,7 @@ from enums.featureEnums import FeatureEnums
 from experiment import run as run_file
 
 
-def train(all_algs: list):
+def train(all_algs: list, feature_set: list[FeatureEnums]):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
     config = run.config
     mu = config.mu
@@ -28,11 +28,9 @@ def train(all_algs: list):
               ("ca-netscience", 19),
               ("mammalia-voles-plj-trapping_100", 60),
               ("inf-euroroad", 20),
-                   ]
+              ]
 
     noises = [0, 0.05, 0.10, 0.15, 0.20, 0.25]
-
-    feature_set = [FeatureEnums.DEG]  # TODO: choose feature set
 
     iterations = 5
 
@@ -80,12 +78,14 @@ def train(all_algs: list):
     acc_sum = 0
     artifact_files = os.listdir(artifact_dir)
     for file in artifact_files:
-
         with open(os.path.join(artifact_dir, file), 'r') as f:
             summary_dict = json.load(f)
             acc = summary_dict['accuracy']
 
             acc_sum += acc
+
+    if len(artifact_files) != (len(graphs) * len(noises) * iterations):
+        raise Exception(f'Number of artifacts {len(artifact_files)} does not match number of expected runs {len(graphs) * len(noises) * iterations}')
 
     avg_acc = acc_sum / len(artifact_files)
 
@@ -95,9 +95,7 @@ def train(all_algs: list):
     run.finish()
 
 
-if __name__ == "__main__":
-    all_algs = copy.copy(_algs)
-
+def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureEnums]):
     sweep_config = {
         "method": "bayes",  # Bayesian optimization for mu
         "metric": {"name": "accuracy", "goal": "maximize"},
@@ -114,9 +112,17 @@ if __name__ == "__main__":
         #  so early stopping is not possible?
     }
 
-    sweep_id = wandb.sweep(sweep_config, project="mu-hyperparameter-tuning")
+    sweep_id = wandb.sweep(sweep_config, project=sweep_name)
 
     wandb.agent(sweep_id,
-                function=lambda: train(all_algs=all_algs),
+                function=lambda: train(all_algs, feature_set),
                 count=50
                 )
+
+
+if __name__ == "__main__":
+    all_algs = copy.copy(_algs)
+
+    feature_set = [FeatureEnums.DEG]
+    project_name = "mu-tuning-for-degree"
+    initialize_sweep(all_algs, project_name, feature_set)
