@@ -168,7 +168,12 @@ if __name__ == "__main__":
     print("The scaling method that has the maximum average distance to baseline for the most features is: ",
           scaling_df['max'].mode()[0])
 
-    latex_table = tabulate(scaling_df.round(4), headers='keys', tablefmt='latex_booktabs')
+    # Print the union of the top 25 performing features
+    rows = ['[AVG_EGO_DEG]', '[DEGREE_CENTRALITY]', '[DEG]', '[EGO_EDGES]', '[EGO_NEIGHBORS]',
+            '[PAGERANK]', '[MEDIAN_EGO_DEGS]', '[EGO_OUT_EDGES]', '[MAX_EGO_DEGS]', '[RANGE_EGO_DEGS]']
+    print(scaling_df.loc[rows])
+
+    latex_table = tabulate(scaling_df.loc[rows].round(4), headers='keys', tablefmt='latex_booktabs')
     print(latex_table)
 
     # Write to file

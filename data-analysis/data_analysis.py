@@ -83,6 +83,16 @@ class DataAnalysis:
         df_2, feature_2 = self.top_performing_feature(sources_2)
         self.save_to_file(df_2, feature_2, sources_2, 2)
 
+        # Third feature
+        sources_3 = [393, 394, 396, 395]
+        df_3, feature_3 = self.top_performing_feature(sources_3)
+        self.save_to_file(df_3, feature_3, sources_3, 3)
+
+        # Fourth feature
+        sources_4 = [398, 399, 400, 401]
+        df_4, feature_4 = self.top_performing_feature(sources_4)
+        self.save_to_file(df_4, feature_4, sources_4, 4)
+
 
 if __name__ == "__main__":
     da = DataAnalysis()

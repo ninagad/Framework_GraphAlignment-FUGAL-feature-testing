@@ -2,6 +2,7 @@ from . import ex
 import numpy as np
 import networkx as nx
 import scipy.sparse as sps
+from scipy.io import mmread
 
 def refill_e(edges, n, amount):
     if amount == 0:
@@ -84,8 +85,16 @@ def get_largest_connected_component(G: nx.Graph) -> nx.Graph:
 
 @ex.capture
 def loadnx(path, use_largest_connected_component: bool):
-    G_e = np.loadtxt(path, int)
-    G = nx.Graph(G_e.tolist())
+    #G_e = np.loadtxt(path, int)
+    #G = nx.Graph(G_e.tolist())
+
+    try:
+        G_e = np.loadtxt(path, int)
+        graph_rep = G_e.tolist()
+    except:
+        path = path[:-3] + "mtx"
+        graph_rep = mmread(path)
+    G = nx.Graph(graph_rep)
 
     if use_largest_connected_component:
         largest_cc = get_largest_connected_component(G)
