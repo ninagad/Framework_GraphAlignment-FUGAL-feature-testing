@@ -28,10 +28,10 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
         # Initialize global variable artifact from run.py
         run_file.artifact = wandb.Artifact(name=artifact_name, type='run-summary')
 
-        graphs = [("bio-celegans", 36),
-                  ("ca-netscience", 19),
-                  ("mammalia-voles-plj-trapping_100", 60),
-                  ("inf-euroroad", 20),
+        graphs = [("bio-celegans", 689),
+                  ("ca-netscience", 690),
+                  ("mammalia-voles-plj-trapping_100", 692),
+                  ("inf-euroroad", 691),
                   ]
 
         noises = [0, 0.05, 0.10, 0.15, 0.20, 0.25]
@@ -64,7 +64,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
                                 'graphs': graph_wrapper,
                                 'iters': iterations,
                                 'xlabel': 'Noise-level',
-                                #'verbose': True
+                                # 'verbose': True
                                 })
 
         # run summaries are logged as files in the Artifact object in run.py
@@ -108,7 +108,6 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
         run.finish(exit_code=1)
 
 
-
 def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureEnums]):
     sweep_config = {
         "method": "bayes",  # Bayesian optimization for mu
@@ -116,8 +115,8 @@ def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureE
         "parameters": {
             "mu": {"min": 0.01,
                    "max": 200.0,
-                   # Rounded log uniform distribution (more values for small mu)
-                   'distribution': 'q_log_uniform_values',
+                   # Rounded uniform distribution
+                   'distribution': 'q_uniform',
                    "q": 0.01  # Restrict to 2 decimal precision for mu
                    },
         }
@@ -139,5 +138,15 @@ if __name__ == "__main__":
 
     feature_set = [FeatureEnums.DEG]
     project_name = "mu-tuning-for-degree"
+
+    feature_set = [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER,
+                   FeatureEnums.EGO_EDGES, FeatureEnums.EGO_OUT_EDGES, FeatureEnums.EGO_NEIGHBORS,
+                   FeatureEnums.ASSORTATIVITY_EGO, FeatureEnums.INTERNAL_FRAC_EGO,
+                   FeatureEnums.MODE_EGO_DEGS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.MIN_EGO_DEGS,
+                   FeatureEnums.MAX_EGO_DEGS, FeatureEnums.RANGE_EGO_DEGS, FeatureEnums.SKEWNESS_EGO_DEGS,
+                   FeatureEnums.KURTOSIS_EGO_DEGS,  # Statistical features
+                   FeatureEnums.CLOSENESS_CENTRALITY, FeatureEnums.DEGREE_CENTRALITY,
+                   FeatureEnums.EIGENVECTOR_CENTRALITY, FeatureEnums.PAGERANK]  # Centrality measures
+    project_name = "mu-tuning-all-features"
 
     initialize_sweep(all_algs, project_name, feature_set)
