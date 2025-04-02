@@ -40,7 +40,7 @@ def parse(run):
     df['mean'] = df.iloc[:,
                     (df.columns != 'Features') & (df.columns != 'Noise-level') & (df.columns != 'variable')].mean(axis=1)
 
-    return df.groupby(['Features']).mean().iloc[0,:]['mean']
+    return df['mean'].mean()
 
 
 if __name__ == "__main__":
