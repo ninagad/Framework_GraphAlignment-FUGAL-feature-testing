@@ -1,6 +1,4 @@
 import argparse
-import pandas as pd
-from tabulate import tabulate
 import sys
 import os
 import numpy as np
