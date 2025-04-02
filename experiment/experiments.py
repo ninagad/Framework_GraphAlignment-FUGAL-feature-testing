@@ -141,15 +141,15 @@ def tuning():
         [
             {'features': x,
              'mu': 1,
-             'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
+             'scaling': ScalingEnums.NO_SCALING,
              'pca': PCAEnums.NO_PCA,
              }
-            for x in [[FeatureEnums.DEG], [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
+            for x in [[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
                       # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
-                      [FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.VAR_EGO_CLUSTER], [FeatureEnums.ASSORTATIVITY_EGO], [FeatureEnums.INTERNAL_FRAC_EGO],  # Other features
-                      [FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features
+                      #[FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.VAR_EGO_CLUSTER], [FeatureEnums.ASSORTATIVITY_EGO], [FeatureEnums.INTERNAL_FRAC_EGO],  # Other features
+                      #[FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features
                       # 'laplacian_centrality',
-                      [FeatureEnums.CLOSENESS_CENTRALITY], [FeatureEnums.DEGREE_CENTRALITY], [FeatureEnums.EIGENVECTOR_CENTRALITY], [FeatureEnums.PAGERANK],  # [Feature.KATZ_CENTRALITY], Centrality measures
+                      #[FeatureEnums.CLOSENESS_CENTRALITY], [FeatureEnums.DEGREE_CENTRALITY], [FeatureEnums.EIGENVECTOR_CENTRALITY], [FeatureEnums.PAGERANK],  # [Feature.KATZ_CENTRALITY], Centrality measures
                       #[Feature.DEG, Feature.CLUSTER, Feature.AVG_EGO_DEG, Feature.AVG_EGO_CLUSTER] # Fugal
                       # Feature.AVG_2HOP_DEG, Feature.AVG_2HOP_CLUSTER, Feature.TWOHOP_EDGES, Feature.TWOHOP_NEIGHBORS,  # 2-hop
                       # Feature.SUM_2HOP_CLUSTER, Feature.VAR_2HOP_CLUSTER, Feature.ASSORTATIVITY_2HOP, Feature.INTERNAL_FRAC_2HOP,  # 2-hop
@@ -157,16 +157,9 @@ def tuning():
                       # Feature.RANGE_2HOP_DEGS, Feature.SKEWNESS_2HOP_DEGS,
                       # ['deg'], ['degree_centrality'], ['pagerank'], ['katz'], ['deg', 'degree_centrality'], ['deg', 'pagerank'], ['deg', 'katz'], ['deg', 'cluster', 'avg_ego_deg', 'avg_ego_cluster']  # ca_netscience
                       # [Feature.DEG], [Feature.CLUSTER], [Feature.AVG_EGO_CLUSTER], [Feature.EGO_EDGES], [Feature.SUM_EGO_CLUSTER], [Feature.INTERNAL_FRAC_EGO], [Feature.MAX_EGO_DEGS], [Feature.CLOSENESS_CENTRALITY], [Feature.DEGREE_CENTRALITY], [Feature.EIGENVECTOR_CENTRALITY], [Feature.PAGERANK],
-                      [FeatureEnums.DEG, FeatureEnums.CLUSTER], [FeatureEnums.DEG, FeatureEnums.AVG_EGO_DEG],
-                      [FeatureEnums.DEG, FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.DEG, FeatureEnums.EGO_EDGES], [FeatureEnums.DEG, FeatureEnums.EGO_OUT_EDGES],
-                      [FeatureEnums.DEG, FeatureEnums.EGO_NEIGHBORS],
-                      [FeatureEnums.DEG, FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.DEG, FeatureEnums.VAR_EGO_CLUSTER], [FeatureEnums.DEG, FeatureEnums.ASSORTATIVITY_EGO],
-                      [FeatureEnums.DEG, FeatureEnums.INTERNAL_FRAC_EGO],
-                      [FeatureEnums.DEG, FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.MIN_EGO_DEGS],
-                      [FeatureEnums.DEG, FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.SKEWNESS_EGO_DEGS],
-                      [FeatureEnums.DEG, FeatureEnums.KURTOSIS_EGO_DEGS],
-                      [FeatureEnums.DEG, FeatureEnums.CLOSENESS_CENTRALITY], [FeatureEnums.DEG, FeatureEnums.DEGREE_CENTRALITY],
-                      [FeatureEnums.DEG, FeatureEnums.EIGENVECTOR_CENTRALITY], [FeatureEnums.DEG, FeatureEnums.PAGERANK],
+                      # [FeatureEnums.DEG, FeatureEnums.CLUSTER], [FeatureEnums.DEG, FeatureEnums.AVG_EGO_DEG], [FeatureEnums.DEG, FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.DEG, FeatureEnums.EGO_EDGES], [FeatureEnums.DEG, FeatureEnums.EGO_OUT_EDGES],
+                      # [FeatureEnums.DEG, FeatureEnums.EGO_NEIGHBORS], [FeatureEnums.DEG, FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.DEG, FeatureEnums.VAR_EGO_CLUSTER], [FeatureEnums.DEG, FeatureEnums.ASSORTATIVITY_EGO], [FeatureEnums.DEG, FeatureEnums.INTERNAL_FRAC_EGO], [FeatureEnums.DEG, FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.MIN_EGO_DEGS],
+                      # [FeatureEnums.DEG, FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.KURTOSIS_EGO_DEGS], [FeatureEnums.DEG, FeatureEnums.CLOSENESS_CENTRALITY], [FeatureEnums.DEG, FeatureEnums.DEGREE_CENTRALITY], [FeatureEnums.DEG, FeatureEnums.EIGENVECTOR_CENTRALITY], [FeatureEnums.DEG, FeatureEnums.PAGERANK],
                       ]
             # {'mu': x, 'features': ['deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
             #        'sum_ego_cluster', 'var_ego_cluster', 'assortativity_ego', 'internal_frac_ego', # Augmented NETSIMILE features
