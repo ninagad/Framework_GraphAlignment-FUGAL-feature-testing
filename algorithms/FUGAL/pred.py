@@ -1,4 +1,4 @@
-#Fugal Algorithm was provided by anonymous authors.
+# Fugal Algorithm was provided by anonymous authors.
 import numpy as np
 import torch
 import networkx as nx
@@ -11,8 +11,9 @@ from enums.featureEnums import FeatureEnums
 from enums.scalingEnums import ScalingEnums
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 
+
 def plot(graph1, graph2):
-    plt.figure(figsize=(12,4))
+    plt.figure(figsize=(12, 4))
     plt.subplot(121)
 
     nx.draw(graph1)
@@ -43,18 +44,18 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
     egonets = {n: nx.ego_graph(G, n) for n in node_list}
 
     neighbor_degs = [[node_degree_dict[m] for m in egonets[n].nodes if m != n]
-        if node_degree_dict[n] > 0
-        else 0
-        for n in node_list
-    ]
+                     if node_degree_dict[n] > 0
+                     else 0
+                     for n in node_list
+                     ]
 
     neighbor_cluster = [[node_clustering_dict[m] for m in egonets[n].nodes if m != n]
-            if node_degree_dict[n] > 0
-            else 0
-            for n in node_list
-    ]
+                        if node_degree_dict[n] > 0
+                        else 0
+                        for n in node_list
+                        ]
 
-# NETSIMILE features:
+    # NETSIMILE features:
     # node degrees
     if FeatureEnums.DEG in features:
         degs = [node_degree_dict[n] for n in node_list]
@@ -72,7 +73,6 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         avg_neighbor_degs = [np.mean(degs) for degs in neighbor_degs]
 
         node_features[:, features.index(FeatureEnums.AVG_EGO_DEG)] = avg_neighbor_degs
-
 
     # average clustering coefficient of neighborhood
     if FeatureEnums.AVG_EGO_CLUSTER in features:
@@ -121,12 +121,12 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index(FeatureEnums.EGO_NEIGHBORS)] = neighbors_of_neighbors
 
-# Augmented NETSIMILE FEATURES
+    # Augmented NETSIMILE FEATURES
     # sum of degrees in the neighborhood
     if 'sum_ego_deg' in features:
         sum_neighbor_degs = [np.sum(degs) for degs in neighbor_degs]
 
-        node_features[:,features.index('sum_ego_deg')] = sum_neighbor_degs
+        node_features[:, features.index('sum_ego_deg')] = sum_neighbor_degs
 
     if 'var_ego_deg' in features:
         var_neighbor_degs = [np.var(degs) for degs in neighbor_degs]
@@ -145,7 +145,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
     if 'avg_ego_edges' in features:
         avg_neighbor_edges = [
-            egonets[n].number_of_edges()/egonets[n].number_of_nodes() if node_degree_dict[n] > 0 else 0
+            egonets[n].number_of_edges() / egonets[n].number_of_nodes() if node_degree_dict[n] > 0 else 0
             for n in node_list
         ]
 
@@ -179,8 +179,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index('avg_ego_neighbors')] = avg_neighbors_of_neighbors
 
-
-# OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis)
+    # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis)
     if FeatureEnums.MODE_EGO_DEGS in features:
         # stats.mode returns the mode and the count. We extract the mode with [0].
         mode_neighbor_degs = [stats.mode(degs)[0] if len(degs) > 0 else 0 for degs in neighbor_degs]
@@ -224,8 +223,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index(FeatureEnums.ASSORTATIVITY_EGO)] = assortativity_neighbors
 
-
-# Centrality measures
+    # Centrality measures
 
     # Calculate centrality measures for every vertex
     if FeatureEnums.CLOSENESS_CENTRALITY in features:
@@ -262,13 +260,14 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index(FeatureEnums.KATZ_CENTRALITY)] = katz
 
-# Avg effective resistance
+    # Avg effective resistance
     if 'avg_resist_dist' in features:
-        avg_resist_dists = [np.mean([float(nx.resistance_distance(G, node, other)) for other in G.nodes()]) for node in G.nodes()]
+        avg_resist_dists = [np.mean([float(nx.resistance_distance(G, node, other)) for other in G.nodes()]) for node in
+                            G.nodes()]
 
         node_features[:, features.index('avg_resist_dist')] = avg_resist_dists
 
-# Internal vs external connectivity
+    # Internal vs external connectivity
     if FeatureEnums.INTERNAL_FRAC_EGO in features:
         ego_in_edges = [egonets[n].number_of_edges() for n in node_list]
 
@@ -282,13 +281,12 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
             for i in node_list
         ]
 
-        frac = [in_edges/in_out_edges if in_out_edges != 0 else 1
+        frac = [in_edges / in_out_edges if in_out_edges != 0 else 1
                 for in_edges, in_out_edges in zip(ego_in_edges, ego_in_out_edges)]
 
         node_features[:, features.index(FeatureEnums.INTERNAL_FRAC_EGO)] = frac
 
-
-# Distance measures
+    # Distance measures
     # NOTE: fails if the graph is not connected!
     if 'eccentricity' in features:
         ec_dict = nx.eccentricity(G)
@@ -296,25 +294,25 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index('eccentricity')] = eccentricity
 
-# Features with 2-hop neighbourhood
+    # Features with 2-hop neighbourhood
 
     two_hop_neighbor_nodes = {node: list(set.union(*[set(egonets[m].nodes) for m in egonets[node].nodes]))
-                                for node in node_list}
+                              for node in node_list}
 
     two_hop_egonets = {node: G.subgraph(two_hop_neighbor_nodes[node])
                        for node in node_list}
 
     two_hop_neighbor_degs = [[node_degree_dict[m] for m in two_hop_egonets[n].nodes if m != n]
-                     if node_degree_dict[n] > 0
-                     else 0
-                     for n in node_list
-                     ]
+                             if node_degree_dict[n] > 0
+                             else 0
+                             for n in node_list
+                             ]
 
     two_hop_neighbor_cluster = [[node_clustering_dict[m] for m in two_hop_egonets[n].nodes if m != n]
-                        if node_degree_dict[n] > 0
-                        else 0
-                        for n in node_list
-                        ]
+                                if node_degree_dict[n] > 0
+                                else 0
+                                for n in node_list
+                                ]
 
     # NetSimile
     # average degree of 2-hop neighborhood
@@ -357,7 +355,6 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         ]
         node_features[:, features.index(FeatureEnums.TWOHOP_NEIGHBORS)] = neighbors_of_2hop
 
-
     # Augmented NetSimile
     if 'var_2hop_deg' in features:
         var_two_neighbor_degs = [np.var(degs) for degs in two_hop_neighbor_degs]
@@ -373,7 +370,6 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         var_two_neighbor_cluster = [np.var(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
 
         node_features[:, features.index(FeatureEnums.VAR_2HOP_CLUSTER)] = var_two_neighbor_cluster
-
 
     if FeatureEnums.INTERNAL_FRAC_2HOP in features:
         two_hop_in_edges = [two_hop_egonets[n].number_of_edges() for n in node_list]
@@ -433,7 +429,7 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
     # Assortativity of 2-hop neighbourhood
     if FeatureEnums.ASSORTATIVITY_2HOP in features:
         assortativity_neighbors = [nx.degree_assortativity_coefficient(two_hop_egonets[n]) for n in node_list
-                                    ]
+                                   ]
 
         node_features[:, features.index(FeatureEnums.ASSORTATIVITY_2HOP)] = assortativity_neighbors
 
@@ -456,17 +452,17 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         robust_normalized_features = scaler.fit_transform(node_features)
         node_features = robust_normalized_features
 
+    # print('before norm: \n', node_features[:5, :])
+    # print('max values: ', max_values[:5])
+    # print('min values: ', min_values[:5])
 
-    #print('before norm: \n', node_features[:5, :])
-    #print('max values: ', max_values[:5])
-    #print('min values: ', min_values[:5])
+    # print('normalized features: \n', normalized_features[:5, :])
 
-    #print('normalized features: \n', normalized_features[:5, :])
-
-    #'shape of maxvalues: ', max_values.shape)
-    #print('shape of minvalues: ', min_values.shape)
-    #print('shape of normalized: ', normalized_features.shape)
+    # 'shape of maxvalues: ', max_values.shape)
+    # print('shape of minvalues: ', min_values.shape)
+    # print('shape of normalized: ', normalized_features.shape)
     return node_features
+
 
 def feature_extractionEV(G):
     """Node feature extraction.
@@ -512,13 +508,13 @@ def feature_extractionEV(G):
 
     1
     try:
-    # Calculate eigenvector centrality for the entire graph
+        # Calculate eigenvector centrality for the entire graph
         centrality = nx.eigenvector_centrality(G)
     except Exception as e:
-    # If an error occurs, set centrality to zeros matrix
+        # If an error occurs, set centrality to zeros matrix
         centrality = {node: 0.0 for node in G.nodes()}
 
-# Extract centrality values for each node and store in a list
+    # Extract centrality values for each node and store in a list
     EC = [centrality[node] for node in G.nodes()]
 
     # assembling the features
@@ -531,7 +527,8 @@ def feature_extractionEV(G):
     node_features = np.nan_to_num(node_features)
     return np.nan_to_num(node_features)
 
-def feature_extractionBM(G,simple):
+
+def feature_extractionBM(G, simple):
     """Node feature extraction.
 
     Parameters
@@ -575,7 +572,7 @@ def feature_extractionBM(G,simple):
 
     # number of edges in the neighborhood
 
-    if simple==False:
+    if simple == False:
         neighbor_edges = [
             egonets[n].number_of_edges() if node_degree_dict[n] > 0 else 0
             for n in node_list
@@ -584,7 +581,7 @@ def feature_extractionBM(G,simple):
     # number of outgoing edges from the neighborhood
     # the sum of neighborhood degrees = 2*(internal edges) + external edges
     # node_features[:,5] = node_features[:,0] * node_features[:,2] - 2*node_features[:,4]
-    if simple==False:
+    if simple == False:
         neighbor_outgoing_edges = [
             len(
                 [
@@ -594,10 +591,10 @@ def feature_extractionBM(G,simple):
                 ]
             )
             for i in node_list
-        ]   
+        ]
 
-    # number of neighbors of neighbors (not in neighborhood)
-    if simple==False:
+        # number of neighbors of neighbors (not in neighborhood)
+    if simple == False:
         neighbors_of_neighbors = [
             len(
                 set([p for m in G.neighbors(n) for p in G.neighbors(m)])
@@ -612,16 +609,18 @@ def feature_extractionBM(G,simple):
     # assembling the features
     node_features[:, 0] = degs
     node_features[:, 1] = clusts
-    #node_features[:, 2] = neighbor_degs
-    #node_features[:, 3] = neighbor_clusts
-    #if (simple==False):
+    # node_features[:, 2] = neighbor_degs
+    # node_features[:, 3] = neighbor_clusts
+    # if (simple==False):
     #    node_features[:, 4] = neighbor_edges #create if statement
     #    node_features[:, 5] = neighbor_outgoing_edges#
     #    node_features[:, 6] = neighbors_of_neighbors#
 
     node_features = np.nan_to_num(node_features)
     return np.nan_to_num(node_features)
-def Degree_Features(G,EFN):
+
+
+def Degree_Features(G, EFN):
     CS = []
     BS = []
     DC = []
@@ -632,32 +631,32 @@ def Degree_Features(G,EFN):
     node_degree_dict = dict(G.degree())
     degs = [node_degree_dict[n] for n in node_list]
 
-# Calculate centrality measures for every vertex
+    # Calculate centrality measures for every vertex
     for node in G.nodes():
-        if (EFN==0):
+        if (EFN == 0):
             CS.append(nx.closeness_centrality(G, u=node))
-        #BS.append(nx.betweenness_centrality(G)[node]) nono
-        elif (EFN==1):
+        # BS.append(nx.betweenness_centrality(G)[node]) nono
+        elif (EFN == 1):
             DC.append(nx.degree_centrality(G)[node])
-        elif (EFN==2):
-            EC.append(nx.eigenvector_centrality(G,tol=0.0001,max_iter=10000)[node])
-        elif (EFN==3):
-            PR.append(nx.pagerank(G,tol=0.0001,max_iter=10000)[node])
-        #BS.append(nx.laplacian_centrality(G)[node]) nono
-        
+        elif (EFN == 2):
+            EC.append(nx.eigenvector_centrality(G, tol=0.0001, max_iter=10000)[node])
+        elif (EFN == 3):
+            PR.append(nx.pagerank(G, tol=0.0001, max_iter=10000)[node])
+        # BS.append(nx.laplacian_centrality(G)[node]) nono
+
     node_features = np.zeros(shape=(G.number_of_nodes(), 1))
-    if (EFN==0):
+    if (EFN == 0):
         node_features[:, 0] = CS
-    elif (EFN==1):
+    elif (EFN == 1):
         node_features[:, 0] = DC
-    #node_features[:, 0] = BS
-    elif (EFN==2):
+    # node_features[:, 0] = BS
+    elif (EFN == 2):
         node_features[:, 0] = EC
-    elif (EFN==3):
+    elif (EFN == 3):
         node_features[:, 0] = PR
-    #elif (EFN==4):
+    # elif (EFN==4):
     #    node_features[:, 0] = degs
-    #print(node_features)
+    # print(node_features)
     node_features = np.nan_to_num(node_features)
     print(node_features)
     return np.nan_to_num(node_features)
@@ -667,9 +666,12 @@ def eucledian_dist(F1, F2, n=None):
     D = euclidean_distances(F1, F2)
     return D
 
+
 def dist(A, B, P):
     obj = np.linalg.norm(np.dot(A, P) - np.dot(P, B))
-    return obj*obj/2
+    return obj * obj / 2
+
+
 '''
 def convex_initTun(A, B, D, mu, niter):
     np.set_printoptions(suppress=True)
@@ -691,68 +693,107 @@ def convex_initTun(A, B, D, mu, niter):
             P = P + alpha * (q - P)
     return P
 '''
-def convex_initTun(A, B, D,K, mu, niter):
+
+
+def convex_initTun(A, B, D, K, mu, niter):
     np.set_printoptions(suppress=True)
     n = len(A)
-    P = torch.ones((n,n), dtype = torch.float64)
-    P=P/n
-    #P=D
-    ones = torch.ones(n, dtype = torch.float64)
-    mat_ones = torch.ones((n, n), dtype = torch.float64)
+    P = torch.ones((n, n), dtype=torch.float64)
+    P = P / n
+    # P=D
+    ones = torch.ones(n, dtype=torch.float64)
+    mat_ones = torch.ones((n, n), dtype=torch.float64)
     reg = 1.0
-    #K=mu*D*-1
-    for i in range(0,11):
+    # K=mu*D*-1
+    for i in range(0, 11):
         for it in range(1, 11):
-            #G=  A.T@torch.sign(A @ P- P@B)- torch.sign(A@P-P@B) @ B.T+K+ i*( - 2*P)
-            G=-torch.mm(torch.mm(A.T, P), B)-torch.mm(torch.mm(A, P), B.T)+ mat_ones+  i*1*( - P)
-            #G= A.T@A@P+P@B.T@B+2*A@P@B+0.2**2*P-K
-            q = sinkhorn(ones, ones, G, reg, maxIter = 1000, stopThr = 1e-6)
+            # G=  A.T@torch.sign(A @ P- P@B)- torch.sign(A@P-P@B) @ B.T+K+ i*( - 2*P)
+            G = -torch.mm(torch.mm(A.T, P), B) - torch.mm(torch.mm(A, P), B.T) + mat_ones + i * 1 * (- P)
+            # G= A.T@A@P+P@B.T@B+2*A@P@B+0.2**2*P-K
+            q = sinkhorn(ones, ones, G, reg, maxIter=1000, stopThr=1e-6)
             alpha = 2.0 / float(2.0 + it)
-            #alpha = 0.01
-            #P = P -alpha*G
+            # alpha = 0.01
+            # P = P -alpha*G
             P = P + alpha * (q - P)
-        #G= A.T@A@P+P@B.T@B-2*A@P@B-0.2**2*i*P-10*K
-        #q = sinkhorn(ones, ones, G, reg, maxIter = 1500, stopThr = 1e-3)
-        #alpha = 2.0 / float(2.0 + it)
-        #P = P + alpha * (q - P)
+        # G= A.T@A@P+P@B.T@B-2*A@P@B-0.2**2*i*P-10*K
+        # q = sinkhorn(ones, ones, G, reg, maxIter = 1500, stopThr = 1e-3)
+        # alpha = 2.0 / float(2.0 + it)
+        # P = P + alpha * (q - P)
     return P
-def convex_init(A, B, D, mu, niter):
+
+
+def convex_init(A, B, D, reg, nu, mu, niter):
     np.set_printoptions(suppress=True)
     n = len(A)
-    P = torch.ones((n,n), dtype = torch.float64)
-    P=P/n
-    ones = torch.ones(n, dtype = torch.float64)
-    mat_ones = torch.ones((n, n), dtype = torch.float64)
-    reg = 1.0
-    K=mu*D
-    #P=sinkhorn(ones, ones, K, reg, maxIter = 1500, stopThr = 1e-3)
-    #P=torch.zeros((n,n), dtype = torch.float64)
-    for i in range(niter):
+    P = torch.ones((n, n), dtype=torch.float64)
+    P = P / n
+    ones = torch.ones(n, dtype=torch.float64)
+    mat_ones = torch.ones((n, n), dtype=torch.float64)
+
+    if nu is not None:
+        # scaling of QAP
+        qap_term = np.trace((A @ P @ B.T @ P.T))
+        lap_term = np.trace(P.T @ D)
+        reg_term = np.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
+
+        qap_scalar = nu * (1 / qap_term)
+        lap_scalar = mu * (1 / lap_term)
+        reg_scalar = 1 / reg_term
+        A = A * qap_scalar
+        D = D * lap_scalar
+
+        # print('QAP term before optimization: ', qap_term)
+        # print('LAP term before optimization: ', lap_term)
+        # print('reg term before scaling: ', reg_term)
+        #
+        # print('QAP term after scaling: ', np.trace((A @ P @ B.T @ P.T)))
+        # print('LAP term after scaling: ', np.trace(P.T @ D))
+        # print('reg term after scaling: ', reg_scalar*np.trace(P.T @ (ones - P)))
+
+    for i in range(niter):  # TODO: optimize lambda later for efficiency
         for it in range(1, 11):
-            #G=  A.T@torch.sign(A @ P- P@B)- torch.sign(A@P-P@B) @ B.T+K+ i*( - 2*P)
-            G=-torch.mm(torch.mm(A.T, P), B)-torch.mm(torch.mm(A, P), B.T)+ K+ i*(mat_ones - 2*P)
-            q = sinkhorn(ones, ones, G, reg, maxIter = 500, stopThr = 1e-3)
+            if nu is not None:
+                # TODO: consider if reg_scalar can be multiplied before loop
+                G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + D + i * reg_scalar * (
+                            mat_ones - 2 * P)
+
+                # Make G non-negative to avoid numeric errors from Gibs kernel.
+                # Scale to 0-1.
+                # Recommendation from here: https://pythonot.github.io/auto_examples/plot_Intro_OT.html#sphx-glr-auto-examples-plot-intro-ot-py
+                G = (G - G.min()) / (G.max() - G.min())
+
+            else:  # Original FUGAL
+                G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + mu * D + i * (
+                        mat_ones - 2 * P)
+
+            q = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
-    #QAP_term = np.trace((A@P@B.T@P.T))
-    #LAP_term = mu*np.trace(P.T@D)
-    #print('QAP term af optimization: ', QAP_term)
-    #print('LAP term after optimization: ', LAP_term)
+
+    # QAP_term = np.trace((A @ P @ B.T @ P.T))
+    # LAP_term = mu * np.trace(P.T @ D)
+    # reg_term = np.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
+    # print('QAP term after optimization: ', QAP_term)
+    # print('LAP term after optimization: ', LAP_term)
+    # print('reg term after optimization: ', reg_term)
     return P
+
+
 def convex_initQAP(A, B, niter):
     n = len(A)
-    P = torch.ones((n,n), dtype = torch.float64)
-    P=P/n
-    ones = torch.ones(n, dtype = torch.float64)
-    mat_ones = torch.ones((n, n), dtype = torch.float64)
-    reg = 1.0 
+    P = torch.ones((n, n), dtype=torch.float64)
+    P = P / n
+    ones = torch.ones(n, dtype=torch.float64)
+    mat_ones = torch.ones((n, n), dtype=torch.float64)
+    reg = 1.0
     for i in range(1):
         for it in range(1, 11):
-            G=-torch.mm(torch.mm(A.T, P), B)-torch.mm(torch.mm(A, P), B.T) + i*(mat_ones - 2*P)
-            q = sinkhorn(ones, ones, G, reg, maxIter = 500, stopThr = 1e-3)
+            G = -torch.mm(torch.mm(A.T, P), B) - torch.mm(torch.mm(A, P), B.T) + i * (mat_ones - 2 * P)
+            q = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
     return P
+
 
 def convertToPermHungarian(M, n1, n2):
     row_ind, col_ind = scipy.optimize.linear_sum_assignment(M, maximize=True)
@@ -767,6 +808,7 @@ def convertToPermHungarian(M, n1, n2):
         ans.append((row_ind[i], col_ind[i]))
     return P, ans
 
+
 def convertToPermGreedy(M, n1, n2):
     n = len(M)
     indices = torch.argsort(M.flatten())
@@ -775,9 +817,9 @@ def convertToPermGreedy(M, n1, n2):
 
     P = np.zeros((n, n))
     ans = []
-    for i in range(n*n):
-        cur_row = int(indices[n*n - 1 - i]/n)
-        cur_col = int(indices[n*n - 1 - i]%n)
+    for i in range(n * n):
+        cur_row = int(indices[n * n - 1 - i] / n)
+        cur_col = int(indices[n * n - 1 - i] % n)
         if (row_done[cur_row] == 0) and (col_done[cur_col] == 0):
             P[cur_row][cur_col] = 1
             row_done[cur_row] = 1
@@ -786,6 +828,7 @@ def convertToPermGreedy(M, n1, n2):
                 continue
             ans.append((cur_row, cur_col))
     return P, ans
+
 
 def convertToPerm(A, B, M, n1, n2):
     P_hung, ans_hung = convertToPermHungarian(M, n1, n2)
@@ -796,5 +839,3 @@ def convertToPerm(A, B, M, n1, n2):
         return P_hung, ans_hung
     else:
         return P_greedy, ans_greedy
-
-

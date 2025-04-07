@@ -25,6 +25,9 @@ artifact: wandb.Artifact | None = None
 wandb_graph: str | None = None
 wandb_noiselvl: float | None = None
 wandb_iteration: int | None = None
+wandb_mu: float | None = None
+wandb_nu: float | None = None
+wandb_sinkhorn_reg: float | None = None
 
 
 def format_output(res):
@@ -278,31 +281,54 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
         res3.append(res2)
 
         if wandb.run is not None:
-            mu = alg[1]['mu']
-            features = alg[1]['features']
+            args = alg[1]
+            global wandb_nu
+            wandb_nu = args['nu']
+            global wandb_mu
+            wandb_mu = args['mu']
+            global wandb_sinkhorn_reg
+            wandb_sinkhorn_reg = args['sinkhorn_reg']
+
+            scaling = args['scaling']
+            pca = args['pca']
+
+            features = args['features']
             acc = res2.item()
             if acc == -1:
                 # Log run as failed
                 logging.error(f'numeric error occurred')
                 # Log avg. accuracy as 0 to steer optimization away from this value of mu
-                wandb.run.log({'mu': mu,
-                         'Avg. accuracy': 0})
+                wandb.run.log({'nu': wandb_nu,
+                               'mu': wandb_mu,
+                               'sinkhorn_reg': wandb_sinkhorn_reg,
+                               'Avg. accuracy': 0})
                 wandb.finish(exit_code=1)
                 # Terminate script immediately so the next value of mu is used
                 sys.exit(1)
 
-            summary_dict = {'mu': mu,
+            summary_dict = {'nu': wandb_nu,
+                            'mu': wandb_mu,
+                            'sinkhorn_reg': wandb_sinkhorn_reg,
                             'accuracy': acc,
                             'features': [feature.name for feature in features],
                             'graph': wandb_graph,
                             'noise-level': wandb_noiselvl,
-                            'iteration': wandb_iteration}
+                            'iteration': wandb_iteration,
+                            'scaling': scaling.name,
+                            'pca': pca.name,
+                            }
 
-            file_name = f'{wandb_graph}-noise={wandb_noiselvl}-iter={wandb_iteration}'
+            filename = f'nu={wandb_nu}-mu={wandb_mu}-sinkhorn_reg={wandb_sinkhorn_reg}.json'
+            # Step 1: Load JSON data from artifact file
+            with open(filename, "r") as f:
+                data = json.load(f)
 
-            # Artifact is defined as a global variable and is initialized in hyperparam_tuning.py
-            with artifact.new_file(file_name + '.json', mode='w') as file:
-                json.dump(summary_dict, file)
+            # Step 2: Append to the results list
+            data.append(summary_dict)
+
+            # Step 3: Write it back to the artifact file
+            with open(filename, "w") as f:
+                json.dump(data, f, indent=2)
 
     return np.array(time2), np.array(res3)
 
@@ -379,6 +405,7 @@ def run_exp(G, output_path, noises, _log, graph_names):
 
             components_df = pd.DataFrame(no_connected_components,
                                          columns=['Noise-level', 'Iteration', 'Connected-components'])
+
             time4 = np.array(time4)
             res5 = np.array(res5)
             time5.append(time4)
@@ -394,5 +421,16 @@ def run_exp(G, output_path, noises, _log, graph_names):
         np.save(f"{output_path}/_res6", np.array(res6))
         # _log.exception("")
         raise
+
+    # Log avg accuracy for each graph
+    if wandb.run is not None:
+        if len(graph_names) != 1:
+            raise ValueError(f'Run graphs one at a time for wandb tuning. Graphs: {graph_names}')
+
+        mean_acc = np.mean(res6)
+        wandb.run.log({'nu': wandb_nu,
+                       'mu': wandb_mu,
+                       'sinkhorn_reg': wandb_sinkhorn_reg,
+                       f'{graph_names[0]} avg. acc': mean_acc})
 
     return np.array(time5), np.array(res6), components_df  # (g,n,i,alg,mt,acc)

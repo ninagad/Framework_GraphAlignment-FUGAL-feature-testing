@@ -33,7 +33,7 @@ def are_matrices_equal(matrix1, matrix2):
     return True
 
 
-def main(data, iter, mu, features, scaling: ScalingEnums, pca: PCAEnums, EFN=5):
+def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling: ScalingEnums, pca: PCAEnums, EFN=5):
     print("Fugal")
     torch.set_num_threads(40)
     dtype = np.float64
@@ -129,7 +129,7 @@ def main(data, iter, mu, features, scaling: ScalingEnums, pca: PCAEnums, EFN=5):
 
     D = torch.tensor(D, dtype = torch.float64)
     
-    P = convex_init(A, B, D, mu, iter)
+    P = convex_init(A, B, D, sinkhorn_reg, nu, mu, iter)
     
     #P=convex_init1(A, B, L, mu, iter)
     #are_matrices_equal(P,P1)
