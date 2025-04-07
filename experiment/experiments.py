@@ -145,8 +145,8 @@ def tuning():
              'pca': PCAEnums.NO_PCA,
              }
             for x in [[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
-                      # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', # Augmented NETSIMILE features
-                      #[FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.VAR_EGO_CLUSTER], [FeatureEnums.ASSORTATIVITY_EGO], [FeatureEnums.INTERNAL_FRAC_EGO],  # Other features
+                      # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', [FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.VAR_EGO_CLUSTER] # Augmented NETSIMILE features
+                      #[FeatureEnums.ASSORTATIVITY_EGO], [FeatureEnums.INTERNAL_FRAC_EGO],  # Other features
                       #[FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features
                       # 'laplacian_centrality',
                       #[FeatureEnums.CLOSENESS_CENTRALITY], [FeatureEnums.DEGREE_CENTRALITY], [FeatureEnums.EIGENVECTOR_CENTRALITY], [FeatureEnums.PAGERANK],  # [Feature.KATZ_CENTRALITY], Centrality measures
