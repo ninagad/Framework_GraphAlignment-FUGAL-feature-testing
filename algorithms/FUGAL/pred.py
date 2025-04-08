@@ -123,25 +123,56 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
     # Augmented NETSIMILE FEATURES
     # sum of degrees in the neighborhood
-    if 'sum_ego_deg' in features:
-        sum_neighbor_degs = [np.sum(degs) for degs in neighbor_degs]
+    if FeatureEnums.SUM_EGO_DEG in features:
+        sum_neighbor_degs = [np.sum(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
-        node_features[:, features.index('sum_ego_deg')] = sum_neighbor_degs
+        node_features[:, features.index(FeatureEnums.SUM_EGO_DEG)] = sum_neighbor_degs
 
-    if 'var_ego_deg' in features:
-        var_neighbor_degs = [np.var(degs) for degs in neighbor_degs]
+    if FeatureEnums.STD_EGO_DEG in features:
+        std_neighbor_degs = [np.std(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
-        node_features[:, features.index('var_ego_deg')] = var_neighbor_degs
+        node_features[:, features.index(FeatureEnums.STD_EGO_DEG)] = std_neighbor_degs
 
     if FeatureEnums.SUM_EGO_CLUSTER in features:
-        sum_neighbor_cluster = [np.sum(cluster_coeffs) for cluster_coeffs in neighbor_cluster]
+        sum_neighbor_cluster = [np.sum(cluster_coeffs) if len(cluster_coeffs) > 0 else 0 for cluster_coeffs in neighbor_cluster]
 
         node_features[:, features.index(FeatureEnums.SUM_EGO_CLUSTER)] = sum_neighbor_cluster
 
-    if FeatureEnums.VAR_EGO_CLUSTER in features:
-        var_neighbor_cluster = [np.var(cluster_coeffs) for cluster_coeffs in neighbor_cluster]
+    if FeatureEnums.STD_EGO_CLUSTER in features:
+        std_neighbor_cluster = [np.std(cluster_coeffs) if len(cluster_coeffs) > 0 else 0 for cluster_coeffs in neighbor_cluster]
 
-        node_features[:, features.index(FeatureEnums.VAR_EGO_CLUSTER)] = var_neighbor_cluster
+        node_features[:, features.index(FeatureEnums.STD_EGO_CLUSTER)] = std_neighbor_cluster
+
+    if FeatureEnums.MEDIAN_EGO_CLUSTER in features:
+        std_neighbor_cluster = [np.median(cluster_coeffs) if len(cluster_coeffs) > 0 else 0 for cluster_coeffs in neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.MEDIAN_EGO_CLUSTER)] = std_neighbor_cluster
+
+    if FeatureEnums.MIN_EGO_CLUSTER in features:
+        min_neighbor_cluster = [np.min(cluster_coeffs) if len(cluster_coeffs) > 0 else 0 for cluster_coeffs in neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.MIN_EGO_CLUSTER)] = min_neighbor_cluster
+
+    if FeatureEnums.MAX_EGO_CLUSTER in features:
+        max_neighbor_cluster = [np.max(cluster_coeffs) if len(cluster_coeffs) > 0 else 0 for cluster_coeffs in neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.MAX_EGO_CLUSTER)] = max_neighbor_cluster
+
+    if FeatureEnums.RANGE_EGO_CLUSTER in features:
+        range_neighbor_cluster = [np.max(cluster_coeffs) - np.min(cluster_coeffs) if len(cluster_coeffs) > 0 else 0 for cluster_coeffs in neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.RANGE_EGO_CLUSTER)] = range_neighbor_cluster
+
+    if FeatureEnums.SKEWNESS_EGO_CLUSTER in features:
+        skew_neighbor_cluster = [stats.skew(cluster_coeffs) if len(cluster_coeffs) > 0 else 0 for cluster_coeffs in neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.SKEWNESS_EGO_CLUSTER)] = skew_neighbor_cluster
+
+    if FeatureEnums.KURTOSIS_EGO_CLUSTER in features:
+        # Must have at least two neighbors and at least one non-zero element
+        kurtosis_neighbor_cluster = [stats.kurtosis(cluster_coeffs) if len(cluster_coeffs) > 0 else 0 for cluster_coeffs in neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.KURTOSIS_EGO_CLUSTER)] = kurtosis_neighbor_cluster
 
     if 'avg_ego_edges' in features:
         avg_neighbor_edges = [
@@ -207,11 +238,13 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         node_features[:, features.index(FeatureEnums.RANGE_EGO_DEGS)] = range_neighbor_degs
 
     if FeatureEnums.SKEWNESS_EGO_DEGS in features:
+        # Must contain at least two elements to compute skewness
         skew_neighbor_degs = [stats.skew(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
         node_features[:, features.index(FeatureEnums.SKEWNESS_EGO_DEGS)] = skew_neighbor_degs
 
     if FeatureEnums.KURTOSIS_EGO_DEGS in features:
+        # Must contain at least two elements to compute kurtosis
         kurtosis_neighbor_degs = [stats.kurtosis(degs) if len(degs) > 0 else 0 for degs in neighbor_degs]
 
         node_features[:, features.index(FeatureEnums.KURTOSIS_EGO_DEGS)] = kurtosis_neighbor_degs

@@ -98,12 +98,12 @@ class FeatureEnums(Enum):
     EGO_NEIGHBORS = 6
 
     # MISCELLANEOUS
-    SUM_EGO_CLUSTER = 7
-    VAR_EGO_CLUSTER = 8
     ASSORTATIVITY_EGO = 9
     INTERNAL_FRAC_EGO = 10
 
-    # STATISTICAL
+    # STATISTICAL on ego degrees
+    SUM_EGO_DEG = 23
+    STD_EGO_DEG = 24
     MODE_EGO_DEGS = 11
     MEDIAN_EGO_DEGS = 12
     MIN_EGO_DEGS = 13
@@ -111,6 +111,16 @@ class FeatureEnums(Enum):
     RANGE_EGO_DEGS = 15
     SKEWNESS_EGO_DEGS = 16
     KURTOSIS_EGO_DEGS = 17
+
+    # Statistical on ego clustering coefficients
+    SUM_EGO_CLUSTER = 7
+    STD_EGO_CLUSTER = 8
+    MEDIAN_EGO_CLUSTER = 25
+    MIN_EGO_CLUSTER = 26
+    MAX_EGO_CLUSTER = 27
+    RANGE_EGO_CLUSTER = 28
+    SKEWNESS_EGO_CLUSTER = 29
+    KURTOSIS_EGO_CLUSTER = 30
 
     # CENTRALITY
     CLOSENESS_CENTRALITY = 18

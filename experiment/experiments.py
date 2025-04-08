@@ -144,10 +144,10 @@ def tuning():
              'scaling': ScalingEnums.NO_SCALING,
              'pca': PCAEnums.NO_PCA,
              }
-            for x in [[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
-                      # 'avg_ego_edges', 'avg_ego_out_edges', 'avg_ego_neighbors', [FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.VAR_EGO_CLUSTER] # Augmented NETSIMILE features
+            for x in [#[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
+                      [FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.STD_EGO_CLUSTER], [FeatureEnums.RANGE_EGO_CLUSTER], [FeatureEnums.MIN_EGO_CLUSTER], [FeatureEnums.MAX_EGO_CLUSTER], [FeatureEnums.MEDIAN_EGO_CLUSTER], [FeatureEnums.SKEWNESS_EGO_CLUSTER], [FeatureEnums.KURTOSIS_EGO_CLUSTER], # Augmented clustering features
                       #[FeatureEnums.ASSORTATIVITY_EGO], [FeatureEnums.INTERNAL_FRAC_EGO],  # Other features
-                      #[FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features
+                      #[FeatureEnums.SUM_EGO_DEG], [FeatureEnums.STD_EGO_DEG], [FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features on degrees
                       # 'laplacian_centrality',
                       #[FeatureEnums.CLOSENESS_CENTRALITY], [FeatureEnums.DEGREE_CENTRALITY], [FeatureEnums.EIGENVECTOR_CENTRALITY], [FeatureEnums.PAGERANK],  # [Feature.KATZ_CENTRALITY], Centrality measures
                       #[FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER] # Fugal
@@ -179,7 +179,7 @@ def tuning():
     iters = 5
 
     graph_names = [
-        "bio-celegans",
+        #"bio-celegans",
         #"ca-netscience",
         #"mammalia-voles-plj-trapping_100",
         #"yeast25_Y2H1",
@@ -191,6 +191,7 @@ def tuning():
         #"nws_n=1000_k=10_p=0.6",
         #"nws_n=1000_k=10_p=0.8",
         #"nws_n=1000_k=10_p=1",
+        #"er_test"
     ]
 
     # graphs = [
@@ -205,6 +206,7 @@ def tuning():
     graphs = rgraphs(graph_names)
 
     #graphs = [
+        #(nx.erdos_renyi_graph, (10, 0.1)),
         #(nx.newman_watts_strogatz_graph, (1000, 10, 0.2)),
         #(nx.newman_watts_strogatz_graph, (1000, 10, 0.4)),
         #(nx.newman_watts_strogatz_graph, (1000, 10, 0.6)),
@@ -212,7 +214,7 @@ def tuning():
         #(nx.newman_watts_strogatz_graph, (1000, 10, 1)),
         #(nx.newman_watts_strogatz_graph, (5,3,0.5)),
     #   (nx.stochastic_block_model, ([250,250,250,250],[[0.01,0.01,0.01,0.01],[0.01,0.01,0.01,0.01],[0.01,0.01,0.01,0.01],[0.01,0.01,0.01,0.01]]))
-    # ]
+    #]
 
     noises = [
         0.00,

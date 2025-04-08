@@ -1,5 +1,7 @@
 import copy
 import json
+
+import numpy as np
 import wandb
 import traceback
 import logging
@@ -24,7 +26,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
         mu = config.mu
         sinkhorn_reg = config.sinkhorn_reg
 
-        artifact_name = f'{mu}'
+        artifact_name = f'nu={nu}-mu={mu}=sinkhorn_reg={sinkhorn_reg}'
 
         # Initialize global variable artifact from run.py
         artifact = wandb.Artifact(name=artifact_name, type='run-summary')
@@ -117,22 +119,29 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
 
 
 def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureEnums]):
+    # Generate 100 values evenly spaced between 0 and 1 and 100 values evenly spaced between 1 and 100.
+    zero_to_one_values = 0.01 * np.arange(1, 100)
+    one_to_100_values = np.arange(1, 101)
+    hyper_param_values = np.hstack((zero_to_one_values, one_to_100_values)).tolist()
+
     sweep_config = {
         "method": "bayes",  # Bayesian optimization for mu
         "metric": {"name": "Avg. accuracy", "goal": "maximize"},
         "parameters": {
-            "nu": {"min": 0.01,
-                   "max": 100,
-                   'distribution': 'q_log_uniform_values',  # Rounded log distribution to try more small values.
-                   "q": 0.01  # Restrict to 2 decimal precision
-                   },
-            "mu": {"min": 0.01,
-                   "max": 100.0,
-                   'distribution': 'q_log_uniform_values',  # Rounded log distribution to try more small values.
-                   "q": 0.01  # Restrict to 2 decimal precision
-                   },
-            "sinkhorn_reg": {"min": 0.001,  # TODO: choose range
-                             "max": 1,  # TODO: choose range
+            "nu": hyper_param_values,
+                # {"min": 0.01,
+                #    "max": 100,
+                #    'distribution': 'q_log_uniform_values',  # Rounded log distribution to try more small values.
+                #    "q": 0.01  # Restrict to 2 decimal precision
+                #    },
+            "mu": hyper_param_values,
+                # {"min": 0.01,
+                #    "max": 100.0,
+                #    'distribution': 'q_log_uniform_values',  # Rounded log distribution to try more small values.
+                #    "q": 0.01  # Restrict to 2 decimal precision
+                #    },
+            "sinkhorn_reg": {"min": 0.001,
+                             "max": 1,
                              "distribution": 'q_uniform',
                              "q": 0.001
                              },
@@ -157,13 +166,22 @@ if __name__ == "__main__":
     # project_name = "mu-tuning-for-degree"
 
     feature_set = [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER,
+                   # Cluster coefficient augmented
+                   FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER,
+                   FeatureEnums.RANGE_EGO_CLUSTER, FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MAX_EGO_CLUSTER,
+                   FeatureEnums.SKEWNESS_EGO_CLUSTER, FeatureEnums.KURTOSIS_EGO_CLUSTER,
+                   # Net simile
                    FeatureEnums.EGO_EDGES, FeatureEnums.EGO_OUT_EDGES, FeatureEnums.EGO_NEIGHBORS,
+                   # Miscellaneous
                    FeatureEnums.ASSORTATIVITY_EGO, FeatureEnums.INTERNAL_FRAC_EGO,
+                   # degree augmented
+                   FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG,
                    FeatureEnums.MODE_EGO_DEGS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.MIN_EGO_DEGS,
                    FeatureEnums.MAX_EGO_DEGS, FeatureEnums.RANGE_EGO_DEGS, FeatureEnums.SKEWNESS_EGO_DEGS,
-                   FeatureEnums.KURTOSIS_EGO_DEGS,  # Statistical features
+                   FeatureEnums.KURTOSIS_EGO_DEGS,
+                   # Centrality measures
                    FeatureEnums.CLOSENESS_CENTRALITY, FeatureEnums.DEGREE_CENTRALITY,
-                   FeatureEnums.EIGENVECTOR_CENTRALITY, FeatureEnums.PAGERANK]  # Centrality measures
+                   FeatureEnums.EIGENVECTOR_CENTRALITY, FeatureEnums.PAGERANK]
     project_name = "nu-mu-reg-tuning-all-features"
 
     initialize_sweep(all_algs, project_name, feature_set)
