@@ -26,7 +26,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
         mu = config.mu
         sinkhorn_reg = config.sinkhorn_reg
 
-        artifact_name = f'nu={nu}-mu={mu}=sinkhorn_reg={sinkhorn_reg}'
+        artifact_name = f'nu{nu}-mu{mu}-sinkhorn_reg{sinkhorn_reg}'
 
         # Initialize global variable artifact from run.py
         artifact = wandb.Artifact(name=artifact_name, type='run-summary')
@@ -128,13 +128,13 @@ def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureE
         "method": "bayes",  # Bayesian optimization for mu
         "metric": {"name": "Avg. accuracy", "goal": "maximize"},
         "parameters": {
-            "nu": hyper_param_values,
+            "nu": {'values': hyper_param_values},
                 # {"min": 0.01,
                 #    "max": 100,
                 #    'distribution': 'q_log_uniform_values',  # Rounded log distribution to try more small values.
                 #    "q": 0.01  # Restrict to 2 decimal precision
                 #    },
-            "mu": hyper_param_values,
+            "mu": {'values': hyper_param_values},
                 # {"min": 0.01,
                 #    "max": 100.0,
                 #    'distribution': 'q_log_uniform_values',  # Rounded log distribution to try more small values.
