@@ -214,6 +214,7 @@ def playground():
 @ex.automain
 def main(_run, _log, verbose=False, load=[], plot=[], nice=0, mon=False):
 
+    _run.info['id'] = _run._id
     path = f"runs/{_run._id}"
 
     def runid(_id):
