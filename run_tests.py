@@ -2,6 +2,8 @@ import copy
 import os
 from threading import Thread
 
+import argparse
+
 import workexp
 from experiment.experiments import alggs as get_run_list, _algs, rgraphs as get_graph_paths
 from enums.scalingEnums import ScalingEnums
@@ -176,11 +178,29 @@ def feature_forward_selection(all_algs: list):
 
     run_parallel(file_path, all_algs, graph_dict, args_lst)
 
-def main():
-    all_algs = copy.copy(_algs)
 
-    scaling_test(all_algs)
+
+
 
 
 if __name__ == "__main__":
-    main()
+    all_algs = copy.copy(_algs)
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--scaling',
+                        action='store_true',
+                        help='Using this flag runs the scaling test')
+
+
+    parser.add_argument('--feature_forward',
+                        action='store_true',
+                        help='Using this flag runs the feature forward selection')
+
+    args = parser.parse_args()
+
+    if args.scaling:
+        scaling_test(all_algs)
+
+    if args.feature_forward:
+        feature_forward_selection(all_algs)
