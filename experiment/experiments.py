@@ -187,6 +187,8 @@ def tuning():
         #"yeast25_Y2H1",
         #"inf-euroroad",
         #"socfb-Bowdoin47",
+        #"ia-reality",
+        #"ia-crime-moreno",
         #"contacts-prox-high-school-2013_100",
         #"nws_n=1000_k=10_p=0.2",
         #"nws_n=1000_k=10_p=0.4",
