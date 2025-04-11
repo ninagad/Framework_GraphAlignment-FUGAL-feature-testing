@@ -101,6 +101,7 @@ def get_color_marker_label(feature: str):
     """
     pu = PU()
 
+    # TODO: refactor to use transform_feature_str_to_label function in FeatureExtensions
     if ',' not in feature:  # It is a single feature
         feature = FE.to_feature(feature)
 

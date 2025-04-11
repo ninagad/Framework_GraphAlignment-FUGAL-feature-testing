@@ -8,7 +8,19 @@ import numpy as np
 # Add the parent directory (project root) to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from plot import load_data, transform_df
+from enums.featureEnums import FeatureExtensions
+
+
+def load_data(source: int):
+    server_runs_path = os.path.join((os.path.dirname(__file__)), '..', 'Server-runs')
+
+    path = os.path.join(server_runs_path, f'{source}', 'res', 'acc.xlsx')
+
+    # Make sure the excel file is not open in Excel! Otherwise, this fails with Errno 13 permission denied.
+    df = pd.read_excel(path, index_col=[0, 1])
+    df.index.names = ['Feature', 'noise']
+
+    return df
 
 
 def parse(sources, baselines):
@@ -38,153 +50,103 @@ def parse(sources, baselines):
 
     for source, baseline in zip(sources, baselines):
         # Load source and baseline
-        df, _, graphs, _ = load_data(source, '', 'acc')
-        if len(graphs) > 1:  # there should not be more than one graph
-            raise ValueError
-        graph = graphs[0]
-        df.rename(columns={'Unnamed: 0': 'Features', 'Unnamed: 1': 'Noise-level'}, inplace=True)
-
-        baseline_df, _, _, _ = load_data(baseline, '', 'acc')
-        baseline_df = transform_df(baseline_df)
-
-        # Fill NaN values with the previous row values
-        df['Features'] = df['Features'].ffill()
-
+        df = load_data(source)
         df = df.replace(-1, np.nan)  # Replace numeric errors with NaN, so they are excluded from the mean calculation.
 
+        baseline_df = load_data(baseline)
+        baseline_df = baseline_df.replace(-1, np.nan)
+        baseline_df['avg accuracy'] = baseline_df.mean(axis=1)
+
         # step 1: calculate the minimum data point from each iteration
-        df['min'] = df.iloc[:,
-                    (df.columns != 'Features') & (df.columns != 'Noise-level') & (df.columns != 'variable')].min(axis=1)
+        df['min'] = df.min(axis=1)
 
         # step 2: calculate the average deviation from baseline for each graph across all noise levels
-        nr_of_features = len(pd.unique(df['Features']))
-        df['min'] = df['min'] - pd.concat([baseline_df['mean']] * nr_of_features,
-                                          ignore_index=True)  # Find deviation from baseline
+        nr_of_features = df.index.get_level_values('Feature').nunique()
 
-        df = df.groupby(['Features']).mean()
+        baseline_dup = pd.concat([pd.Series(baseline_df['avg accuracy'].reset_index(drop=True))] * nr_of_features,
+                                 ignore_index=True)
+
+        # Find deviation from baseline
+        df['min'] = pd.Series(
+            df['min'].to_numpy() - baseline_dup.to_numpy(),
+            index=df.index
+        )
+
+        df = df.groupby(level='Feature')['min'].mean()
 
         dfs.append(df)
 
     # step 3: determine average deviation from baseline for each feature across all graphs
     combined_df = pd.concat(dfs)
-    combined_df = combined_df.groupby(['Features']).mean()
-
-    # combined_df = combined_df[combined_df['min'] > combined_df['min'].quantile(0.75)] # only consider the top 25 % performing features
+    combined_df = combined_df.groupby(level='Feature').mean()
 
     return combined_df
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    # First four = original features, last four augmented clustering and deg
+    scaling_dict = {'individual_mm_norm': [377, 378, 379, 380,
+                                           804, 805, 807, 808],
 
-    parser.add_argument('--ifn',
-                        nargs='+',
-                        help='The indexes of the files containing the individual feature normalization')
+                    'individual_stand': [385, 386, 387, 388,
+                                         1021, 1022, 1023, 1024],
 
-    parser.add_argument('--ifs',
-                        nargs='+',
-                        help='The indexes of the files containing the individual feature standardization')
+                    'individual_rob_norm': [381, 382, 383, 384,
+                                            833, 834, 835, 836],
 
-    parser.add_argument('--irfn',
-                        nargs='+',
-                        help='The indexes of the files containing the individual robust feature normalization')
+                    'collective_mm_norm': [365, 366, 367, 368,
+                                           1009, 1010, 1011, 1012],
 
-    parser.add_argument('--cfn',
-                        nargs='+',
-                        help='The indexes of the files containing the collective feature normalization')
+                    'collective_stand': [373, 374, 375, 376,
+                                         1017, 1018, 1019, 1020],
 
-    parser.add_argument('--cfs',
-                        nargs='+',
-                        help='The indexes of the files containing the collective feature standardization')
+                    'collective_rob_norm': [369, 370, 371, 372,
+                                            1025, 1026, 1027, 1028]
+                    }
 
-    parser.add_argument('--crfn',
-                        nargs='+',
-                        help='The indexes of the files containing the collective robust feature normalization')
+    baselines = [36, 19, 20, 60]
 
-    parser.add_argument('--baselines',
-                        nargs='+',
-                        help='The index of the file used for the baseline')
+    dfs = []
+    for scaling, run_indices in scaling_dict.items():
+        df1 = parse(run_indices[:4], baselines)
+        df2 = parse(run_indices[4:], baselines)
 
-    args = parser.parse_args()
+        df = pd.concat([df1, df2])
+        df = df.rename(scaling)
+        dfs.append(df)
 
-    # Scaling computed over each graph separately
-    individual_mm_norm = args.ifn
-    individual_stand = args.ifs
-    individual_rob_norm = args.irfn
-
-    # Scaling computed over both graphs
-    collective_mm_norm = args.cfn
-    collective_stand = args.cfs
-    collective_rob_norm = args.crfn
-
-    baselines = args.baselines
-
-    # parse all graphs with min max feature normalization
-    individual_mm_norm_df = parse(individual_mm_norm, baselines)
-
-    # parse all graphs with feature standardization
-    individual_stand_df = parse(individual_stand, baselines)
-
-    # parse all graphs with robust feature normalization
-    individual_rob_norm_df = parse(individual_rob_norm, baselines)
-
-    #
-    # parse all graphs with min max feature normalization
-    collective_mm_norm_df = parse(collective_mm_norm, baselines)
-
-    # parse all graphs with feature standardization
-    collective_stand_df = parse(collective_stand, baselines)
-
-    # parse all graphs with robust feature normalization
-    collective_rob_norm_df = parse(collective_rob_norm, baselines)
-
-    #
-    # Create new dataframe with scaling values
-    scaling_df = pd.concat([individual_mm_norm_df['min'],
-                            individual_stand_df['min'],
-                            individual_rob_norm_df['min'],
-                            collective_mm_norm_df['min'],
-                            collective_stand_df['min'],
-                            collective_rob_norm_df['min']],
-                           axis=1)
-
-    scaling_df.columns = ['individual_mm_norm',
-                          'individual_stand',
-                          'individual_rob_norm',
-                          'collective_mm_norm',
-                          'collective_stand',
-                          'collective_rob_norm']
+    scaling_df = pd.concat(dfs, axis=1)
 
     # Remove Katz centrality if it is there
-    try:
-        scaling_df = scaling_df.drop('[KATZ_CENTRALITY]')
-    except KeyError:
-        pass
+    drop_indices = ['[KATZ_CENTRALITY]', '[VAR_EGO_CLUSTER]']
+    for idx in drop_indices:
+        try:
+            scaling_df = scaling_df.drop(index=[idx])
+        except KeyError:
+            pass
+
+    k = scaling_df.shape[0] // 4  # Get 25 percent of #features
+    scaling_df = pd.concat([scaling_df.nlargest(k, columns=[col]) for col in scaling_df.columns])
+    scaling_df = scaling_df.drop_duplicates()
 
     # Find the scaling method for each feature that has the maximum average distance to baseline
     scaling_df['max'] = scaling_df.idxmax(axis=1)
 
-    f = open("myfile.txt", "w")
-    print("The scaling method that has the maximum average distance to baseline for the most features is: ",
-          scaling_df['max'].mode()[0])
+    # Convert feature names to labels
+    FE = FeatureExtensions()
+    scaling_df.index = scaling_df.index.map(lambda x: FE.transform_feature_str_to_label(x))
+    scaling_df = scaling_df.sort_index()
 
-    # Print the union of the top 25 performing features
-    rows = ['[AVG_EGO_DEG]', '[DEGREE_CENTRALITY]', '[DEG]', '[EGO_EDGES]', '[EGO_NEIGHBORS]',
-            '[PAGERANK]', '[MEDIAN_EGO_DEGS]', '[EGO_OUT_EDGES]', '[MAX_EGO_DEGS]', '[RANGE_EGO_DEGS]']
-    print(scaling_df.loc[rows])
-
-    latex_table = tabulate(scaling_df.loc[rows].round(4), headers='keys', tablefmt='latex_booktabs')
-    print(latex_table)
+    latex_table = tabulate(scaling_df.round(4), headers='keys', tablefmt='latex_booktabs')
 
     # Write to file
     file_path = os.path.join('..', 'tables', "scaling-table.txt")
     with open(file_path, "w") as file:
-        args_dict = vars(args)
-
-        file.write(str(args_dict))
+        file.write(f'Baselines: {baselines} \n')
+        file.write(str(scaling_dict))
         file.write('\n\n')
+        file.write(f"The scaling method that has the maximum average distance "
+                   f"to baseline for the most features is: {scaling_df['max'].mode()[0]}"
+                   f"\n\n")
+
         file.write(latex_table)
-
-
-
-

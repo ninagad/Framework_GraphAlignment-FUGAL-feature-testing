@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import sys
+from enums.featureEnums import FeatureExtensions
 
 # Add the parent directory (project root) to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -9,16 +10,6 @@ from enums.featureEnums import FeatureExtensions
 
 
 class DataAnalysis:
-    def transform_feature_str_to_label(self, feature: str):
-        fe = FeatureExtensions()
-
-        if ',' not in feature:
-            return fe.to_label(fe.to_feature(feature))
-        else:
-            features_in_combination = feature.replace(' ', '').split(',')
-            features = [fe.to_feature(name) for name in features_in_combination]
-            return fe.to_labels(features)
-
 
     def top_performing_feature(self, sources):
         current_dir = (os.path.dirname(__file__))
@@ -54,7 +45,8 @@ class DataAnalysis:
         df = df.reset_index()
 
         # Convert feature names to labels
-        df['Feature'] = df['Feature'].apply(lambda x: self.transform_feature_str_to_label(x))
+        FE = FeatureExtensions()
+        df['Feature'] = df['Feature'].apply(lambda x: FE.transform_feature_str_to_label(x))
 
         return df, max_feature
 
