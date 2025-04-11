@@ -1,24 +1,18 @@
-Baselines: [36, 19, 20, 60] 
-{'individual_mm_norm': [377, 378, 379, 380, 804, 805, 807, 808], 'individual_stand': [385, 386, 387, 388, 1021, 1022, 1023, 1024], 'individual_rob_norm': [381, 382, 383, 384, 833, 834, 835, 836], 'collective_mm_norm': [365, 366, 367, 368, 1009, 1010, 1011, 1012], 'collective_stand': [373, 374, 375, 376, 1017, 1018, 1019, 1020], 'collective_rob_norm': [369, 370, 371, 372, 1025, 1026, 1027, 1028]}
-
-The scaling method that has the maximum average distance to baseline for the most features is: collective_rob_norm
+{'ifn': ['377', '378', '379', '380'], 'ifs': ['385', '386', '387', '388'], 'irfn': ['381', '382', '383', '384'], 'cfn': ['365', '366', '367', '368'], 'cfs': ['373', '374', '375', '376'], 'crfn': ['369', '370', '371', '372'], 'baselines': ['36', '19', '20', '60']}
 
 \begin{tabular}{lrrrrrrl}
 \toprule
- Feature           &   individual\_mm\_norm &   individual\_stand &   individual\_rob\_norm &   collective\_mm\_norm &   collective\_stand &   collective\_rob\_norm & max                 \\
+ Features            &   individual\_mm\_norm &   individual\_stand &   individual\_rob\_norm &   collective\_mm\_norm &   collective\_stand &   collective\_rob\_norm & max                 \\
 \midrule
- avg ego deg       &               0.0039 &             0.0275 &                0.0325 &               0.0105 &             0.025  &                0.019  & individual\_rob\_norm \\
- degree            &               0.0146 &             0.0385 &                0.0488 &               0.0459 &             0.0672 &                0.0867 & collective\_rob\_norm \\
- degree centrality &               0.0131 &             0.0376 &                0.0461 &               0.0461 &             0.0669 &                0.0843 & collective\_rob\_norm \\
- ego edges         &               0.0047 &             0.0102 &               -0.0176 &               0.0116 &             0.042  &                0.0429 & collective\_rob\_norm \\
- ego neighbors     &               0.0117 &             0.0223 &               -0.0088 &               0.0333 &             0.0306 &                0.0322 & collective\_mm\_norm  \\
- ego out edges     &              -0.0242 &             0.0102 &                0.0081 &               0.0293 &             0.0358 &                0.0399 & collective\_rob\_norm \\
- max ego degs      &              -0.0182 &            -0.0241 &               -0.0791 &               0.0288 &             0.0244 &                0.0168 & collective\_mm\_norm  \\
- median ego degs   &              -0.0068 &             0.0365 &                0.0226 &               0.0116 &             0.022  &                0.033  & individual\_stand    \\
- min ego degs      &              -0.031  &             0.0111 &               -0.0152 &              -0.0324 &            -0.0054 &               -0.0101 & individual\_stand    \\
- pagerank          &              -0.0018 &             0.0167 &                0.0238 &              -0.0203 &             0.0243 &                0.0322 & collective\_rob\_norm \\
- range ego degs    &              -0.0109 &            -0.0146 &               -0.0047 &               0.023  &             0.0332 &                0.0282 & collective\_stand    \\
- std ego degs      &              -0.0043 &            -0.0059 &                0.0061 &               0.0144 &            -0.0089 &                0.0018 & collective\_mm\_norm  \\
- sum ego degs      &               0.0051 &            -0.0063 &               -0.006  &               0.0273 &             0.0117 &                0.0251 & collective\_mm\_norm  \\
+ [AVG\_EGO\_DEG]       &               0.0039 &             0.0275 &                0.0325 &               0.0105 &             0.025  &                0.019  & individual\_rob\_norm \\
+ [DEGREE\_CENTRALITY] &               0.0131 &             0.0376 &                0.0461 &               0.0461 &             0.0669 &                0.0843 & collective\_rob\_norm \\
+ [DEG]               &               0.0146 &             0.0385 &                0.0488 &               0.0459 &             0.0672 &                0.0867 & collective\_rob\_norm \\
+ [EGO\_EDGES]         &               0.0047 &             0.0102 &               -0.0176 &               0.0116 &             0.042  &                0.0429 & collective\_rob\_norm \\
+ [EGO\_NEIGHBORS]     &               0.0117 &             0.0223 &               -0.0088 &               0.0333 &             0.0306 &                0.0322 & collective\_mm\_norm  \\
+ [PAGERANK]          &              -0.0018 &             0.0167 &                0.0238 &              -0.0203 &             0.0243 &                0.0322 & collective\_rob\_norm \\
+ [MEDIAN\_EGO\_DEGS]   &              -0.0068 &             0.0365 &                0.0226 &               0.0116 &             0.022  &                0.033  & individual\_stand    \\
+ [EGO\_OUT\_EDGES]     &              -0.0242 &             0.0102 &                0.0081 &               0.0293 &             0.0358 &                0.0399 & collective\_rob\_norm \\
+ [MAX\_EGO\_DEGS]      &              -0.0182 &            -0.0241 &               -0.0791 &               0.0288 &             0.0244 &                0.0168 & collective\_mm\_norm  \\
+ [RANGE\_EGO\_DEGS]    &              -0.0109 &            -0.0146 &               -0.0047 &               0.023  &             0.0332 &                0.0282 & collective\_stand    \\
 \bottomrule
 \end{tabular}
