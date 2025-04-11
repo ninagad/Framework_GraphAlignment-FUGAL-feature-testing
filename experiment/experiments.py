@@ -140,7 +140,7 @@ def tuning():
         #1,  # CONE
         [
             {'features': x,
-             'mu': 0,
+             'mu': 1,
              #'mu': 93,
              #'nu': 0.56,
              #'sinkhorn_reg': 0.008,
@@ -178,10 +178,10 @@ def tuning():
 
     run = list(range(len(tmp[1])))
 
-    iters = 1
+    iters = 5
 
     graph_names = [
-        #"bio-celegans",
+        "bio-celegans",
         #"ca-netscience",
         #"mammalia-voles-plj-trapping_100",
         #"yeast25_Y2H1",
@@ -189,7 +189,7 @@ def tuning():
         #"socfb-Bowdoin47",
         #"ia-reality",
         #"ia-crime-moreno",
-        "DD_g501",
+        #"DD_g501",
         #"power-685-bus",
         #"contacts-prox-high-school-2013_100",
         #"nws_n=1000_k=10_p=0.2",
