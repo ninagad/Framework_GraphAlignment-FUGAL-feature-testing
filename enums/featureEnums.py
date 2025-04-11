@@ -37,6 +37,8 @@ class FeatureExtensions:
             FeatureEnums.INTERNAL_FRAC_EGO: "ego internal frac",
 
             # STATISTICAL
+            FeatureEnums.SUM_EGO_DEG: "sum ego degs",
+            FeatureEnums.STD_EGO_DEG: "std ego degs",
             FeatureEnums.MODE_EGO_DEGS: "mode ego degs",
             FeatureEnums.MEDIAN_EGO_DEGS: "median ego degs",
             FeatureEnums.MIN_EGO_DEGS: "min ego degs",
@@ -44,6 +46,14 @@ class FeatureExtensions:
             FeatureEnums.RANGE_EGO_DEGS: "range ego degs",
             FeatureEnums.SKEWNESS_EGO_DEGS: "skewness ego degs",
             FeatureEnums.KURTOSIS_EGO_DEGS: "kurtosis ego degs",
+
+            FeatureEnums.STD_EGO_CLUSTER: "std ego cluster coeff",
+            FeatureEnums.MEDIAN_EGO_CLUSTER: "median ego cluster coeff",
+            FeatureEnums.MIN_EGO_CLUSTER: "min ego cluster coeff",
+            FeatureEnums.MAX_EGO_CLUSTER: "max ego cluster coeff",
+            FeatureEnums.RANGE_EGO_CLUSTER: "range ego cluster coeff",
+            FeatureEnums.SKEWNESS_EGO_CLUSTER: "skewness ego cluster coeff",
+            FeatureEnums.KURTOSIS_EGO_CLUSTER: "kurtosis ego cluster coeff",
 
             # CENTRALITY
             FeatureEnums.CLOSENESS_CENTRALITY: "closeness centrality",
@@ -81,7 +91,20 @@ class FeatureExtensions:
             return 'FUGAL'
         return label
 
+    @staticmethod
+    def transform_feature_str_to_label(feature: str):
+        fe = FeatureExtensions()
 
+        if ',' not in feature:
+            feature_enum = fe.to_feature(feature)
+            if feature_enum is None:
+                return None
+
+            return fe.to_label(feature_enum)
+        else:
+            features_in_combination = feature.replace(' ', '').split(',')
+            features = [fe.to_feature(name) for name in features_in_combination]
+            return fe.to_labels(features)
 class FeatureEnums(Enum):
     _settings_ = NoAlias
 
@@ -100,6 +123,7 @@ class FeatureEnums(Enum):
     # MISCELLANEOUS
     ASSORTATIVITY_EGO = 9
     INTERNAL_FRAC_EGO = 10
+    VAR_EGO_CLUSTER = 31
 
     # STATISTICAL on ego degrees
     SUM_EGO_DEG = 23

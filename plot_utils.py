@@ -15,8 +15,8 @@ class PlotUtils:
         self.init_combination_features()
 
     def init_single_feature(self):
-        colormaps = ['Blues', 'Greys', 'Greens', 'Purples']  # OrRd']
-        group_sizes = [7, 4, 7, 5]
+        colormaps = ['Blues', 'Wistia', 'Greens', 'Greys', 'Purples']  # OrRd']
+        group_sizes = [7, 2, 7, 6, 5]
 
         # Generate colorscale
         colorscale = np.empty((0, 4), float)
