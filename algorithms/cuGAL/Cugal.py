@@ -1,14 +1,13 @@
 from cugal.pred import cugal
 from cugal.config import Config, SinkhornMethod, HungarianMethod
 from cugal.profile import Profile, append_phases_to_csv
-from fugal.pred import fugal
+#from fugal.pred import fugal
 import numpy as np
 import networkx as nx
 import torch
 
 def main(data, 
          iter,
-         simple, 
          mu, 
          path=None, 
          sparse=False, 
@@ -65,14 +64,14 @@ def main(data,
     
     profile = Profile()
 
-    if use_fugal:
-        P, mapping = fugal(Src1, Tar1, mu, iter, config, profile)
-    else:
-        P, mapping = cugal(Src1, Tar1, config, profile)
-        print("Sinkhorn threshold: ", config.sinkhorn_threshold)
-        print("Max Sinkhorn iterations: ", np.max([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
-        print("Mean Sinkhorn iterations: ", np.mean([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
-        print("Max memory used: ", profile.max_memory)
+    #if use_fugal:
+    #    P, mapping = fugal(Src1, Tar1, mu, iter, config, profile)
+    #else:
+    P, mapping = cugal(Src1, Tar1, config, profile)
+    print("Sinkhorn threshold: ", config.sinkhorn_threshold)
+    print("Max Sinkhorn iterations: ", np.max([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
+    print("Mean Sinkhorn iterations: ", np.mean([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
+    print("Max memory used: ", profile.max_memory)
 
     if not path == None: 
         append_phases_to_csv(profile, path)

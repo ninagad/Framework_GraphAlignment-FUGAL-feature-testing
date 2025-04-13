@@ -91,41 +91,7 @@ def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling
     F1 = combined_features[:n,:]
     F2 = combined_features[n:,:]
 
-    # Normalization before squaring must be computed manually.
-    if scaling == ScalingEnums.NORMALIZE_DIFFERENCES:
-        no_of_features = F1.shape[1]
-        D = np.ones((n1, n2, no_of_features))
-        #print(f'{F1=}')
-        #print(f'{F2=}')
-        # Compute pairwise differences for all nodes
-        for i in range(n1):
-            for j in range(n2):
-                # D is a (n x n x #features) matrix after this
-                D[i, j] = abs(F1[i, :] - F2[j, :])
-        #print(f'{D.shape=}')
-        #print(f'{D=}')
-
-        # Select the min and max values over all combinations of nodes for each feature dimension
-        mins = np.min(D, axis=(0,1))
-        maxes = np.max(D, axis=(0,1))
-
-        #print(f'{mins=}')
-        #print(f'{maxes=}')
-
-        # Min-max normalize differences
-        D = (D-mins)/(maxes-mins)
-        #print('D shape after normalization: ', D.shape)
-        #print('D after min-max norm: \n', D)
-
-        D = np.linalg.norm(D, axis=2)
-
-        #print('D shape after linalg.norm: ', D.shape)
-        #print('D after linalg.norm: \n', D)
-
-    else: # Otherwise use library function
-        D = eucledian_dist(F1, F2, n)
-
-    D /= np.sqrt(len(features))
+    D = eucledian_dist(F1, F2, n)
 
     D = torch.tensor(D, dtype = torch.float64)
     

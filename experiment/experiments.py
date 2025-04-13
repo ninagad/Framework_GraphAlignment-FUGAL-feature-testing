@@ -133,11 +133,12 @@ def tuning():
     #use_largest_connected_component = True
 
     tmp = [
-        12, # Fugal
+        #12, # Fugal
         # 20, # GrampaS (Grampa: 10)
         # 6, # IsoRank
         # 3, # REGAL
         #1,  # CONE
+        22, # cuGAL
         [
             {'features': x,
              'mu': 1,
@@ -145,7 +146,7 @@ def tuning():
              #'nu': 0.56,
              #'sinkhorn_reg': 0.008,
              #'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
-             'pca': PCAEnums.NO_PCA,
+             #'pca': PCAEnums.NO_PCA,
              }
             for x in [[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
                       #[FeatureEnums.SUM_EGO_DEG], [FeatureEnums.STD_EGO_DEG], [FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features on degrees
@@ -178,11 +179,11 @@ def tuning():
 
     run = list(range(len(tmp[1])))
 
-    iters = 5
+    iters = 1
 
     graph_names = [
-        "bio-celegans",
-        #"ca-netscience",
+        #"bio-celegans",
+        "ca-netscience",
         #"mammalia-voles-plj-trapping_100",
         #"yeast25_Y2H1",
         #"inf-euroroad",

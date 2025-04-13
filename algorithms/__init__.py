@@ -17,4 +17,5 @@ from .DSPP import Dspp
 from .Fgot import fgot
 from .Got import got
 from .Parrot import Parrot
-from .MDS import Mds 
+from .MDS import Mds
+from .cuGAL import Cugal
