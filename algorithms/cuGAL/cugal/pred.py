@@ -228,7 +228,7 @@ def convert_to_permutation_matrix(
 def cugal(
     source: nx.Graph,
     target: nx.Graph,
-    features: list,
+    feature_names: list,
     scaling: ScalingEnums,
     config: Config,
     profile=Profile(),
@@ -251,8 +251,9 @@ def cugal(
 
     # Feature extraction.
     start_time = TimeStamp(config.device)
-    features = Features.create(source, target, config) # original cugal features
-    #features = Features_extensive.create(source, target, config, features, scaling)
+    #features = Features.create(source, target, config) # original cugal features
+    features = Features_extensive.create(source, target, config, feature_names, scaling)
+    print("feature source shapes: ", features.source.shape)
 
     if config.safe_mode:
         assert features.source.isfinite().all(), "source feature tensor has NaN values"
