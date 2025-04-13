@@ -77,6 +77,7 @@ class SinkhornState:
         use_cuda = can_use_cuda(config)
         start_time = TimeStamp(config.device)
         K = - C / config.sinkhorn_regularization
+        print("K max is: ", max(K), " and K min is: ", min(K))
         if use_cuda:
             K_transpose = K.t().contiguous()
         errors, momentum = [], 1.0

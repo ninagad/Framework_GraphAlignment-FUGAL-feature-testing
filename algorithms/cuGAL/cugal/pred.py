@@ -19,7 +19,6 @@ from algorithms.cuGAL.cugal.config import Config, HungarianMethod, SinkhornMetho
 from algorithms.cuGAL.cugal.profile import Profile, Phase, SinkhornProfile, TimeStamp
 from algorithms.cuGAL.cugal.feature_extraction import Features, Features_extensive
 from algorithms.cuGAL.cugal.sinkhorn import SinkhornState
-from algorithms.cuGAL.cugal.sinkhorn import SinkhornState
 from enums.scalingEnums import ScalingEnums
 
 try:

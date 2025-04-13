@@ -79,7 +79,7 @@ class Config:
     frank_wolfe_threshold: float | None = None
     """The max difference of the objective before stopping when running Frank-Wolfe."""
 
-    use_sparse_adjacency: bool = False
+    use_sparse_adjacency: bool = False # sparse adjacency is not implemented
     """Use sparse matrix representation for adjacency matrices."""
 
     use_sinkhorn_warm_start: bool = True
