@@ -113,8 +113,8 @@ class Features_extensive:
         target_features = feature_extraction(target, features, scaling)
 
         combined_features = np.vstack((source_features, target_features))
-        n1 = source.shape[0]
-        n2 = target.shape[0]
+        n1 = source.number_of_nodes
+        n2 = target.number_of_nodes
         n = max(n1, n2)
 
         if scaling == ScalingEnums.COLLECTIVE_STANDARDIZATION:
