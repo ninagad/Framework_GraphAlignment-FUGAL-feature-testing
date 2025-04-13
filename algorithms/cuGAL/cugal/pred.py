@@ -48,7 +48,7 @@ def dense_gradient(
     reg_scalar = 1
     if config.nu is not None:
         # scaling of QAP
-        ones = torch.ones(A.shape[0], device=config.device, dtype=torch.float64)
+        ones = torch.ones(A.shape[0], device=config.device, dtype=torch.float32)
         D = features.distance_matrix()
 
         qap_term = torch.trace((A @ P @ B.T @ P.T))
@@ -251,7 +251,7 @@ def cugal(
 
     # Feature extraction.
     start_time = TimeStamp(config.device)
-    features = Features_extensive.create(source, target, config, features, scaling)
+    features = Features.create(source, target, config, features, scaling)
 
     if config.safe_mode:
         assert features.source.isfinite().all(), "source feature tensor has NaN values"

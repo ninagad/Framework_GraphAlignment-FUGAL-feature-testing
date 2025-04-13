@@ -141,11 +141,11 @@ def tuning():
         22, # cuGAL
         [
             {'features': x,
-             #'mu': 1,
-             'mu': 93,
-             'nu': 0.56,
+             'mu': 1,
+             #'mu': 93,
+             #'nu': 0.56,
              #'sinkhorn_reg': 0.008,
-             'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
+             #'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
              'pca': PCAEnums.NO_PCA,
              }
             for x in [[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile

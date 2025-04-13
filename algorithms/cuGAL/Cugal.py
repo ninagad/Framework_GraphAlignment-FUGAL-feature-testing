@@ -49,6 +49,8 @@ def main(data,
         #lambda_func=lambda_func,
     )
     print("cuGAL")
+    print("nu is :", config.nu, " and mu is: ", config.mu)
+    print("scaling is: ", scaling)
     
     Src = data['Src']
     Tar = data['Tar']

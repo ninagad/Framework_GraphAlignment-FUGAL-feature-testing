@@ -38,6 +38,7 @@ def extract_features_cuda(graph: nx.Graph | Adjacency, config: Config) -> torch.
     cuda_kernels.average_neighbor_features(
         adjacency.col_indices, adjacency.row_pointers, degrees, neighbor_degrees)
     torch.cuda.synchronize()
+    print("their shape is: ", torch.stack((degrees, clustering, neighbor_degrees, neighbor_clustering)).T.shape)
     return torch.stack((degrees, clustering, neighbor_degrees, neighbor_clustering)).T
 
 
@@ -63,6 +64,8 @@ def extract_features_nx(G: nx.Graph) -> np.ndarray:
         else 0
         for n in node_list
     ]
+
+    print("their shape is: ", np.stack((degs, clusts, neighbor_degs, neighbor_clusts)).T.shape)
 
     return np.nan_to_num(np.stack((degs, clusts, neighbor_degs, neighbor_clusts)).T)
 
