@@ -160,7 +160,7 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
     K = torch.empty(C.shape, dtype=C.dtype).to(device)
     torch.div(C, -reg, out=K)
     torch.exp(K, out=K)
-    print("K max is: ", max(K), " and K min is: ", min(K))
+    print("K max is: ", torch.max(K), " and K min is: ", torch.min(K))
 
     b_hat = torch.empty(b.shape, dtype=C.dtype).to(device)
 
