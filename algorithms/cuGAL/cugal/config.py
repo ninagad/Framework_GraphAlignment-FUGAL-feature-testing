@@ -67,6 +67,9 @@ class Config:
     mu: float = 0.5
     """The contribution of node features in finding the alignment."""
 
+    nu: float = 0.5
+    """The contribution of node features in finding the alignment."""
+
     iter_count: int = 15
     """The number of iterations to perform."""
 
