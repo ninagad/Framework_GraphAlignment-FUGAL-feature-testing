@@ -30,7 +30,7 @@ except ImportError:
 
 
 def add_feature_distance(gradient: torch.Tensor, features: torch.Tensor | Features) -> torch.Tensor:
-    if type(features) is Features:
+    if type(features) is Features or type(features) is Features_extensive:
         gradient = features.add_distance(gradient)
     else:
         gradient += features
