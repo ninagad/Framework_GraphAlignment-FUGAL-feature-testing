@@ -51,9 +51,9 @@ def dense_gradient(
         ones = torch.ones(A.shape[0], dtype=torch.float64)
         D = features.distance_matrix()
 
-        qap_term = np.trace((A @ P @ B.T @ P.T))
-        lap_term = np.trace(P.T @ D)
-        reg_term = np.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
+        qap_term = torch.trace((A @ P @ B.T @ P.T))
+        lap_term = torch.trace(P.T @ D)
+        reg_term = torch.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
 
         qap_scalar = config.nu * (1 / qap_term)
         lap_scalar = config.mu * (1 / lap_term)
