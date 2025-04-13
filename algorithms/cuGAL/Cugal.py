@@ -20,6 +20,7 @@ def main(data,
          cache=0, 
          sinkhorn_method=SinkhornMethod.LOG,
          sinkhorn_iterations=500,
+         sinkhorn_reg = 1,
          frank_wolfe_threshold=None,
          hungarian=HungarianMethod.SCIPY,
          device='cuda:0',
@@ -43,14 +44,14 @@ def main(data,
         nu=nu,
         use_sparse_adjacency=sparse,
         #sinkhorn_cache_size=cache,
+        sinkhorn_regularization=sinkhorn_reg,
         frank_wolfe_threshold=frank_wolfe_threshold,
         recompute_distance=True,
         hungarian_method=hungarian,
         #lambda_func=lambda_func,
     )
     print("cuGAL")
-    print("nu is :", config.nu, " and mu is: ", config.mu)
-    print("scaling is: ", scaling)
+    print(config.sinkhorn_regularization)
     
     Src = data['Src']
     Tar = data['Tar']

@@ -44,7 +44,7 @@ class Config:
     dtype: torch.dtype = torch.float64
     """The data type used for computations."""
 
-    sinkhorn_regularization: float = 1.0
+    sinkhorn_regularization: float = 0.008
     """Regularization of the cost matrix when running Sinkhorn.
 
     Higher values can help with numeric stability, but can lower accuracy."""
