@@ -4,6 +4,9 @@ import torch
 from cugal.adjacency import Adjacency
 from cugal.config import Config
 from dataclasses import dataclass
+from algorithms.FUGAL.pred import feature_extraction,eucledian_dist
+from enums.scalingEnums import ScalingEnums
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 
 try:
     import cuda_kernels
@@ -93,6 +96,44 @@ class Features:
         if config.safe_mode:
             assert source_features.isfinite().all(), "source feature tensor has NaN values"
             assert target_features.isfinite().all(), "target feature tensor has NaN values"
+        return cls(source_features, target_features)
+
+@dataclass
+class Features_extensive:
+    """Features of source and target graph. Features can include all features from Pi and Nina's thesis"""
+
+    source: torch.Tensor
+    target: torch.Tensor
+
+    @classmethod
+    def create(cls, source: nx.Graph | Adjacency, target: nx.Graph | Adjacency, config: Config, features: list, scaling: ScalingEnums):
+        #use_cuda = has_cuda and 'cuda' in config.device
+
+        source_features = torch.tensor(feature_extraction(source, features, scaling), device=config.device, dtype=config.dtype)
+        target_features = torch.tensor(feature_extraction(target, features, scaling), device=config.device, dtype=config.dtype)
+
+        combined_features = np.vstack((source_features, target_features))
+        n1 = source.shape[0]
+        n2 = target.shape[0]
+        n = max(n1, n2)
+
+        if scaling == ScalingEnums.COLLECTIVE_STANDARDIZATION:
+            # Standardization
+            scaler = StandardScaler()
+            combined_features = scaler.fit_transform(combined_features)
+
+        if scaling == ScalingEnums.COLLECTIVE_MM_NORMALIZATION:
+            # Min max normalization to 0-1 range
+            scaler = MinMaxScaler()
+            combined_features = scaler.fit_transform(combined_features)
+
+        if scaling == ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION:
+            scaler = RobustScaler()
+            combined_features = scaler.fit_transform(combined_features)
+
+        source_features = combined_features[:n, :]
+        target_features = combined_features[n:, :]
+
         return cls(source_features, target_features)
 
     def add_distance(self, out: torch.Tensor) -> torch.Tensor:

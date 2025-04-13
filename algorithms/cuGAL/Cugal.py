@@ -5,14 +5,20 @@ from cugal.profile import Profile, append_phases_to_csv
 import numpy as np
 import networkx as nx
 import torch
+from enums.pcaEnums import PCAEnums
+from enums.scalingEnums import ScalingEnums
 
 def main(data, 
          iter,
-         mu, 
+         mu,
+         nu: float,
+         features: list,
+         scaling: ScalingEnums,
+         pca: PCAEnums,
          path=None, 
          sparse=False, 
          cache=0, 
-         sinkhorn_method=SinkhornMethod.MIX, 
+         sinkhorn_method=SinkhornMethod.LOG,
          sinkhorn_iterations=500,
          frank_wolfe_threshold=None,
          hungarian=HungarianMethod.SCIPY,
@@ -35,12 +41,13 @@ def main(data,
         iter_count=iter,
         mu=mu,
         use_sparse_adjacency=sparse,
-        sinkhorn_cache_size=cache,
+        #sinkhorn_cache_size=cache,
         frank_wolfe_threshold=frank_wolfe_threshold,
         recompute_distance=True,
         hungarian_method=hungarian,
         #lambda_func=lambda_func,
     )
+    print("cuGAL")
     
     Src = data['Src']
     Tar = data['Tar']
@@ -61,6 +68,11 @@ def main(data,
     n = max(n1, n2)
     Src1 = nx.from_numpy_array(Src)
     Tar1 = nx.from_numpy_array(Tar)
+
+    if pca != PCAEnums.NO_PCA:
+        # Override scaling to have no scaling bc we standardize before applying PCA
+        scaling = ScalingEnums.NO_SCALING
+
     
     profile = Profile()
 
@@ -68,10 +80,10 @@ def main(data,
     #    P, mapping = fugal(Src1, Tar1, mu, iter, config, profile)
     #else:
     P, mapping = cugal(Src1, Tar1, config, profile)
-    print("Sinkhorn threshold: ", config.sinkhorn_threshold)
-    print("Max Sinkhorn iterations: ", np.max([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
-    print("Mean Sinkhorn iterations: ", np.mean([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
-    print("Max memory used: ", profile.max_memory)
+    #print("Sinkhorn threshold: ", config.sinkhorn_threshold)
+    #print("Max Sinkhorn iterations: ", np.max([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
+    #print("Mean Sinkhorn iterations: ", np.mean([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
+    #print("Max memory used: ", profile.max_memory)
 
     if not path == None: 
         append_phases_to_csv(profile, path)

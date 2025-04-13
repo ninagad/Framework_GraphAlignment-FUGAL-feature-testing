@@ -1,7 +1,7 @@
 from sacred import Experiment
 from sacred.observers import FileStorageObserver
 import logging
-from algorithms import gwl, conealign, grasp as grasp, regal, eigenalign, NSD, isorank2 as isorank, netalign, klaus, sgwl,Grampa,GraspB,GrampaS,Fugal,Fugal2,QAP,cuGAL
+from algorithms import gwl, conealign, grasp as grasp, regal, eigenalign, NSD, isorank2 as isorank, netalign, klaus, sgwl,Grampa,GraspB,GrampaS,Fugal,Fugal2,QAP,Cugal
 from algorithms import Parrot,Path,got,fgot,Dspp,Mds
 #GraspBafter Grampa
 from enums.scalingEnums import ScalingEnums
@@ -326,7 +326,7 @@ _algs = [
     #(Fugal2, _Fugal_args, [3], "FUGALB"),
     (GrampaS, _GrampaS_args, [3], "GRAMPAS"),
     (Fugal2, _Fugal2_args, [3], "FUGALB"),
-    (cuGAL, _cugal_args, [3], "CUGAL"),
+    (Cugal, _cugal_args, [3], "CUGAL"),
 
 ]   
 

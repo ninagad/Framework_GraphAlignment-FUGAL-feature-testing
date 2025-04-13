@@ -17,9 +17,10 @@ from cugal.adjacency import Adjacency
 from cugal import sinkhorn
 from cugal.config import Config, HungarianMethod, SinkhornMethod
 from cugal.profile import Profile, Phase, SinkhornProfile, TimeStamp
-from cugal.feature_extraction import Features
+from cugal.feature_extraction import Features, Features_extensive
 from cugal.sinkhorn import SinkhornState
 from cugal.sinkhorn import SinkhornState
+from enums.scalingEnums import ScalingEnums
 
 try:
     import cuda_kernels
@@ -207,6 +208,8 @@ def convert_to_permutation_matrix(
 def cugal(
     source: nx.Graph,
     target: nx.Graph,
+    features: list,
+    scaling: ScalingEnums,
     config: Config,
     profile=Profile(),
 ) -> tuple[np.array, list[tuple[int, int]]]:
@@ -228,7 +231,7 @@ def cugal(
 
     # Feature extraction.
     start_time = TimeStamp(config.device)
-    features = Features.create(source, target, config)
+    features = Features_extensive.create(source, target, config, features, scaling)
 
     if config.safe_mode:
         assert features.source.isfinite().all(), "source feature tensor has NaN values"
