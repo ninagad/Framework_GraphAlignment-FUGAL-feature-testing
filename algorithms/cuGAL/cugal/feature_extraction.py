@@ -101,6 +101,18 @@ class Features:
             assert target_features.isfinite().all(), "target feature tensor has NaN values"
         return cls(source_features, target_features)
 
+    def add_distance(self, out: torch.Tensor) -> torch.Tensor:
+        """Calculate `out + self.distance_matrix() * config.mu` efficiently."""
+        if has_cuda and 'cuda' in str(out.device):
+            cuda_kernels.add_distance(self.source, self.target, out)
+        else:
+            out += self.distance_matrix()
+        return out
+
+    def distance_matrix(self) -> torch.Tensor:
+        """Calculate euclidean distance matrix."""
+        return torch.cdist(self.source, self.target)
+
 @dataclass
 class Features_extensive:
     """Features of source and target graph. Features can include all features from Pi and Nina's thesis"""
