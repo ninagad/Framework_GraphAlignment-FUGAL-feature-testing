@@ -144,7 +144,7 @@ def tuning():
              #'mu': 0.5,
              'mu': 93,
              'nu': 0.56,
-             'sinkhorn_reg': 0.008,
+             'sinkhorn_reg': 0.08,
              'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
              'pca': PCAEnums.NO_PCA,
              }
