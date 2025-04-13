@@ -1,6 +1,6 @@
-from cugal.pred import cugal
-from cugal.config import Config, SinkhornMethod, HungarianMethod
-from cugal.profile import Profile, append_phases_to_csv
+from algorithms.cuGAL.cugal.pred import cugal
+from algorithms.cuGAL.cugal.config import Config, SinkhornMethod, HungarianMethod
+from algorithms.cuGAL.cugal.profile import Profile, append_phases_to_csv
 #from fugal.pred import fugal
 import numpy as np
 import networkx as nx

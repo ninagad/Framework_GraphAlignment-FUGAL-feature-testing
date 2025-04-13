@@ -1,6 +1,6 @@
 import torch
-from cugal.config import Config, SinkhornMethod
-from cugal.profile import SinkhornProfile, TimeStamp
+from algorithms.cuGAL.cugal.config import Config, SinkhornMethod
+from algorithms.cuGAL.cugal.profile import SinkhornProfile, TimeStamp
 from dataclasses import dataclass
 import math
 

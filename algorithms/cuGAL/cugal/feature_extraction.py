@@ -1,8 +1,8 @@
 import networkx as nx
 import numpy as np
 import torch
-from cugal.adjacency import Adjacency
-from cugal.config import Config
+from algorithms.cuGAL.cugal.adjacency import Adjacency
+from algorithms.cuGAL.cugal.config import Config
 from dataclasses import dataclass
 from algorithms.FUGAL.pred import feature_extraction,eucledian_dist
 from enums.scalingEnums import ScalingEnums

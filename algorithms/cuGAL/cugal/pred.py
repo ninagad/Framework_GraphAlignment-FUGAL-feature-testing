@@ -13,13 +13,13 @@ except:
 from tqdm.auto import tqdm
 from functools import partial
 
-from cugal.adjacency import Adjacency
-from cugal import sinkhorn
-from cugal.config import Config, HungarianMethod, SinkhornMethod
-from cugal.profile import Profile, Phase, SinkhornProfile, TimeStamp
-from cugal.feature_extraction import Features, Features_extensive
-from cugal.sinkhorn import SinkhornState
-from cugal.sinkhorn import SinkhornState
+from algorithms.cuGAL.cugal.adjacency import Adjacency
+from algorithms.cuGAL.cugal import sinkhorn
+from algorithms.cuGAL.cugal.config import Config, HungarianMethod, SinkhornMethod
+from algorithms.cuGAL.cugal.profile import Profile, Phase, SinkhornProfile, TimeStamp
+from algorithms.cuGAL.cugal.feature_extraction import Features, Features_extensive
+from algorithms.cuGAL.cugal.sinkhorn import SinkhornState
+from algorithms.cuGAL.cugal.sinkhorn import SinkhornState
 from enums.scalingEnums import ScalingEnums
 
 try:
