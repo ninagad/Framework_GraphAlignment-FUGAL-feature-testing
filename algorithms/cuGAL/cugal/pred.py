@@ -43,9 +43,27 @@ def dense_gradient(
     P: torch.Tensor,
     features: torch.Tensor | Features,
     iteration: int,
+    config: Config
 ) -> torch.Tensor:
+    reg_scalar = 1
+    if config.nu is not None:
+        # scaling of QAP
+        ones = torch.ones(A.shape[0], dtype=torch.float64)
+        D = features.distance_matrix()
+
+        qap_term = np.trace((A @ P @ B.T @ P.T))
+        lap_term = np.trace(P.T @ D)
+        reg_term = np.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
+
+        qap_scalar = config.nu * (1 / qap_term)
+        lap_scalar = config.mu * (1 / lap_term)
+        reg_scalar = 1 / reg_term
+        A = A * qap_scalar
+        features.source *= lap_scalar
+        features.target *= lap_scalar
+
     gradient = -A.T @ P @ B - A @ P @ B.T
-    gradient = add_feature_distance(gradient, features) + iteration*(1 - 2*P)
+    gradient = add_feature_distance(gradient, features) + iteration*reg_scalar*(1 - 2*P)
     if has_cuda and 'cuda' in str(P.device):
         cuda_kernels.regularize(gradient, P, iteration)
     else:
@@ -61,6 +79,7 @@ def sparse_gradient(
     features: torch.Tensor | Features,
     iteration: int,
 ) -> torch.Tensor:
+
     if A is A_transpose and B is B_transpose:
         gradient = B.mul(A.mul(P).T).T
         gradient *= -2
@@ -121,9 +140,10 @@ def find_quasi_permutation_matrix(
     for λ in tqdm(range(config.iter_count), desc="λ"):
         for it in tqdm(range(1, config.frank_wolfe_iter_count + 1), desc="frank-wolfe", leave=False):
             start_time = TimeStamp(config.device)
-            gradient_function = partial(sparse_gradient, A, B, A, B) \
-                if config.use_sparse_adjacency else partial(dense_gradient, A, B)
-            gradient = gradient_function(P, features, λ)
+            #gradient_function = partial(sparse_gradient, A, B, A, B) \
+            #    if config.use_sparse_adjacency else partial(dense_gradient, A, B)
+            gradient_function = partial(dense_gradient, A, B)
+            gradient = gradient_function(P, features, λ, config)
             profile.log_time(start_time, Phase.GRADIENT)
 
             start_time = TimeStamp(config.device)
@@ -232,7 +252,6 @@ def cugal(
     # Feature extraction.
     start_time = TimeStamp(config.device)
     features = Features_extensive.create(source, target, config, features, scaling)
-    print("features source shape: ", features.source.shape)
 
     if config.safe_mode:
         assert features.source.isfinite().all(), "source feature tensor has NaN values"

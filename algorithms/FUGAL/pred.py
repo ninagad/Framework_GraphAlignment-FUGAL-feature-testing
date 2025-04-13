@@ -762,6 +762,7 @@ def convex_init(A, B, D, reg, nu, mu, niter):
     P = P / n
     ones = torch.ones(n, dtype=torch.float64)
     mat_ones = torch.ones((n, n), dtype=torch.float64)
+    reg_scalar = 1
 
     if nu is not None:
         # scaling of QAP
