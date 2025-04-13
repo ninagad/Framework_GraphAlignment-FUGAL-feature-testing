@@ -109,8 +109,8 @@ class Features_extensive:
     def create(cls, source: nx.Graph | Adjacency, target: nx.Graph | Adjacency, config: Config, features: list, scaling: ScalingEnums):
         #use_cuda = has_cuda and 'cuda' in config.device
 
-        source_features = torch.tensor(feature_extraction(source, features, scaling), device=config.device, dtype=config.dtype)
-        target_features = torch.tensor(feature_extraction(target, features, scaling), device=config.device, dtype=config.dtype)
+        source_features = feature_extraction(source, features, scaling)
+        target_features = feature_extraction(target, features, scaling)
 
         combined_features = np.vstack((source_features, target_features))
         n1 = source.shape[0]
@@ -131,8 +131,8 @@ class Features_extensive:
             scaler = RobustScaler()
             combined_features = scaler.fit_transform(combined_features)
 
-        source_features = combined_features[:n, :]
-        target_features = combined_features[n:, :]
+        source_features = torch.tensor(combined_features[:n, :], device=config.device, dtype=config.dtype)
+        target_features = torch.tensor(combined_features[n:, :], device=config.device, dtype=config.dtype)
 
         return cls(source_features, target_features)
 

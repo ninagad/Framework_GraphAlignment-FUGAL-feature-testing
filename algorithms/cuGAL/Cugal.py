@@ -79,7 +79,7 @@ def main(data,
     #if use_fugal:
     #    P, mapping = fugal(Src1, Tar1, mu, iter, config, profile)
     #else:
-    P, mapping = cugal(Src1, Tar1, config, profile)
+    P, mapping = cugal(Src1, Tar1, features, scaling, config, profile)
     #print("Sinkhorn threshold: ", config.sinkhorn_threshold)
     #print("Max Sinkhorn iterations: ", np.max([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
     #print("Mean Sinkhorn iterations: ", np.mean([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))

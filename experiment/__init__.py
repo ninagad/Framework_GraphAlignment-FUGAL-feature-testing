@@ -294,9 +294,9 @@ _mds_args={
 
 _cugal_args={
     'iter': 15,
-    #'scaling': ScalingEnums.NO_SCALING,
-    #'pca': PCAEnums.NO_PCA,
-    #'nu': None,
+    'scaling': ScalingEnums.NO_SCALING,
+    'pca': PCAEnums.NO_PCA,
+    'nu': None,
     #'sinkhorn_reg': 1,
     #'iter': 15, for xx dataset.
     #'mu': 1,#1,#1 MM,are,net --0.1 ce--2 eu
