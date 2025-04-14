@@ -126,6 +126,7 @@ class Features_extensive:
 
         print("target features: ", target_features[0,:])
         print(target_features.shape)
+        print("features: ", features)
 
         combined_features = np.vstack((source_features, target_features))
         n1 = source.number_of_nodes()
