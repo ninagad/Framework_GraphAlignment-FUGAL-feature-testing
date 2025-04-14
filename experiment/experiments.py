@@ -185,10 +185,10 @@ def tuning():
 
     graph_names = [
         #"bio-celegans",
-        #"ca-netscience",
+        "ca-netscience",
         #"mammalia-voles-plj-trapping_100",
         #"yeast25_Y2H1",
-        "inf-euroroad",
+        #"inf-euroroad",
         #"socfb-Bowdoin47",
         #"ia-reality",
         #"ia-crime-moreno",

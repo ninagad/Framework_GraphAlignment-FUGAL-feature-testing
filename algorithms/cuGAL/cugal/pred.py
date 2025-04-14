@@ -256,7 +256,7 @@ def cugal(
     start_time = TimeStamp(config.device)
     #features = Features.create(source, target, config) # original cugal features
     features = Features_extensive.create(source, target, config, feature_names, scaling)
-    print("features: ", features.source[:1,:])
+    print("features: ", features.source.shape)
 
     if config.safe_mode:
         assert features.source.isfinite().all(), "source feature tensor has NaN values"
