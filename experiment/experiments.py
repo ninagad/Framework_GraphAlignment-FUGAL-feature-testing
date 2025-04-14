@@ -6,6 +6,7 @@ import numpy as np
 from enums.featureEnums import FeatureEnums
 from enums.scalingEnums import ScalingEnums
 from enums.pcaEnums import PCAEnums
+from algorithms.cuGAL.cugal.config import SinkhornMethod
 
 # mprof run workexp.py with playground run=[1,2,3,4,5] iters=2 win
 
@@ -141,19 +142,20 @@ def tuning():
         22, # cuGAL
         [
             {'features': x,
-             'mu': 1,
-             #'mu': 93,
-             #'nu': 0.56,
-             #'sinkhorn_reg': 0.08,
+             #'mu': 1,
+             'mu': 99,
+             'nu': 51,
+             'sinkhorn_reg': 0.002,
+             'sinkhorn_method': SinkhornMethod.STANDARD,
              #'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
              #'pca': PCAEnums.NO_PCA,
              }
-            for x in [[FeatureEnums.DEG], [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
-                      [FeatureEnums.SUM_EGO_DEG], [FeatureEnums.STD_EGO_DEG], [FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features on degrees
-                      [FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.STD_EGO_CLUSTER], [FeatureEnums.RANGE_EGO_CLUSTER], [FeatureEnums.MIN_EGO_CLUSTER], [FeatureEnums.MAX_EGO_CLUSTER], [FeatureEnums.MEDIAN_EGO_CLUSTER], [FeatureEnums.SKEWNESS_EGO_CLUSTER], [FeatureEnums.KURTOSIS_EGO_CLUSTER], # Augmented clustering features
-                      [FeatureEnums.SUM_EGO_DEG], [FeatureEnums.STD_EGO_DEG], [FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features on degrees
-                      [FeatureEnums.ASSORTATIVITY_EGO], [FeatureEnums.INTERNAL_FRAC_EGO],  # Other features
-                      [FeatureEnums.CLOSENESS_CENTRALITY], [FeatureEnums.DEGREE_CENTRALITY], [FeatureEnums.EIGENVECTOR_CENTRALITY], [FeatureEnums.PAGERANK],  # [Feature.KATZ_CENTRALITY], Centrality measures
+            for x in [[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER], [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
+                      #[FeatureEnums.SUM_EGO_DEG], [FeatureEnums.STD_EGO_DEG], [FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features on degrees
+                      #[FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.STD_EGO_CLUSTER], [FeatureEnums.RANGE_EGO_CLUSTER], [FeatureEnums.MIN_EGO_CLUSTER], [FeatureEnums.MAX_EGO_CLUSTER], [FeatureEnums.MEDIAN_EGO_CLUSTER], [FeatureEnums.SKEWNESS_EGO_CLUSTER], [FeatureEnums.KURTOSIS_EGO_CLUSTER], # Augmented clustering features
+                      #[FeatureEnums.SUM_EGO_DEG], [FeatureEnums.STD_EGO_DEG], [FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features on degrees
+                      #[FeatureEnums.ASSORTATIVITY_EGO], [FeatureEnums.INTERNAL_FRAC_EGO],  # Other features
+                      #[FeatureEnums.CLOSENESS_CENTRALITY], [FeatureEnums.DEGREE_CENTRALITY], [FeatureEnums.EIGENVECTOR_CENTRALITY], [FeatureEnums.PAGERANK],  # [Feature.KATZ_CENTRALITY], Centrality measures
                       #[FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER] # Fugal
                       # Feature.AVG_2HOP_DEG, Feature.AVG_2HOP_CLUSTER, Feature.TWOHOP_EDGES, Feature.TWOHOP_NEIGHBORS,  # 2-hop
                       # Feature.SUM_2HOP_CLUSTER, Feature.VAR_2HOP_CLUSTER, Feature.ASSORTATIVITY_2HOP, Feature.INTERNAL_FRAC_2HOP,  # 2-hop
@@ -186,8 +188,8 @@ def tuning():
         #"ca-netscience",
         #"mammalia-voles-plj-trapping_100",
         #"yeast25_Y2H1",
-        #"inf-euroroad",
-        "socfb-Bowdoin47",
+        "inf-euroroad",
+        #"socfb-Bowdoin47",
         #"ia-reality",
         #"ia-crime-moreno",
         #"DD_g501",

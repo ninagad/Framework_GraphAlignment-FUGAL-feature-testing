@@ -6,6 +6,7 @@ from algorithms import Parrot,Path,got,fgot,Dspp,Mds
 #GraspBafter Grampa
 from enums.scalingEnums import ScalingEnums
 from enums.pcaEnums import PCAEnums
+from algorithms.cuGAL.cugal.config import SinkhornMethod
 
 ex = Experiment("ex")
 
@@ -297,6 +298,7 @@ _cugal_args={
     'scaling': ScalingEnums.NO_SCALING,
     'pca': PCAEnums.NO_PCA,
     'nu': None,
+    'sinkhorn_method': SinkhornMethod.LOG,
     #'sinkhorn_reg': 1,
     #'iter': 15, for xx dataset.
     #'mu': 1,#1,#1 MM,are,net --0.1 ce--2 eu
