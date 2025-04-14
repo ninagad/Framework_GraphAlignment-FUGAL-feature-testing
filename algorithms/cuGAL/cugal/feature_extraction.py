@@ -151,6 +151,7 @@ class Features_extensive:
     def add_distance(self, out: torch.Tensor) -> torch.Tensor:
         """Calculate `out + self.distance_matrix() * config.mu` efficiently."""
         if has_cuda and 'cuda' in str(out.device):
+            print("1 ", self.source.dtype, " ", self.target.dtype)
             cuda_kernels.add_distance(self.source, self.target, out)
         else:
             out += self.distance_matrix()
