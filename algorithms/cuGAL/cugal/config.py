@@ -82,7 +82,7 @@ class Config:
     use_sparse_adjacency: bool = False # sparse adjacency is not implemented
     """Use sparse matrix representation for adjacency matrices."""
 
-    use_sinkhorn_warm_start: bool = False
+    use_sinkhorn_warm_start: bool = True
 
     sinkhorn_momentum_start: Optional[int] = None
 

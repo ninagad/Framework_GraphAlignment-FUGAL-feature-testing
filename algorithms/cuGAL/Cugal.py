@@ -51,6 +51,9 @@ def main(data,
         #lambda_func=lambda_func,
     )
     print("cuGAL")
+    print("mu: ", mu, " nu: ", nu)
+    print("method: ", sinkhorn_method)
+    print("reg: ", sinkhorn_reg)
     
     Src = data['Src']
     Tar = data['Tar']

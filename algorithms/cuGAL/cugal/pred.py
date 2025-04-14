@@ -49,6 +49,7 @@ def dense_gradient(
 
     if config.nu is not None:
         # scaling of QAP
+        print("1")
         ones = torch.ones(A.shape[0], device=config.device, dtype=config.dtype)
         D = features.distance_matrix()
 
