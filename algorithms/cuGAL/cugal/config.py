@@ -55,7 +55,7 @@ class Config:
     sinkhorn_iterations: int = 500
     """The maximum number of sinkhorn iterations performed."""
 
-    sinkhorn_threshold: float = 1e-4
+    sinkhorn_threshold: float = 1e-3
     """The marginal error threshold tolerated when running Sinkhorn."""
 
     sinkhorn_eval_freq: int = 10
