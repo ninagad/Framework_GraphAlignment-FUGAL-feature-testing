@@ -124,6 +124,9 @@ class Features_extensive:
         source_features = feature_extraction(source, features, scaling)
         target_features = feature_extraction(target, features, scaling)
 
+        print("target features: ", target_features[0,:])
+        print(target_features.shape)
+
         combined_features = np.vstack((source_features, target_features))
         n1 = source.number_of_nodes()
         n2 = target.number_of_nodes()
@@ -145,6 +148,8 @@ class Features_extensive:
 
         source_features = torch.tensor(combined_features[:n, :], device=config.device, dtype=config.dtype)
         target_features = torch.tensor(combined_features[n:, :], device=config.device, dtype=config.dtype)
+        print("target_features after: ", target_features[0,:])
+        print(target_features.shape)
 
         return cls(source_features, target_features)
 
