@@ -142,11 +142,11 @@ def tuning():
         22, # cuGAL
         [
             {'features': x,
-             #'mu': 1,
-             'mu': 99,
-             'nu': 51,
-             'sinkhorn_reg': 0.002,
-             'sinkhorn_method': SinkhornMethod.STANDARD,
+             'mu': 1,
+             #'mu': 99,
+             #'nu': 51,
+             #'sinkhorn_reg': 0.002,
+             #'sinkhorn_method': SinkhornMethod.STANDARD,
              #'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
              #'pca': PCAEnums.NO_PCA,
              }
