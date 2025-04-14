@@ -51,7 +51,6 @@ def main(data,
         #lambda_func=lambda_func,
     )
     print("cuGAL")
-    print(config.sinkhorn_regularization)
     
     Src = data['Src']
     Tar = data['Tar']

@@ -45,6 +45,8 @@ def dense_gradient(
     config: Config
 ) -> torch.Tensor:
     reg_scalar = 1
+
+    print("entries of features 2: ", Features_extensive.source[:2, :])
     if config.nu is not None:
         # scaling of QAP
         ones = torch.ones(A.shape[0], device=config.device, dtype=config.dtype)
@@ -60,7 +62,7 @@ def dense_gradient(
         A = A * qap_scalar
         features.source *= lap_scalar
         features.target *= lap_scalar
-
+    print("entries of features 2: ", Features_extensive.source[:2, :])
     gradient = -A.T @ P @ B - A @ P @ B.T
     gradient = add_feature_distance(gradient, features) + iteration*reg_scalar*(1 - 2*P)
     if has_cuda and 'cuda' in str(P.device):
@@ -78,6 +80,7 @@ def sparse_gradient(
     features: torch.Tensor | Features,
     iteration: int,
 ) -> torch.Tensor:
+
 
     if A is A_transpose and B is B_transpose:
         gradient = B.mul(A.mul(P).T).T
@@ -252,6 +255,8 @@ def cugal(
     start_time = TimeStamp(config.device)
     #features = Features.create(source, target, config) # original cugal features
     features = Features_extensive.create(source, target, config, feature_names, scaling)
+    print("shape of features: ", Features_extensive.source.shape)
+    print("entries of features 1: ", Features_extensive.source[:2,:])
 
     if config.safe_mode:
         assert features.source.isfinite().all(), "source feature tensor has NaN values"
