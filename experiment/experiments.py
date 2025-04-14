@@ -146,7 +146,7 @@ def tuning():
              #'mu': 99,
              #'nu': 51,
              #'sinkhorn_reg': 0.002,
-             #'sinkhorn_method': SinkhornMethod.STANDARD,
+             'sinkhorn_method': SinkhornMethod.LOG,
              #'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
              #'pca': PCAEnums.NO_PCA,
              }
