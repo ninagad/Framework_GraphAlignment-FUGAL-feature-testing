@@ -807,8 +807,9 @@ def convex_init(A, B, D, reg, nu, mu, niter):
             q = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
-            print("P at iter ", it , " is ",  P[0,0])
+
         print("the gradient at lambda ", i, " is ", G[0,0])
+        print("the P at lambda ", i, " is ", P[0, 0])
 
     print("the last G: ", G[0,:10])
 

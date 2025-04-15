@@ -168,7 +168,6 @@ def find_quasi_permutation_matrix(
                     P, K, u, v, alpha, config.sinkhorn_method)
                 duality_gap = abs(
                     torch.sum(gradient * (diff / alpha)).cpu().item())
-            print("P at iter ", it , " is ",  P[0,0])
 
             profile.frank_wolfe_iterations += 1
             if not config.frank_wolfe_threshold is None and duality_gap < config.frank_wolfe_threshold:
@@ -177,6 +176,8 @@ def find_quasi_permutation_matrix(
             if not config.use_sinkhorn_warm_start:
                 sinkhorn_state = SinkhornState(n, config)
         print("gradient at lambda ", λ, " is ", gradient[0,0])
+        print("P at lambda ", λ, " is ", P[0, 0])
+
 
     print("the last gradient: ", gradient[0, :10])
     return P
