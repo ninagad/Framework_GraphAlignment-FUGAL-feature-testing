@@ -177,7 +177,7 @@ def find_quasi_permutation_matrix(
                 sinkhorn_state = SinkhornState(n, config)
         print("gradient at lambda ", λ, " is ", gradient[0,0])
         print("P at lambda ", λ, " is ", P[0, 0])
-        print("sinkhorn at lambda ", λ, " is ", u.reshape(-1, 1) * K * v.reshape(1, -1))
+        print("sinkhorn at lambda ", λ, " is ", (u.reshape(-1, 1) * K * v.reshape(1, -1))[0,0])
 
     print("the last gradient: ", gradient[0, :10])
     return P
