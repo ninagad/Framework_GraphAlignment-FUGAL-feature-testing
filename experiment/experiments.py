@@ -134,19 +134,19 @@ def tuning():
     #use_largest_connected_component = True
 
     tmp = [
-        12, # Fugal
+        #12, # Fugal
         # 20, # GrampaS (Grampa: 10)
         # 6, # IsoRank
         # 3, # REGAL
         #1,  # CONE
-        #22, # cuGAL
+        22, # cuGAL
         [
             {'features': x,
              'mu': 1,
              #'mu': 99,
              #'nu': 51,
              #'sinkhorn_reg': 0.002,
-             #'sinkhorn_method': SinkhornMethod.STANDARD,
+             'sinkhorn_method': SinkhornMethod.STANDARD,
              #'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
              #'pca': PCAEnums.NO_PCA,
              }
