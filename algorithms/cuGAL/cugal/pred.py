@@ -102,15 +102,15 @@ def update_quasi_permutation(
     scale = sinkhorn.scale_kernel_matrix_log if \
         sinkhorn_method == SinkhornMethod.LOG else sinkhorn.scale_kernel_matrix
     #print("scale: ", scale)
-    sinkhorn_res = scale(K, u, v)
+    q = scale(K, u, v)
     #print("q: ", q)
-    q = sinkhorn_res - P
+    q -= P
     #print("q: ", q)
     q *= alpha
     #print("q: ", q)
     P += q
     #print("P: ", P)
-    return q, sinkhorn_res
+    return q
 
 
 def find_quasi_permutation_matrix(
@@ -164,7 +164,7 @@ def find_quasi_permutation_matrix(
                 duality_gap = cuda_kernels.update_quasi_permutation_log(
                     P, K, u, v, alpha, config.sinkhorn_regularization)
             else:
-                diff, sinkhorn_res = update_quasi_permutation(
+                diff = update_quasi_permutation(
                     P, K, u, v, alpha, config.sinkhorn_method)
                 duality_gap = abs(
                     torch.sum(gradient * (diff / alpha)).cpu().item())
@@ -177,7 +177,7 @@ def find_quasi_permutation_matrix(
                 sinkhorn_state = SinkhornState(n, config)
         print("gradient at lambda ", λ, " is ", gradient[0,0])
         print("P at lambda ", λ, " is ", P[0, 0])
-        print("sinkhorn at lambda ", λ, " is ", sinkhorn_res)
+        print("sinkhorn at lambda ", λ, " is ", u.reshape(-1, 1) * K * v.reshape(1, -1))
 
     print("the last gradient: ", gradient[0, :10])
     return P
