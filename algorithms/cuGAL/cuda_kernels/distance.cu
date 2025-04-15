@@ -25,8 +25,11 @@ __global__ void kernel(
     printf("index: ", index);
     printf("size: ", size);
     printf("entry_count: ", entry_count);
-    printf("type of source x: ", type(source[x]));
-    printf("shape of source x: ", source[x].shape);
+    // Type:
+    std::cout << "Type of source[x]: " << source_x.dtype() << std::endl;
+
+    // Shape:
+    std::cout << "Shape of source[x]: " << source_x.sizes() << std::endl;
 
     auto sum = 0.0;
 #pragma unroll
