@@ -203,6 +203,7 @@ def find_quasi_permutation_matrix(
             profile.log_time(start_time, Phase.SINKHORN)
 
             alpha = 2.0 / float(2.0 + it)
+            print("grad 1 ", gradient)
             if has_cuda and 'cuda' in config.device and config.dtype == torch.float32 and config.sinkhorn_method == SinkhornMethod.LOG:
                 duality_gap = cuda_kernels.update_quasi_permutation_log(
                     P, K, u, v, alpha, config.sinkhorn_regularization)
@@ -218,7 +219,8 @@ def find_quasi_permutation_matrix(
 
             if not config.use_sinkhorn_warm_start:
                 sinkhorn_state = SinkhornState(n, config)
-        print("gradient at lambda ", λ, " is ", gradient[0,0])
+            print("grad 2 ", gradient)
+
 
     print("the last gradient: ", gradient[0, :10])
     return P
