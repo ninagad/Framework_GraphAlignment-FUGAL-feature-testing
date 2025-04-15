@@ -94,6 +94,7 @@ def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling
     D = eucledian_dist(F1, F2, n)
 
     D = torch.tensor(D, dtype = torch.float64)
+    print("source graph: ", Src[0, :10], " target graph: ", Tar[0, :10])
     
     P = convex_init(A, B, D, sinkhorn_reg, nu, mu, iter)
 

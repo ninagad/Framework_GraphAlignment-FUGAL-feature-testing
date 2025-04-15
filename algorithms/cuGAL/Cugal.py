@@ -82,6 +82,8 @@ def main(data,
     
     profile = Profile()
 
+    print("source graph: ", Src[0,:10], " target graph: ", Tar[0,:10])
+
     #if use_fugal:
     #    P, mapping = fugal(Src1, Tar1, mu, iter, config, profile)
     #else:
