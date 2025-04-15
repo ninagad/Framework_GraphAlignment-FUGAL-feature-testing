@@ -16,8 +16,18 @@ from experiment import run as run_file
 
 from generation.generate import init1, init2
 
+graphs = ["bio-celegans",
+          "ca-netscience",
+          "mammalia-voles-plj-trapping_100",
+          "inf-euroroad",
+          ]
 
-def generate_graphs(graph_name: str, noises: list[float], iterations: int):
+noises = [0.25, 0.20, 0.15, 0.10, 0.05, 0]
+
+iterations = 5
+
+
+def generate_graphs(graph_name: str):
     """
     Generates random noisy graphs separately for each noise level in 'noises'.
     Args:
@@ -40,7 +50,18 @@ def generate_graphs(graph_name: str, noises: list[float], iterations: int):
     return source_graphs, target_graph_dict
 
 
+def generate_all_graph():
+    # Dictionary with source graphs pr. iteration.
+    source_graphs_dict = {}
+    # Nested dictionary with nx graphs pr graph and noise level.
+    target_graphs_dict = {}
 
+    for graph in graphs:
+        sources, targets = generate_graphs(graph)
+        source_graphs_dict[graph] = sources
+        target_graphs_dict[graph] = targets
+
+    return source_graphs_dict, target_graphs_dict
 
 
 def get_hyperparam_config(run: wandb.run):
@@ -52,7 +73,7 @@ def get_hyperparam_config(run: wandb.run):
     return nu, mu, reg
 
 
-def log_final_metrics(graphs: list, graph_accs: dict, accs: list, run: wandb.run):
+def log_final_metrics(graph_accs: dict, accs: list, run: wandb.run):
     nu, mu, sinkhorn_reg = get_hyperparam_config(run)
 
     # Log avg accuracy for each graph
@@ -78,26 +99,6 @@ def log_final_metrics(graphs: list, graph_accs: dict, accs: list, run: wandb.run
 def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums]):
     nu, mu, sinkhorn_reg = get_hyperparam_config(run)
 
-    graphs = ["bio-celegans",
-              "ca-netscience",
-              "mammalia-voles-plj-trapping_100",
-              "inf-euroroad",
-              ]
-
-    noises = [0.25, 0.20, 0.15, 0.10, 0.05, 0]
-
-    iterations = 5
-
-    # Dictionary with source graphs pr. iteration.
-    source_graphs_dict = {}
-    # Nested dictionary with nx graphs pr graph and noise level.
-    target_graphs_dict = {}
-
-    for graph in graphs:
-        sources, targets = generate_graphs(graph, noises, iterations)
-        source_graphs_dict[graph] = sources
-        target_graphs_dict[graph] = targets
-
     alg_id = 12  # FUGAL
     args_lst = [
         {'features': features,
@@ -114,10 +115,10 @@ def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums]):
     _algs[:] = all_algs
     _algs[:] = get_run_list([alg_id, args_lst])
 
-    return graphs, noises, iterations, run_lst, source_graphs_dict, target_graphs_dict
+    return run_lst
 
 
-def train(all_algs: list, feature_set: list[FeatureEnums]):
+def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, target_dict: dict):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
     try:
         nu, mu, sinkhorn_reg = get_hyperparam_config(run)
@@ -127,12 +128,8 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
         artifact = wandb.Artifact(name=artifact_name, type='run-summary')
         run_file.artifact = artifact
 
-        (graphs,
-         noises,
-         iterations,
-         run_lst,
-         source_graphs_dict,
-         target_graphs_dict) = setup_fugal(run, all_algs, feature_set)
+        # Get arguments for fugal runs
+        run_lst = setup_fugal(run, all_algs, feature_set)
 
         # Used to log overall avg acc and graph-wise avg. acc.
         accs = []
@@ -145,8 +142,8 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
                 json.dump([], f, indent=2)
 
             for graph in graphs:
-                nx_source_graphs = source_graphs_dict[graph]
-                nx_target_graphs = target_graphs_dict[graph][noise]
+                nx_source_graphs = source_dict[graph]
+                nx_target_graphs = target_dict[graph][noise]
 
                 workexp.ex.run(
                     config_updates={'noises': [noise],
@@ -185,7 +182,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
             if os.path.exists(artifact_file):
                 os.remove(artifact_file)
 
-        log_final_metrics(graphs, graph_accs, accs, run)
+        log_final_metrics(graph_accs, accs, run)
 
         # run summaries are logged as files in the Artifact object in run.py
         wandb.run.log_artifact(run_file.artifact).wait()
@@ -228,8 +225,10 @@ def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureE
 
     sweep_id = wandb.sweep(sweep_config, project=sweep_name)
 
+    source_graphs, target_graphs = generate_all_graph()
+
     wandb.agent(sweep_id,
-                function=lambda: train(all_algs, feature_set),
+                function=lambda: train(all_algs, feature_set, source_graphs, target_graphs),
                 count=150
                 )
 
