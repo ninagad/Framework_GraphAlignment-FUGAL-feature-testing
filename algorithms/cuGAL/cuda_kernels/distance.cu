@@ -22,18 +22,9 @@ __global__ void kernel(
     const auto a = source[x];
     const auto b = target[y];
 
-    printf("index: ", index);
-    printf("size: ", size);
-    printf("entry_count: ", entry_count);
-    // Type:
-    std::cout << "Type of source[x]: " << source_x.dtype() << std::endl;
-
-    // Shape:
-    std::cout << "Shape of source[x]: " << source_x.sizes() << std::endl;
-
     auto sum = 0.0;
 #pragma unroll
-    for (auto i = 0; i < 1; i++) {
+    for (auto i = 0; i < source.size(1); i++) {
         const auto diff = a[i] - b[i];
         sum += diff * diff;
     }
