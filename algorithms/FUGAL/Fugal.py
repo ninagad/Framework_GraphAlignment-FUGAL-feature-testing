@@ -96,6 +96,8 @@ def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling
     D = torch.tensor(D, dtype = torch.float64)
     
     P = convex_init(A, B, D, sinkhorn_reg, nu, mu, iter)
+
+    print("The resulting souble stochastic matrix: ", P[0,:10])
     
     #P=convex_init1(A, B, L, mu, iter)
     #are_matrices_equal(P,P1)

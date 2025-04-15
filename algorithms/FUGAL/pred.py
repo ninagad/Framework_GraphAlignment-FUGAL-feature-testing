@@ -785,7 +785,8 @@ def convex_init(A, B, D, reg, nu, mu, niter):
         # print('QAP term after scaling: ', np.trace((A @ P @ B.T @ P.T)))
         # print('LAP term after scaling: ', np.trace(P.T @ D))
         # print('reg term after scaling: ', reg_scalar*np.trace(P.T @ (ones - P)))
-
+    print("the first G: ", -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + mu * D + i * (
+                        mat_ones - 2 * P))
     for i in range(niter):  # TODO: optimize lambda later for efficiency
         for it in range(1, 11):
             if nu is not None:
@@ -805,6 +806,8 @@ def convex_init(A, B, D, reg, nu, mu, niter):
             q = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
+
+    print("the last G: ", G[0,:10])
 
     # QAP_term = np.trace((A @ P @ B.T @ P.T))
     # LAP_term = mu * np.trace(P.T @ D)

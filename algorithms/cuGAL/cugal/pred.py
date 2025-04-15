@@ -64,11 +64,6 @@ def dense_gradient(
         features.source *= lap_scalar
         features.target *= lap_scalar
 
-    D = features.distance_matrix()
-    ones = torch.ones(A.shape[0], device=config.device, dtype=config.dtype)
-    print("before optimization: QAP: ", np.trace((A @ P @ B.T @ P.T)), " LAP: ", np.trace(P.T @ D), " reg: ",
-          np.trace(P.T @ (ones - P)))
-
     gradient = -A.T @ P @ B - A @ P @ B.T
     gradient = add_feature_distance(gradient, features) + iteration*reg_scalar*(1 - 2*P)
     if has_cuda and 'cuda' in str(P.device):
@@ -145,6 +140,12 @@ def find_quasi_permutation_matrix(
         P = torch.full([A.shape[0]] * 2, fill_value=1 /
                        A.shape[0], device=config.device, dtype=config.dtype)
 
+    D = features.distance_matrix()
+    ones = torch.ones(A.shape[0], device=config.device, dtype=config.dtype)
+    print("before optimization: QAP: ", torch.trace((A @ P @ B.T @ P.T)), " LAP: ", torch.trace(P.T @ D), " reg: ",
+          torch.trace(P.T @ (ones - P)))
+    gradient_function = partial(dense_gradient, A, B)
+    print("the first gradient: ", gradient_function(P, features, 0, config))
     for λ in tqdm(range(config.iter_count), desc="λ"):
         for it in tqdm(range(1, config.frank_wolfe_iter_count + 1), desc="frank-wolfe", leave=False):
             start_time = TimeStamp(config.device)
@@ -177,6 +178,7 @@ def find_quasi_permutation_matrix(
             if not config.use_sinkhorn_warm_start:
                 sinkhorn_state = SinkhornState(n, config)
 
+    print("the last gradient: ", gradient[0, :10])
     return P
 
 
@@ -261,10 +263,6 @@ def cugal(
     start_time = TimeStamp(config.device)
     #features = Features.create(source, target, config) # original cugal features
     features = Features_extensive.create(source, target, config, feature_names, scaling)
-
-    print("source: ", features.source[:4,:])
-    print("target: ", features.target[:4, :])
-
 
     if config.safe_mode:
         assert features.source.isfinite().all(), "source feature tensor has NaN values"

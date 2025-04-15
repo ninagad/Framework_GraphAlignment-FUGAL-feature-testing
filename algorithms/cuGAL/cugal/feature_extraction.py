@@ -124,9 +124,6 @@ class Features_extensive:
         source_features = feature_extraction(source, features, scaling)
         target_features = feature_extraction(target, features, scaling)
 
-        print("source before: ", source_features[:4, :])
-        print("target before: ", target_features[:4, :])
-
         combined_features = np.vstack((source_features, target_features))
         n1 = source.number_of_nodes()
         n2 = target.number_of_nodes()
@@ -148,8 +145,7 @@ class Features_extensive:
 
         source_features = torch.tensor(combined_features[:n, :], device=config.device, dtype=config.dtype)
         target_features = torch.tensor(combined_features[n:, :], device=config.device, dtype=config.dtype)
-        print("source after: ", source_features[:4,:])
-        print("target after: ", target_features[:4, :])
+
         return cls(source_features, target_features)
 
     def add_distance(self, out: torch.Tensor) -> torch.Tensor:

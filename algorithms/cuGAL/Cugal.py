@@ -97,4 +97,6 @@ def main(data,
             #if not sp.res_matrix is None:
             #    np.savetxt(path + 'sinkhorn_' + str(sp.iteration_count) + '.csv', sp.res_matrix.numpy(), delimiter=',')
 
+    print("The resulting souble stochastic matrix: ", P[0, :10])
+
     return P
