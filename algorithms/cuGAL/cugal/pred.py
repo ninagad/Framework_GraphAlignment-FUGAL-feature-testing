@@ -71,49 +71,6 @@ def dense_gradient(
         gradient += iteration - iteration * 2 * P
     return gradient
 
-def dense_gradient_with_prints(
-    A: torch.Tensor,
-    B: torch.Tensor,
-    P: torch.Tensor,
-    features: torch.Tensor | Features,
-    iteration: int,
-    config: Config
-) -> torch.Tensor:
-    reg_scalar = 1
-
-
-    if config.nu is not None:
-        # scaling of QAP
-        print("Entered not none nu")
-        ones = torch.ones(A.shape[0], device=config.device, dtype=config.dtype)
-        D = features.distance_matrix()
-
-        qap_term = torch.trace((A @ P @ B.T @ P.T))
-        lap_term = torch.trace(P.T @ D)
-        reg_term = torch.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
-
-        qap_scalar = config.nu * (1 / qap_term)
-        lap_scalar = config.mu * (1 / lap_term)
-        reg_scalar = 1 / reg_term
-        A = A * qap_scalar
-        features.source *= lap_scalar
-        features.target *= lap_scalar
-    D = features.distance_matrix()
-    #print("the first QAP1: ", (-A.T @ P @ B )[0, :10], " QAP2: ",
-    #      (- A @ P @ B.T)[0, :10], " LAP: ", config.mu * D[0, :10])
-
-    #print("the self computed gradient: ", (-A.T @ P @ B ) + (- A @ P @ B.T) + config.mu * D)
-
-    gradient = -A.T @ P @ B - A @ P @ B.T
-    gradient = add_feature_distance(gradient, features) + iteration*reg_scalar*(1 - 2*P)
-    #print("the first gradient: ", gradient)
-    if has_cuda and 'cuda' in str(P.device):
-        cuda_kernels.regularize(gradient, P, iteration)
-    else:
-        gradient += iteration - iteration * 2 * P
-    #print("the second gradient: ", gradient)
-    return gradient
-
 
 def sparse_gradient(
     A, B: Adjacency,
@@ -144,10 +101,15 @@ def update_quasi_permutation(
 ) -> torch.Tensor:
     scale = sinkhorn.scale_kernel_matrix_log if \
         sinkhorn_method == SinkhornMethod.LOG else sinkhorn.scale_kernel_matrix
+    #print("scale: ", scale)
     q = scale(K, u, v)
+    #print("q: ", q)
     q -= P
+    #print("q: ", q)
     q *= alpha
+    #print("q: ", q)
     P += q
+    #print("P: ", P)
     return q
 
 
@@ -182,11 +144,6 @@ def find_quasi_permutation_matrix(
         P = torch.full([A.shape[0]] * 2, fill_value=1 /
                        A.shape[0], device=config.device, dtype=config.dtype)
 
-    D = features.distance_matrix()
-    ones = torch.ones(A.shape[0], device=config.device, dtype=config.dtype)
-    print("before optimization: QAP: ", torch.trace((A @ P @ B.T @ P.T)), " LAP: ", torch.trace(P.T @ D), " reg: ",
-          torch.trace(P.T @ (ones - P)))
-    print(dense_gradient_with_prints(A,B,P, features, 0, config))
     for λ in tqdm(range(config.iter_count), desc="λ"):
         for it in tqdm(range(1, config.frank_wolfe_iter_count + 1), desc="frank-wolfe", leave=False):
             start_time = TimeStamp(config.device)
@@ -203,7 +160,6 @@ def find_quasi_permutation_matrix(
             profile.log_time(start_time, Phase.SINKHORN)
 
             alpha = 2.0 / float(2.0 + it)
-            print("grad 1 ", gradient)
             if has_cuda and 'cuda' in config.device and config.dtype == torch.float32 and config.sinkhorn_method == SinkhornMethod.LOG:
                 duality_gap = cuda_kernels.update_quasi_permutation_log(
                     P, K, u, v, alpha, config.sinkhorn_regularization)
@@ -212,6 +168,7 @@ def find_quasi_permutation_matrix(
                     P, K, u, v, alpha, config.sinkhorn_method)
                 duality_gap = abs(
                     torch.sum(gradient * (diff / alpha)).cpu().item())
+            print("P at iter ", it , " is ",  P[0,0])
 
             profile.frank_wolfe_iterations += 1
             if not config.frank_wolfe_threshold is None and duality_gap < config.frank_wolfe_threshold:
@@ -219,8 +176,7 @@ def find_quasi_permutation_matrix(
 
             if not config.use_sinkhorn_warm_start:
                 sinkhorn_state = SinkhornState(n, config)
-            print("grad 2 ", gradient)
-
+        print("gradient at lambda ", λ, " is ", gradient[0,0])
 
     print("the last gradient: ", gradient[0, :10])
     return P
