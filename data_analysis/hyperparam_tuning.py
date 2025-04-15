@@ -109,14 +109,14 @@ def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums]):
     nu, mu, sinkhorn_reg = get_hyperparam_config(run)
 
     graphs = ["bio-celegans",
-              # "ca-netscience",
-              # "mammalia-voles-plj-trapping_100",
-              # "inf-euroroad",
+              "ca-netscience",
+              "mammalia-voles-plj-trapping_100",
+              "inf-euroroad",
               ]
 
-    noises = [0.25, ]  # 0.20, 0.15, 0.10, 0.05, 0]
+    noises = [0.25, 0.20, 0.15, 0.10, 0.05, 0]
 
-    iterations = 1
+    iterations = 5
 
     # Dictionary with source graphs pr. iteration.
     source_graphs_dict = {}
