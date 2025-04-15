@@ -22,11 +22,11 @@ __global__ void kernel(
     const auto a = source[x];
     const auto b = target[y];
 
-    print("index: ", index)
-    print("size: ", size)
-    print("entry_count: ", entry_count)
-    print("type of source x: ", type(source[x]))
-    print("shape of source x: ", source[x].shape)
+    printf("index: ", index)
+    printf("size: ", size)
+    printf("entry_count: ", entry_count)
+    printf("type of source x: ", type(source[x]))
+    printf("shape of source x: ", source[x].shape)
 
     auto sum = 0.0;
 #pragma unroll
