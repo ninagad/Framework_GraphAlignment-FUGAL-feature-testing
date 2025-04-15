@@ -30,7 +30,7 @@ __global__ void kernel(
 
     auto sum = 0.0;
 #pragma unroll
-    for (auto i = 0; i < 4; i++) {
+    for (auto i = 0; i < a.shape[1]; i++) {
         const auto diff = a[i] - b[i];
         sum += diff * diff;
     }
