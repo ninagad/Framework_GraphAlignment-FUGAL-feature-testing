@@ -103,6 +103,8 @@ def dense_gradient_with_prints(
     print("the first QAP1: ", (-A.T @ P @ B )[0, :10], " QAP2: ",
           (- A @ P @ B.T)[0, :10], " LAP: ", config.mu * D[0, :10])
 
+    print("the self computed gradient: ", (-A.T @ P @ B ) + (- A @ P @ B.T) + config.mu * D[0, :10])
+
     gradient = -A.T @ P @ B - A @ P @ B.T
     gradient = add_feature_distance(gradient, features) + iteration*reg_scalar*(1 - 2*P)
     if has_cuda and 'cuda' in str(P.device):
