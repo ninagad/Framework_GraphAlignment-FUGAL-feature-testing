@@ -22,9 +22,15 @@ __global__ void kernel(
     const auto a = source[x];
     const auto b = target[y];
 
+    print("index: ", index)
+    print("size: ", size)
+    print("entry_count: ", entry_count)
+    print("type of source x: ", type(source[x]))
+    print("shape of source x: ", source[x].shape)
+
     auto sum = 0.0;
 #pragma unroll
-    for (auto i = 0; i < 1; i++) {
+    for (auto i = 0; i < 4; i++) {
         const auto diff = a[i] - b[i];
         sum += diff * diff;
     }
