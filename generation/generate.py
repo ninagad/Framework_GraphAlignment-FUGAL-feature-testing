@@ -35,7 +35,6 @@ def remove_e(edges, noise, no_disc=True, until_connected=False):
     ii = 0
     while True:
         ii += 1
-        print(f"##<{ii}>##")
 
         if no_disc:
             bin_count = np.bincount(edges.flatten())
@@ -53,7 +52,7 @@ def remove_e(edges, noise, no_disc=True, until_connected=False):
 
         graph = nx.Graph(new_edges.tolist())
         graph_cc = len(max(nx.connected_components(graph), key=len))
-        print(graph_cc, np.amax(edges)+1)
+        #print(graph_cc, np.amax(edges)+1)
         graph_connected = graph_cc == np.amax(edges) + 1
         # if not graph_connected:
         #     break
@@ -177,12 +176,10 @@ def generate_graphs(G, source_noise=0.00, target_noise=0.00, refill=False):
         print("B")
     elif isinstance(G, nx.Graph):
         Src_e = np.array(G.edges)
-        print("C")
     else:
-        print("D")
         return sps.csr_matrix([]), sps.csr_matrix([]), (np.empty(1), np.empty(1))
+
     if (np.amin(Src_e)!=0):
-        print("E")
         Src_e=Src_e-np.amin(Src_e)
     n = np.amax(Src_e) + 1
     nedges = Src_e.shape[0]
@@ -230,7 +227,6 @@ def init1(graphs, iters):
     #                     mode='r', shape=(len(graphs), iters))
 
     #     randcheck = path
-    print("init1")
     S_G = [
         [loadnx(graph_path) for _ in range(iters)] for graph_path in graphs
     ]
@@ -241,7 +237,6 @@ def init1(graphs, iters):
 # def init2(S_G, noises, _run, path=None):
 @ ex.capture
 def init2(S_G, noises):
-    print("init2")
     G = [
         [
             [

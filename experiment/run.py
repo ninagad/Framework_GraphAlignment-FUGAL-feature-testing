@@ -359,17 +359,17 @@ def run_exp(G, output_path, noises, _log, graph_names):
 
         for graph_number, g_n in enumerate(G):
 
-            _log.info("Graph:(%s/%s)", graph_number + 1, len(G))
-
             if wandb.run is not None:
                 global wandb_graph
                 wandb_graph = graph_names[graph_number]
+
+            _log.info(f"Graph:(%s/%s) - {graph_names[graph_number]}", graph_number + 1, len(G))
 
             time4 = []
             res5 = []
             for noise_level, g_it in enumerate(g_n):
 
-                _log.info("Noise_level:(%s/%s)", noise_level + 1, len(g_n))
+                _log.info(f"Noise_level:(%s/%s) - noise={noises[noise_level]}", noise_level + 1, len(g_n))
 
                 if wandb.run is not None:
                     global wandb_noiselvl

@@ -40,37 +40,7 @@ def generate_graphs(graph_name: str, noises: list[float], iterations: int):
     return source_graphs, target_graph_dict
 
 
-def log_artifact_and_save_accs(artifact: wandb.Artifact,
-                               artifact_file: str,
-                               artifact_name: str,
-                               graph_accs: dict,
-                               all_accs: list):
-    # Add file to wandb after writing to it in run.py
-    artifact.add_file(artifact_file)
 
-    # run summaries are logged as files in the Artifact object in run.py
-    wandb.run.log_artifact(run_file.artifact).wait()
-
-    # Access the logged artifact
-    artifact = wandb.run.use_artifact(f'{artifact_name}:latest')
-
-    # Download the artifact to a local folder
-    artifact_dir = artifact.download()
-
-    with open(os.path.join(artifact_dir, artifact_file), 'r') as f:
-        summary_dicts = json.load(f)
-        for dictionary in summary_dicts:
-            graph = dictionary['graph']
-            acc = dictionary['accuracy']
-
-            graph_accs[graph].append(acc)
-            # Append to all accs
-
-            all_accs.append(acc)
-
-    # Remove artifact file from local machine
-    if os.path.exists(artifact_file):
-        os.remove(artifact_file)
 
 
 def get_hyperparam_config(run: wandb.run):
@@ -189,7 +159,20 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
                                     # 'verbose': True
                                     })
 
-            log_artifact_and_save_accs(artifact, artifact_file, artifact_name, graph_accs, accs)
+            # Add file to wandb after writing to it in run.py
+            artifact.add_file(artifact_file)
+
+            # Open file locally and append accuracies
+            with open(artifact_file, 'r') as f:
+                summary_dicts = json.load(f)
+                for dictionary in summary_dicts:
+                    graph = dictionary['graph']
+                    acc = dictionary['accuracy']
+
+                    graph_accs[graph].append(acc)
+
+                    # Append to all accs
+                    accs.append(acc)
 
             # Log current cum. accuracy for early stopping purposes
             cum_acc = sum(accs)
@@ -198,7 +181,14 @@ def train(all_algs: list, feature_set: list[FeatureEnums]):
                            'sinkhorn_reg': sinkhorn_reg,
                            f'cum. accuracy': cum_acc})
 
+            # Remove artifact file from local machine
+            if os.path.exists(artifact_file):
+                os.remove(artifact_file)
+
         log_final_metrics(graphs, graph_accs, accs, run)
+
+        # run summaries are logged as files in the Artifact object in run.py
+        wandb.run.log_artifact(run_file.artifact).wait()
 
         run.finish()
 

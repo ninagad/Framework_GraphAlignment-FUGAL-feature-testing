@@ -250,7 +250,7 @@ def save_results(path, runtimes: np.array, results: np.array, components: pd.Dat
 
 @ex.automain
 def main(_run, _log, verbose, plot, nice=0, source_graphs=None, target_graphs=None):
-    print(f'{_run._id=}')
+
     _run.info['id'] = _run._id
     path = f"runs/{_run._id}"
 
