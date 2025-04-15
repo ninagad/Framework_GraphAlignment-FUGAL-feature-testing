@@ -109,6 +109,7 @@ def dense_gradient_with_prints(
         cuda_kernels.regularize(gradient, P, iteration)
     else:
         gradient += iteration - iteration * 2 * P
+    print("the first gradient: ", gradient)
     return gradient
 
 
@@ -183,8 +184,7 @@ def find_quasi_permutation_matrix(
     ones = torch.ones(A.shape[0], device=config.device, dtype=config.dtype)
     print("before optimization: QAP: ", torch.trace((A @ P @ B.T @ P.T)), " LAP: ", torch.trace(P.T @ D), " reg: ",
           torch.trace(P.T @ (ones - P)))
-    gradient_function = partial(dense_gradient, A, B)
-    print("the first gradient: ", gradient_function(P, features, 0, config))
+    print(dense_gradient_with_prints(A,B,P, features, 0, config))
     for λ in tqdm(range(config.iter_count), desc="λ"):
         for it in tqdm(range(1, config.frank_wolfe_iter_count + 1), desc="frank-wolfe", leave=False):
             start_time = TimeStamp(config.device)
