@@ -810,6 +810,7 @@ def convex_init(A, B, D, reg, nu, mu, niter):
 
         print("the gradient at lambda ", i, " is ", G[0,0])
         print("the P at lambda ", i, " is ", P[0, 0])
+        print("the sinkhorn at lambda ", i, " is ", q[0, 0])
 
     print("the last G: ", G[0,:10])
 
