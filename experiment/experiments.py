@@ -134,29 +134,29 @@ def tuning():
     #use_largest_connected_component = True
 
     tmp = [
-        #12, # Fugal
+        12, # Fugal
         # 20, # GrampaS (Grampa: 10)
         # 6, # IsoRank
         # 3, # REGAL
         #1,  # CONE
-        22, # cuGAL
+        #22, # cuGAL
         [
             {'features': x,
              'mu': 1,
              #'mu': 99,
              #'nu': 51,
              #'sinkhorn_reg': 0.002,
-             'sinkhorn_method': SinkhornMethod.STANDARD,
+             #'sinkhorn_method': SinkhornMethod.STANDARD,
              #'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
              #'pca': PCAEnums.NO_PCA,
              }
-            for x in [#[FeatureEnums.DEG], [FeatureEnums.CLUSTER] #, [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
+            for x in [[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER] #, [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.EGO_OUT_EDGES], [FeatureEnums.EGO_NEIGHBORS],  # NetSimile
                       #[FeatureEnums.SUM_EGO_DEG], [FeatureEnums.STD_EGO_DEG], [FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features on degrees
                       #[FeatureEnums.SUM_EGO_CLUSTER], [FeatureEnums.STD_EGO_CLUSTER], [FeatureEnums.RANGE_EGO_CLUSTER], [FeatureEnums.MIN_EGO_CLUSTER], [FeatureEnums.MAX_EGO_CLUSTER], [FeatureEnums.MEDIAN_EGO_CLUSTER], [FeatureEnums.SKEWNESS_EGO_CLUSTER], [FeatureEnums.KURTOSIS_EGO_CLUSTER], # Augmented clustering features
                       #[FeatureEnums.SUM_EGO_DEG], [FeatureEnums.STD_EGO_DEG], [FeatureEnums.MODE_EGO_DEGS], [FeatureEnums.MEDIAN_EGO_DEGS], [FeatureEnums.MIN_EGO_DEGS], [FeatureEnums.MAX_EGO_DEGS], [FeatureEnums.RANGE_EGO_DEGS], [FeatureEnums.SKEWNESS_EGO_DEGS], [FeatureEnums.KURTOSIS_EGO_DEGS],  # Statistical features on degrees
                       #[FeatureEnums.ASSORTATIVITY_EGO], [FeatureEnums.INTERNAL_FRAC_EGO],  # Other features
                       #[FeatureEnums.CLOSENESS_CENTRALITY], [FeatureEnums.DEGREE_CENTRALITY], [FeatureEnums.EIGENVECTOR_CENTRALITY], [FeatureEnums.PAGERANK],  # [Feature.KATZ_CENTRALITY], Centrality measures
-                      [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER] # Fugal
+                      #[FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER] # Fugal
                       # Feature.AVG_2HOP_DEG, Feature.AVG_2HOP_CLUSTER, Feature.TWOHOP_EDGES, Feature.TWOHOP_NEIGHBORS,  # 2-hop
                       # Feature.SUM_2HOP_CLUSTER, Feature.VAR_2HOP_CLUSTER, Feature.ASSORTATIVITY_2HOP, Feature.INTERNAL_FRAC_2HOP,  # 2-hop
                       # 'mode_2hop_degs', 'min_2hop_degs', 'kurtosis_2hop_degs', 'median_2hop_degs', 'max_2hop_degs',
@@ -227,11 +227,11 @@ def tuning():
 
     noises = [
         0.00,
-        0.05,
-        0.10,
-        0.15,
-        0.20,
-        0.25,
+        #0.05,
+        #0.10,
+        #0.15,
+        #0.20,
+        #0.25,
     ]
     # s_trans = (2, 1, 0, 3)
     # s_trans = (0, 2, 1, 3,4)

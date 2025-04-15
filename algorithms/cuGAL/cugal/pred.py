@@ -64,6 +64,11 @@ def dense_gradient(
         features.source *= lap_scalar
         features.target *= lap_scalar
 
+    D = features.distance_matrix()
+    ones = torch.ones(A.shape[0], device=config.device, dtype=config.dtype)
+    print("before optimization: QAP: ", np.trace((A @ P @ B.T @ P.T)), " LAP: ", np.trace(P.T @ D), " reg: ",
+          np.trace(P.T @ (ones - P)))
+
     gradient = -A.T @ P @ B - A @ P @ B.T
     gradient = add_feature_distance(gradient, features) + iteration*reg_scalar*(1 - 2*P)
     if has_cuda and 'cuda' in str(P.device):
@@ -256,6 +261,10 @@ def cugal(
     start_time = TimeStamp(config.device)
     #features = Features.create(source, target, config) # original cugal features
     features = Features_extensive.create(source, target, config, feature_names, scaling)
+
+    print("source: ", features.source[:4,:])
+    print("target: ", features.target[:4, :])
+
 
     if config.safe_mode:
         assert features.source.isfinite().all(), "source feature tensor has NaN values"

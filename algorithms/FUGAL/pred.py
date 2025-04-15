@@ -764,6 +764,8 @@ def convex_init(A, B, D, reg, nu, mu, niter):
     mat_ones = torch.ones((n, n), dtype=torch.float64)
     reg_scalar = 1
 
+    print("before optimization: QAP: ", np.trace((A @ P @ B.T @ P.T)), " LAP: ", np.trace(P.T @ D), " reg: ", np.trace(P.T @ (ones - P)))
+
     if nu is not None:
         # scaling of QAP
         qap_term = np.trace((A @ P @ B.T @ P.T))

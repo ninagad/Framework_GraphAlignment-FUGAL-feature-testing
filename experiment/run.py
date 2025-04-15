@@ -212,6 +212,7 @@ def preprocess(Src, Tar, gt, _run, addgt=False):
 @ex.capture
 def run_algs(g, algs, _log, _run, prep=False, circular=False):
     Src_e, Tar_e, Gt = g
+    print("Src_e: ", Src_e.tolist()[:10], "Tar_e: ", Tar_e.tolist()[:10])
     n = Gt[0].size
 
     # prefix = f"{output_path}/graphs/{graph_number+1:0>2d}_{noise_level+1:0>2d}_{i+1:0>2d}"
