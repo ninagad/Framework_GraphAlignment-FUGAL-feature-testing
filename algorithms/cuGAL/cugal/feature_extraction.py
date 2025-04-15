@@ -7,7 +7,6 @@ from dataclasses import dataclass
 from algorithms.FUGAL.pred import feature_extraction,eucledian_dist
 from enums.scalingEnums import ScalingEnums
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
-from sklearn.metrics.pairwise import euclidean_distances
 
 try:
     import cuda_kernels
@@ -125,10 +124,6 @@ class Features_extensive:
         source_features = feature_extraction(source, features, scaling)
         target_features = feature_extraction(target, features, scaling)
 
-        print("target features: ", target_features[0,:])
-        print(target_features.shape)
-        print("features: ", features)
-
         combined_features = np.vstack((source_features, target_features))
         n1 = source.number_of_nodes()
         n2 = target.number_of_nodes()
@@ -150,8 +145,6 @@ class Features_extensive:
 
         source_features = torch.tensor(combined_features[:n, :], device=config.device, dtype=config.dtype)
         target_features = torch.tensor(combined_features[n:, :], device=config.device, dtype=config.dtype)
-        print("target_features after: ", target_features[0,:])
-        print(target_features.shape)
 
         return cls(source_features, target_features)
 
@@ -165,5 +158,4 @@ class Features_extensive:
 
     def distance_matrix(self) -> torch.Tensor:
         """Calculate euclidean distance matrix."""
-        #return torch.cdist(self.source, self.target)
-        return euclidean_distances(self.source,self.target)
+        return torch.cdist(self.source, self.target)
