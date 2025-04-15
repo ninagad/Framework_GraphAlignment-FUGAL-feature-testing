@@ -34,7 +34,7 @@ def global_config():
 
     load = []
     plot = []
-    verbose=False
+    verbose = False
 
     run = [
         0,  # gwl
@@ -212,24 +212,27 @@ def playground():
     # noise_type = 2
 
 
-@ex.capture
-def runid(_run, _id):
-    return _id if _id > 0 else int(_run._id) + _id
-
-
 def load_path(_id):
-    return f"runs/{runid(_id)}"
+    return f"runs/{_id}"
 
 
 @ex.capture
 def get_graphs(load):
     if len(load) > 0:
-        S_G = pickle.load(open(f"{load_path(load[0])}/S_G.pickle", "rb"))
+        id = load[0]
+        if load[0] <= 0:
+            raise Exception('Load ids should be larger than 0')
+
+        S_G = pickle.load(open(f"runs/{id}/_S_G.pickle", "rb"))
     else:
         S_G = init1()
 
     if len(load) > 1:
-        G = pickle.load(open(f"{load_path(load[1])}/_G.pickle", "rb"))
+        id = load[1]
+        G = pickle.load(open(f"runs/{id}/_G.pickle", "rb"))
+
+        if load[1] <= 0:
+            raise Exception('Load ids should be larger than 0')
     else:
         G = init2(S_G)
 
@@ -247,6 +250,7 @@ def save_results(path, runtimes: np.array, results: np.array, components: pd.Dat
 
 @ex.automain
 def main(_run, _log, verbose, plot, nice=0, source_graphs=None, target_graphs=None):
+    print(f'{_run._id=}')
     _run.info['id'] = _run._id
     path = f"runs/{_run._id}"
 
