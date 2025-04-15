@@ -212,7 +212,7 @@ def tuning():
     #   (nx.gnp_random_graph, (2**15, 0.0003)),
     #    ]
 
-    graphs = rgraphs(graph_names)
+    graphs = get_graph_paths(graph_names)
 
     #graphs = [
         #(nx.erdos_renyi_graph, (10, 0.1)),
@@ -361,9 +361,9 @@ def real_noise():
     # s_trans = (3, 1, 2, 0, 4)
 
 
-def rgraphs(gnames):
+def get_graph_paths(gnames):
     return [
-        (gen.loadnx, (f"data/{name}.txt",)) for name in gnames
+        f"data/{name}.txt" for name in gnames
     ]
 
 
@@ -417,7 +417,7 @@ def real():
         # "ca-Erdos992",          # 6.1K  / 7.5K  / disc - 100 + 1k disc nodes
     ]
     print("done")
-    graphs = rgraphs(graph_names)
+    graphs = get_graph_paths(graph_names)
 
     noises = [
         0.00,

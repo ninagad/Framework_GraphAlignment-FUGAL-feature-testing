@@ -123,7 +123,6 @@ class FeatureEnums(Enum):
     # MISCELLANEOUS
     ASSORTATIVITY_EGO = 9
     INTERNAL_FRAC_EGO = 10
-    VAR_EGO_CLUSTER = 31
 
     # STATISTICAL on ego degrees
     SUM_EGO_DEG = 23
@@ -145,6 +144,8 @@ class FeatureEnums(Enum):
     RANGE_EGO_CLUSTER = 28
     SKEWNESS_EGO_CLUSTER = 29
     KURTOSIS_EGO_CLUSTER = 30
+    # For backwards compatibility
+    VAR_EGO_CLUSTER = 8
 
     # CENTRALITY
     CLOSENESS_CENTRALITY = 18

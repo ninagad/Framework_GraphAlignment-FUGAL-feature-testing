@@ -6,9 +6,6 @@ import numpy as np
 import networkx as nx
 import sys
 
-# Add the parent directory (project root) to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 from enums.graphEnums import GraphEnums
 from enums.featureEnums import FeatureEnums, FeatureExtensions
 from enums.scalingEnums import ScalingEnums

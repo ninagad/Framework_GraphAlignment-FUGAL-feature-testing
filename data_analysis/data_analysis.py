@@ -3,9 +3,6 @@ import pandas as pd
 import sys
 from enums.featureEnums import FeatureExtensions
 
-# Add the parent directory (project root) to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 from enums.featureEnums import FeatureExtensions
 
 

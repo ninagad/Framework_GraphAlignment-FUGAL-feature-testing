@@ -1,13 +1,17 @@
+import os
+import json
 import argparse
+import subprocess
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
-import os
-import json
+import numpy as np
 
 from enums.featureEnums import FeatureExtensions as FE
-from plot_utils import PlotUtils as PU
-import numpy as np
+from .plot_utils import PlotUtils as PU
+from data_analysis.utils import get_git_root
+
 
 def load_data(source: int, xaxis: str, yaxis: str) -> (pd.DataFrame, int, str, int):
     """
@@ -20,8 +24,8 @@ def load_data(source: int, xaxis: str, yaxis: str) -> (pd.DataFrame, int, str, i
         dataframe, mu, graph name and #iterations.
 
     """
-
-    server_runs_path = os.path.join((os.path.dirname(__file__)), 'Server-runs')
+    root_path = get_git_root()
+    server_runs_path = os.path.join(root_path, 'Server-runs')
     res_dir_path = os.path.join(server_runs_path, f'{source}')
     res_path = os.path.join(res_dir_path, 'res', f'{yaxis}.xlsx')
 
@@ -267,10 +271,12 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
     plt.grid(True)
 
     # Save plot
+    root_path = get_git_root()
     if mu is not None:
-        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}-run={source}.svg')
+        path = os.path.join(root_path, 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}-run={source}.svg')
     else:  # For other algorithms than FUGAL
-        path = os.path.join(os.path.dirname(__file__), 'plots', outputdir, f'{title}-{graph}-{yaxis}-run={source}.svg')
+        path = os.path.join(root_path, 'plots', outputdir, f'{title}-{graph}-{yaxis}-run={source}.svg')
+
     plt.savefig(path)
 
 

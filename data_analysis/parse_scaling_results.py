@@ -1,12 +1,8 @@
-import argparse
+import os
+
 import pandas as pd
 from tabulate import tabulate
-import sys
-import os
 import numpy as np
-
-# Add the parent directory (project root) to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from enums.featureEnums import FeatureExtensions
 

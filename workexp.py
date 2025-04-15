@@ -30,44 +30,47 @@ os.chdir(project_root)
 
 @ex.config
 def global_config():
-
     use_largest_connected_component: bool = False
 
-    run = [
-        0,      # gwl
-        1,      # conealign
-        2,      # grasp
-        3,      # regal
-        4,      # eigenalign
-        5,      # NSD
+    load = []
+    plot = []
+    verbose=False
 
-        6,      # isorank
+    run = [
+        0,  # gwl
+        1,  # conealign
+        2,  # grasp
+        3,  # regal
+        4,  # eigenalign
+        5,  # NSD
+
+        6,  # isorank
         # 7,      # netalign
         # 8,      # klaus
-        9,       #SGWL
-        10, #Grampa
-        11, #Grasp-B
-        12, #Fugal
-        13,#FAQ -approx
-        14,#GOT
-        15,#FGOT
-        16,#Parrot
-        17,#Path
-        18,#DS++
-        19,#MDS
-        #14, #GrampaS
-        #15,#Fugal2
-        
+        9,  # SGWL
+        10,  # Grampa
+        11,  # Grasp-B
+        12,  # Fugal
+        13,  # FAQ -approx
+        14,  # GOT
+        15,  # FGOT
+        16,  # Parrot
+        17,  # Path
+        18,  # DS++
+        19,  # MDS
+        # 14, #GrampaS
+        # 15,#Fugal2
+
     ]
 
     accs = [
-        0,      # acc
+        0,  # acc
         # 1,      # EC
         # 2,      # ICS
         # 3,      # S3
         # 4,      # jacc
         # 5,      # mnc
-        #6, #frob
+        # 6, #frob
     ]
 
     algs = [_algs[i] for i in run]
@@ -76,7 +79,7 @@ def global_config():
 
     if mall:
         algs = [
-            (alg, args, [1, 2, 3, 30, -1, -2, -3, -30,-96,96], algname) for alg, args, _, algname in algs
+            (alg, args, [1, 2, 3, 30, -1, -2, -3, -30, -96, 96], algname) for alg, args, _, algname in algs
         ]
 
     acc_names = [_acc_names[i] for i in accs]
@@ -107,7 +110,6 @@ def configg():
 
 @ex.named_config
 def playground():
-
     graph_names = [
         # "gnp",
         "barabasi",
@@ -170,7 +172,6 @@ def playground():
         # (nx.LFR_benchmark_graph, (1133, 2.75, 1.2,
         #                           0.2, 7, None, None, 3, 1100, 1e-07, 5000)),  # the 5k.. very desc + 331
 
-
         # (loadnx, ('data/arenas_old/source.txt',)),
         # (loadnx, ('data/in-arenas.txt',)),
         # (loadnx, ('data/soc-facebook.txt',)),
@@ -211,19 +212,53 @@ def playground():
     # noise_type = 2
 
 
-@ex.automain
-def main(_run, _log, verbose=False, load=[], plot=[], nice=0, mon=False):
+@ex.capture
+def runid(_run, _id):
+    return _id if _id > 0 else int(_run._id) + _id
 
+
+def load_path(_id):
+    return f"runs/{runid(_id)}"
+
+
+@ex.capture
+def get_graphs(load):
+    if len(load) > 0:
+        S_G = pickle.load(open(f"{load_path(load[0])}/S_G.pickle", "rb"))
+    else:
+        S_G = init1()
+
+    if len(load) > 1:
+        G = pickle.load(open(f"{load_path(load[1])}/_G.pickle", "rb"))
+    else:
+        G = init2(S_G)
+
+    return S_G, G
+
+
+def save_results(path, runtimes: np.array, results: np.array, components: pd.DataFrame):
+    np.save(f"{path}/_time5", runtimes)
+    np.save(f"{path}/_res6", results)
+
+    os.makedirs(f"{path}/res")
+    save(runtimes, results, f"{path}/res")
+    components.to_csv(f"{path}/res/components.csv")
+
+
+@ex.automain
+def main(_run, _log, verbose, plot, nice=0, source_graphs=None, target_graphs=None):
     _run.info['id'] = _run._id
     path = f"runs/{_run._id}"
 
-    def runid(_id):
-        return _id if _id > 0 else int(_run._id) + _id
+    if (source_graphs is not None) and (target_graphs is not None):
+        S_G = source_graphs
+        G = target_graphs
+    else:
+        S_G, G = get_graphs()
 
-    def load_path(_id):
-        return f"runs/{runid(_id)}"
+    pickle.dump(S_G, open(f"{path}/_S_G.pickle", "wb"))
+    pickle.dump(G, open(f"{path}/_G.pickle", "wb"))
 
-    # try:
     if not verbose:
         sys.stdout = open(os.devnull, 'w')
         sys.stderr = open(os.devnull, 'w')
@@ -234,74 +269,12 @@ def main(_run, _log, verbose=False, load=[], plot=[], nice=0, mon=False):
     except Exception:
         pass
 
-    # if mon:
-    #     # p = Process(target=monitor.monitor, args=(f"{path}/res",))
-    #     # p.start()
-    #     os.makedirs(f"{path}/mon")
-    #     proc = subprocess.Popen(
-    #         ['python', 'monitor.py', f"{path}/mon"], shell=False)
-
-    if len(load) > 0:
-        S_G = pickle.load(open(f"{load_path(load[0])}/_S_G.pickle", "rb"))
-        randcheck1 = runid(load[0])
-        # S_G, randcheck1 = init1(path=load_path(load[0]))
-    else:
-        S_G, randcheck1 = init1()
-
-    pickle.dump(S_G, open(f"{path}/_S_G.pickle", "wb"))
     if len(plot) > 0 and plot[0]:
         plotS_G(S_G)
 
-    if len(load) > 1:
-        G = pickle.load(open(f"{load_path(load[1])}/_G.pickle", "rb"))
-        randcheck2 = runid(load[1])
-        # G, randcheck2 = init2(S_G, path=load_path(load[1]))
-    else:
-        G, randcheck2 = init2(S_G)
-
-    pickle.dump(G, open(f"{path}/_G.pickle", "wb"))
     if len(plot) > 1 and plot[1]:
         plot_G(G)
 
-    # gg = np.array(G)
+    time5, res6, components_df = run_exp(G, path)
 
-    # print(gg.shape)
-
-    # G = gg[:1, :, :1, :].tolist()
-
-    # exit()
-
-    randcheck = (randcheck1, randcheck2)
-    _log.info("randcheck: %s", randcheck)
-    open(f"{path}/_randcheck.txt", "w").write(str(randcheck))
-
-    if len(load) > 2:
-        time5 = np.load(f"{load_path(load[2])}/_time5.npy")
-        res6 = np.load(f"{load_path(load[2])}/_res6.npy")
-        components_df = pd.DataFrame()
-        # time = np.load(f"{load_path(load[2])}/_time4.npy")
-        # time = np.expand_dims(time, axis=0)
-        # time6 = np.expand_dims(time, axis=0)
-        # res = np.load(f"{load_path(load[2])}/_res5.npy")
-        # res = np.expand_dims(res, axis=0)
-        # res6 = np.expand_dims(res, axis=0)
-    else:
-        time5, res6, components_df = run_exp(G, path)
-
-    np.save(f"{path}/_time5", time5)
-    np.save(f"{path}/_res6", res6)
-
-    os.makedirs(f"{path}/res")
-    save(time5, res6, f"{path}/res")
-    components_df.to_csv(f"{path}/res/components.csv")
-
-    # if mon:
-    #     proc.send_signal(signal.SIGINT)
-    # p.terminate()
-
-    # while True:
-    #     pass
-
-    # except Exception:
-    #     _log.exception("")
-    #     raise
+    save_results(path, time5, res6, components_df)

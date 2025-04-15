@@ -2,6 +2,8 @@ import subprocess
 import os
 import sys
 import argparse
+
+from data_analysis.utils import get_git_root
 from enums.graphEnums import GraphEnums
 
 
@@ -46,10 +48,12 @@ class PlotGenerator():
     @staticmethod
     def activate_venv():
         """Activate the virtual environment in a cross-platform way."""
+
+        root_path = get_git_root()
         if os.name == "nt":  # Windows
-            venv_python = os.path.join("venv", "Scripts", "python.exe")
+            venv_python = os.path.join(root_path, "venv", "Scripts", "python.exe")
         else:  # macOS/Linux
-            venv_python = os.path.join("venv", "bin", "python")
+            venv_python = os.path.join(root_path, "venv", "bin", "python")
 
         # Ensure the virtual environment exists
         if not os.path.exists(venv_python):

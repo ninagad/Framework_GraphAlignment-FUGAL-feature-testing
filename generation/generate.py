@@ -4,6 +4,7 @@ import networkx as nx
 import scipy.sparse as sps
 from scipy.io import mmread
 
+
 def refill_e(edges, n, amount):
     if amount == 0:
         return edges
@@ -84,7 +85,7 @@ def get_largest_connected_component(G: nx.Graph) -> nx.Graph:
 
 
 @ex.capture
-def loadnx(path, use_largest_connected_component: bool):
+def loadnx(path, use_largest_connected_component: bool=False):
     #G_e = np.loadtxt(path, int)
     #G = nx.Graph(G_e.tolist())
 
@@ -231,33 +232,15 @@ def init1(graphs, iters):
     #     randcheck = path
     print("init1")
     S_G = [
-        [alg(*args) for _ in range(iters)] for alg, args in graphs
+        [loadnx(graph_path) for _ in range(iters)] for graph_path in graphs
     ]
 
-    return S_G, np.random.rand(1)[0]
+    return S_G
 
 
 # def init2(S_G, noises, _run, path=None):
 @ ex.capture
 def init2(S_G, noises):
-
-    # if path is None:
-    #     G = np.memmap(f"runs/{_run._id}/_G.dat", dtype=object,
-    #                   mode='w+', shape=(S_G.shape[0], len(noises), S_G.shape[1]))
-
-    #     for i, gi in enumerate(S_G):
-    #         for j, noise in enumerate(noises):
-    #             for k, g in enumerate(gi):
-    #                 G[i, j, k] = generate_graphs(g, **noise_types(noise))
-    #                 G.flush()
-
-    #     randcheck = np.random.rand(1)[0]
-
-    # else:
-    #     G = np.memmap(f"{path}/_S_G.dat", dtype=object,
-    #                   mode='r', shape=(S_G.shape[0], len(noises), S_G.shape[1]))
-
-    #     randcheck = path
     print("init2")
     G = [
         [
@@ -267,4 +250,4 @@ def init2(S_G, noises):
         ] for gi in S_G
     ]
 
-    return G, np.random.rand(1)[0]
+    return G
