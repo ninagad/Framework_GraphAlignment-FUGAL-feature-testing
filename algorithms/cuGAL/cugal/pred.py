@@ -72,6 +72,45 @@ def dense_gradient(
         gradient += iteration - iteration * 2 * P
     return gradient
 
+def dense_gradient_with_prints(
+    A: torch.Tensor,
+    B: torch.Tensor,
+    P: torch.Tensor,
+    features: torch.Tensor | Features,
+    iteration: int,
+    config: Config
+) -> torch.Tensor:
+    reg_scalar = 1
+
+
+    if config.nu is not None:
+        # scaling of QAP
+        print("Entered not none nu")
+        ones = torch.ones(A.shape[0], device=config.device, dtype=config.dtype)
+        D = features.distance_matrix()
+
+        qap_term = torch.trace((A @ P @ B.T @ P.T))
+        lap_term = torch.trace(P.T @ D)
+        reg_term = torch.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
+
+        qap_scalar = config.nu * (1 / qap_term)
+        lap_scalar = config.mu * (1 / lap_term)
+        reg_scalar = 1 / reg_term
+        A = A * qap_scalar
+        features.source *= lap_scalar
+        features.target *= lap_scalar
+    D = features.distance_matrix()
+    print("the first QAP1: ", (-A.T @ P @ B )[0, :10], " QAP2: ",
+          (- A @ P @ B.T)[0, :10], " LAP: ", config.mu * D[0, :10])
+
+    gradient = -A.T @ P @ B - A @ P @ B.T
+    gradient = add_feature_distance(gradient, features) + iteration*reg_scalar*(1 - 2*P)
+    if has_cuda and 'cuda' in str(P.device):
+        cuda_kernels.regularize(gradient, P, iteration)
+    else:
+        gradient += iteration - iteration * 2 * P
+    return gradient
+
 
 def sparse_gradient(
     A, B: Adjacency,
