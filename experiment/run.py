@@ -307,7 +307,7 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
                 # Terminate script immediately so the next value of mu is used
                 sys.exit(1)
 
-            summary_dict = {'algorithm': alg[0],
+            summary_dict = {'algorithm': (alg[0]).__name__,
                             'nu': wandb_nu,
                             'mu': wandb_mu,
                             'sinkhorn_reg': wandb_sinkhorn_reg,
