@@ -1,0 +1,23 @@
+method: bayes
+
+early_terminate:
+  type: hyperband
+  min_iter: 2
+
+metric:
+  name: cum. accuracy
+  goal: maximize
+
+parameters:
+  sinkhorn_reg:
+    value: 0.1  # TODO: get fixed value from tuning of reg
+  nu:
+    min: 0
+    max: 500
+    distribution: q_uniform
+    q: 0.01
+  mu:
+    min: 0
+    max: 500
+    distribution: q_uniform
+    q: 0.01

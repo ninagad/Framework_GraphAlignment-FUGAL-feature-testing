@@ -1,20 +1,23 @@
+# std lib imports
+import os
 import copy
 import json
-
-import numpy as np
-import wandb
 import traceback
 import logging
-import sys
-import os
 
-import workexp
-from experiment.experiments import alggs as get_run_list, _algs
+import argparse
+# lib imports
+import wandb
+import yaml
+
+# local imports
 from enums.scalingEnums import ScalingEnums
 from enums.featureEnums import FeatureEnums
+import workexp
+from experiment.experiments import alggs as get_run_list, _algs
 from experiment import run as run_file
-
 from generation.generate import init1, init2
+
 
 graphs = ["bio-celegans",
           "ca-netscience",
@@ -26,6 +29,23 @@ noises = [0.25, 0.20, 0.15, 0.10, 0.05, 0]
 
 iterations = 5
 
+all_features = [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER,
+                   # Cluster coefficient augmented
+                   FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER,
+                   FeatureEnums.RANGE_EGO_CLUSTER, FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MAX_EGO_CLUSTER,
+                   FeatureEnums.SKEWNESS_EGO_CLUSTER, FeatureEnums.KURTOSIS_EGO_CLUSTER,
+                   # Net simile
+                   FeatureEnums.EGO_EDGES, FeatureEnums.EGO_OUT_EDGES, FeatureEnums.EGO_NEIGHBORS,
+                   # Miscellaneous
+                   FeatureEnums.ASSORTATIVITY_EGO, FeatureEnums.INTERNAL_FRAC_EGO,
+                   # degree augmented
+                   FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG,
+                   FeatureEnums.MODE_EGO_DEGS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.MIN_EGO_DEGS,
+                   FeatureEnums.MAX_EGO_DEGS, FeatureEnums.RANGE_EGO_DEGS, FeatureEnums.SKEWNESS_EGO_DEGS,
+                   FeatureEnums.KURTOSIS_EGO_DEGS,
+                   # Centrality measures
+                   FeatureEnums.CLOSENESS_CENTRALITY, FeatureEnums.DEGREE_CENTRALITY,
+                   FeatureEnums.EIGENVECTOR_CENTRALITY, FeatureEnums.PAGERANK]
 
 def generate_graphs(graph_name: str):
     """
@@ -78,13 +98,13 @@ def log_final_metrics(graph_accs: dict, accs: list, run: wandb.run):
 
     # Log avg accuracy for each graph
     for graph in graphs:
-        accs = graph_accs[graph]
-        avg_acc = sum(accs) / len(accs)
+        graph_accs = graph_accs[graph]
+        graph_avg_acc = sum(graph_accs) / len(graph_accs)
 
         wandb.run.log({'nu': nu,
                        'mu': mu,
                        'sinkhorn_reg': sinkhorn_reg,
-                       f'{graph} avg. acc': avg_acc})
+                       f'{graph} avg. acc': graph_avg_acc})
 
     # Log average accuracy across all graphs
     avg_acc = sum(accs) / len(accs)
@@ -96,10 +116,14 @@ def log_final_metrics(graph_accs: dict, accs: list, run: wandb.run):
              })
 
 
-def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums]):
+def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums], log_stabilized: bool = True):
     nu, mu, sinkhorn_reg = get_hyperparam_config(run)
 
-    alg_id = 12  # FUGAL
+    if log_stabilized:
+        alg_id = 22  # cuGAL with log stabilized (default)
+    else:
+        alg_id = 12  # FUGAL
+
     args_lst = [
         {'features': features,
          'nu': nu,
@@ -132,7 +156,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
         run_lst = setup_fugal(run, all_algs, feature_set)
 
         # Used to log overall avg acc and graph-wise avg. acc.
-        accs = []
+        all_accs = []
         graph_accs = {graph: [] for graph in graphs}
 
         for noise in noises:
@@ -169,10 +193,10 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
                     graph_accs[graph].append(acc)
 
                     # Append to all accs
-                    accs.append(acc)
+                    all_accs.append(acc)
 
             # Log current cum. accuracy for early stopping purposes
-            cum_acc = sum(accs)
+            cum_acc = sum(all_accs)
             wandb.run.log({'nu': nu,
                            'mu': mu,
                            'sinkhorn_reg': sinkhorn_reg,
@@ -182,7 +206,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
             if os.path.exists(artifact_file):
                 os.remove(artifact_file)
 
-        log_final_metrics(graph_accs, accs, run)
+        log_final_metrics(graph_accs, all_accs, run)
 
         # run summaries are logged as files in the Artifact object in run.py
         wandb.run.log_artifact(run_file.artifact).wait()
@@ -195,33 +219,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
         run.finish(exit_code=1)
 
 
-def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureEnums]):
-    sweep_config = {
-        "method": "bayes",  # Bayesian optimization for mu
-        "early_terminate": {'type': 'hyperband',
-                            'min_iter': 2,  # Start early termination after 2 noise levels.
-                            },
-        "metric": {"name": "cum. accuracy", "goal": "maximize"},
-        "parameters": {
-            "nu":
-                {"min": 0,
-                 "max": 500,
-                 'distribution': 'q_uniform',
-                 "q": 0.01  # Restrict to 2 decimal precision
-                 },
-            "mu":
-                {"min": 0,
-                 "max": 500,
-                 'distribution': 'q_uniform',
-                 "q": 0.01  # Restrict to 2 decimal precision
-                 },
-            "sinkhorn_reg": {"min": 0.001,
-                             "max": 0.1,
-                             "distribution": 'q_uniform',
-                             "q": 0.0001  # 4 decimal precision
-                             },
-        }
-    }
+def initialize_sweep(sweep_config: dict, all_algs: list, sweep_name: str, feature_set: list[FeatureEnums]):
 
     sweep_id = wandb.sweep(sweep_config, project=sweep_name)
 
@@ -229,34 +227,35 @@ def initialize_sweep(all_algs: list, sweep_name: str, feature_set: list[FeatureE
 
     wandb.agent(sweep_id,
                 function=lambda: train(all_algs, feature_set, source_graphs, target_graphs),
-                count=150
+                count=50
                 )
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--tune',
+                        choices=['reg', 'nu_and_mu'],
+                        default='nu_and_mu')
+
+    args = parser.parse_args()
+    tune = args.tune
+
     all_algs = copy.copy(_algs)
 
+    # Load sweep config
+    config_file = 'nu_mu_config.yaml' if tune == "nu_and_mu" else 'reg_config.yaml'
+    path = os.path.join('tuning_configs', config_file)
+
+    with open(path) as f:
+        sweep_config = yaml.safe_load(f)
+
+    # Select features
     # feature_set = [FeatureEnums.DEG]
     # project_name = "mu-tuning-for-degree"
 
-    feature_set = [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER,
-                   # Cluster coefficient augmented
-                   FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER,
-                   FeatureEnums.RANGE_EGO_CLUSTER, FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MAX_EGO_CLUSTER,
-                   FeatureEnums.SKEWNESS_EGO_CLUSTER, FeatureEnums.KURTOSIS_EGO_CLUSTER,
-                   # Net simile
-                   FeatureEnums.EGO_EDGES, FeatureEnums.EGO_OUT_EDGES, FeatureEnums.EGO_NEIGHBORS,
-                   # Miscellaneous
-                   FeatureEnums.ASSORTATIVITY_EGO, FeatureEnums.INTERNAL_FRAC_EGO,
-                   # degree augmented
-                   FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG,
-                   FeatureEnums.MODE_EGO_DEGS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.MIN_EGO_DEGS,
-                   FeatureEnums.MAX_EGO_DEGS, FeatureEnums.RANGE_EGO_DEGS, FeatureEnums.SKEWNESS_EGO_DEGS,
-                   FeatureEnums.KURTOSIS_EGO_DEGS,
-                   # Centrality measures
-                   FeatureEnums.CLOSENESS_CENTRALITY, FeatureEnums.DEGREE_CENTRALITY,
-                   FeatureEnums.EIGENVECTOR_CENTRALITY, FeatureEnums.PAGERANK]
-
+    feature_set = all_features
     project_name = "nu-mu-reg-tuning-all-features"
 
-    initialize_sweep(all_algs, project_name, feature_set)
+    # Initialize run
+    initialize_sweep(sweep_config, all_algs, project_name, feature_set)

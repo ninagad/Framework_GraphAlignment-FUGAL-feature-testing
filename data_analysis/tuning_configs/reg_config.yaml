@@ -1,0 +1,20 @@
+method: bayes
+
+early_terminate:
+  type: hyperband
+  min_iter: 2
+
+metric:
+  name: cum. accuracy
+  goal: maximize
+
+parameters:
+  nu:
+    value: 1
+  mu:
+    value: 1
+  sinkhorn_reg:
+    min: 0.001
+    max: 1
+    distribution: q_uniform
+    q: 0.0001
