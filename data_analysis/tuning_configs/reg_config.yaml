@@ -10,7 +10,7 @@ metric:
 
 parameters:
   nu:
-    value: 1
+    value: None
   mu:
     value: 1
   sinkhorn_reg:
