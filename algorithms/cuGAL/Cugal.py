@@ -52,7 +52,9 @@ def main(data,
         hungarian_method=hungarian,
         #lambda_func=lambda_func,
     )
-    
+
+    print("nu: ", nu)
+
     Src = data['Src']
     Tar = data['Tar']
     for i in range(Src.shape[0]):
