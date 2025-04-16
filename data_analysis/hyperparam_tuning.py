@@ -10,6 +10,7 @@ import argparse
 import wandb
 import yaml
 
+from data_analysis.utils import get_git_root
 # local imports
 from enums.scalingEnums import ScalingEnums
 from enums.featureEnums import FeatureEnums
@@ -245,7 +246,8 @@ if __name__ == "__main__":
 
     # Load sweep config
     config_file = 'nu_mu_config.yaml' if tune == "nu_and_mu" else 'reg_config.yaml'
-    path = os.path.join('tuning_configs', config_file)
+    root = get_git_root()
+    path = os.path.join(root, 'data_analysis', 'tuning_configs', config_file)
 
     with open(path) as f:
         sweep_config = yaml.safe_load(f)
@@ -255,7 +257,7 @@ if __name__ == "__main__":
     # project_name = "mu-tuning-for-degree"
 
     feature_set = all_features
-    project_name = "nu-mu-reg-tuning-all-features"
+    project_name = "reg-tuning-all-features"
 
     # Initialize run
     initialize_sweep(sweep_config, all_algs, project_name, feature_set)
