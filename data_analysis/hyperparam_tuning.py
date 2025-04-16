@@ -258,6 +258,6 @@ if __name__ == "__main__":
 
     feature_set = all_features
     project_name = "reg-tuning-all-features"
-    project_name = 'testing'
+
     # Initialize run
     initialize_sweep(sweep_config, all_algs, project_name, feature_set)
