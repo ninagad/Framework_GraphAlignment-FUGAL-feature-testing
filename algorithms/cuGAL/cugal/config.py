@@ -69,7 +69,7 @@ class Config:
     mu: float = 0.5
     """The contribution of node features in finding the alignment."""
 
-    nu: float = 0.5
+    nu: float = None
     """The contribution of node features in finding the alignment."""
 
     scaling: ScalingEnums = ScalingEnums.NO_SCALING
