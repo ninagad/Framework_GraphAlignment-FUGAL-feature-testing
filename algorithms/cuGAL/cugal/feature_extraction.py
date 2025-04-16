@@ -6,7 +6,9 @@ from algorithms.cuGAL.cugal.config import Config
 from dataclasses import dataclass
 from algorithms.FUGAL.pred import feature_extraction,eucledian_dist
 from enums.scalingEnums import ScalingEnums
+from enums.pcaEnums import PCAEnums
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
+from sklearn.decomposition import PCA
 
 try:
     import cuda_kernels
@@ -118,7 +120,7 @@ class Features_extensive:
     target: torch.Tensor
 
     @classmethod
-    def create(cls, source: nx.Graph | Adjacency, target: nx.Graph | Adjacency, config: Config, features: list, scaling: ScalingEnums):
+    def create(cls, source: nx.Graph | Adjacency, target: nx.Graph | Adjacency, config: Config, features: list, scaling: ScalingEnums, pca: PCAEnums):
         #use_cuda = has_cuda and 'cuda' in config.device
 
         source_features = feature_extraction(source, features, scaling)
@@ -128,6 +130,13 @@ class Features_extensive:
         n1 = source.number_of_nodes()
         n2 = target.number_of_nodes()
         n = max(n1, n2)
+
+        if pca != PCAEnums.NO_PCA:
+            scaler = StandardScaler()
+            standardized_features = scaler.fit_transform(combined_features)
+            pca_obj = PCA(n_components=pca.value)
+            principal_components = pca_obj.fit_transform(standardized_features)
+            combined_features = principal_components
 
         if scaling == ScalingEnums.COLLECTIVE_STANDARDIZATION:
             # Standardization

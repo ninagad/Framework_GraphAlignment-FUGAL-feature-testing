@@ -42,6 +42,8 @@ def main(data,
         iter_count=iter,
         mu=mu,
         nu=nu,
+        scaling=scaling,
+        pca=pca,
         use_sparse_adjacency=sparse,
         #sinkhorn_cache_size=cache,
         sinkhorn_regularization=sinkhorn_reg,
@@ -75,13 +77,12 @@ def main(data,
         # Override scaling to have no scaling bc we standardize before applying PCA
         scaling = ScalingEnums.NO_SCALING
 
-    
     profile = Profile()
 
     #if use_fugal:
     #    P, mapping = fugal(Src1, Tar1, mu, iter, config, profile)
     #else:
-    P, mapping = cugal(Src1, Tar1, features, scaling, config, profile)
+    P, mapping = cugal(Src1, Tar1, features, scaling, pca, config, profile)
     #print("Sinkhorn threshold: ", config.sinkhorn_threshold)
     #print("Max Sinkhorn iterations: ", np.max([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))
     #print("Mean Sinkhorn iterations: ", np.mean([sinkhorn_profile.iteration_count for sinkhorn_profile in profile.sinkhorn_profiles]))

@@ -4,6 +4,8 @@ from dataclasses import dataclass
 import dataclasses
 from enum import Enum
 from typing import Optional
+from enums.pcaEnums import PCAEnums
+from enums.scalingEnums import ScalingEnums
 
 import torch
 
@@ -49,7 +51,7 @@ class Config:
 
     Higher values can help with numeric stability, but can lower accuracy."""
 
-    sinkhorn_method: SinkhornMethod = SinkhornMethod.STANDARD
+    sinkhorn_method: SinkhornMethod = SinkhornMethod.LOG
     """The version of Sinkhorn used."""
 
     sinkhorn_iterations: int = 500
@@ -69,6 +71,12 @@ class Config:
 
     nu: float = 0.5
     """The contribution of node features in finding the alignment."""
+
+    scaling: ScalingEnums = ScalingEnums.NO_SCALING
+    """The scaling of the features."""
+
+    pca: PCAEnums = PCAEnums.NO_PCA
+    """The PCA method used."""
 
     iter_count: int = 15
     """The number of iterations to perform."""

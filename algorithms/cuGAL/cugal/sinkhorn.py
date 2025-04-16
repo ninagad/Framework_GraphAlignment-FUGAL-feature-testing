@@ -130,10 +130,9 @@ class SinkhornState:
         config: Config,
         profile=SinkhornProfile(),
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        C = (C - C.min()) / (C.max() - C.min())  # min max normalize the gradient
         match config.sinkhorn_method:
             case SinkhornMethod.LOG:
                 return self.solve_log(C, config, profile)
             case SinkhornMethod.STANDARD:
-                #if config.nu is not None:
-                #    C = (C - C.min()) / (C.max() - C.min()) # min max normalize the gradient
                 return self.solve_standard(C, config, profile)

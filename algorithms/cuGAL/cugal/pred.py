@@ -20,6 +20,7 @@ from algorithms.cuGAL.cugal.profile import Profile, Phase, SinkhornProfile, Time
 from algorithms.cuGAL.cugal.feature_extraction import Features, Features_extensive
 from algorithms.cuGAL.cugal.sinkhorn import SinkhornState
 from enums.scalingEnums import ScalingEnums
+from enums.pcaEnums import PCAEnums
 
 try:
     import cuda_kernels
@@ -232,6 +233,7 @@ def cugal(
     target: nx.Graph,
     feature_names: list,
     scaling: ScalingEnums,
+    pca: PCAEnums,
     config: Config,
     profile=Profile(),
 ) -> tuple[np.array, list[tuple[int, int]]]:
@@ -254,7 +256,7 @@ def cugal(
     # Feature extraction.
     start_time = TimeStamp(config.device)
     #features = Features.create(source, target, config) # original cugal features
-    features = Features_extensive.create(source, target, config, feature_names, scaling)
+    features = Features_extensive.create(source, target, config, feature_names, scaling, pca)
 
     if config.safe_mode:
         assert features.source.isfinite().all(), "source feature tensor has NaN values"
