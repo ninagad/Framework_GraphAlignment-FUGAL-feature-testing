@@ -87,7 +87,13 @@ def generate_all_graph():
 
 def get_hyperparam_config(run: wandb.run):
     config = run.config
-    nu = config.nu
+
+    try:
+        nu = config.nu
+    except:
+        config.nu = None
+        nu = None
+
     mu = config.mu
     reg = config.sinkhorn_reg
 
@@ -206,6 +212,10 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
             # Remove artifact file from local machine
             if os.path.exists(artifact_file):
                 os.remove(artifact_file)
+
+            if run._settings._early_terminate:
+                print("Early termination requested — exiting loop.")
+                break
 
         log_final_metrics(graph_accs, all_accs, run)
 

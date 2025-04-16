@@ -9,8 +9,6 @@ metric:
   goal: maximize
 
 parameters:
-  nu:
-    value: None
   mu:
     value: 1
   sinkhorn_reg:
