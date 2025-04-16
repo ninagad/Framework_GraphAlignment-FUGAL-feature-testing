@@ -213,10 +213,6 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
             if os.path.exists(artifact_file):
                 os.remove(artifact_file)
 
-            if run._settings._early_terminate:
-                print("Early termination requested — exiting loop.")
-                break
-
         log_final_metrics(graph_accs, all_accs, run)
 
         # run summaries are logged as files in the Artifact object in run.py
