@@ -764,8 +764,6 @@ def convex_init(A, B, D, reg, nu, mu, niter):
     mat_ones = torch.ones((n, n), dtype=torch.float64)
     reg_scalar = 1
 
-    print("before optimization: QAP: ", np.trace((A @ P @ B.T @ P.T)), " LAP: ", np.trace(P.T @ D), " reg: ", np.trace(P.T @ (ones - P)))
-
     if nu is not None:
         # scaling of QAP
         qap_term = np.trace((A @ P @ B.T @ P.T))
@@ -785,9 +783,7 @@ def convex_init(A, B, D, reg, nu, mu, niter):
         # print('QAP term after scaling: ', np.trace((A @ P @ B.T @ P.T)))
         # print('LAP term after scaling: ', np.trace(P.T @ D))
         # print('reg term after scaling: ', reg_scalar*np.trace(P.T @ (ones - P)))
-    #print("the first G: ", -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + mu * D + 0 * (
-    #                    mat_ones - 2 * P))
-    #print("the first QAP1: ", (-(torch.mm(torch.mm(A.T, P), B)))[0,:10], " QAP2: ", (- (torch.mm(torch.mm(A, P), B.T)))[0,:10], " LAP: ", mu * D[0,:10])
+
     for i in range(niter):  # TODO: optimize lambda later for efficiency
         for it in range(1, 11):
             if nu is not None:
@@ -807,12 +803,6 @@ def convex_init(A, B, D, reg, nu, mu, niter):
             q = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
-
-        print("the gradient at lambda ", i, " is ", G[0,0])
-        print("the P at lambda ", i, " is ", P[0, 0])
-        print("the sinkhorn at lambda ", i, " is ", q[0, 0])
-
-    print("the last G: ", G[0,:10])
 
     # QAP_term = np.trace((A @ P @ B.T @ P.T))
     # LAP_term = mu * np.trace(P.T @ D)

@@ -101,15 +101,10 @@ def update_quasi_permutation(
 ) -> torch.Tensor:
     scale = sinkhorn.scale_kernel_matrix_log if \
         sinkhorn_method == SinkhornMethod.LOG else sinkhorn.scale_kernel_matrix
-    #print("scale: ", scale)
     q = scale(K, u, v)
-    #print("q: ", q)
     q -= P
-    #print("q: ", q)
     q *= alpha
-    #print("q: ", q)
     P += q
-    #print("P: ", P)
     return q
 
 
@@ -175,11 +170,7 @@ def find_quasi_permutation_matrix(
 
             if not config.use_sinkhorn_warm_start:
                 sinkhorn_state = SinkhornState(n, config)
-        print("gradient at lambda ", λ, " is ", gradient[0,0])
-        print("P at lambda ", λ, " is ", P[0, 0])
-        print("sinkhorn at lambda ", λ, " is ", (u.reshape(-1, 1) * K * v.reshape(1, -1))[0,0])
 
-    print("the last gradient: ", gradient[0, :10])
     return P
 
 

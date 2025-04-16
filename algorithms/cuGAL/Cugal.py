@@ -50,10 +50,6 @@ def main(data,
         hungarian_method=hungarian,
         #lambda_func=lambda_func,
     )
-    print("cuGAL")
-    print("mu: ", mu, " nu: ", nu)
-    print("method: ", sinkhorn_method)
-    print("reg: ", sinkhorn_reg)
     
     Src = data['Src']
     Tar = data['Tar']
@@ -82,8 +78,6 @@ def main(data,
     
     profile = Profile()
 
-    print("source graph: ", Src[0,:10], " target graph: ", Tar[0,:10])
-
     #if use_fugal:
     #    P, mapping = fugal(Src1, Tar1, mu, iter, config, profile)
     #else:
@@ -98,7 +92,5 @@ def main(data,
         #for sp in profile.sinkhorn_profiles:
             #if not sp.res_matrix is None:
             #    np.savetxt(path + 'sinkhorn_' + str(sp.iteration_count) + '.csv', sp.res_matrix.numpy(), delimiter=',')
-
-    print("The resulting souble stochastic matrix: ", P[0, :10])
 
     return P
