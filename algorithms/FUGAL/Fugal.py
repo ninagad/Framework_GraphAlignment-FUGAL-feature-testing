@@ -33,7 +33,7 @@ def are_matrices_equal(matrix1, matrix2):
     return True
 
 
-def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling: ScalingEnums, pca: PCAEnums, EFN=5):
+def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling: ScalingEnums, pca_components: int):
     print("Fugal")
     torch.set_num_threads(40)
     dtype = np.float64
@@ -59,7 +59,7 @@ def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling
     A = torch.tensor((Src), dtype = torch.float64)
     B = torch.tensor((Tar), dtype = torch.float64)
 
-    if pca != PCAEnums.NO_PCA:
+    if pca_components is not None:
         # Override scaling to have no scaling bc we standardize before applying PCA
         scaling = ScalingEnums.NO_SCALING
 
@@ -67,10 +67,10 @@ def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling
     F2 = feature_extraction(Tar1, features, scaling)
     combined_features = np.vstack((F1,F2))
 
-    if pca != PCAEnums.NO_PCA:
+    if pca_components is not None:
         scaler = StandardScaler()
         standardized_features = scaler.fit_transform(combined_features)
-        pca_obj = PCA(n_components=pca.value)
+        pca_obj = PCA(n_components=pca_components)
         principal_components = pca_obj.fit_transform(standardized_features)
         combined_features = principal_components
 

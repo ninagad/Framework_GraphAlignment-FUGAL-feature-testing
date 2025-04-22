@@ -94,23 +94,29 @@ def get_hyperparam_config(run: wandb.run):
         config.nu = None
         nu = None
 
+    try:
+        pca_components = config.components
+    except:
+        pca_components = None
+
     mu = config.mu
     reg = config.sinkhorn_reg
 
-    return nu, mu, reg
+    return nu, mu, reg, pca_components
 
 
-def log_final_metrics(graph_accs: dict, accs: list, run: wandb.run):
-    nu, mu, sinkhorn_reg = get_hyperparam_config(run)
+def log_final_metrics(graph_accs_dict: dict, accs: list, run: wandb.run):
+    nu, mu, sinkhorn_reg, pca_components = get_hyperparam_config(run)
 
     # Log avg accuracy for each graph
     for graph in graphs:
-        graph_accs = graph_accs[graph]
+        graph_accs = graph_accs_dict[graph]
         graph_avg_acc = sum(graph_accs) / len(graph_accs)
 
         wandb.run.log({'nu': nu,
                        'mu': mu,
                        'sinkhorn_reg': sinkhorn_reg,
+                       'pca_components': pca_components,
                        f'{graph} avg. acc': graph_avg_acc})
 
     # Log average accuracy across all graphs
@@ -119,12 +125,13 @@ def log_final_metrics(graph_accs: dict, accs: list, run: wandb.run):
     run.log({'nu': nu,
              'mu': mu,
              'sinkhorn_reg': sinkhorn_reg,
+             'pca_components': pca_components,
              'avg. accuracy': avg_acc,
              })
 
 
 def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums], log_stabilized: bool = True):
-    nu, mu, sinkhorn_reg = get_hyperparam_config(run)
+    nu, mu, sinkhorn_reg, pca_components = get_hyperparam_config(run)
 
     if log_stabilized:
         alg_id = 22  # cuGAL with log stabilized (default)
@@ -137,6 +144,7 @@ def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums], log_stab
          'mu': mu,
          'sinkhorn_reg': sinkhorn_reg,
          'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
+         'pca_components': pca_components,
          }
     ]
 
@@ -152,10 +160,10 @@ def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums], log_stab
 def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, target_dict: dict):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
     try:
-        nu, mu, sinkhorn_reg = get_hyperparam_config(run)
+        nu, mu, sinkhorn_reg, pca_components = get_hyperparam_config(run)
 
         # Initialize global variable artifact from run.py
-        artifact_name = f'nu{nu}-mu{mu}-sinkhorn_reg{sinkhorn_reg}'
+        artifact_name = f'nu{nu}-mu{mu}-sinkhorn_reg{sinkhorn_reg}-pca_components={pca_components}'
         artifact = wandb.Artifact(name=artifact_name, type='run-summary')
         run_file.artifact = artifact
 
@@ -168,7 +176,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
 
         for noise in noises:
             # Create an empty artifact file
-            artifact_file = f'nu={nu}-mu={mu}-sinkhorn_reg={sinkhorn_reg}-noise={noise}.json'
+            artifact_file = f'nu={nu}-mu={mu}-sinkhorn_reg={sinkhorn_reg}-pca_components={pca_components}-noise={noise}.json'
             with open(artifact_file, "w") as f:
                 json.dump([], f, indent=2)
 
@@ -207,7 +215,8 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
             wandb.run.log({'nu': nu,
                            'mu': mu,
                            'sinkhorn_reg': sinkhorn_reg,
-                           f'cum. accuracy': cum_acc})
+                           'pca_components': pca_components,
+                           'cum. accuracy': cum_acc})
 
             # Remove artifact file from local machine
             if os.path.exists(artifact_file):
@@ -234,7 +243,7 @@ def initialize_sweep(sweep_config: dict, all_algs: list, sweep_name: str, featur
 
     wandb.agent(sweep_id,
                 function=lambda: train(all_algs, feature_set, source_graphs, target_graphs),
-                count=50
+                count=150
                 )
 
 
@@ -242,7 +251,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--tune',
-                        choices=['reg', 'nu_and_mu'],
+                        choices=['reg', 'nu_and_mu', 'pca'],
                         default='nu_and_mu')
 
     args = parser.parse_args()
@@ -251,7 +260,17 @@ if __name__ == "__main__":
     all_algs = copy.copy(_algs)
 
     # Load sweep config
-    config_file = 'nu_mu_config.yaml' if tune == "nu_and_mu" else 'reg_config.yaml'
+    if tune == "nu_and_mu":
+        config_file = 'nu_mu_config.yaml'
+        project_prefix = 'nu-mu-tuning-'
+
+    elif tune == 'pca':
+        config_file = 'pca_config.yaml'
+        project_prefix = 'pca-tuning-'
+    else:
+        config_file = 'reg_config.yaml'
+        project_prefix = 'reg-tuning-'
+
     root = get_git_root()
     path = os.path.join(root, 'data_analysis', 'tuning_configs', config_file)
 
@@ -263,7 +282,7 @@ if __name__ == "__main__":
     # project_name = "mu-tuning-for-degree"
 
     feature_set = all_features
-    project_name = "reg-tuning-all-features"
+    project_name = project_prefix + "all-features"
 
     # Initialize run
     initialize_sweep(sweep_config, all_algs, project_name, feature_set)
