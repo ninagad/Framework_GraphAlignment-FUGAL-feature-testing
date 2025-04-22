@@ -320,7 +320,7 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
                             'pca_components': pca_components,
                             }
 
-            filename = f'nu={wandb_nu}-mu={wandb_mu}-sinkhorn_reg={wandb_sinkhorn_reg}-noise={wandb_noiselvl}.json'
+            filename = f'nu={wandb_nu}-mu={wandb_mu}-sinkhorn_reg={wandb_sinkhorn_reg}-pca_components={pca_components}-noise={wandb_noiselvl}.json'
             # Step 1: Load JSON data from artifact file
             with open(filename, "r") as f:
                 data = json.load(f)
