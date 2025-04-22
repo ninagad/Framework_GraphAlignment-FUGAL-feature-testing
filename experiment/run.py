@@ -290,7 +290,7 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
             wandb_sinkhorn_reg = args['sinkhorn_reg']
 
             scaling = args['scaling']
-            pca = args['pca']
+            pca_components = args['pca_components']
 
             features = args['features']
             acc = res2.item()
@@ -317,7 +317,7 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
                             'noise-level': wandb_noiselvl,
                             'iteration': wandb_iteration,
                             'scaling': scaling.name,
-                            'pca': pca.name,
+                            'pca_components': pca_components,
                             }
 
             filename = f'nu={wandb_nu}-mu={wandb_mu}-sinkhorn_reg={wandb_sinkhorn_reg}-noise={wandb_noiselvl}.json'

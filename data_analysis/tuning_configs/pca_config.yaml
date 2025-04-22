@@ -27,4 +27,3 @@ parameters:
   components:
     min: 1
     max: 30
-    distribution: uniform
