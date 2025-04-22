@@ -130,13 +130,13 @@ def log_final_metrics(graph_accs_dict: dict, accs: list, run: wandb.run):
              })
 
 
-def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums], log_stabilized: bool = True):
+def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums], log_stabilized: bool = False):
     nu, mu, sinkhorn_reg, pca_components = get_hyperparam_config(run)
 
     if log_stabilized:
-        alg_id = 22  # cuGAL with log stabilized (default)
+        alg_id = 22  # cuGAL with log stabilized
     else:
-        alg_id = 12  # FUGAL
+        alg_id = 12  # FUGAL (default)
 
     args_lst = [
         {'features': features,
@@ -163,7 +163,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
         nu, mu, sinkhorn_reg, pca_components = get_hyperparam_config(run)
 
         # Initialize global variable artifact from run.py
-        artifact_name = f'nu{nu}-mu{mu}-sinkhorn_reg{sinkhorn_reg}-pca_components={pca_components}'
+        artifact_name = f'nu{nu}-mu{mu}-sinkhorn_reg{sinkhorn_reg}-pca_components{pca_components}'
         artifact = wandb.Artifact(name=artifact_name, type='run-summary')
         run_file.artifact = artifact
 

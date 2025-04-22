@@ -240,7 +240,7 @@ _GrampaS_args = {
 _Fugal_args={
     'iter': 15,
     'scaling': ScalingEnums.NO_SCALING,
-    'pca': None,
+    'pca_components': None,
     'nu': None,
     'sinkhorn_reg': 1,
     #'iter': 15, for xx dataset.
