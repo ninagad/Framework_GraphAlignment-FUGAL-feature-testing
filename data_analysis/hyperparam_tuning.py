@@ -288,8 +288,9 @@ if __name__ == "__main__":
     # feature_set = [FeatureEnums.DEG]
     # project_name = "mu-tuning-for-degree"
 
-    feature_set = all_features
-    project_name = project_prefix + "all-features"
-
+    #feature_set = all_features
+    #project_name = project_prefix + "all-features"
+    feature_set = [FeatureEnums.EGO_NEIGHBORS]
+    project_name = project_prefix + 'ego-neighbors'
     # Initialize run
     initialize_sweep(sweep_config, all_algs, project_name, feature_set)
