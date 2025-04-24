@@ -243,7 +243,8 @@ def initialize_sweep(sweep_config: dict, all_algs: list, sweep_name: str, featur
 
     wandb.agent(sweep_id,
                 function=lambda: train(all_algs, feature_set, source_graphs, target_graphs),
-                count=50
+                count=50,
+                project=sweep_name
                 )
 
 
