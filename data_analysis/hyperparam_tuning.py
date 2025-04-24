@@ -251,8 +251,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--tune',
-                        choices=['reg', 'nu_and_mu', 'pca'],
-                        default='nu_and_mu')
+                        choices=['nu_mu_reg', 'reg', 'nu_and_mu', 'pca'],
+                        default='nu_mu_reg')
 
     args = parser.parse_args()
     tune = args.tune
@@ -260,16 +260,23 @@ if __name__ == "__main__":
     all_algs = copy.copy(_algs)
 
     # Load sweep config
-    if tune == "nu_and_mu":
+    if tune == 'nu_mu_reg':
+        config_file = 'nu_mu_reg_config.yaml'
+        project_prefix = 'nu-mu-reg-tuning-'
+
+    elif tune == "nu_and_mu":
         config_file = 'nu_mu_config.yaml'
         project_prefix = 'nu-mu-tuning-'
 
     elif tune == 'pca':
         config_file = 'pca_config.yaml'
         project_prefix = 'pca-tuning-'
-    else:
+
+    elif tune == 'reg':
         config_file = 'reg_config.yaml'
         project_prefix = 'reg-tuning-'
+    else:
+        raise ValueError('Unknown tuning choice')
 
     root = get_git_root()
     path = os.path.join(root, 'data_analysis', 'tuning_configs', config_file)
