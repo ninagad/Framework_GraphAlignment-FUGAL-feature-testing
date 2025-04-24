@@ -237,13 +237,13 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
 
 def initialize_sweep(sweep_config: dict, all_algs: list, sweep_name: str, feature_set: list[FeatureEnums]):
 
-    sweep_id = wandb.sweep(sweep_config, project=sweep_name)
-
+    #sweep_id = wandb.sweep(sweep_config, project=sweep_name)
+    sweep_id = "8b386080"
     source_graphs, target_graphs = generate_all_graph()
 
     wandb.agent(sweep_id,
                 function=lambda: train(all_algs, feature_set, source_graphs, target_graphs),
-                count=150
+                count=50
                 )
 
 
