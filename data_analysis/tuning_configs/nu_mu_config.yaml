@@ -10,7 +10,7 @@ metric:
 
 parameters:
   sinkhorn_reg:
-    value: 0.1  # TODO: get fixed value from tuning of reg
+    value: 0.0014
   nu:
     min: 0
     max: 500
