@@ -764,6 +764,14 @@ def convex_init(A, B, D, reg, nu, mu, niter):
     mat_ones = torch.ones((n, n), dtype=torch.float64)
     reg_scalar = 1
 
+    qap_term = np.trace((A @ P @ B.T @ P.T))
+    lap_term = np.trace(P.T @ D)
+    reg_term = np.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
+
+    print('QAP term before optimization: ', qap_term)
+    print('LAP term before optimization: ', lap_term)
+    print('reg term before scaling: ', reg_term)
+
     if nu is not None:
         # scaling of QAP
         qap_term = np.trace((A @ P @ B.T @ P.T))
@@ -785,7 +793,9 @@ def convex_init(A, B, D, reg, nu, mu, niter):
         # print('reg term after scaling: ', reg_scalar*np.trace(P.T @ (ones - P)))
 
     for i in range(niter):  # TODO: optimize lambda later for efficiency
+
         for it in range(1, 11):
+            print(f'Iteration: {it}')
             if nu is not None:
                 # TODO: consider if reg_scalar can be multiplied before loop
                 G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + D + i * reg_scalar * (
@@ -800,7 +810,13 @@ def convex_init(A, B, D, reg, nu, mu, niter):
                 G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + mu * D + i * (
                         mat_ones - 2 * P)
 
+                # print(f'G min: {torch.min(G)}')
+                # print(f'G max: {torch.max(G)}')
+                # print(f'G mean: {torch.mean(G)}')
+                # print('')
+
             q = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
+            # print(f'{torch.isinf(q).any()=}')
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
 

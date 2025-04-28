@@ -161,6 +161,9 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
     torch.div(C, -reg, out=K)
     torch.exp(K, out=K)
 
+    #print(f'{torch.min(K)=}')
+    KTu_min = torch.min(K)
+
     b_hat = torch.empty(b.shape, dtype=C.dtype).to(device)
 
     it = 1
@@ -178,9 +181,19 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
         torch.matmul(K, v, out=Kv)
         u = torch.div(a, Kv)
 
-        if torch.any(KTu == 0) or torch.any(torch.isnan(u)) or torch.any(torch.isnan(v)) or \
+        if KTu_min > torch.min(KTu): KTu_min = torch.min(KTu)
+
+        if torch.any(KTu == 0.) or torch.any(torch.isnan(u)) or torch.any(torch.isnan(v)) or \
                 torch.any(torch.isinf(u)) or torch.any(torch.isinf(v)):
             print('Warning: numerical errors at iteration', it)
+            #print(f'{KTu[torch.logical_and(KTu>=0, KTu<=1e-308)]=}')
+            print(f'{torch.min(KTu)=}')
+            print(f'{torch.any(KTu == 0)=}')
+            print(f'{torch.any(torch.isnan(u))=}')
+            print(f'{torch.any(torch.isnan(v))=}')
+            print(f'{torch.any(torch.isinf(u))=}')
+            print(f'{torch.any(torch.isinf(v))=}')
+
             u, v = upre, vpre
             break
 
@@ -210,6 +223,7 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
         log['beta'] = reg * torch.log(v + M_EPS)
 
     # transport plan
+    print(f'{KTu_min=}')
     P = u.reshape(-1, 1) * K * v.reshape(1, -1)
     if log:
         return P, log
