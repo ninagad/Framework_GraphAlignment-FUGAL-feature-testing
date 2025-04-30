@@ -2,17 +2,19 @@ from enum import Enum, auto
 
 
 class ScalingEnums(Enum):
-    NO_SCALING = auto()
+    def __repr__(self):
+        return self.name
+
+    NO_SCALING = "no_scaling"
 
     # Normalization
-    INDIVIDUAL_MM_NORMALIZATION = auto()
-    COLLECTIVE_MM_NORMALIZATION = auto()
-    NORMALIZE_DIFFERENCES = auto()
+    INDIVIDUAL_MM_NORMALIZATION = "individual_mm_normalization"
+    COLLECTIVE_MM_NORMALIZATION = "collective_mm_normalization"
 
     # Standardization
-    INDIVIDUAL_STANDARDIZATION = auto()
-    COLLECTIVE_STANDARDIZATION = auto()
+    INDIVIDUAL_STANDARDIZATION = "individual_standardization"
+    COLLECTIVE_STANDARDIZATION = "collective_standardization"
 
     # Robust normalization
-    INDIVIDUAL_ROBUST_NORMALIZATION = auto()
-    COLLECTIVE_ROBUST_NORMALIZATION = auto()
+    INDIVIDUAL_ROBUST_NORMALIZATION = "individual_robust_normalization"
+    COLLECTIVE_ROBUST_NORMALIZATION = "collective_robust_normalization"
