@@ -69,37 +69,33 @@ def top_performing_feature(sources):
     return df, max_feature, nu, mu, sinkhorn_reg
 
 
-class DataAnalysis:
+def save_to_file(df, feature, sources, nu, mu, reg, round_no):
+    latex_table = pd.Series.to_latex(df, index=False)
 
-    @staticmethod
-    def save_to_file(df, feature, sources, nu, mu, reg, round):
-        latex_table = pd.Series.to_latex(df, index=False)
+    # Write to file
+    file_path = os.path.join('..', 'tables', f"feature-forward-selection-{round_no}-features.txt")
+    with open(file_path, "w") as file:
+        file.write(f'sources used for computation: {sources}')
+        file.write('\n\n')
+        file.write(f'nu: {nu} \n'
+                   f'mu: {mu} \n'
+                   f'sinkhorn_reg: {reg} \n \n')
 
-        # Write to file
-        file_path = os.path.join('..', 'tables', f"feature-forward-selection-{round}-features.txt")
-        with open(file_path, "w") as file:
-            file.write(f'sources used for computation: {sources}')
-            file.write('\n\n')
-            file.write(f'nu: {nu} \n'
-                       f'mu: {mu} \n'
-                       f'sinkhorn_reg: {reg} \n \n')
+        file.write(f'Best feature: {feature}')
+        file.write('\n\n')
+        file.write(latex_table)
 
-            file.write(f'Best feature: {feature}')
-            file.write('\n\n')
-            file.write(latex_table)
 
-    def forward_feature_selection(self):
-        sources_dict = {1: [369, 370, 371, 372],
-                        2: [389, 390, 392, 391],
-                        3: [393, 394, 396, 395],
-                        4: [398, 399, 400, 401]}
+def forward_feature_selection():
+    sources_dict = {1: [369, 370, 371, 372],
+                    2: [389, 390, 392, 391],
+                    3: [393, 394, 396, 395],
+                    4: [398, 399, 400, 401]}
 
-        for round_no, sources in sources_dict.items():
-            df, feature, nu, mu, reg = top_performing_feature(sources)
-            self.save_to_file(df, feature, sources, nu, mu, reg, round_no)
+    for round_no, sources in sources_dict.items():
+        df, feature, nu, mu, reg = top_performing_feature(sources)
+        save_to_file(df, feature, sources, nu, mu, reg, round_no)
 
 
 if __name__ == "__main__":
-    da = DataAnalysis()
-
-    da.forward_feature_selection()
+    forward_feature_selection()
