@@ -73,7 +73,8 @@ def save_to_file(df, feature, sources, nu, mu, reg, round_no):
     latex_table = pd.Series.to_latex(df, index=False)
 
     # Write to file
-    file_path = os.path.join('..', 'tables', f"feature-forward-selection-{round_no}-features.txt")
+    current_dir = (os.path.dirname(__file__))
+    file_path = os.path.join(current_dir, '..', 'tables', f"feature-forward-selection-{round_no}-features.txt")
     with open(file_path, "w") as file:
         file.write(f'sources used for computation: {sources}')
         file.write('\n\n')
@@ -87,10 +88,11 @@ def save_to_file(df, feature, sources, nu, mu, reg, round_no):
 
 
 def forward_feature_selection():
-    sources_dict = {1: [369, 370, 371, 372],
-                    2: [389, 390, 392, 391],
-                    3: [393, 394, 396, 395],
-                    4: [398, 399, 400, 401]}
+    sources_dict = {1: [7522, 7523, 7524, 7525],
+                    2: [11427, 11428, 11429, 11430],
+                    #3: [393, 394, 396, 395],
+                    #4: [398, 399, 400, 401]
+                    }
 
     for round_no, sources in sources_dict.items():
         df, feature, nu, mu, reg = top_performing_feature(sources)
