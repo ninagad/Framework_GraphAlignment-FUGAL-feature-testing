@@ -5,6 +5,7 @@ Rewrite ot.bregman.sinkhorn in Python Optimal Transport (https://pythonot.github
 using pytorch operations.
 Bregman projections for regularized OT (Sinkhorn distance).
 """
+import math
 
 import torch
 import time
