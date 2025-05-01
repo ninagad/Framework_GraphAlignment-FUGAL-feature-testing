@@ -23,7 +23,7 @@ def plot(graph1, graph2):
     plt.savefig('x1.png')
 
 
-def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = ScalingEnums.NO_SCALING) -> np.array:
+def feature_extraction(G: nx.Graph, features: list) -> np.array:
     """Node feature extraction.
 
     Parameters
@@ -468,32 +468,6 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
     node_features = np.nan_to_num(node_features)
 
-    if scaling == ScalingEnums.INDIVIDUAL_STANDARDIZATION:
-        # Standardization
-        scaler = StandardScaler()
-        standardized_features = scaler.fit_transform(node_features)
-        node_features = standardized_features
-
-    if scaling == ScalingEnums.INDIVIDUAL_MM_NORMALIZATION:
-        # Min max normalization to 0-1 range
-        scaler = MinMaxScaler()
-        normalized_features = scaler.fit_transform(node_features)
-        node_features = normalized_features
-
-    if scaling == ScalingEnums.INDIVIDUAL_ROBUST_NORMALIZATION:
-        scaler = RobustScaler()
-        robust_normalized_features = scaler.fit_transform(node_features)
-        node_features = robust_normalized_features
-
-    # print('before norm: \n', node_features[:5, :])
-    # print('max values: ', max_values[:5])
-    # print('min values: ', min_values[:5])
-
-    # print('normalized features: \n', normalized_features[:5, :])
-
-    # 'shape of maxvalues: ', max_values.shape)
-    # print('shape of minvalues: ', min_values.shape)
-    # print('shape of normalized: ', normalized_features.shape)
     return node_features
 
 
@@ -754,7 +728,6 @@ def convex_initTun(A, B, D, K, mu, niter):
         # P = P + alpha * (q - P)
     return P
 
-
 def convex_init(A, B, D, reg, nu, mu, niter):
     np.set_printoptions(suppress=True)
     n = len(A)
@@ -792,10 +765,11 @@ def convex_init(A, B, D, reg, nu, mu, niter):
         # print('LAP term after scaling: ', np.trace(P.T @ D))
         # print('reg term after scaling: ', reg_scalar*np.trace(P.T @ (ones - P)))
 
+    fail_count = 0
     for i in range(niter):  # TODO: optimize lambda later for efficiency
 
         for it in range(1, 11):
-            print(f'Iteration: {it}')
+            #print(f'Iteration: {it}')
             if nu is not None:
                 # TODO: consider if reg_scalar can be multiplied before loop
                 G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + D + i * reg_scalar * (
@@ -815,7 +789,8 @@ def convex_init(A, B, D, reg, nu, mu, niter):
                 # print(f'G mean: {torch.mean(G)}')
                 # print('')
 
-            q = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
+            q, fails = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
+            fail_count += fails
             # print(f'{torch.isinf(q).any()=}')
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
@@ -826,6 +801,7 @@ def convex_init(A, B, D, reg, nu, mu, niter):
     # print('QAP term after optimization: ', QAP_term)
     # print('LAP term after optimization: ', LAP_term)
     # print('reg term after optimization: ', reg_term)
+    #print(f'number of sinkhorn-knopp executions with numeric errors: {fail_count}')
     return P
 
 

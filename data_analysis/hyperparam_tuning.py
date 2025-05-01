@@ -18,6 +18,7 @@ import workexp
 from experiment.experiments import alggs as get_run_list, _algs
 from experiment import run as run_file
 from generation.generate import init1, init2
+from utils import get_all_features
 
 
 graphs = ["bio-celegans",
@@ -30,23 +31,7 @@ noises = [0.25, 0.20, 0.15, 0.10, 0.05, 0]
 
 iterations = 5
 
-all_features = [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER,
-                   # Cluster coefficient augmented
-                   FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER,
-                   FeatureEnums.RANGE_EGO_CLUSTER, FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MAX_EGO_CLUSTER,
-                   FeatureEnums.SKEWNESS_EGO_CLUSTER, FeatureEnums.KURTOSIS_EGO_CLUSTER,
-                   # Net simile
-                   FeatureEnums.EGO_EDGES, FeatureEnums.EGO_OUT_EDGES, FeatureEnums.EGO_NEIGHBORS,
-                   # Miscellaneous
-                   FeatureEnums.ASSORTATIVITY_EGO, FeatureEnums.INTERNAL_FRAC_EGO,
-                   # degree augmented
-                   FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG,
-                   FeatureEnums.MODE_EGO_DEGS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.MIN_EGO_DEGS,
-                   FeatureEnums.MAX_EGO_DEGS, FeatureEnums.RANGE_EGO_DEGS, FeatureEnums.SKEWNESS_EGO_DEGS,
-                   FeatureEnums.KURTOSIS_EGO_DEGS,
-                   # Centrality measures
-                   FeatureEnums.CLOSENESS_CENTRALITY, FeatureEnums.DEGREE_CENTRALITY,
-                   FeatureEnums.EIGENVECTOR_CENTRALITY, FeatureEnums.PAGERANK]
+all_features = get_all_features()
 
 def generate_graphs(graph_name: str):
     """
