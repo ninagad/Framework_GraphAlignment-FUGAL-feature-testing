@@ -48,6 +48,9 @@ def apply_pca(source_features: np.array, target_features: np.array, components: 
 
 def apply_scaling(source_features: np.array, target_features: np.array, scaling: ScalingEnums):
 
+    if scaling == ScalingEnums.NO_SCALING:
+        return source_features, target_features
+
     if (scaling == ScalingEnums.INDIVIDUAL_STANDARDIZATION) or (scaling == ScalingEnums.COLLECTIVE_STANDARDIZATION):
         # Standardization
         scaler = StandardScaler()
@@ -60,7 +63,7 @@ def apply_scaling(source_features: np.array, target_features: np.array, scaling:
         scaler = RobustScaler()
 
     else:
-        raise Exception("Not known scaling method")
+        raise Exception(f"Not known scaling method. Scaling: {scaling.name}")
 
     if 'individual' in scaling.name.lower():
         source_features = scaler.fit_transform(source_features)
