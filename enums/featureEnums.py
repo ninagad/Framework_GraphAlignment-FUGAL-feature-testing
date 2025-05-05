@@ -3,12 +3,12 @@ from aenum import Enum, NoAlias, auto
 
 class FeatureExtensions:
     @staticmethod
-    def to_feature(name: str):  #-> 'Feature' | None:
+    def to_feature(name: str):  # -> 'Feature' | None:
         name = name.replace('[', '').replace('\'', '').replace(']', '')  # Remove brackets and '.
         try:
             return FeatureEnums[name.upper()]
         except:
-            if name == 'katz': # Katz centrality
+            if name == 'katz':  # Katz centrality
                 return FeatureEnums['KATZ_CENTRALITY']
 
             try:  # 2hop_edges and 2hop_neighbors
@@ -95,7 +95,8 @@ class FeatureExtensions:
         labels = [FeatureExtensions.to_label(feature) for feature in features]
         label = ", ".join(labels)
 
-        fugal_features = [FeatureEnums['DEG'], FeatureEnums['CLUSTER'], FeatureEnums['AVG_EGO_DEG'], FeatureEnums['AVG_EGO_CLUSTER']]
+        fugal_features = [FeatureEnums['DEG'], FeatureEnums['CLUSTER'], FeatureEnums['AVG_EGO_DEG'],
+                          FeatureEnums['AVG_EGO_CLUSTER']]
         fugal_label = ", ".join([FeatureExtensions.to_label(feature) for feature in fugal_features])
 
         if label == fugal_label:
@@ -116,6 +117,8 @@ class FeatureExtensions:
             features_in_combination = feature.replace(' ', '').split(',')
             features = [fe.to_feature(name) for name in features_in_combination]
             return fe.to_labels(features)
+
+
 class FeatureEnums(Enum):
     _settings_ = NoAlias
 

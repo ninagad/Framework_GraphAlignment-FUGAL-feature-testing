@@ -56,7 +56,7 @@ def top_performing_feature(sources):
     # Compute the mean over the different graphs and noise levels for each feature
     df = df.groupby(level=[0]).mean()
     df = df.sort_values(ascending=False)
-    df.index.name = 'Feature'
+    df.index.name = 'Feature set'
 
     max_feature = df.idxmax()
 
@@ -64,7 +64,7 @@ def top_performing_feature(sources):
 
     # Convert feature names to labels
     FE = FeatureExtensions()
-    df['Feature'] = df['Feature'].apply(lambda x: FE.transform_feature_str_to_label(x))
+    df['Feature set'] = df['Feature set'].apply(lambda x: FE.transform_feature_str_to_label(x))
 
     return df, max_feature, nu, mu, sinkhorn_reg
 

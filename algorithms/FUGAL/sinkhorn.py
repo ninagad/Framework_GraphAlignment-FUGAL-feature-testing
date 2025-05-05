@@ -5,6 +5,7 @@ Rewrite ot.bregman.sinkhorn in Python Optimal Transport (https://pythonot.github
 using pytorch operations.
 Bregman projections for regularized OT (Sinkhorn distance).
 """
+import math
 
 import torch
 import time
@@ -162,7 +163,7 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
     torch.exp(K, out=K)
 
     #print(f'{torch.min(K)=}')
-    KTu_min = torch.min(K)
+    KTu_min = math.inf
 
     b_hat = torch.empty(b.shape, dtype=C.dtype).to(device)
 
@@ -173,6 +174,7 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
     KTu = torch.empty(v.shape, dtype=v.dtype).to(device)
     Kv = torch.empty(u.shape, dtype=u.dtype).to(device)
 
+    fail_counter = 0
     # t1 = time.time()
     while (err > stopThr and it <= maxIter):
         upre, vpre = u, v
@@ -186,13 +188,16 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
         if torch.any(KTu == 0.) or torch.any(torch.isnan(u)) or torch.any(torch.isnan(v)) or \
                 torch.any(torch.isinf(u)) or torch.any(torch.isinf(v)):
             print('Warning: numerical errors at iteration', it)
+
+            fail_counter += 1
+
             #print(f'{KTu[torch.logical_and(KTu>=0, KTu<=1e-308)]=}')
-            print(f'{torch.min(KTu)=}')
-            print(f'{torch.any(KTu == 0)=}')
-            print(f'{torch.any(torch.isnan(u))=}')
-            print(f'{torch.any(torch.isnan(v))=}')
-            print(f'{torch.any(torch.isinf(u))=}')
-            print(f'{torch.any(torch.isinf(v))=}')
+            # print(f'{torch.min(KTu)=}')
+            # print(f'{torch.any(KTu == 0)=}')
+            # print(f'{torch.any(torch.isnan(u))=}')
+            # print(f'{torch.any(torch.isnan(v))=}')
+            # print(f'{torch.any(torch.isinf(u))=}')
+            # print(f'{torch.any(torch.isinf(v))=}')
 
             u, v = upre, vpre
             break
@@ -223,12 +228,12 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
         log['beta'] = reg * torch.log(v + M_EPS)
 
     # transport plan
-    print(f'{KTu_min=}')
+    #print(f'{KTu_min=}')
     P = u.reshape(-1, 1) * K * v.reshape(1, -1)
     if log:
         return P, log
     else:
-        return P
+        return P, fail_counter
 
 
 def sinkhorn_stabilized(a, b, C, reg=1e-1, maxIter=1000, tau=1e3, stopThr=1e-9,
