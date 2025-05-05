@@ -69,7 +69,7 @@ class FeatureExtensions:
             FeatureEnums.TWOHOP_NEIGHBORS: '2hop neighbors',
             FeatureEnums.SUM_2HOP_DEGS: 'sum 2hop degs',
             FeatureEnums.STD_2HOP_DEGS: 'std 2hop degs',
-            FeatureEnums.MODE_2HOP_DEG: 'mode 2hop degs',
+            FeatureEnums.MODE_2HOP_DEGS: 'mode 2hop degs',
             FeatureEnums.MEDIAN_2HOP_DEGS: 'median 2hop degs',
             FeatureEnums.MIN_2HOP_DEGS: 'min 2hop degs',
             FeatureEnums.MAX_2HOP_DEGS: 'max 2hop degs',

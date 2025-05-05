@@ -369,12 +369,6 @@ def feature_extraction(G: nx.Graph, features: list) -> np.array:
 
         node_features[:, features.index(FeatureEnums.TWOHOP_EDGES)] = two_neighbor_edges
 
-    # sum of degrees in the 2-hop neighborhood
-    if FeatureEnums.SUM_2HOP_DEGS in features:
-        sum_two_neighbor_degs = [np.sum(degs) for degs in two_hop_neighbor_degs]
-
-        node_features[:, features.index(FeatureEnums.SUM_2HOP_DEGS)] = sum_two_neighbor_degs
-
     if FeatureEnums.TWOHOP_NEIGHBORS in features:
         neighbors_of_2hop = [
             len(
@@ -389,20 +383,6 @@ def feature_extraction(G: nx.Graph, features: list) -> np.array:
         node_features[:, features.index(FeatureEnums.TWOHOP_NEIGHBORS)] = neighbors_of_2hop
 
     # Augmented NetSimile
-    if FeatureEnums.STD_2HOP_DEGS in features:
-        std_two_neighbor_degs = [np.std(degs) for degs in two_hop_neighbor_degs]
-
-        node_features[:, features.index(FeatureEnums.STD_2HOP_DEGS)] = std_two_neighbor_degs
-
-    if FeatureEnums.SUM_2HOP_CLUSTER in features:
-        sum_two_neighbor_cluster = [np.sum(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
-
-        node_features[:, features.index(FeatureEnums.SUM_2HOP_CLUSTER)] = sum_two_neighbor_cluster
-
-    if FeatureEnums.STD_2HOP_CLUSTER in features:
-        std_two_neighbor_cluster = [np.std(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
-
-        node_features[:, features.index(FeatureEnums.STD_2HOP_CLUSTER)] = std_two_neighbor_cluster
 
     if FeatureEnums.INTERNAL_FRAC_2HOP in features:
         two_hop_in_edges = [two_hop_egonets[n].number_of_edges() for n in node_list]
@@ -423,11 +403,21 @@ def feature_extraction(G: nx.Graph, features: list) -> np.array:
         node_features[:, features.index(FeatureEnums.INTERNAL_FRAC_2HOP)] = frac
 
     # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis) for degree
+    if FeatureEnums.SUM_2HOP_DEGS in features:
+        sum_two_neighbor_degs = [np.sum(degs) for degs in two_hop_neighbor_degs]
+
+        node_features[:, features.index(FeatureEnums.SUM_2HOP_DEGS)] = sum_two_neighbor_degs
+
+    if FeatureEnums.STD_2HOP_DEGS in features:
+        std_two_neighbor_degs = [np.std(degs) for degs in two_hop_neighbor_degs]
+
+        node_features[:, features.index(FeatureEnums.STD_2HOP_DEGS)] = std_two_neighbor_degs
+
     if FeatureEnums.MODE_2HOP_DEGS in features:
         # stats.mode returns the mode and the count. We extract the mode with [0].
         mode_two_neighbor_degs = [stats.mode(degs)[0] for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index(FeatureEnums.MODE_2HOP_DEG)] = mode_two_neighbor_degs
+        node_features[:, features.index(FeatureEnums.MODE_2HOP_DEGS)] = mode_two_neighbor_degs
 
     if FeatureEnums.MEDIAN_2HOP_DEGS in features:
         median_two_neighbor_degs = [np.median(degs) for degs in two_hop_neighbor_degs]
@@ -466,6 +456,16 @@ def feature_extraction(G: nx.Graph, features: list) -> np.array:
     #    mode_two_neighbor_cluster = [stats.mode(cluster_coeffs)[0] for cluster_coeffs in two_hop_neighbor_cluster]
 
     #    node_features[:, features.index(FeatureEnums.MODE_2HOP_CLUSTER)] = mode_two_neighbor_cluster
+
+    if FeatureEnums.SUM_2HOP_CLUSTER in features:
+        sum_two_neighbor_cluster = [np.sum(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.SUM_2HOP_CLUSTER)] = sum_two_neighbor_cluster
+
+    if FeatureEnums.STD_2HOP_CLUSTER in features:
+        std_two_neighbor_cluster = [np.std(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.STD_2HOP_CLUSTER)] = std_two_neighbor_cluster
 
     if FeatureEnums.MEDIAN_2HOP_CLUSTER in features:
         median_two_neighbor_cluster = [np.median(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
