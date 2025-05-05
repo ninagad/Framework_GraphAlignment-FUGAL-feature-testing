@@ -370,10 +370,10 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         node_features[:, features.index(FeatureEnums.TWOHOP_EDGES)] = two_neighbor_edges
 
     # sum of degrees in the 2-hop neighborhood
-    if 'sum_2hop_deg' in features:
+    if FeatureEnums.SUM_2HOP_DEGS in features:
         sum_two_neighbor_degs = [np.sum(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('sum_2hop_deg')] = sum_two_neighbor_degs
+        node_features[:, features.index(FeatureEnums.SUM_2HOP_DEGS)] = sum_two_neighbor_degs
 
     if FeatureEnums.TWOHOP_NEIGHBORS in features:
         neighbors_of_2hop = [
@@ -389,20 +389,20 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
         node_features[:, features.index(FeatureEnums.TWOHOP_NEIGHBORS)] = neighbors_of_2hop
 
     # Augmented NetSimile
-    if 'var_2hop_deg' in features:
-        var_two_neighbor_degs = [np.var(degs) for degs in two_hop_neighbor_degs]
+    if FeatureEnums.STD_2HOP_DEGS in features:
+        std_two_neighbor_degs = [np.std(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('var_2hop_deg')] = var_two_neighbor_degs
+        node_features[:, features.index(FeatureEnums.STD_2HOP_DEGS)] = std_two_neighbor_degs
 
     if FeatureEnums.SUM_2HOP_CLUSTER in features:
         sum_two_neighbor_cluster = [np.sum(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
 
         node_features[:, features.index(FeatureEnums.SUM_2HOP_CLUSTER)] = sum_two_neighbor_cluster
 
-    if FeatureEnums.VAR_2HOP_CLUSTER in features:
-        var_two_neighbor_cluster = [np.var(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
+    if FeatureEnums.STD_2HOP_CLUSTER in features:
+        std_two_neighbor_cluster = [np.std(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
 
-        node_features[:, features.index(FeatureEnums.VAR_2HOP_CLUSTER)] = var_two_neighbor_cluster
+        node_features[:, features.index(FeatureEnums.STD_2HOP_CLUSTER)] = std_two_neighbor_cluster
 
     if FeatureEnums.INTERNAL_FRAC_2HOP in features:
         two_hop_in_edges = [two_hop_egonets[n].number_of_edges() for n in node_list]
@@ -422,22 +422,22 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index(FeatureEnums.INTERNAL_FRAC_2HOP)] = frac
 
-    # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis)
-    if 'mode_2hop_degs' in features:
+    # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis) for degree
+    if FeatureEnums.MODE_2HOP_DEGS in features:
         # stats.mode returns the mode and the count. We extract the mode with [0].
         mode_two_neighbor_degs = [stats.mode(degs)[0] for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('mode_2hop_degs')] = mode_two_neighbor_degs
+        node_features[:, features.index(FeatureEnums.MODE_2HOP_DEG)] = mode_two_neighbor_degs
 
     if FeatureEnums.MEDIAN_2HOP_DEGS in features:
         median_two_neighbor_degs = [np.median(degs) for degs in two_hop_neighbor_degs]
 
         node_features[:, features.index(FeatureEnums.MEDIAN_2HOP_DEGS)] = median_two_neighbor_degs
 
-    if 'min_2hop_degs' in features:
+    if FeatureEnums.MIN_2HOP_DEGS in features:
         min_neighbor_degs = [np.min(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('min_2hop_degs')] = min_neighbor_degs
+        node_features[:, features.index(FeatureEnums.MIN_2HOP_DEGS)] = min_neighbor_degs
 
     if FeatureEnums.MAX_2HOP_DEGS in features:
         max_neighbor_degs = [np.max(degs) for degs in two_hop_neighbor_degs]
@@ -454,10 +454,48 @@ def feature_extraction(G: nx.Graph, features: list, scaling: ScalingEnums = Scal
 
         node_features[:, features.index(FeatureEnums.SKEWNESS_2HOP_DEGS)] = skew_neighbor_degs
 
-    if 'kurtosis_2hop_degs' in features:
+    if FeatureEnums.KURTOSIS_2HOP_DEGS in features:
         kurtosis_neighbor_degs = [stats.kurtosis(degs) for degs in two_hop_neighbor_degs]
 
-        node_features[:, features.index('kurtosis_2hop_degs')] = kurtosis_neighbor_degs
+        node_features[:, features.index(FeatureEnums.KURTOSIS_2HOP_DEGS)] = kurtosis_neighbor_degs
+
+    # OUR OWN FEATURES (mode, median, min, max, range, skewness, kurtosis) for cluster
+
+    #if FeatureEnums.MODE_2HOP_CLUSTER in features:
+        # stats.mode returns the mode and the count. We extract the mode with [0].
+    #    mode_two_neighbor_cluster = [stats.mode(cluster_coeffs)[0] for cluster_coeffs in two_hop_neighbor_cluster]
+
+    #    node_features[:, features.index(FeatureEnums.MODE_2HOP_CLUSTER)] = mode_two_neighbor_cluster
+
+    if FeatureEnums.MEDIAN_2HOP_CLUSTER in features:
+        median_two_neighbor_cluster = [np.median(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.MEDIAN_2HOP_CLUSTER)] = median_two_neighbor_cluster
+
+    if FeatureEnums.MIN_2HOP_CLUSTER in features:
+        min_neighbor_cluster = [np.min(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_degs]
+
+        node_features[:, features.index(FeatureEnums.MIN_2HOP_CLUSTER)] = min_neighbor_cluster
+
+    if FeatureEnums.MAX_2HOP_CLUSTER in features:
+        max_neighbor_cluster = [np.max(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.MAX_2HOP_CLUSTER)] = max_neighbor_cluster
+
+    if FeatureEnums.RANGE_2HOP_CLUSTER in features:
+        range_neighbor_cluster = [np.max(cluster_coeffs) - np.min(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.RANGE_2HOP_CLUSTER)] = range_neighbor_cluster
+
+    if FeatureEnums.SKEWNESS_2HOP_CLUSTER in features:
+        skew_neighbor_cluster = [stats.skew(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.SKEWNESS_2HOP_CLUSTER)] = skew_neighbor_cluster
+
+    if FeatureEnums.KURTOSIS_2HOP_CLUSTER in features:
+        kurtosis_neighbor_cluster = [stats.kurtosis(cluster_coeffs) for cluster_coeffs in two_hop_neighbor_cluster]
+
+        node_features[:, features.index(FeatureEnums.KURTOSIS_2HOP_CLUSTER)] = kurtosis_neighbor_cluster
 
     # Assortativity of 2-hop neighbourhood
     if FeatureEnums.ASSORTATIVITY_2HOP in features:

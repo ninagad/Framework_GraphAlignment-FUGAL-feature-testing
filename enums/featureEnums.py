@@ -1,4 +1,4 @@
-from aenum import Enum, NoAlias
+from aenum import Enum, NoAlias, auto
 
 
 class FeatureExtensions:
@@ -67,14 +67,25 @@ class FeatureExtensions:
             FeatureEnums.AVG_2HOP_CLUSTER: 'avg 2hop cluster coeff',
             FeatureEnums.TWOHOP_EDGES: '2hop edges',
             FeatureEnums.TWOHOP_NEIGHBORS: '2hop neighbors',
-            FeatureEnums.SUM_2HOP_CLUSTER: 'sum 2hop cluster coeff',
-            FeatureEnums.VAR_2HOP_CLUSTER: 'var 2hop cluster coeff',
-            FeatureEnums.ASSORTATIVITY_2HOP: '2hop assortativity',
-            FeatureEnums.INTERNAL_FRAC_2HOP: '2hop internal frac',
+            FeatureEnums.SUM_2HOP_DEGS: 'sum 2hop degs',
+            FeatureEnums.STD_2HOP_DEGS: 'std 2hop degs',
+            FeatureEnums.MODE_2HOP_DEG: 'mode 2hop degs',
             FeatureEnums.MEDIAN_2HOP_DEGS: 'median 2hop degs',
+            FeatureEnums.MIN_2HOP_DEGS: 'min 2hop degs',
             FeatureEnums.MAX_2HOP_DEGS: 'max 2hop degs',
             FeatureEnums.RANGE_2HOP_DEGS: 'range 2hop degs',
-            FeatureEnums.SKEWNESS_2HOP_DEGS: 'skewness 2hop degs'
+            FeatureEnums.KURTOSIS_2HOP_DEGS: 'kurtosis 2hop degs',
+            FeatureEnums.SKEWNESS_2HOP_DEGS: 'skewness 2hop degs',
+            FeatureEnums.SUM_2HOP_CLUSTER: 'sum 2hop cluster coeff',
+            FeatureEnums.STD_2HOP_CLUSTER: 'std 2hop cluster coeff',
+            FeatureEnums.MEDIAN_2HOP_CLUSTER: 'mode 2hop cluster coeff',
+            FeatureEnums.MIN_2HOP_CLUSTER: 'min 2hop cluster coeff',
+            FeatureEnums.MAX_2HOP_CLUSTER: 'min 2hop cluster coeff',
+            FeatureEnums.RANGE_2HOP_CLUSTER: 'range 2hop cluster coeff',
+            FeatureEnums.KURTOSIS_2HOP_CLUSTER: 'kurtosis 2hop cluster coeff',
+            FeatureEnums.SKEWNESS_2HOP_CLUSTER: 'skewness 2hop cluster coeff',
+            FeatureEnums.ASSORTATIVITY_2HOP: '2hop assortativity',
+            FeatureEnums.INTERNAL_FRAC_2HOP: '2hop internal frac'
         }
 
         return label_dict[feature]
@@ -159,11 +170,25 @@ class FeatureEnums(Enum):
     AVG_2HOP_CLUSTER = 3
     TWOHOP_EDGES = 4
     TWOHOP_NEIGHBORS = 6
-    SUM_2HOP_CLUSTER = 7
-    VAR_2HOP_CLUSTER = 8
-    ASSORTATIVITY_2HOP = 9
-    INTERNAL_FRAC_2HOP = 10
+
+    SUM_2HOP_DEGS = auto()
+    STD_2HOP_DEGS = auto()
+    MODE_2HOP_DEGS = auto()
     MEDIAN_2HOP_DEGS = 12
+    MIN_2HOP_DEGS = auto()
     MAX_2HOP_DEGS = 14
     RANGE_2HOP_DEGS = 15
-    SKEWNESS_2HOP_DEGS = 16
+    SKEWNESS_2HOP_DEGS = 16 #auto()
+    KURTOSIS_2HOP_DEGS = auto()
+
+    SUM_2HOP_CLUSTER = 7
+    STD_2HOP_CLUSTER = 8
+    MEDIAN_2HOP_CLUSTER = auto()
+    MIN_2HOP_CLUSTER = auto()
+    MAX_2HOP_CLUSTER = auto()
+    RANGE_2HOP_CLUSTER = auto()
+    SKEWNESS_2HOP_CLUSTER = auto()
+    KURTOSIS_2HOP_CLUSTER = auto()
+
+    ASSORTATIVITY_2HOP = 9
+    INTERNAL_FRAC_2HOP = 10
