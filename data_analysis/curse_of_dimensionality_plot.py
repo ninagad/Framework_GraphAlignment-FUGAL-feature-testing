@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics.pairwise import euclidean_distances
 
 # Local imports
-from utils import get_graph, get_all_features, get_fugal_features
+from utils import get_graph, get_all_features, get_fugal_features, get_git_root
 from algorithms.FUGAL.pred import feature_extraction
 from algorithms.FUGAL.Fugal import apply_scaling
 from enums.featureEnums import FeatureEnums
@@ -24,7 +24,7 @@ def plot_distance_histograms(graph_name: str):
                     get_all_features()]
 
     # Create one figure with 3 horizontal subplots
-    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(18, 5))
+    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(15, 5))
 
     x_min = float('inf')
     x_max = float('-inf')
@@ -44,9 +44,8 @@ def plot_distance_histograms(graph_name: str):
         pairwise_distance_matrix *= 1 / lap_term
 
         all_distances.append(pairwise_distance_matrix.flatten())
-        #print(f'{np.sum(pairwise_distance_matrix.flatten())=}')
-        print(f'{feature_set=}')
-        print(f'{np.var(pairwise_distance_matrix.flatten())=}')
+        # print(f'{feature_set=}')
+        # print(f'{np.var(pairwise_distance_matrix.flatten())=}')
 
     # Get global min/max
     global_min = np.min(all_distances)
@@ -59,12 +58,21 @@ def plot_distance_histograms(graph_name: str):
     for i, feature_set in enumerate(feature_sets):
         # Plot histogram on subplot
         counts, bins, patches = axes[i].hist(all_distances[i], bins=common_bins, edgecolor='black')
-        axes[i].set_title(f'{len(feature_set)} features')
-        axes[i].set_xlabel('Distance')
-        axes[i].set_ylabel('Frequency')
+        axes[i].set_title(f'{len(feature_set)} features', fontsize=14)
+        axes[i].set_xlabel('Distance', fontsize=12)
+
+        percentile = 98
+        percentile_98 = np.percentile(all_distances[i], percentile)
+        # Add vertical line at the 98th percentile
+        axes[i].axvline(x=percentile_98, color='grey', linestyle='--', linewidth=2, alpha=0.3,
+                        label=f'{percentile}th percentile')
+
+        # Only add y-axis label for leftmost plot
+        if i == 0:
+            axes[i].set_ylabel('Frequency', fontsize=12)
 
         x_min = min(x_min, bins[0])
-        x_max = max(x_max, bins[-1])
+        x_max = max(x_max, percentile_98)
         y_max = max(y_max, counts.max())
 
     # set the same y-limit for all plots
@@ -72,10 +80,15 @@ def plot_distance_histograms(graph_name: str):
         ax.set_ylim(0, y_max * 1.1)
         ax.set_xlim(x_min, x_max)
 
-    plt.tight_layout()
+    # Add legend outside the plot, top-left
+    plt.legend(loc='upper right', bbox_to_anchor=(1, 1.2), ncol=3, borderaxespad=0)
+    plt.suptitle(f'{graph_name}', fontsize=24)
 
-    current_dir = os.path.dirname(__file__)
-    save_path = os.path.join(current_dir, '..', 'plots', 'distance-histograms', f'{graph_name}-histograms.svg')
+    plt.tight_layout()
+    fig.subplots_adjust(top=0.8)
+
+    git_root = get_git_root()
+    save_path = os.path.join(git_root, 'plots', 'distance-histograms', f'{graph_name}-histograms.svg')
     fig.savefig(save_path)
 
 
@@ -83,7 +96,8 @@ if __name__ == "__main__":
     graph_names = ['bio-celegans',
                    'inf-euroroad',
                    'ca-netscience',
-                   'mammalia-voles-plj-trapping_100']
+                   'mammalia-voles-plj-trapping_100'
+    ]
 
     for graph in graph_names:
         plot_distance_histograms(graph)
