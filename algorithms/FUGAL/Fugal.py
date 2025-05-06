@@ -47,7 +47,6 @@ def apply_pca(source_features: np.array, target_features: np.array, components: 
 
 
 def apply_scaling(source_features: np.array, target_features: np.array, scaling: ScalingEnums):
-
     if scaling == ScalingEnums.NO_SCALING:
         return source_features, target_features
 
@@ -59,7 +58,8 @@ def apply_scaling(source_features: np.array, target_features: np.array, scaling:
         # Min max normalization to 0-1 range
         scaler = MinMaxScaler()
 
-    elif (scaling == ScalingEnums.INDIVIDUAL_ROBUST_NORMALIZATION) or (scaling == ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION):
+    elif (scaling == ScalingEnums.INDIVIDUAL_ROBUST_NORMALIZATION) or (
+            scaling == ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION):
         scaler = RobustScaler()
 
     else:
@@ -79,8 +79,16 @@ def apply_scaling(source_features: np.array, target_features: np.array, scaling:
     return source_features, target_features
 
 
+def main(data,
+         iter: int,
+         sinkhorn_reg: float,
+         nu: float,
+         mu: float,
+         features: list,
+         scaling: ScalingEnums,
+         pca_components: int,
+         frank_wolfe_iters: int):
 
-def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling: ScalingEnums, pca_components: int):
     print("Fugal")
     torch.set_num_threads(40)
     dtype = np.float64
@@ -119,9 +127,9 @@ def main(data, iter, sinkhorn_reg: float, nu: float, mu, features: list, scaling
     D = torch.tensor(D, dtype=torch.float64)
     print("source graph: ", Src[0, :10], " target graph: ", Tar[0, :10])
 
-    P = convex_init(A, B, D, sinkhorn_reg, nu, mu, iter)
+    P = convex_init(A, B, D, sinkhorn_reg, nu, mu, iter, frank_wolfe_iters)
 
-    print("The resulting souble stochastic matrix: ", P[0, :10])
+    print("The resulting double stochastic matrix: ", P[0, :10])
 
     # P=convex_init1(A, B, L, mu, iter)
     # are_matrices_equal(P,P1)
