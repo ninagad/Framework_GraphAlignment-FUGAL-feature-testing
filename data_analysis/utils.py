@@ -57,3 +57,18 @@ def get_fugal_features():
                       FeatureEnums.AVG_EGO_CLUSTER]
 
     return fugal_features
+
+
+def get_forward_selected_features():
+    feature_set = [FeatureEnums.EGO_NEIGHBORS,
+                   FeatureEnums.SUM_EGO_DEG,
+                   FeatureEnums.STD_EGO_DEG]
+
+    return feature_set
+
+
+def strip_graph_name(name: str):
+    if 'voles' in name:
+        return 'voles'
+    else:
+        return name
