@@ -49,7 +49,7 @@ def plot_distance_histograms(graph_name: str, feature_sets: list[list[FeatureEnu
     # Create one figure with 3 horizontal subplots
     fig, axes = plt.subplots(nrows=1,
                              ncols=plot_count,
-                             figsize=(plot_count * 4, 4),
+                             figsize=(plot_count * 3.5, 3.5),
                              squeeze=False,
                              sharex=True,
                              sharey=True)
@@ -71,7 +71,7 @@ def plot_distance_histograms(graph_name: str, feature_sets: list[list[FeatureEnu
     for i, feature_set in enumerate(feature_sets):
         # Plot histogram on subplot
         axes[i].hist(all_distances[i], bins=common_bins, edgecolor='black')
-        axes[i].set_title(f'{len(feature_set)} features')#, fontsize=16)
+        axes[i].set_title(f'{len(feature_set)} features')
 
         percentile = 98
         percentile_98 = np.percentile(all_distances[i], percentile)
@@ -107,14 +107,14 @@ def plot_distance_histograms(graph_name: str, feature_sets: list[list[FeatureEnu
     pos = [ax.get_position() for ax in axes]
     center_x = (pos[0].x0 + pos[-1].x1) / 2
 
-    plt.suptitle(f'{strip_graph_name(graph_name)}', x=center_x, fontsize=20)
+    plt.suptitle(f'{strip_graph_name(graph_name)}', x=center_x, fontsize=18)
 
     return fig
 
 
 def save_fig(fig: plt.figure, filename: str):
     git_root = get_git_root()
-    save_path = os.path.join(git_root, 'plots', 'distance-histograms', f'{filename}.svg')
+    save_path = os.path.join(git_root, 'plots', 'distance-histograms', f'{filename}.pdf')
     fig.savefig(save_path)
 
 
