@@ -49,45 +49,39 @@ def plot_distance_histograms(graph_name: str, feature_sets: list[list[FeatureEnu
     # Create one figure with 3 horizontal subplots
     fig, axes = plt.subplots(nrows=1,
                              ncols=plot_count,
-                             figsize=(plot_count * 5, 5),
+                             figsize=(plot_count * 4, 4),
                              squeeze=False,
                              sharex=True,
                              sharey=True)
     axes: list[plt.Axes] = axes[0, :]
 
-    #x_min = float('inf')
-    x_max = float('-inf')
-    #y_max = 0  # Track the max y-value across all plots
-
     all_distances = compute_distances(graph, feature_sets)
 
     # Get global min/max
     global_min = np.min(all_distances)
-    global_max = np.max(all_distances)
+
+    percentiles_98 = [np.percentile(distances, 98) for distances in all_distances]
+    largest_98_percentile = max(percentiles_98)
 
     # Define common bin edges (e.g., 50 bins between global_min and global_max)
-    num_bins = 50
-    common_bins = np.linspace(global_min, global_max, num_bins + 1)
+    num_bins = 21
+
+    common_bins = np.linspace(global_min, largest_98_percentile, num_bins + 1)
 
     for i, feature_set in enumerate(feature_sets):
         # Plot histogram on subplot
-        counts, bins, patches = axes[i].hist(all_distances[i], bins=common_bins, edgecolor='black')
-        axes[i].set_title(f'{len(feature_set)} features', fontsize=16)
+        axes[i].hist(all_distances[i], bins=common_bins, edgecolor='black')
+        axes[i].set_title(f'{len(feature_set)} features')#, fontsize=16)
 
         percentile = 98
         percentile_98 = np.percentile(all_distances[i], percentile)
         if plot_count > 1:
             # Add vertical line at the 98th percentile
-            axes[i].axvline(x=percentile_98, color='grey', linestyle='--', linewidth=2, alpha=0.3,
+            axes[i].axvline(x=percentile_98, color='grey', linestyle='--', linewidth=2, alpha=0.4,
                             label=f'{percentile}th percentile')
 
-        # Only add y-axis label for leftmost plot
-        #if i == 0:
-        #    axes[i].set_ylabel('Frequency', fontsize=12)
-
-        #x_min = min(x_min, bins[0])
-        x_max = max(x_max, percentile_98)
-        #y_max = max(y_max, counts.max())
+        axes[i].grid(True)
+        axes[i].set_axisbelow(True)  # Puts grid lines behind everything
 
     # set the same y-limit for all plots
     #for ax in axes:
@@ -97,17 +91,23 @@ def plot_distance_histograms(graph_name: str, feature_sets: list[list[FeatureEnu
     else:
         middle_plot = 0
 
-    axes[middle_plot].set_xlabel('Distance', fontsize=14)
-    axes[0].set_xlim(0, x_max)
-    axes[0].set_ylabel('Frequency', fontsize=14)
+    axes[middle_plot].set_xlabel('Distance', fontsize=12)
+    axes[0].set_xlim(0, largest_98_percentile)
+    axes[0].set_ylabel('Frequency', fontsize=12)
 
     # Add legend outside the plot, top-left
     if plot_count > 1:
-        plt.legend(loc='upper right', bbox_to_anchor=(1, 1.2), ncol=3, borderaxespad=0)
-    plt.suptitle(f'{strip_graph_name(graph_name)}', fontsize=24)
+        plt.legend(loc='upper right', bbox_to_anchor=(1, 1.28), ncol=3, borderaxespad=0)
 
     plt.tight_layout()
     fig.subplots_adjust(top=0.8)
+
+    # Center suptitle w.r.t. plot areas excluding the tick and axis labels.
+    fig.canvas.draw()  # required to update layout info
+    pos = [ax.get_position() for ax in axes]
+    center_x = (pos[0].x0 + pos[-1].x1) / 2
+
+    plt.suptitle(f'{strip_graph_name(graph_name)}', x=center_x, fontsize=20)
 
     return fig
 
@@ -143,5 +143,5 @@ if __name__ == "__main__":
                    'mammalia-voles-plj-trapping_100'
                    ]
 
-    plot_FUGAL_histograms(graph_names)
-    #plot_histograms(graph_names)
+    #plot_FUGAL_histograms(graph_names)
+    plot_histograms(graph_names)
