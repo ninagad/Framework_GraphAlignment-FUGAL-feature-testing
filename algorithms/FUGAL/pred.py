@@ -795,7 +795,7 @@ def convex_init(A, B, D, reg: float, nu: float, mu: float, niter: int, fw_iters:
         # print('LAP term after scaling: ', np.trace(P.T @ D))
         # print('reg term after scaling: ', reg_scalar*np.trace(P.T @ (ones - P)))
 
-    fail_count = 0
+    overflow_count = 0
     for i in range(niter):  # TODO: optimize lambda later for efficiency
 
         for it in range(1, fw_iters + 1):
@@ -812,8 +812,8 @@ def convex_init(A, B, D, reg: float, nu: float, mu: float, niter: int, fw_iters:
                 G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + mu * D + i * (
                         mat_ones - 2 * P)
 
-            q, fails = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
-            fail_count += fails
+            q, overflows = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
+            overflow_count += overflows
             # print(f'{torch.isinf(q).any()=}')
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
@@ -824,7 +824,7 @@ def convex_init(A, B, D, reg: float, nu: float, mu: float, niter: int, fw_iters:
     # print('QAP term after optimization: ', QAP_term)
     # print('LAP term after optimization: ', LAP_term)
     # print('reg term after optimization: ', reg_term)
-    #print(f'number of sinkhorn-knopp executions with numeric errors: {fail_count}')
+    print(f'number of sinkhorn-knopp executions with numeric errors: {overflow_count}')
     return P
 
 
