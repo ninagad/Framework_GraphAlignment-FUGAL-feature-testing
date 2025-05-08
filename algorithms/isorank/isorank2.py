@@ -4,6 +4,8 @@ import scipy.sparse as sps
 import scipy
 import networkx as nx
 from algorithms.FUGAL.pred import feature_extraction, eucledian_dist
+from algorithms.FUGAL.Fugal import apply_scaling
+from enums.scalingEnums import ScalingEnums
 
 
 
@@ -78,7 +80,7 @@ def create_L(A, B, lalpha=1, mind=None, weighted=True):
 # def main(A, B, L=None, alpha=0.5, tol=1e-12, maxiter=1, verbose=True):
 
 
-def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=None, weighted=True):
+def main(data, features, scaling: ScalingEnums, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=None, weighted=True):
     print("Isorank")
     dtype = np.float32
     Src = data['Src']
@@ -90,7 +92,9 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=N
     n2 = Src.shape[0]
     F1 = feature_extraction(Src1, features)
     F2 = feature_extraction(Tar1, features)
+    F1, F2 = apply_scaling(F1, F2, scaling)
     Sim = np.ones((n1,n2))
+    nr_of_features = len(features)
 
     for i in range(n1):
         for j in range(n2):
@@ -100,6 +104,7 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=N
             # Sim[i, j] = np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0))) / nr_of_features
             # Sim[i,j] = 1- (np.sum(np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)) / nr_of_features)
             #Sim[i, j] = np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)))
+            #Sim[i, j] = np.sqrt(np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) ** 2 / np.max(np.vstack((F1[i, :] ** 2, F2[j, :] ** 2)), axis=0)))) / nr_of_features
 
     #D = eucledian_dist(F1, F2, Src.shape[0])
 
