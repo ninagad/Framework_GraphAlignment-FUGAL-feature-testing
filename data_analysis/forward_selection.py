@@ -90,11 +90,11 @@ def save_to_file(df, feature, sources, nu, mu, reg, round_no):
 def forward_feature_selection():
     sources_dict = {1: [7522, 7523, 7524, 7525],
                     #2: [11427, 11428, 11429, 11430],
-                    #2: [115, 116, 117, 118],
+                    #2: [115Skadi, 116, 117, 118],
                     2: [12384, 12385, 12386, 12387],
                     #3: [12380, 12381, 12382, 12383],
                     3: [12388, 12389, 12390, 12391],
-                    #4: [398, 399, 400, 401]
+                    4: [12400, 12401, 12402, 12403]
                     }
 
     for round_no, sources in sources_dict.items():

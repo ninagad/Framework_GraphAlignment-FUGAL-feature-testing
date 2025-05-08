@@ -1,0 +1,41 @@
+sources used for computation: [12400, 12401, 12402, 12403]
+
+nu: 447.24 
+mu: 442.66 
+sinkhorn_reg: 0.0014 
+ 
+Best feature: [EGO_NEIGHBORS, SUM_EGO_DEG, STD_EGO_DEG, DEGREE_CENTRALITY]
+
+\begin{tabular}{lr}
+\toprule
+Feature set & avg accuracy \\
+\midrule
+ego neighbors, sum ego degs, std ego degs, degree centrality & 0.761863 \\
+ego neighbors, sum ego degs, std ego degs, degree & 0.761729 \\
+ego neighbors, sum ego degs, std ego degs, median ego degs & 0.761699 \\
+ego neighbors, sum ego degs, std ego degs, ego out edges & 0.761219 \\
+ego neighbors, sum ego degs, std ego degs, cluster coeff & 0.761118 \\
+ego neighbors, sum ego degs, std ego degs, sum ego cluster coeff & 0.760591 \\
+ego neighbors, sum ego degs, std ego degs, max ego cluster coeff & 0.760148 \\
+ego neighbors, sum ego degs, std ego degs, avg ego deg & 0.760083 \\
+ego neighbors, sum ego degs, std ego degs, range ego cluster coeff & 0.759616 \\
+ego neighbors, sum ego degs, std ego degs, std ego cluster coeff & 0.758997 \\
+ego neighbors, sum ego degs, std ego degs, ego edges & 0.758739 \\
+ego neighbors, sum ego degs, std ego degs, max ego degs & 0.757578 \\
+ego neighbors, sum ego degs, std ego degs, avg ego cluster coeff & 0.757458 \\
+ego neighbors, sum ego degs, std ego degs, median ego cluster coeff & 0.757306 \\
+ego neighbors, sum ego degs, std ego degs, range ego degs & 0.756356 \\
+ego neighbors, sum ego degs, std ego degs, kurtosis ego degs & 0.754783 \\
+ego neighbors, sum ego degs, std ego degs, min ego cluster coeff & 0.754630 \\
+ego neighbors, sum ego degs, std ego degs, ego internal frac & 0.754077 \\
+ego neighbors, sum ego degs, std ego degs, kurtosis ego cluster coeff & 0.753190 \\
+ego neighbors, sum ego degs, std ego degs, ego assortativity & 0.752530 \\
+ego neighbors, sum ego degs, std ego degs, skewness ego degs & 0.750557 \\
+ego neighbors, sum ego degs, std ego degs, mode ego degs & 0.748185 \\
+ego neighbors, sum ego degs, std ego degs, skewness ego cluster coeff & 0.746267 \\
+ego neighbors, sum ego degs, std ego degs, pagerank & 0.739165 \\
+ego neighbors, sum ego degs, std ego degs, min ego degs & 0.734051 \\
+ego neighbors, sum ego degs, std ego degs, closeness centrality & 0.731144 \\
+ego neighbors, sum ego degs, std ego degs, eigenvector centrality & 0.728737 \\
+\bottomrule
+\end{tabular}
