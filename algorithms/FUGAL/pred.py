@@ -766,7 +766,7 @@ def convex_initTun(A, B, D, K, mu, niter):
         # P = P + alpha * (q - P)
     return P
 
-def convex_init(A, B, D, reg, nu, mu, niter):
+def convex_init(A, B, D, reg: float, nu: float, mu: float, niter: int, fw_iters: int):
     np.set_printoptions(suppress=True)
     n = len(A)
     P = torch.ones((n, n), dtype=torch.float64)
@@ -774,14 +774,6 @@ def convex_init(A, B, D, reg, nu, mu, niter):
     ones = torch.ones(n, dtype=torch.float64)
     mat_ones = torch.ones((n, n), dtype=torch.float64)
     reg_scalar = 1
-
-    qap_term = np.trace((A @ P @ B.T @ P.T))
-    lap_term = np.trace(P.T @ D)
-    reg_term = np.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
-
-    print('QAP term before optimization: ', qap_term)
-    print('LAP term before optimization: ', lap_term)
-    print('reg term before scaling: ', reg_term)
 
     if nu is not None:
         # scaling of QAP
@@ -803,18 +795,16 @@ def convex_init(A, B, D, reg, nu, mu, niter):
         # print('LAP term after scaling: ', np.trace(P.T @ D))
         # print('reg term after scaling: ', reg_scalar*np.trace(P.T @ (ones - P)))
 
-    fail_count = 0
+    overflow_count = 0
     for i in range(niter):  # TODO: optimize lambda later for efficiency
 
-        for it in range(1, 11):
-            #print(f'Iteration: {it}')
+        for it in range(1, fw_iters + 1):
+            print(f'Iteration: {it}')
             if nu is not None:
                 # TODO: consider if reg_scalar can be multiplied before loop
                 G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + D + i * reg_scalar * (
                             mat_ones - 2 * P)
 
-                # Make G non-negative to avoid numeric errors from Gibs kernel.
-                # Scale to 0-1.
                 # Recommendation from here: https://pythonot.github.io/auto_examples/plot_Intro_OT.html#sphx-glr-auto-examples-plot-intro-ot-py
                 G = (G - G.min()) / (G.max() - G.min())
 
@@ -822,13 +812,8 @@ def convex_init(A, B, D, reg, nu, mu, niter):
                 G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + mu * D + i * (
                         mat_ones - 2 * P)
 
-                # print(f'G min: {torch.min(G)}')
-                # print(f'G max: {torch.max(G)}')
-                # print(f'G mean: {torch.mean(G)}')
-                # print('')
-
-            q, fails = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
-            fail_count += fails
+            q, overflows = sinkhorn(ones, ones, G, reg, maxIter=500, stopThr=1e-3)
+            overflow_count += overflows
             # print(f'{torch.isinf(q).any()=}')
             alpha = 2.0 / float(2.0 + it)
             P = P + alpha * (q - P)
@@ -839,7 +824,7 @@ def convex_init(A, B, D, reg, nu, mu, niter):
     # print('QAP term after optimization: ', QAP_term)
     # print('LAP term after optimization: ', LAP_term)
     # print('reg term after optimization: ', reg_term)
-    #print(f'number of sinkhorn-knopp executions with numeric errors: {fail_count}')
+    print(f'number of sinkhorn-knopp executions with numeric errors: {overflow_count}')
     return P
 
 

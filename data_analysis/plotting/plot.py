@@ -273,9 +273,9 @@ def plot(xaxis: str, yaxis: str, baseline: int, source: int, title: str, outputd
     # Save plot
     root_path = get_git_root()
     if mu is not None:
-        path = os.path.join(root_path, 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}-run={source}.svg')
+        path = os.path.join(root_path, 'plots', outputdir, f'{graph}-mu={mu}-{yaxis}-run={source}.pdf')
     else:  # For other algorithms than FUGAL
-        path = os.path.join(root_path, 'plots', outputdir, f'{title}-{graph}-{yaxis}-run={source}.svg')
+        path = os.path.join(root_path, 'plots', outputdir, f'{title}-{graph}-{yaxis}-run={source}.pdf')
 
     plt.savefig(path)
 

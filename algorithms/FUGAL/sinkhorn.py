@@ -174,7 +174,7 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
     KTu = torch.empty(v.shape, dtype=v.dtype).to(device)
     Kv = torch.empty(u.shape, dtype=u.dtype).to(device)
 
-    fail_counter = 0
+    overflow_counter = 0
     # t1 = time.time()
     while (err > stopThr and it <= maxIter):
         upre, vpre = u, v
@@ -189,7 +189,7 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
                 torch.any(torch.isinf(u)) or torch.any(torch.isinf(v)):
             print('Warning: numerical errors at iteration', it)
 
-            fail_counter += 1
+            overflow_counter += 1
 
             #print(f'{KTu[torch.logical_and(KTu>=0, KTu<=1e-308)]=}')
             # print(f'{torch.min(KTu)=}')
@@ -233,7 +233,7 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
     if log:
         return P, log
     else:
-        return P, fail_counter
+        return P, overflow_counter
 
 
 def sinkhorn_stabilized(a, b, C, reg=1e-1, maxIter=1000, tau=1e3, stopThr=1e-9,

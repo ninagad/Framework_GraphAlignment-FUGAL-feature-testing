@@ -274,8 +274,12 @@ if __name__ == "__main__":
 
     #feature_set = all_features
     #project_name = project_prefix + "all-features"
-    feature_set = [FeatureEnums.EGO_NEIGHBORS]
-    project_name = project_prefix + 'ego-neighbors'
+    #feature_set = [FeatureEnums.EGO_NEIGHBORS]
+    #project_name = project_prefix + 'ego-neighbors'
+
+    # PCA
+    feature_set = all_features
+    project_name = project_prefix
 
     # Initialize run
     initialize_sweep(sweep_config, all_algs, project_name, feature_set)

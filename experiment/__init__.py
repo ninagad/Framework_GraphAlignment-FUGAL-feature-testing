@@ -1,9 +1,10 @@
 from sacred import Experiment
 from sacred.observers import FileStorageObserver
 import logging
-from algorithms import gwl, conealign, grasp as grasp, regal, eigenalign, NSD, isorank2 as isorank, netalign, klaus, sgwl,Grampa,GraspB,GrampaS,Fugal,Fugal2,QAP,Cugal
-from algorithms import Parrot,Path,got,fgot,Dspp,Mds
-#GraspBafter Grampa
+from algorithms import gwl, conealign, grasp as grasp, regal, eigenalign, NSD, isorank2 as isorank, netalign, klaus, \
+    sgwl, Grampa, GraspB, GrampaS, Fugal, Fugal2, QAP, Cugal
+from algorithms import Parrot, Path, got, fgot, Dspp, Mds
+# GraspBafter Grampa
 from enums.scalingEnums import ScalingEnums
 from enums.pcaEnums import PCAEnums
 from algorithms.cuGAL.cugal.config import SinkhornMethod
@@ -32,7 +33,6 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 ex.logger = logger
-
 
 _GW_args = {
     'opt_dict': {
@@ -70,17 +70,17 @@ _SGW_args1 = {
     'ot_dict': {
         'loss_type': 'L2',  # the key hyperparameters of GW distance
         'ot_method': 'proximal',
-         #'beta': 0.025,#euroroad
-        #'beta': 0.2,#netscience,eurorad,arenas
-        #'beta': 0.1,#dense ex fb, socfb datasets
-        'beta': 0.2,# 0.025-0.1 depends on degree
+        # 'beta': 0.025,#euroroad
+        # 'beta': 0.2,#netscience,eurorad,arenas
+        # 'beta': 0.1,#dense ex fb, socfb datasets
+        'beta': 0.2,  # 0.025-0.1 depends on degree
         # outer, inner iteration, error bound of optimal transport
         'outer_iteration': 2000,  # num od nodes
         'iter_bound': 1e-10,
         'inner_iteration': 2,
         'sk_bound': 1e-10,
         'node_prior': 0,
-        'max_iter': 5,  
+        'max_iter': 5,
         'cost_bound': 1e-16,
         'update_p': False,  # optional updates of source distribution
         'lr': 0,
@@ -99,18 +99,18 @@ _SGW_args = {
     'ot_dict': {
         'loss_type': 'L2',  # the key hyperparameters of GW distance
         'ot_method': 'proximal',
-         #'beta': 0.025,#euroroad
-        #'beta': 0.2,#netscience,eurorad,arenas
-        #'beta': 0.1,#dense ex fb, socfb datasets
-        'beta': 0.2,# 0.025-0.1 depends on degree
+        # 'beta': 0.025,#euroroad
+        # 'beta': 0.2,#netscience,eurorad,arenas
+        # 'beta': 0.1,#dense ex fb, socfb datasets
+        'beta': 0.2,  # 0.025-0.1 depends on degree
         # outer, inner iteration, error bound of optimal transport
         'outer_iteration': 2000,  # num od nodes
         'iter_bound': 1e-10,
         'inner_iteration': 2,
-        'sk_bound': 1e-30,#--mine
-        'node_prior': 1000,#--mine
-        
-        'max_iter': 4,#--mine  # iteration and error bound for calcuating barycenter
+        'sk_bound': 1e-30,  # --mine
+        'node_prior': 1000,  # --mine
+
+        'max_iter': 4,  # --mine  # iteration and error bound for calcuating barycenter
         'cost_bound': 1e-26,
         'update_p': False,  # optional updates of source distribution
         'lr': 0,
@@ -143,17 +143,17 @@ _CONE_args = {
 }
 
 _GRASP_args = {
-    #'laa': 2,
-    #'icp': False,
+    # 'laa': 2,
+    # 'icp': False,
     'laa': 3,
     'icp': True,
     'icp_its': 3,
-    #'q': 100,
+    # 'q': 100,
     'q': 20,
     'k': 20,
-    #'n_eig': Src.shape[0] - 1
+    # 'n_eig': Src.shape[0] - 1
     'n_eig': 100,
-    #'lower_t': 1.0,
+    # 'lower_t': 1.0,
     'lower_t': 0.1,
     'upper_t': 50.0,
     'linsteps': True,
@@ -165,24 +165,24 @@ _GRASPB_args = {
     'icp_its': 3,
     'q': 20,
     'k': 20,
-    #'n_eig': Src.shape[0] - 1
-    #n_eig': 100,
+    # 'n_eig': Src.shape[0] - 1
+    # n_eig': 100,
     'lower_t': 0.1,
     'upper_t': 50.0,
     'linsteps': True,
     'ba_': True,
     'corr_func': 1,
-    'k_span':40
+    'k_span': 40
 
 }
 
 _REGAL_args = {
-    'attributes': 1, # None, if no features
+    'attributes': 1,  # None, if no features
     'attrvals': 2,
     'dimensions': 128,  # useless
-    'k': 10,            # d = klogn
-    'untillayer': 2,    # k
-    'alpha': 0.01,      # delta
+    'k': 10,  # d = klogn
+    'untillayer': 2,  # k
+    'alpha': 0.01,  # delta
     'gammastruc': 1.0,
     'gammaattr': 0.01,
     'numtop': 10,
@@ -205,7 +205,7 @@ _ISO_args = {
     'alpha': 0.9,
     'tol': 1e-12,
     'maxiter': 100,
-    'lalpha': None, # 10000 if include degree sim
+    'lalpha': None,  # 10000 if include degree sim
     'weighted': True
 }
 
@@ -228,80 +228,81 @@ _KLAU_args = {
     'verbose': True
 }
 _Grampa_args = {
-   'eta': 0.2,
+    'eta': 0.2,
 }
 _GrampaS_args = {
-   'eta': 0.1,
-   'lalpha': 10000,
-   'initSim': 1,  # 0, if no features
-   'Eigtype': 0  # any other than 0,2,3 is NL
+    'eta': 0.1,
+    'lalpha': 10000,
+    'initSim': 1,  # 0, if no features
+    'Eigtype': 0  # any other than 0,2,3 is NL
 }
 
-_Fugal_args={
+# Defaults correspond to original FUGAL
+_Fugal_args = {
     'iter': 15,
     'scaling': ScalingEnums.NO_SCALING,
     'pca_components': None,
     'nu': None,
     'sinkhorn_reg': 1,
-    #'iter': 15, for xx dataset.
-    #'mu': 1,#1,#1 MM,are,net --0.1 ce--2 eu
-}
-_Fugal2_args={
-    'iter': 15,
-    #'iter': 15, for xx dataset.
-    'simple': True,
-    'mu':1,#1 MM,are,net --0.1 ce--2 eu
-}
-_path_args={
-}
-_dspp_args={
-    
+    'frank_wolfe_iters': 10
 }
 
-_parrot_args={
-"sepRwrIter":100,
-"prodRwrIter": 50,
-"alpha" : 0.1,  
-"inIter" : 5,     
-"outIter" : 10,   
-"beta" : 0.5,   
-"gamma" : 0.9,  
-"l1" : 1e-3,  
-"l2" : 4e-4, 
-"l3" : 1e-2,  
-"l4" : 1e-5,  
+_Fugal2_args = {
+    'iter': 15,
+    # 'iter': 15, for xx dataset.
+    'simple': True,
+    'mu': 1,  # 1 MM,are,net --0.1 ce--2 eu
 }
-_got_args={
-    'it':10,
-    'tau':2,
-    'n_samples':20,
-    'epochs':600,
-    'lr':0.5
+_path_args = {
 }
-_fgot_args={
+_dspp_args = {
+
 }
-_mds_args={
+
+_parrot_args = {
+    "sepRwrIter": 100,
+    "prodRwrIter": 50,
+    "alpha": 0.1,
+    "inIter": 5,
+    "outIter": 10,
+    "beta": 0.5,
+    "gamma": 0.9,
+    "l1": 1e-3,
+    "l2": 4e-4,
+    "l3": 1e-2,
+    "l4": 1e-5,
+}
+_got_args = {
+    'it': 10,
+    'tau': 2,
+    'n_samples': 20,
+    'epochs': 600,
+    'lr': 0.5
+}
+_fgot_args = {
+}
+_mds_args = {
     'n_components': 2,
     'alpha': 1.0,
     'max_iter': 500,
     'tol': 1e-5,
     'min_eps': 0.001,
-    'eps':0.01,
+    'eps': 0.01,
     'eps_annealing': True,
     'alpha_annealing': True,
     'gw_init': True,
     'return_stress': False
 }
 
-_cugal_args={
+_cugal_args = {
     'iter': 15,
     'scaling': ScalingEnums.NO_SCALING,
     'pca': PCAEnums.NO_PCA,
     'nu': None,
     'sinkhorn_method': SinkhornMethod.LOG,
-    #'sinkhorn_reg': 1,
-    #'iter': 15, for xx dataset.
-    #'mu': 1,#1,#1 MM,are,net --0.1 ce--2 eu
+    # 'sinkhorn_reg': 1,
+    # 'iter': 15, for xx dataset.
+    # 'mu': 1,#1,#1 MM,are,net --0.1 ce--2 eu
 }
 
 _algs = [
@@ -325,12 +326,12 @@ _algs = [
     (Path, _path_args, [3], "PATH"),
     (Dspp, _dspp_args, [3], "DS++"),
     (Mds, _mds_args, [3], "MDS"),
-    #(Fugal2, _Fugal_args, [3], "FUGALB"),
+    # (Fugal2, _Fugal_args, [3], "FUGALB"),
     (GrampaS, _GrampaS_args, [3], "GRAMPAS"),
     (Fugal2, _Fugal2_args, [3], "FUGALB"),
     (Cugal, _cugal_args, [3], "CUGAL"),
 
-]   
+]
 
 _acc_names = [
     "acc",
