@@ -1,9 +1,11 @@
 import subprocess
 from pathlib import Path
 import os
+import json
 
 import numpy as np
 import networkx as nx
+import pandas as pd
 
 from enums.featureEnums import FeatureEnums
 
@@ -16,7 +18,7 @@ def get_git_root():
         raise RuntimeError("Not a git repository")
 
 
-def get_graph(filename: str):
+def get_graph(filename: str) -> nx.Graph:
     current_dir = (os.path.dirname(__file__))
     data_dir = os.path.join(current_dir, '..', 'data')
 
@@ -28,7 +30,7 @@ def get_graph(filename: str):
     return graph
 
 
-def get_all_features():
+def get_all_features() -> [FeatureEnums]:
     all_features = [FeatureEnums.DEG, FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.AVG_EGO_CLUSTER,
                     # Net simile
                     FeatureEnums.EGO_EDGES, FeatureEnums.EGO_OUT_EDGES, FeatureEnums.EGO_NEIGHBORS,
@@ -50,7 +52,7 @@ def get_all_features():
     return all_features
 
 
-def get_fugal_features():
+def get_fugal_features() -> [FeatureEnums]:
     fugal_features = [FeatureEnums.DEG,
                       FeatureEnums.CLUSTER,
                       FeatureEnums.AVG_EGO_DEG,
@@ -59,7 +61,7 @@ def get_fugal_features():
     return fugal_features
 
 
-def get_forward_selected_features():
+def get_forward_selected_features() -> [FeatureEnums]:
     feature_set = [FeatureEnums.EGO_NEIGHBORS,
                    FeatureEnums.SUM_EGO_DEG,
                    FeatureEnums.STD_EGO_DEG]
@@ -67,8 +69,54 @@ def get_forward_selected_features():
     return feature_set
 
 
-def strip_graph_name(name: str):
+def get_training_graph_names():
+    graphs = ['bio-celegans', 'ca-netscience', 'inf-euroroad', 'voles']
+    return graphs
+
+
+def strip_graph_name(name: str) -> str:
     if 'voles' in name:
         return 'voles'
     else:
         return name
+
+
+def get_acc_file_as_df(run: int) -> pd.DataFrame:
+    root = get_git_root()
+    path = os.path.join(root, 'Server-runs', f'{run}', 'res', 'acc.xlsx')
+
+    df = pd.read_excel(path, index_col=[0, 1])
+    df.index.names = ['Feature', 'Noise']
+
+    return df
+
+
+def get_config_file(run: int) -> json:
+    root = get_git_root()
+    path = os.path.join(root, 'Server-runs', f'{run}', 'config.json')
+
+    config = json.load(open(path))
+
+    return config
+
+
+def get_graph_names_from_file(runs: list[int]) -> list[str]:
+    graph_names = []
+    for run in runs:
+        config = get_config_file(run)
+
+        names = config['graph_names']
+        if len(names) != 1:
+            raise NotImplementedError
+
+        graph_names.append(names[0])
+
+    return graph_names
+
+
+def get_algo_args(run: int) -> list[dict] :
+    config = get_config_file(run)
+    args = [execution[1] for execution in config['algs']]
+
+    return args
+

@@ -1,0 +1,13 @@
+\begin{tabular}{lr}
+\toprule
+FW iterations & avg. accuracy in \% \\
+\midrule
+1 & 75.73 \\
+2 & 76.23 \\
+3 & 76.11 \\
+4 & 75.97 \\
+6 & 75.92 \\
+8 & 75.91 \\
+10 & 75.85 \\
+\bottomrule
+\end{tabular}
