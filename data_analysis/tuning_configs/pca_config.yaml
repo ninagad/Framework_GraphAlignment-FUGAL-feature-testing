@@ -10,11 +10,12 @@ metric:
 
 parameters:
   sinkhorn_reg:
-    value: 0.001409
+    value: 0.00141
   nu:
     value: 447.24
   mu:
     value: 442.66
+  frank_wolfe_iters: 2
   components:
     min: 1
     max: 30
