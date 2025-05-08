@@ -51,18 +51,10 @@ def check_runs_have_correct_config(grouped_runs: dict):
             test_run_have_expected_sinkhorn_reg(run, sinkhorn)
 
 
-def process_frank_wolfe_data():
-    fw_dict = {1: [12450, 12451, 12452, 12453],
-               2: [12413, 12414, 12415, 12416],
-               3: [12454, 12455, 12456, 12457],
-               4: [12429, 12430, 12431, 12432],
-               6: [12433, 12434, 12435, 12436],
-               8: [12437, 12438, 12439, 12440],
-               10: [12445, 12446, 12447, 12461]}
+def process_frank_wolfe_data(res_dict: dict):
+    check_runs_have_correct_config(res_dict)
 
-    check_runs_have_correct_config(fw_dict)
-
-    avg_accs = get_avg_accs(fw_dict)
+    avg_accs = get_avg_accs(res_dict)
 
     # Convert dictionary to a DataFrame
     df = pd.DataFrame(avg_accs.items(), columns=['FW iterations', 'avg. accuracy in \%'])
@@ -79,4 +71,12 @@ def process_frank_wolfe_data():
 
 
 if __name__ == '__main__':
-    process_frank_wolfe_data()
+    fw_dict = {1: [12450, 12451, 12452, 12453],
+               2: [12413, 12414, 12415, 12416],
+               3: [12454, 12455, 12456, 12457],
+               4: [12429, 12430, 12431, 12432],
+               6: [12433, 12434, 12435, 12436],
+               8: [12437, 12438, 12439, 12440],
+               10: [12445, 12446, 12447, 12461]}
+
+    process_frank_wolfe_data(fw_dict)
