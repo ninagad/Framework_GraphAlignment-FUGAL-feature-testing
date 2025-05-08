@@ -8,7 +8,7 @@ Best feature: [EGO_NEIGHBORS, SUM_EGO_DEG]
 
 \begin{tabular}{lr}
 \toprule
-Feature set & avg accuracy \\
+Feature & avg accuracy \\
 \midrule
 ego neighbors, sum ego degs & 0.747074 \\
 ego neighbors, min ego degs & 0.746301 \\
