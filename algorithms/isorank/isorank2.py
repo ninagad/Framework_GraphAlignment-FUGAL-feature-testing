@@ -111,10 +111,11 @@ def main(data, features, scaling: ScalingEnums, alpha=0.5, tol=1e-12, maxiter=1,
             #Sim[i,j] = eucledian_dist(F1[i,:], F2[j,:], 1) / np.max(np.sum(F1[i,:],F2[j,:]))
             # Sim[i,j] = np.sum(np.absolute(F1[i,:] - F2[j,:]) / np.max(np.vstack((F1[i,:],F2[j,:])), axis=0))
             # Sim[i,j] = 1 - (np.sum(np.absolute(F1[i,:] - F2[j,:])) / np.max([np.sum(F1[i,:]),np.sum(F2[j,:])]))
-            Sim[i, j] = np.sum(np.ones(nr_of_features) - (diff / max)) / nr_of_features
+            #Sim[i, j] = np.sum(np.ones(nr_of_features) - (diff / max)) / nr_of_features
+            Sim[i, j] = 1 - (np.sum(diff / max) / nr_of_features)
             # Sim[i,j] = 1- (np.sum(np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)) / nr_of_features)
             #Sim[i, j] = np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)))
-            #Sim[i, j] = np.sqrt(np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) ** 2 / np.max(np.vstack((F1[i, :] ** 2, F2[j, :] ** 2)), axis=0)))) / nr_of_features
+            #Sim[i, j] = np.sqrt(np.sum(np.ones(nr_of_features) - ((diff ** 2) / (max ** 2)))) / nr_of_features
 
     #D = eucledian_dist(F1, F2, Src.shape[0])
 
