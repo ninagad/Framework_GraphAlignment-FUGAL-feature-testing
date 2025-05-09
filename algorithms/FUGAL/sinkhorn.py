@@ -187,7 +187,8 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
 
         if torch.any(KTu == 0.) or torch.any(torch.isnan(u)) or torch.any(torch.isnan(v)) or \
                 torch.any(torch.isinf(u)) or torch.any(torch.isinf(v)):
-            print('Warning: numerical errors at iteration', it)
+            if it > 1:
+                print('Warning: numerical errors at iteration', it)
 
             overflow_counter += 1
 
