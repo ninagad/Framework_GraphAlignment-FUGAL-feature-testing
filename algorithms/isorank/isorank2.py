@@ -95,13 +95,23 @@ def main(data, features, scaling: ScalingEnums, alpha=0.5, tol=1e-12, maxiter=1,
     F1, F2 = apply_scaling(F1, F2, scaling)
     Sim = np.ones((n1,n2))
     nr_of_features = len(features)
+    min = np.min([np.min(F1),np.min(F2)])
+    if min < 0:
+        F1 -= min
+        F2 -= min
+        raise Exception
 
     for i in range(n1):
         for j in range(n2):
-            Sim[i,j] = eucledian_dist(F1[i,:], F2[j,:], 1) / np.max(np.sum(F1[i,:],F2[j,:]))
+            max = np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)
+            diff = np.absolute(F1[i, :] - F2[j, :])
+            for k in np.argwhere(max == 0):
+                max[k] = 1
+                diff[k] = 0
+            #Sim[i,j] = eucledian_dist(F1[i,:], F2[j,:], 1) / np.max(np.sum(F1[i,:],F2[j,:]))
             # Sim[i,j] = np.sum(np.absolute(F1[i,:] - F2[j,:]) / np.max(np.vstack((F1[i,:],F2[j,:])), axis=0))
             # Sim[i,j] = 1 - (np.sum(np.absolute(F1[i,:] - F2[j,:])) / np.max([np.sum(F1[i,:]),np.sum(F2[j,:])]))
-            # Sim[i, j] = np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0))) / nr_of_features
+            Sim[i, j] = np.sum(np.ones(nr_of_features) - (diff / max)) / nr_of_features
             # Sim[i,j] = 1- (np.sum(np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)) / nr_of_features)
             #Sim[i, j] = np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) / np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)))
             #Sim[i, j] = np.sqrt(np.sum(np.ones(nr_of_features) - (np.absolute(F1[i, :] - F2[j, :]) ** 2 / np.max(np.vstack((F1[i, :] ** 2, F2[j, :] ** 2)), axis=0)))) / nr_of_features
