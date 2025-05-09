@@ -9,6 +9,8 @@ from sklearn.neighbors import KDTree
 # from data import ReadFile
 from . import unsup_align, embedding
 from ..FUGAL.pred import feature_extraction, eucledian_dist
+from algorithms.FUGAL.Fugal import apply_scaling
+from enums.scalingEnums import ScalingEnums
 
 
 #original code from https://github.com/GemsLab/CONE-Align
@@ -35,13 +37,13 @@ def align_embeddings(embed1, embed2, CONE_args, adj1=None, adj2=None, struc_embe
         if not sps.issparse(adj2):
             adj2 = sps.csr_matrix(adj2)
         init_sim, corr_mat = unsup_align.convex_init_sparse(
-            embed1, embed2, sim_matrix=CONE_args['similarity'], K_X=adj1, K_Y=adj2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
+            embed1, embed2, K_X=adj1, K_Y=adj2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
     else:
         init_sim, corr_mat = unsup_align.convex_init(
             embed1, embed2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
 
-    dim_align_matrix, corr_mat = unsup_align.align(
-        embed1, embed2, init_sim, lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
+    dim_align_matrix, corr_mat = unsup_align.align_with_features(
+        embed1, embed2, init_sim, sim_matrix=CONE_args['similarity'], lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
         #embed1, embed2, init_sim, sim_matrix=CONE_args['similarity'], lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
  
     aligned_embed1 = embed1.dot(dim_align_matrix)
@@ -122,7 +124,7 @@ def kd_align(emb1, emb2, normalize=False, distance_metric="euclidean", num_top=1
     return sparse_align_matrix.tocsr()
 
 
-def main(data, **args):
+def main(data, sim_scalar, scaling: ScalingEnums, **args):
     print("Cone")
     Src = data['Src']
     Tar = data['Tar']
@@ -134,8 +136,9 @@ def main(data, **args):
         Tar1 = nx.from_numpy_array(Tar)
         F1 = feature_extraction(Src1, features)
         F2 = feature_extraction(Tar1, features)
+        F1, F2 = apply_scaling(F1, F2, scaling)
         D = eucledian_dist(F1, F2)
-        args['similarity'] = D
+        args['similarity'] = D * sim_scalar
     else:
         args['similarity'] = None
 

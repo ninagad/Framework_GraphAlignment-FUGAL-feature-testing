@@ -139,7 +139,10 @@ _CONE_args = {
     'lr': 1.0,
     'embsim': 'euclidean',
     'alignmethod': 'greedy',
-    'numtop': 10
+    'numtop': 10,
+    'sim_scalar': 1,
+    'scaling': ScalingEnums.NO_SCALING,
+    'features': None
 }
 
 _GRASP_args = {

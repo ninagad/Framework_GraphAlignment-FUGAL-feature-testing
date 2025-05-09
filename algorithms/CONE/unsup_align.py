@@ -137,7 +137,7 @@ def convex_init(X, Y, niter=10, reg=1.0, apply_sqrt=False):
     # print(obj)
     return utils.procrustes(np.dot(P, X), Y).T, P
 
-def convex_init_sparse(X, Y, sim_matrix, K_X=None, K_Y=None, niter=10, reg=1.0, apply_sqrt=False, P=None):
+def convex_init_sparse(X, Y, K_X=None, K_Y=None, niter=10, reg=1.0, apply_sqrt=False, P=None):
     if P is not None:  # already given initial correspondence--then just procrustes
         return utils.procrustes(P.dot(X), Y).T, P
     n, d = X.shape
@@ -158,7 +158,7 @@ def convex_init_sparse(X, Y, sim_matrix, K_X=None, K_Y=None, niter=10, reg=1.0, 
     for it in range(1, niter + 1):
         # if it % 10 == 0:
         #     print(it)
-        G = P.dot(K2_X) + K2_Y.dot(P) - 2 * K_Y.dot(P.dot(K_X)) + sim_matrix
+        G = P.dot(K2_X) + K2_Y.dot(P) - 2 * K_Y.dot(P.dot(K_X)) # + sim_matrix
         # G = G.todense() #TODO how to get around this??
         q = ot.sinkhorn(np.ones(n), np.ones(n), G, reg, stopThr=1e-3)
         #q = sparse.csr_matrix(q)
