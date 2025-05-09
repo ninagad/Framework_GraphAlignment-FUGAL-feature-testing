@@ -182,7 +182,7 @@ def seigh(A):
   u = u[:,idx]
   return l, u
 def main(data, eta,lalpha,initSim,Eigtype, features):
-    print("GrampaNL")
+    print("GrampaS")
     os.environ["MKL_NUM_THREADS"] = "30"
     Src = data['Src']
     Tar = data['Tar']
@@ -223,10 +223,26 @@ def main(data, eta,lalpha,initSim,Eigtype, features):
         Tar1=nx.from_numpy_array(Tar)
         F1= feature_extraction(Src1,features)
         F2= feature_extraction(Tar1,features)
-        K = eucledian_dist(F1, F2, n)
-        L=np.max(K)-K
-        #L = calculate_similarity_scores_from_matrices(Src,Tar)
-        coeff = coeff * (U.T @ L @ V)
+
+        #Alternative similarity computation from IsoRank
+        sim = np.empty((n,n))
+        if (np.min(F1) < 0) or (np.min(F2) < 0):
+            raise Exception('No feature values below zero allowed in similarity computation')
+
+        for i in range(n):
+            for j in range(n):
+                max = np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)
+                diff = np.absolute(F1[i, :] - F2[j, :])
+                for k in np.argwhere(max == 0):
+                    max[k] = 1
+
+                sim[i, j] = 1 - (np.sum(diff / max) / len(features))
+
+        # Konstantinos' suggestion for similarity computation
+        #K = eucledian_dist(F1, F2, n)
+        #sim = np.max(K)-K
+
+        coeff = coeff * (U.T @ sim @ V)
     else:
         coeff = coeff * (U.T @ np.ones((n,n)) @ V)
     X = U @ coeff @ V.T
