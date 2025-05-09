@@ -18,6 +18,8 @@ from . import xnetmf
 from .config import RepMethod, Graph
 from .alignments import get_embeddings, get_embedding_similarities
 from algorithms.FUGAL.pred import feature_extraction, eucledian_dist
+from enums.scalingEnums import ScalingEnums
+from algorithms.FUGAL.Fugal import apply_scaling
 
 
 # def parse_args():
@@ -63,7 +65,7 @@ def G_to_Adj(G1, G2):
 
 
 # def main(Tar, Src, REGAL_args) -> object:
-def main(data, features, **args) -> object:
+def main(data, features, scaling: ScalingEnums, **args) -> object:
     print("Regal")
     Src = data['Src']
     Tar = data['Tar']
@@ -77,9 +79,10 @@ def main(data, features, **args) -> object:
         # get features from the features list
         Src1 = nx.from_numpy_array(Src)
         Tar1 = nx.from_numpy_array(Tar)
-        features1 = feature_extraction(Src1, features)
-        features2 = feature_extraction(Tar1, features)
-        combined_features = np.vstack((features1, features2))
+        F1 = feature_extraction(Src1, features)
+        F2 = feature_extraction(Tar1, features)
+        F1, F2 = apply_scaling(F1, F2, scaling)
+        combined_features = np.vstack((F1, F2))
 
         args['attributes'] = combined_features
 
