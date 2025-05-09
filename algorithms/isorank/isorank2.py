@@ -80,7 +80,7 @@ def create_L(A, B, lalpha=1, mind=None, weighted=True):
 # def main(A, B, L=None, alpha=0.5, tol=1e-12, maxiter=1, verbose=True):
 
 
-def main(data, features, scaling: ScalingEnums, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=None, weighted=True):
+def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=None, weighted=True):
     print("Isorank")
     dtype = np.float32
     Src = data['Src']
@@ -92,7 +92,6 @@ def main(data, features, scaling: ScalingEnums, alpha=0.5, tol=1e-12, maxiter=1,
     n2 = Src.shape[0]
     F1 = feature_extraction(Src1, features)
     F2 = feature_extraction(Tar1, features)
-    F1, F2 = apply_scaling(F1, F2, scaling)
     Sim = np.ones((n1,n2))
     nr_of_features = len(features)
     min = np.min([np.min(F1),np.min(F2)])
