@@ -65,6 +65,16 @@ def test_run_has_5_iterations(run: int):
     assert iters == 5, f'Got {iters} iterations in run {run}. Expected 5'
 
 
+def test_runs_have_ordered_graphs(grouped_runs: dict):
+    training_graphs = get_training_graph_names()
+
+    for runs in grouped_runs.values():
+        graph_names = get_graph_names_from_file(runs)
+        stripped_names = [strip_graph_name(name) for name in graph_names]
+
+        assert stripped_names == training_graphs, f'Current graphs has order {stripped_names} in runs {runs}. Expected graphs to have order {training_graphs}.'
+
+
 def test_configuration_graph_iters_nu_mu_sinkhorn(runs: dict, nu: float, mu: float, sinkhorn_reg: float):
     for fw, runs in runs.items():
         test_graphs_are_training_graphs(runs)
@@ -74,4 +84,3 @@ def test_configuration_graph_iters_nu_mu_sinkhorn(runs: dict, nu: float, mu: flo
             test_run_has_6_noise_levels(run)
             test_run_have_expected_nu_and_mu(run, nu, mu)
             test_run_have_expected_sinkhorn_reg(run, sinkhorn_reg)
-
