@@ -6,11 +6,9 @@ import pandas as pd
 
 # Local import
 from utils import get_acc_file_as_df, get_git_root
-from test_run_configurations import (test_graphs_are_training_graphs,
-                                     test_run_has_6_noise_levels,
-                                     test_run_have_expected_nu_and_mu,
+from test_run_configurations import (test_configuration_graph_iters_nu_mu_sinkhorn,
                                      test_run_have_expected_frank_wolfe_iters,
-                                     test_run_have_expected_sinkhorn_reg)
+                                     )
 
 
 def average_accuracy_across_graphs(runs: list[int]) -> float:
@@ -41,14 +39,11 @@ def check_runs_have_correct_config(grouped_runs: dict):
     mu = 442.66
     sinkhorn = 0.00141
 
-    for fw, runs in grouped_runs.items():
-        test_graphs_are_training_graphs(runs)
+    test_configuration_graph_iters_nu_mu_sinkhorn(grouped_runs, nu, mu, sinkhorn)
 
+    for fw, runs in grouped_runs.items():
         for run in runs:
-            test_run_has_6_noise_levels(run)
-            test_run_have_expected_nu_and_mu(run, nu, mu)
             test_run_have_expected_frank_wolfe_iters(run, fw)
-            test_run_have_expected_sinkhorn_reg(run, sinkhorn)
 
 
 def process_frank_wolfe_data(res_dict: dict):

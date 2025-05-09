@@ -80,6 +80,11 @@ def get_hyperparam_config(run: wandb.run):
         nu = None
 
     try:
+        fw = config.frank_wolfe_iters
+    except:
+        fw = 10
+
+    try:
         pca_components = config.components
     except:
         pca_components = None
@@ -87,11 +92,11 @@ def get_hyperparam_config(run: wandb.run):
     mu = config.mu
     reg = config.sinkhorn_reg
 
-    return nu, mu, reg, pca_components
+    return nu, mu, reg, fw, pca_components
 
 
 def log_final_metrics(graph_accs_dict: dict, accs: list, run: wandb.run):
-    nu, mu, sinkhorn_reg, pca_components = get_hyperparam_config(run)
+    nu, mu, sinkhorn_reg, fw, pca_components = get_hyperparam_config(run)
 
     # Log avg accuracy for each graph
     for graph in graphs:
@@ -101,6 +106,7 @@ def log_final_metrics(graph_accs_dict: dict, accs: list, run: wandb.run):
         wandb.run.log({'nu': nu,
                        'mu': mu,
                        'sinkhorn_reg': sinkhorn_reg,
+                       'frank_wolfe_iters': fw,
                        'pca_components': pca_components,
                        f'{graph} avg. acc': graph_avg_acc})
 
@@ -110,13 +116,14 @@ def log_final_metrics(graph_accs_dict: dict, accs: list, run: wandb.run):
     run.log({'nu': nu,
              'mu': mu,
              'sinkhorn_reg': sinkhorn_reg,
+             'frank_wolfe_iters': fw,
              'pca_components': pca_components,
              'avg. accuracy': avg_acc,
              })
 
 
 def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums], log_stabilized: bool = False):
-    nu, mu, sinkhorn_reg, pca_components = get_hyperparam_config(run)
+    nu, mu, sinkhorn_reg, fw, pca_components = get_hyperparam_config(run)
 
     if log_stabilized:
         alg_id = 22  # cuGAL with log stabilized
@@ -129,6 +136,7 @@ def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums], log_stab
          'mu': mu,
          'sinkhorn_reg': sinkhorn_reg,
          'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
+         'frank_wolfe_iters': fw,
          'pca_components': pca_components,
          }
     ]
@@ -145,10 +153,10 @@ def setup_fugal(run: wandb.run, all_algs, features: list[FeatureEnums], log_stab
 def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, target_dict: dict):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
     try:
-        nu, mu, sinkhorn_reg, pca_components = get_hyperparam_config(run)
+        nu, mu, sinkhorn_reg, fw, pca_components = get_hyperparam_config(run)
 
         # Initialize global variable artifact from run.py
-        artifact_name = f'nu{nu}-mu{mu}-sinkhorn_reg{sinkhorn_reg}-pca_components{pca_components}'
+        artifact_name = f'nu{nu}-mu{mu}-sinkhorn_reg{sinkhorn_reg}-fw{fw}-pca_components{pca_components}'
         artifact = wandb.Artifact(name=artifact_name, type='run-summary')
         run_file.artifact = artifact
 
@@ -161,7 +169,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
 
         for noise in noises:
             # Create an empty artifact file
-            artifact_file = f'nu={nu}-mu={mu}-sinkhorn_reg={sinkhorn_reg}-pca_components={pca_components}-noise={noise}.json'
+            artifact_file = f'nu={nu}-mu={mu}-sinkhorn_reg={sinkhorn_reg}-fw={fw}-pca_components={pca_components}-noise={noise}.json'
             with open(artifact_file, "w") as f:
                 json.dump([], f, indent=2)
 
@@ -200,6 +208,7 @@ def train(all_algs: list, feature_set: list[FeatureEnums], source_dict: dict, ta
             wandb.run.log({'nu': nu,
                            'mu': mu,
                            'sinkhorn_reg': sinkhorn_reg,
+                           'frank_wolfe_iters': fw,
                            'pca_components': pca_components,
                            'cum. accuracy': cum_acc})
 
@@ -227,7 +236,7 @@ def initialize_sweep(sweep_config: dict, all_algs: list, sweep_name: str, featur
 
     wandb.agent(sweep_id,
                 function=lambda: train(all_algs, feature_set, source_graphs, target_graphs),
-                count=150
+                count=15
                 )
 
 
@@ -254,7 +263,7 @@ if __name__ == "__main__":
 
     elif tune == 'pca':
         config_file = 'pca_config.yaml'
-        project_prefix = 'pca-tuning-'
+        project_prefix = 'pca-tuning'
 
     elif tune == 'reg':
         config_file = 'reg_config.yaml'

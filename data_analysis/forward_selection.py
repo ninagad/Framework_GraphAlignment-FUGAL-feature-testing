@@ -1,43 +1,22 @@
-import json
 import os
+
 import pandas as pd
 
 from enums.featureEnums import FeatureExtensions
+from utils import get_parameter, get_acc_file_as_df, get_git_root
+from test_run_configurations import test_configuration_graph_iters_nu_mu_sinkhorn
 
 
-def top_performing_feature(sources):
-    current_dir = (os.path.dirname(__file__))
-    runs_dir = "../Server-runs"
+def top_performing_feature(sources: list[int]):
+    first_run = sources[0]
+    nu = get_parameter(first_run, 'nu')
+    mu = get_parameter(first_run, 'mu')
+    sinkhorn_reg = get_parameter(first_run, 'sinkhorn_reg')
 
     dfs = []
 
-    nu = None
-    mu = None
-    sinkhorn_reg = None
-
-    for idx, source in enumerate(sources):
-        run_dir = os.path.join(current_dir, runs_dir, str(source))
-        acc_path = os.path.join(run_dir, 'res', 'acc.xlsx')
-        config_path = os.path.join(run_dir, 'config.json')
-
-        config_dict = json.load(open(config_path))
-        args = config_dict['algs'][0][1]
-
-        if idx == 0:
-            nu = args['nu']
-            mu = args['mu']
-            sinkhorn_reg = args['sinkhorn_reg']
-
-        else:  # Verify that all runs have the same nu, mu and sinkhorn_reg
-            current_nu = args['nu']
-            current_mu = args['mu']
-            current_sinkhorn_reg = args['sinkhorn_reg']
-
-            assert current_nu == nu, f"nu must be the same in all runs. Previous: {nu}, source {idx} has mu: {current_nu}"
-            assert current_mu == mu, f"mu must be the same in all runs. Previous: {mu}, source {idx} has mu: {current_mu}"
-            assert current_sinkhorn_reg == sinkhorn_reg, f"sinkhorn_reg must be the same in all runs. Previous: {sinkhorn_reg}, source {idx} has sinkhorn_reg: {current_sinkhorn_reg}"
-
-        graph_df = pd.read_excel(acc_path, index_col=[0, 1])
+    for source in sources:
+        graph_df = get_acc_file_as_df(source)
 
         # Remove Katz centrality if it is there
         try:
@@ -56,15 +35,15 @@ def top_performing_feature(sources):
     # Compute the mean over the different graphs and noise levels for each feature
     df = df.groupby(level=[0]).mean()
     df = df.sort_values(ascending=False)
-    df.index.name = 'Feature set'
+    df.index.name = 'Feature'
 
     max_feature = df.idxmax()
 
     df = df.reset_index()
 
     # Convert feature names to labels
-    FE = FeatureExtensions()
-    df['Feature set'] = df['Feature set'].apply(lambda x: FE.transform_feature_str_to_label(x))
+    fe = FeatureExtensions()
+    df['Feature'] = df['Feature'].apply(lambda x: fe.transform_feature_str_to_label(x))
 
     return df, max_feature, nu, mu, sinkhorn_reg
 
@@ -73,8 +52,8 @@ def save_to_file(df, feature, sources, nu, mu, reg, round_no):
     latex_table = pd.Series.to_latex(df, index=False)
 
     # Write to file
-    current_dir = (os.path.dirname(__file__))
-    file_path = os.path.join(current_dir, '..', 'tables', f"feature-forward-selection-{round_no}-features.txt")
+    root = get_git_root()
+    file_path = os.path.join(root, 'tables', f"feature-forward-selection-{round_no}-features.txt")
     with open(file_path, "w") as file:
         file.write(f'sources used for computation: {sources}')
         file.write('\n\n')
@@ -89,13 +68,23 @@ def save_to_file(df, feature, sources, nu, mu, reg, round_no):
 
 def forward_feature_selection():
     sources_dict = {1: [7522, 7523, 7524, 7525],
-                    #2: [11427, 11428, 11429, 11430],
-                    #2: [115Skadi, 116, 117, 118],
+                    # 2: [11427, 11428, 11429, 11430],
+                    # 2: [115, 116, 117, 118],  # Skadi
                     2: [12384, 12385, 12386, 12387],
-                    #3: [12380, 12381, 12382, 12383],
+                    # 3: [12380, 12381, 12382, 12383],
                     3: [12388, 12389, 12390, 12391],
                     4: [12400, 12401, 12402, 12403]
                     }
+
+    # Test configurations of all runs
+    nu_initial, mu_initial = 494, 125.98
+    sinkhorn = 0.0014
+    nu_remaining, mu_remaining = 447.24, 442.66
+
+    # Test that all runs have the correct graphs, nu, mu, reg and iters
+    test_configuration_graph_iters_nu_mu_sinkhorn({1: sources_dict[1]}, nu_initial, mu_initial, sinkhorn)
+    test_configuration_graph_iters_nu_mu_sinkhorn({k: v for k, v in sources_dict.items() if k != 1}, nu_remaining,
+                                                  mu_remaining, sinkhorn)
 
     for round_no, sources in sources_dict.items():
         df, feature, nu, mu, reg = top_performing_feature(sources)

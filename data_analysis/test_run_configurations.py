@@ -55,3 +55,23 @@ def test_run_have_expected_sinkhorn_reg(run: int, expected_sinkhorn_reg: float):
 
         assert current_sinkhorn == expected_sinkhorn_reg, (f'Current sinkhorn reg is {current_sinkhorn} in run {run}. '
                                                            f'Expected sinkhorn reg is {expected_sinkhorn_reg}')
+
+
+def test_run_has_5_iterations(run: int):
+    config = get_config_file(run)
+
+    iters = config['iters']
+
+    assert iters == 5, f'Got {iters} iterations in run {run}. Expected 5'
+
+
+def test_configuration_graph_iters_nu_mu_sinkhorn(runs: dict, nu: float, mu: float, sinkhorn_reg: float):
+    for fw, runs in runs.items():
+        test_graphs_are_training_graphs(runs)
+
+        for run in runs:
+            test_run_has_5_iterations(run)
+            test_run_has_6_noise_levels(run)
+            test_run_have_expected_nu_and_mu(run, nu, mu)
+            test_run_have_expected_sinkhorn_reg(run, sinkhorn_reg)
+

@@ -291,6 +291,7 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
 
             scaling = args['scaling']
             pca_components = args['pca_components']
+            fw = args['frank_wolfe_iters']
 
             features = args['features']
             acc = res2.item()
@@ -301,6 +302,7 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
                 wandb.run.log({'nu': wandb_nu,
                                'mu': wandb_mu,
                                'sinkhorn_reg': wandb_sinkhorn_reg,
+                               'frank_wolfe_iters': fw,
                                'cum. accuracy': 0,
                                'avg. accuracy': 0})
                 wandb.finish(exit_code=1)
@@ -317,10 +319,11 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
                             'noise-level': wandb_noiselvl,
                             'iteration': wandb_iteration,
                             'scaling': scaling.name,
+                            'frank_wolfe_iters': fw,
                             'pca_components': pca_components,
                             }
 
-            filename = f'nu={wandb_nu}-mu={wandb_mu}-sinkhorn_reg={wandb_sinkhorn_reg}-pca_components={pca_components}-noise={wandb_noiselvl}.json'
+            filename = f'nu={wandb_nu}-mu={wandb_mu}-sinkhorn_reg={wandb_sinkhorn_reg}-fw={fw}-pca_components={pca_components}-noise={wandb_noiselvl}.json'
             # Step 1: Load JSON data from artifact file
             with open(filename, "r") as f:
                 data = json.load(f)

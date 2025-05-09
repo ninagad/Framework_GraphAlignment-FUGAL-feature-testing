@@ -2,6 +2,7 @@ import subprocess
 from pathlib import Path
 import os
 import json
+from typing import Literal
 
 import numpy as np
 import networkx as nx
@@ -114,9 +115,21 @@ def get_graph_names_from_file(runs: list[int]) -> list[str]:
     return graph_names
 
 
-def get_algo_args(run: int) -> list[dict] :
+def get_algo_args(run: int) -> list[dict]:
     config = get_config_file(run)
     args = [execution[1] for execution in config['algs']]
 
     return args
 
+
+def get_parameter(run: int, param: Literal['nu', 'mu', 'sinkhorn_reg']) -> list[float] | float:
+    args = get_algo_args(run)
+
+    param_vals = [args_dict[param] for args_dict in args]
+
+    unique_param_vals = set(param_vals)
+
+    if len(unique_param_vals) != 1:
+        return param_vals
+    else:
+        return param_vals[0]
