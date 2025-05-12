@@ -42,9 +42,9 @@ def align_embeddings(embed1, embed2, CONE_args, adj1=None, adj2=None, struc_embe
         init_sim, corr_mat = unsup_align.convex_init(
             embed1, embed2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
 
-    dim_align_matrix, corr_mat = unsup_align.align_with_features(
-        embed1, embed2, init_sim, sim_matrix=CONE_args['similarity'], lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
-        #embed1, embed2, init_sim, sim_matrix=CONE_args['similarity'], lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
+    dim_align_matrix, corr_mat = unsup_align.align(
+        embed1, embed2, init_sim, lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
+        #embed1, embed2, init_sim, sim_matrix=CONE_args['distance'], lr=CONE_args['lr'], bsz=CONE_args['bsz'], nepoch=CONE_args['nepoch'], niter=CONE_args['niter_align'], reg=CONE_args['reg_align'])
  
     aligned_embed1 = embed1.dot(dim_align_matrix)
 
@@ -74,7 +74,7 @@ def align_embeddings1(embed1, embed2, CONE_args, adj1=None, adj2=None, struc_emb
         if not sps.issparse(adj2):
             adj2 = sps.csr_matrix(adj2)
         init_sim, corr_mat = unsup_align.convex_init_sparse(
-            embed1, embed2, K_X=adj1, K_Y=adj2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
+            embed1, embed2, dist_matrix=CONE_args['distance'], K_X=adj1, K_Y=adj2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
     else:
         init_sim, corr_mat = unsup_align.convex_init(
             embed1, embed2, apply_sqrt=False, niter=CONE_args['niter_init'], reg=CONE_args['reg_init'], P=corr)
@@ -124,7 +124,7 @@ def kd_align(emb1, emb2, normalize=False, distance_metric="euclidean", num_top=1
     return sparse_align_matrix.tocsr()
 
 
-def main(data, sim_scalar, scaling: ScalingEnums, **args):
+def main(data, dist_scalar, scaling: ScalingEnums, **args):
     print("Cone")
     Src = data['Src']
     Tar = data['Tar']
@@ -138,9 +138,9 @@ def main(data, sim_scalar, scaling: ScalingEnums, **args):
         F2 = feature_extraction(Tar1, features)
         F1, F2 = apply_scaling(F1, F2, scaling)
         D = eucledian_dist(F1, F2)
-        args['similarity'] = D * sim_scalar
+        args['distance'] = D * dist_scalar
     else:
-        args['similarity'] = None
+        args['distance'] = None
 
     #min_dim = min(Src.shape[0] - 1, Tar.shape[0] - 1)
     #if args['dim'] > min_dim:

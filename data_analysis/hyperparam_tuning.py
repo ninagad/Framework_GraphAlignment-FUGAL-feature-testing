@@ -31,7 +31,7 @@ noises = [0.25, 0.20, 0.15, 0.10, 0.05, 0]
 
 iterations = 5
 
-allowed_algorithms_type = Literal['fugal', 'cugal', 'isorank', 'regal']
+allowed_algorithms_type = Literal['fugal', 'cugal', 'isorank', 'regal', 'grampa']
 
 def generate_graphs(graph_name: str):
     """
@@ -99,7 +99,8 @@ def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums
     algo_id_dict = {'fugal': 12,
                     'cugal': 22,
                     'isorank': 6,
-                    'regal': 3}
+                    'regal': 3,
+                    'grampa': 20}
 
     config_dict = get_hyperparam_config(run)
 
@@ -220,48 +221,52 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--tune',
-                        choices=['nu_mu_reg', 'nu_and_mu', 'pca', 'isorank', 'regal'],
+                        choices=['nu_mu_reg', 'nu_mu', 'pca', 'isorank', 'regal', 'grampa'],
                         default='nu_mu_reg')
 
     args = parser.parse_args()
     tune = args.tune
 
     all_algs = copy.copy(_algs)
-    algorithm: allowed_algorithms_type = 'fugal'
+    algorithm: allowed_algorithms_type
+
     # Load sweep config
-    if tune == 'nu_mu_reg':
-        config_file = 'nu_mu_reg_config.yaml'
-        project_name = 'nu-mu-reg-tuning-all-features'
-        trials = 150
+    if (tune == 'nu_mu_reg') or (tune == "nu_mu") or (tune == 'pca'):
+        config_file = f'{tune}_config.yaml'
+        algorithm = 'fugal'
 
-        feature_set = get_all_features()
+        if tune == 'nu_mu_reg':
+            project_name = 'nu-mu-reg-tuning-all-features'
+            feature_set = get_all_features()
+            trials = 150
 
-    elif tune == "nu_and_mu":
-        config_file = 'nu_mu_config.yaml'
-        project_name = 'nu-mu-tuning-ego-neighbors'
-        feature_set = [FeatureEnums.EGO_NEIGHBORS]
-        trials = 100
+        if tune == "nu_mu":
+            project_name = 'nu-mu-tuning-ego-neighbors'
+            feature_set = [FeatureEnums.EGO_NEIGHBORS]
+            trials = 100
 
-    elif tune == 'pca':
-        config_file = 'pca_config.yaml'
-        project_name = 'pca-tuning'
-        # TODO: decide feature set for PCA
-        feature_set = get_all_features()
-        trials = 15
+        if tune == 'pca':
+            project_name = 'pca-tuning'
+            # TODO: decide feature set for PCA
+            feature_set = get_all_features()
+            trials = 15
 
-    elif tune == 'isorank':
-        config_file = 'isorank.yaml'
-        project_name = 'isorank-alpha-tuning'
+    elif (tune == 'isorank') or (tune == 'regal') or (tune =='grampa'):
+        config_file = f'{tune}.yaml'
         feature_set = get_forward_selected_features()
-        algorithm = 'isorank'
+        algorithm = tune
         trials = 50
+        project_name = ''
 
-    elif tune == 'regal':
-        config_file = 'regal.yaml'
-        project_name = 'regal-gammaattr-tuning'
-        feature_set = get_forward_selected_features()
-        algorithm = 'regal'
-        trials = 50
+        if tune == 'isorank':
+            project_name = 'isorank-alpha-tuning'
+
+        if tune == 'regal':
+            project_name = 'regal-gammaattr-tuning'
+
+        if tune == 'grampa':
+            project_name = 'grampa-eta-tuning'
+
     else:
         raise ValueError('Unknown tuning choice')
 

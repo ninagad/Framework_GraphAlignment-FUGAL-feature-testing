@@ -65,8 +65,8 @@ def align(X, Y, R, lr=1.0, bsz=10, nepoch=5, niter=10,
     return R, P
 
 
-def align_with_features(X, Y, R, sim_matrix, lr=1.0, bsz=10, nepoch=5, niter=10,
-          nmax=10, reg=0.05, verbose=True, project_every=True):
+def align_with_features(X, Y, R, dist_matrix, lr=1.0, bsz=10, nepoch=5, niter=10,
+                        nmax=10, reg=0.05, verbose=True, project_every=True):
     for epoch in range(1, nepoch + 1):
         nmax = X.shape[0]
         x_perm = np.random.permutation(nmax)
@@ -83,8 +83,8 @@ def align_with_features(X, Y, R, sim_matrix, lr=1.0, bsz=10, nepoch=5, niter=10,
             yt = X[y_indices,:]
             # Select rows and columns in similarity matrix corresponding
             # to the x and y rows selected in mini-batch
-            if sim_matrix is not None:
-                dt = sim_matrix[np.ix_(x_indices, y_indices)]
+            if dist_matrix is not None:
+                dt = dist_matrix[np.ix_(x_indices, y_indices)]
             else:
                 dt = 0
             # compute OT on minibatch
@@ -137,7 +137,7 @@ def convex_init(X, Y, niter=10, reg=1.0, apply_sqrt=False):
     # print(obj)
     return utils.procrustes(np.dot(P, X), Y).T, P
 
-def convex_init_sparse(X, Y, K_X=None, K_Y=None, niter=10, reg=1.0, apply_sqrt=False, P=None):
+def convex_init_sparse(X, Y, dist_matrix, K_X=None, K_Y=None, niter=10, reg=1.0, apply_sqrt=False, P=None):
     if P is not None:  # already given initial correspondence--then just procrustes
         return utils.procrustes(P.dot(X), Y).T, P
     n, d = X.shape
@@ -158,7 +158,7 @@ def convex_init_sparse(X, Y, K_X=None, K_Y=None, niter=10, reg=1.0, apply_sqrt=F
     for it in range(1, niter + 1):
         # if it % 10 == 0:
         #     print(it)
-        G = P.dot(K2_X) + K2_Y.dot(P) - 2 * K_Y.dot(P.dot(K_X)) # + sim_matrix
+        G = P.dot(K2_X) + K2_Y.dot(P) - 2 * K_Y.dot(P.dot(K_X)) + dist_matrix
         # G = G.todense() #TODO how to get around this??
         q = ot.sinkhorn(np.ones(n), np.ones(n), G, reg, stopThr=1e-3)
         #q = sparse.csr_matrix(q)
