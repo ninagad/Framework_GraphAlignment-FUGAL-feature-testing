@@ -1,0 +1,21 @@
+method: grid
+
+early_terminate:
+  type: hyperband
+  min_iter: 2
+
+metric:
+  name: cum. accuracy
+  goal: maximize
+
+parameters:
+  sinkhorn_reg:
+    value: 0.00141
+  nu:
+    value: 447.24
+  mu:
+    value: 442.66
+  frank_wolfe_iters:
+    value: 2
+  components:
+    values: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]

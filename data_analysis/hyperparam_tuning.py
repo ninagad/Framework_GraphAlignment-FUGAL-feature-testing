@@ -31,7 +31,7 @@ noises = [0.25, 0.20, 0.15, 0.10, 0.05, 0]
 
 iterations = 5
 
-allowed_algorithms_type = Literal['fugal', 'cugal', 'isorank', 'regal', 'grampa']
+allowed_algorithms_type = Literal['fugal', 'cugal', 'isorank', 'regal', 'grampa', 'cone']
 
 def generate_graphs(graph_name: str):
     """
@@ -96,11 +96,13 @@ def log_final_metrics(graph_accs_dict: dict, accs: list, run: wandb.run):
 
 def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums],
                            algorithm: allowed_algorithms_type):
+
     algo_id_dict = {'fugal': 12,
                     'cugal': 22,
                     'isorank': 6,
                     'regal': 3,
-                    'grampa': 20}
+                    'grampa': 20,
+                    'cone': 1}
 
     config_dict = get_hyperparam_config(run)
 
@@ -109,7 +111,7 @@ def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums
     config_dict['features'] = features
     # Add scaling to algorithms that use distance matrix.
     # No scaling for algorithms that use similarity matrix.
-    if algorithm in ['fugal', 'cugal', 'regal']:
+    if algorithm in ['fugal', 'cugal', 'regal', 'cone']:
         config_dict['scaling'] = ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION
 
     args_lst = [
@@ -221,7 +223,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--tune',
-                        choices=['nu_mu_reg', 'nu_mu', 'pca', 'isorank', 'regal', 'grampa'],
+                        choices=['nu_mu_reg', 'nu_mu', 'pca_all', 'pca_15', 'isorank', 'regal', 'grampa', 'cone'],
                         default='nu_mu_reg')
 
     args = parser.parse_args()
@@ -229,10 +231,10 @@ if __name__ == "__main__":
 
     all_algs = copy.copy(_algs)
     algorithm: allowed_algorithms_type
+    config_file = f'{tune}.yaml'
 
     # Load sweep config
-    if (tune == 'nu_mu_reg') or (tune == "nu_mu") or (tune == 'pca'):
-        config_file = f'{tune}_config.yaml'
+    if (tune == 'nu_mu_reg') or (tune == "nu_mu") or (tune == 'pca_all') or (tune == 'pca_15'):
         algorithm = 'fugal'
 
         if tune == 'nu_mu_reg':
@@ -245,14 +247,21 @@ if __name__ == "__main__":
             feature_set = [FeatureEnums.EGO_NEIGHBORS]
             trials = 100
 
-        if tune == 'pca':
-            project_name = 'pca-tuning'
-            # TODO: decide feature set for PCA
+        if tune == 'pca_all':
+            project_name = 'pca-all-features-tuning'
             feature_set = get_all_features()
+            trials = 30
+
+        if tune == 'pca_15':
+            project_name = 'pca-15-features-tuning'
+            feature_set = [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.EGO_OUT_EDGES,
+                           FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.MAX_EGO_CLUSTER,
+                           FeatureEnums.AVG_EGO_CLUSTER, FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.RANGE_EGO_CLUSTER,
+                           FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MIN_EGO_DEGS, FeatureEnums.MAX_EGO_DEGS,
+                           FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER, FeatureEnums.SUM_EGO_DEG]
             trials = 15
 
-    elif (tune == 'isorank') or (tune == 'regal') or (tune =='grampa'):
-        config_file = f'{tune}.yaml'
+    elif (tune == 'isorank') or (tune == 'regal') or (tune =='grampa') or (tune == 'cone'):
         feature_set = get_forward_selected_features()
         algorithm = tune
         trials = 50
@@ -266,6 +275,9 @@ if __name__ == "__main__":
 
         if tune == 'grampa':
             project_name = 'grampa-eta-tuning'
+
+        if tune == 'cone':
+            project_name = 'cone-dist_scalar-tuning'
 
     else:
         raise ValueError('Unknown tuning choice')
