@@ -31,6 +31,7 @@ noises = [0.25, 0.20, 0.15, 0.10, 0.05, 0]
 
 iterations = 5
 
+allowed_algorithms_type = Literal['fugal', 'cugal', 'isorank', 'regal']
 
 def generate_graphs(graph_name: str):
     """
@@ -94,10 +95,11 @@ def log_final_metrics(graph_accs_dict: dict, accs: list, run: wandb.run):
 
 
 def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums],
-                           algorithm: Literal['fugal', 'cugal', 'isorank']):
+                           algorithm: allowed_algorithms_type):
     algo_id_dict = {'fugal': 12,
                     'cugal': 22,
-                    'isorank': 6}
+                    'isorank': 6,
+                    'regal': 3}
 
     config_dict = get_hyperparam_config(run)
 
@@ -106,7 +108,7 @@ def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums
     config_dict['features'] = features
     # Add scaling to algorithms that use distance matrix.
     # No scaling for algorithms that use similarity matrix.
-    if algorithm in ['fugal', 'cugal']:
+    if algorithm in ['fugal', 'cugal', 'regal']:
         config_dict['scaling'] = ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION
 
     args_lst = [
@@ -122,7 +124,7 @@ def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums
     return run_lst
 
 
-def train(algorithm: Literal['fugal', 'cugal', 'isorank'], all_algs: list, feature_set: list[FeatureEnums],
+def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[FeatureEnums],
           source_dict: dict, target_dict: dict):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
     try:
@@ -204,7 +206,7 @@ def train(algorithm: Literal['fugal', 'cugal', 'isorank'], all_algs: list, featu
 
 
 def initialize_sweep(sweep_config: dict, sweep_count: int, all_algs: list, sweep_name: str,
-                     feature_set: list[FeatureEnums], algorithm: Literal['fugal', 'cugal', 'isorank']):
+                     feature_set: list[FeatureEnums], algorithm: allowed_algorithms_type):
     sweep_id = wandb.sweep(sweep_config, project=sweep_name)
     source_graphs, target_graphs = generate_all_graph()
 
@@ -218,14 +220,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--tune',
-                        choices=['nu_mu_reg', 'nu_and_mu', 'pca', 'isorank'],
+                        choices=['nu_mu_reg', 'nu_and_mu', 'pca', 'isorank', 'regal'],
                         default='nu_mu_reg')
 
     args = parser.parse_args()
     tune = args.tune
 
     all_algs = copy.copy(_algs)
-    algorithm: Literal['fugal', 'cugal', 'isorank'] = 'fugal'
+    algorithm: allowed_algorithms_type = 'fugal'
     # Load sweep config
     if tune == 'nu_mu_reg':
         config_file = 'nu_mu_reg_config.yaml'
@@ -254,6 +256,12 @@ if __name__ == "__main__":
         algorithm = 'isorank'
         trials = 50
 
+    elif tune == 'regal':
+        config_file = 'regal.yaml'
+        project_name = 'regal-gammaattr-tuning'
+        feature_set = get_forward_selected_features()
+        algorithm = 'regal'
+        trials = 50
     else:
         raise ValueError('Unknown tuning choice')
 
