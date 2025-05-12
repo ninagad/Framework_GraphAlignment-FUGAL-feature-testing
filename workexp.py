@@ -249,8 +249,7 @@ def save_results(path, runtimes: np.array, results: np.array, components: pd.Dat
 
 
 @ex.automain
-def main(_run, _log, verbose, plot, nice=0, source_graphs=None, target_graphs=None):
-
+def main(_run, _log, verbose, plot, nice=0, source_graphs=None, target_graphs=None, artifact_file=None):
     _run.info['id'] = _run._id
     path = f"runs/{_run._id}"
 
@@ -279,6 +278,6 @@ def main(_run, _log, verbose, plot, nice=0, source_graphs=None, target_graphs=No
     if len(plot) > 1 and plot[1]:
         plot_G(G)
 
-    time5, res6, components_df = run_exp(G, path)
+    time5, res6, components_df = run_exp(G, path, artifact_filename=artifact_file)
 
     save_results(path, time5, res6, components_df)

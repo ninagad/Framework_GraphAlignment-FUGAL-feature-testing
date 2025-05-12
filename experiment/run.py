@@ -22,13 +22,10 @@ import json
 
 # Global variables used when tuning hyperparameter mu in FUGAL
 artifact: wandb.Artifact | None = None
+artifact_file: str | None = None
 wandb_graph: str | None = None
 wandb_noiselvl: float | None = None
 wandb_iteration: int | None = None
-wandb_mu: float | None = None
-wandb_nu: float | None = None
-wandb_sinkhorn_reg: float | None = None
-
 
 def format_output(res):
     if isinstance(res, tuple):
@@ -281,49 +278,40 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
         res3.append(res2)
 
         if wandb.run is not None:
-            args = alg[1]
-            global wandb_nu
-            wandb_nu = args['nu']
-            global wandb_mu
-            wandb_mu = args['mu']
-            global wandb_sinkhorn_reg
-            wandb_sinkhorn_reg = args['sinkhorn_reg']
+            args: dict = alg[1]
 
-            scaling = args['scaling']
-            pca_components = args['pca_components']
-            fw = args['frank_wolfe_iters']
-
-            features = args['features']
             acc = res2.item()
             if acc == -1:
                 # Log run as failed
                 logging.error(f'numeric error occurred')
                 # Log avg. accuracy as 0 to steer optimization away from this set of hyperparameters
-                wandb.run.log({'nu': wandb_nu,
-                               'mu': wandb_mu,
-                               'sinkhorn_reg': wandb_sinkhorn_reg,
-                               'frank_wolfe_iters': fw,
-                               'cum. accuracy': 0,
-                               'avg. accuracy': 0})
+                error_dict = args.copy()
+                error_dict['cum. accuracy'] = 0
+                error_dict['avg. accuracy'] = 0
+                wandb.run.log(error_dict)
                 wandb.finish(exit_code=1)
                 # Terminate script immediately so the next value of mu is used
                 sys.exit(1)
 
-            summary_dict = {'algorithm': (alg[0]).__name__,
-                            'nu': wandb_nu,
-                            'mu': wandb_mu,
-                            'sinkhorn_reg': wandb_sinkhorn_reg,
-                            'accuracy': acc,
-                            'features': [feature.name for feature in features],
-                            'graph': wandb_graph,
-                            'noise-level': wandb_noiselvl,
-                            'iteration': wandb_iteration,
-                            'scaling': scaling.name,
-                            'frank_wolfe_iters': fw,
-                            'pca_components': pca_components,
-                            }
+            summary_dict = args.copy()
+            summary_dict['algorithm'] = (alg[0]).__name__
+            summary_dict['accuracy'] = acc
+            summary_dict['graph'] = wandb_graph
+            summary_dict['noise-level'] = wandb_noiselvl
+            summary_dict['iteration'] = wandb_iteration
 
-            filename = f'nu={wandb_nu}-mu={wandb_mu}-sinkhorn_reg={wandb_sinkhorn_reg}-fw={fw}-pca_components={pca_components}-noise={wandb_noiselvl}.json'
+            # Map enums to their string representation to make it json serializable
+            try:
+                summary_dict['features'] = [feature.name for feature in summary_dict['features']]
+            except KeyError:
+                pass
+
+            try:
+                summary_dict['scaling'] = summary_dict['scaling'].name
+            except KeyError:
+                pass
+
+            filename = artifact_file
             # Step 1: Load JSON data from artifact file
             with open(filename, "r") as f:
                 data = json.load(f)
@@ -350,7 +338,10 @@ def e_to_G(e, n):
 
 
 @ex.capture
-def run_exp(G, output_path, noises, _log, graph_names):
+def run_exp(G, output_path, noises, _log, graph_names, artifact_filename: str):
+    global artifact_file
+    artifact_file = artifact_filename
+
     time2 = time3 = time4 = None
     time5 = []
     res3 = res4 = res5 = None
