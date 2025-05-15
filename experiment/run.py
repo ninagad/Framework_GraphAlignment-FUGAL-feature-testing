@@ -94,7 +94,10 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
             ['python', 'monitor.py', output_path], shell=False)
         time.sleep(2)
     start = time.time()
-    res = alg_exe(alg, data, args)
+    res, *pca_explained_var = alg_exe(alg, data, args)
+    # Unpack list if pca_explained_var is not the empty list
+    pca_explained_var = pca_explained_var[0] if pca_explained_var else None
+
     time1.append(time.time() - start)
     if mon:
         proc.send_signal(signal.SIGINT)
@@ -146,7 +149,7 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
 
     _log.debug(f"{'#':#^35}")
 
-    return time1, res2
+    return time1, res2, pca_explained_var
 
 
 # @profile
@@ -273,7 +276,9 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
     res3 = []
 
     for alg in algs:
-        time1, res2 = run_alg(alg, data, Gt)
+        # When FUGAL is used with PCA, it returns the explained variance.
+        # Otherwise the third variable is empty.
+        time1, res2, *pca_explained_variance = run_alg(alg, data, Gt)
         time2.append(time1)
         res3.append(res2)
 
@@ -299,6 +304,8 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
             summary_dict['graph'] = wandb_graph
             summary_dict['noise-level'] = wandb_noiselvl
             summary_dict['iteration'] = wandb_iteration
+            if pca_explained_variance:  # If list is non-empty, get first element
+                summary_dict['explained_var'] = pca_explained_variance[0]
 
             # Map enums to their string representation to make it json serializable
             try:

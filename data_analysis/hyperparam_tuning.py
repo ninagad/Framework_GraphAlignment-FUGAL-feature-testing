@@ -4,6 +4,7 @@ import copy
 import json
 import traceback
 import logging
+from itertools import chain
 from typing import Literal
 
 import argparse
@@ -75,22 +76,33 @@ def get_hyperparam_config(run: wandb.run) -> dict:
     return dict(config)
 
 
-def log_final_metrics(graph_accs_dict: dict, accs: list, run: wandb.run):
+def log_final_metrics(run: wandb.run, graph_accs_dict: dict, accs: list, explained_vars: dict):
     config_dict = get_hyperparam_config(run)
 
+    print(f'In logging of final metrics: {graph_accs_dict.keys()=}')
     # Log avg accuracy for each graph
-    for graph in graphs:
+    for graph in graph_accs_dict.keys():
         graph_accs = graph_accs_dict[graph]
         graph_avg_acc = sum(graph_accs) / len(graph_accs)
 
-        graph_res_dict = config_dict.copy()
-        graph_res_dict[f'{graph} avg. acc'] = graph_avg_acc
-        wandb.run.log(config_dict)
+        config_dict[f'{graph} avg. acc'] = graph_avg_acc
+
+        # If pca is tuned, log explained variance per graph
+        graph_explained_vars = explained_vars[graph]
+        if graph_explained_vars:  # If not empty, compute mean
+            graph_avg_var = sum(graph_explained_vars) / len(graph_explained_vars)
+            config_dict[f'{graph} avg. explained var.'] = graph_avg_var
 
     # Log average accuracy across all graphs
     avg_acc = sum(accs) / len(accs)
-
     config_dict['avg. accuracy'] = avg_acc
+
+    # For PCA, log average explained variance across graphs
+    all_vars = list(chain.from_iterable(explained_vars.values()))
+    if all_vars:
+        avg_var = sum(all_vars) / len(all_vars)
+        config_dict['avg. explained var.'] = avg_var
+
     run.log(config_dict)
 
 
@@ -145,6 +157,7 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
         # Used to log overall avg acc and graph-wise avg. acc.
         all_accs = []
         graph_accs = {graph: [] for graph in graphs}
+        pca_explained_vars = {graph: [] for graph in graphs}
 
         for noise in noises:
             # Create an empty artifact file
@@ -166,7 +179,7 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
                                     'iters': iterations,
                                     'xlabel': 'Noise-level',
                                     'artifact_file': artifact_file,
-                                    'verbose': True
+                                    #'verbose': True
                                     })
 
             # Add file to wandb after writing to it in run.py
@@ -178,6 +191,13 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
                 for dictionary in summary_dicts:
                     graph = dictionary['graph']
                     acc = dictionary['accuracy']
+
+                    # If we are tuning pca, log the explained variance
+                    try:
+                        pca_explained_var = dictionary['explained_var']
+                        pca_explained_vars[graph].append(pca_explained_var)
+                    except KeyError:
+                        pass
 
                     graph_accs[graph].append(acc)
 
@@ -195,7 +215,7 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
             if os.path.exists(artifact_file):
                 os.remove(artifact_file)
 
-        log_final_metrics(graph_accs, all_accs, run)
+        log_final_metrics(run, graph_accs, all_accs, pca_explained_vars)
 
         # run summaries are logged as files in the Artifact object in run.py
         wandb.run.log_artifact(run_file.artifact).wait()

@@ -40,10 +40,11 @@ def apply_pca(source_features: np.array, target_features: np.array, components: 
 
     scaler = StandardScaler()
     standardized_features = scaler.fit_transform(combined_features)
-    pca_obj = PCA(n_components=components)
-    principal_components = pca_obj.fit_transform(standardized_features)
+    pca = PCA(n_components=components)
+    principal_components = pca.fit_transform(standardized_features)
+    explained_variance = pca.explained_variance_ratio_.sum()
 
-    return principal_components[:n, :], principal_components[n:, :]
+    return principal_components[:n, :], principal_components[n:, :], explained_variance
 
 
 def apply_scaling(source_features: np.array, target_features: np.array, scaling: ScalingEnums):
@@ -117,8 +118,10 @@ def main(data,
     F1 = feature_extraction(Src1, features)
     F2 = feature_extraction(Tar1, features)
 
+    explained_var = None
     if pca_components is not None:
-        F1, F2 = apply_pca(F1, F2, pca_components)
+        F1, F2, explained_var = apply_pca(F1, F2, pca_components)
+
     else:
         F1, F2 = apply_scaling(F1, F2, scaling)
 
@@ -134,4 +137,7 @@ def main(data,
     # P=convex_init1(A, B, L, mu, iter)
     # are_matrices_equal(P,P1)
     # P_perm, ans = convertToPermHungarian(P, n1, n2)
-    return P
+    if explained_var is not None:
+        return P, explained_var
+    else:
+        return P
