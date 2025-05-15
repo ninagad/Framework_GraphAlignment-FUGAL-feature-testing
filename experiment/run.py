@@ -1,4 +1,5 @@
 import sys
+import typing
 
 from . import ex
 from generation import similarities_preprocess
@@ -27,34 +28,34 @@ wandb_graph: str | None = None
 wandb_noiselvl: float | None = None
 wandb_iteration: int | None = None
 
-def format_output(res):
-    if isinstance(res, tuple):
-        sim, cost = res
+def make_sparse(matrix):
+    if sps.issparse(matrix):
+        sparse = matrix.toarray()
+        return sparse
     else:
-        sim = res
-        cost = None
+        return matrix
 
-    # if sim is not None:
-    #     sim = sps.csr_matrix(sim)
 
-    # if cost is not None:
-    #     cost = sps.csr_matrix(cost)
+def format_additional_vals(additional_vals: list) -> tuple[typing.Any, None | float]:
+    if len(additional_vals) == 0:
+        return None, None
+    if len(additional_vals) == 1:
+        val = additional_vals[0]
 
-    if sps.issparse(sim):
-        sim = sim.toarray()
-        # res[0] = sim.toarray()
+        # Is explained variance of PCA in FUGAL
+        if type(val) == float:
+            return None, val
 
-    if sps.issparse(cost):
-        cost = cost.toarray()
-        # res[1] = cost.toarray()
-
-    return sim, cost
-
+        else:
+            return make_sparse(val), None
 
 # @profile
 @ex.capture
 def alg_exe(alg, data, args):
     return alg.main(data=data, **args)
+
+
+
 
 
 @ex.capture
@@ -94,9 +95,8 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
             ['python', 'monitor.py', output_path], shell=False)
         time.sleep(2)
     start = time.time()
-    res, *pca_explained_var = alg_exe(alg, data, args)
-    # Unpack list if pca_explained_var is not the empty list
-    pca_explained_var = pca_explained_var[0] if pca_explained_var else None
+    sim, *additional_vals = alg_exe(alg, data, args)
+    sim = make_sparse(sim)
 
     time1.append(time.time() - start)
     if mon:
@@ -104,7 +104,7 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
     # gc.enable()
     # gc.collect()
 
-    sim, cost = format_output(res)
+    cost, pca_explained_var = format_additional_vals(additional_vals)
 
     try:
         _run.log_scalar(f"{algname}.sim.size", sim.size)
