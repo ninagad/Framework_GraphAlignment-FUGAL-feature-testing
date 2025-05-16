@@ -2,10 +2,10 @@ import os
 
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 import pandas as pd
 from matplotlib.figure import Figure
 
-from enums.graphEnums import GraphEnums
 from utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, get_git_root
 
 
@@ -28,6 +28,7 @@ def get_marks():
     marker_options = ['o', '^', 's', 'D', 'x', 'P', 'd']
     return marker_options
 
+
 def plot_cone_subplots(df: pd.DataFrame, source: int, axes, row: int, col: int):
     # Divide df into each run
     dfs = [df.iloc[i:i + 6] for i in range(0, len(df), 6)]
@@ -44,9 +45,13 @@ def plot_cone_subplots(df: pd.DataFrame, source: int, axes, row: int, col: int):
         axes[row, col].plot(xs, df['mean'], label=dist_scalar, color=colors[idx], marker=marks[idx],
                             markersize=5)
 
+
 def plot_subplot(baseline: int, source: int, axes, row: int, col: int, title: str):
     # Baseline trace color (orange)
-    baseline_color = plt.get_cmap("Set1")(4)
+    #baseline_color = plt.get_cmap("Set1")(4)
+    colormap = plt.get_cmap('tab10')
+    baseline_color = colormap(1)
+    color = colormap(0)
 
     graph_name = get_graph_names_from_file([source])[0]
     graph_name = strip_graph_name(graph_name)
@@ -58,20 +63,28 @@ def plot_subplot(baseline: int, source: int, axes, row: int, col: int, title: st
 
     # Baseline
     baseline_df = compute_mean_over_iters(baseline)
-    axes[row, col].plot(xs, baseline_df['mean'], label='baseline', color=baseline_color)
 
     if title == "CONE":
+        axes[row, col].plot(xs, baseline_df['mean'], label='baseline', color=baseline_color)
         plot_cone_subplots(df, source, axes, row, col)
+        axes[row, col].grid(True)
+        axes[row, col].set_ylim(-0.1, 1.1)
     else:
-        axes[row, col].plot(xs, df['mean'], label='with features'
-                            )
+        baseline_df['type'] = 'baseline'
+        df['type'] = 'with features'
+        baseline_df['noise'] = xs
+        df['noise'] = xs
+        # Combine into one DataFrame
+        df_all = pd.concat([baseline_df, df], ignore_index=True)
+        sns.barplot(data=df_all, x='noise', y='mean', hue='type', ax=axes[row, col], palette=[baseline_color, color])
+        # hide the individual legend
+        axes[row, col].legend().remove()
+
     # Layout plot
-    axes[row, col].set_ylim(-0.1, 1.1)
     if col == 0:
         axes[row, col].set_ylabel('Accuracy')
     axes[row, col].set_xlabel('Noise level')
     axes[row, col].set_title(label=f'{graph_name}', fontsize=12)
-    axes[row, col].grid(True)
 
 
 def layout_plot(fig: Figure, axes, title: str, legend_name: str):
@@ -122,16 +135,16 @@ def plot_eval_graphs(baselines: list, sources: list, title: str, legend_title: s
 if __name__ == '__main__':
     cone_baselines = [281, 282, 283, 284]
     cone_sources = [14054, 14179, 14181, 14182]
-    plot_eval_graphs(cone_baselines, cone_sources, 'CONE', 'Dist scalar','CONE-dist_scalar')
+    plot_eval_graphs(cone_baselines, cone_sources, 'CONE', 'Dist scalar', 'CONE-dist_scalar')
 
     isorank_baselines = [15274, 15276, 15279, 15280]
     isorank_sources = [15272, 15258, 15260, 15269]
-    plot_eval_graphs(isorank_baselines, isorank_sources, 'IsoRank', '', 'IsoRank-eval')
+    plot_eval_graphs(isorank_baselines, isorank_sources, 'IsoRank', '', 'IsoRank-bar-eval')
 
     regal_baselines = [15211, 15196, 15215, 15201]
     regal_sources = [15126, 15129, 15142, 15123]
-    plot_eval_graphs(regal_baselines, regal_sources, 'REGAL', '', 'REGAL-eval')
+    plot_eval_graphs(regal_baselines, regal_sources, 'REGAL', '', 'REGAL-bar-eval')
 
     grampa_baselines = [15285, 15287, 15289, 15291]
     grampa_sources = [15233, 15235, 15239, 15240]
-    plot_eval_graphs(grampa_baselines, grampa_sources, 'GRAMPA', '', 'GRAMPA-eval')
+    plot_eval_graphs(grampa_baselines, grampa_sources, 'GRAMPA', '', 'GRAMPA-bar-eval')
