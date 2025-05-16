@@ -16,7 +16,20 @@ class FeatureExtensions:
                 return FeatureEnums[name]
             except:
                 print(f'Feature: {name} is not an ENUM -> excluded from plot')
-                return
+                return None
+
+    @staticmethod
+    def to_features(name: str):
+        features_in_combination = name.replace(' ', '').split(',')
+        features = [FeatureExtensions.to_feature(name) for name in features_in_combination]
+
+        if len(features) == 1:
+            return features[0]
+
+        elif None in features:
+            return None
+        else:
+            return features
 
     @staticmethod
     def to_label(feature: 'FeatureEnums') -> str:
@@ -104,7 +117,7 @@ class FeatureExtensions:
         return label
 
     @staticmethod
-    def transform_feature_str_to_label(feature: str):
+    def transform_feature_str_to_label(feature: str) -> str | None:
         fe = FeatureExtensions()
 
         if ',' not in feature:

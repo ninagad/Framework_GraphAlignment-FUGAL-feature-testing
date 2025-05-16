@@ -4,7 +4,6 @@ import numpy as np
 from enums.featureEnums import FeatureExtensions as FE
 
 
-
 class PlotUtils:
     def __init__(self):
         self.colorscale_dict = {}
@@ -102,14 +101,21 @@ class PlotUtils:
         fugal_name = FE.to_labels(FUGAL_combination)
         self.colorscale_dict[fugal_name] = plt.get_cmap("Set1")(4)
 
-    def to_color(self, feature: FeatureEnums) -> str:
-        name = FE.to_label(feature)
-        return self.colorscale_dict[name]
+    def to_color(self, feature: FeatureEnums) -> str | None:
+        try:
+            name = FE.to_label(feature)
+            return self.colorscale_dict[name]
 
-    def to_colors(self, features: list[FeatureEnums]) -> str:
-        name = FE.to_labels(features)
-        return self.colorscale_dict[name]
+        except KeyError:
+            return None
 
+    def to_colors(self, features: list[FeatureEnums]) -> str | None:
+        try:
+            name = FE.to_labels(features)
+            return self.colorscale_dict[name]
+
+        except KeyError:
+            return None
 
     def to_marker(self, feature: FeatureEnums) -> str:
         name = FE.to_label(feature)
@@ -132,7 +138,3 @@ class PlotUtils:
         }
 
         return column_name_dict[plottype]
-
-
-
-
