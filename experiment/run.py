@@ -28,6 +28,7 @@ wandb_graph: str | None = None
 wandb_noiselvl: float | None = None
 wandb_iteration: int | None = None
 
+
 def make_sparse(matrix):
     if sps.issparse(matrix):
         sparse = matrix.toarray()
@@ -43,19 +44,22 @@ def format_additional_vals(additional_vals: list) -> tuple[typing.Any, None | fl
         val = additional_vals[0]
 
         # Is explained variance of PCA in FUGAL
-        if type(val) == float:
+        if type(val) == np.float64:
             return None, val
 
         else:
             return make_sparse(val), None
 
+
 # @profile
 @ex.capture
-def alg_exe(alg, data, args):
-    return alg.main(data=data, **args)
-
-
-
+def alg_exe(alg, data, args) -> tuple:
+    # Ensure that returned value is always tuple, so it is unpacked correctly.
+    res = alg.main(data=data, **args)
+    if isinstance(res, tuple):
+        return res
+    else:
+        return (res,)
 
 
 @ex.capture
@@ -97,14 +101,13 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
     start = time.time()
     sim, *additional_vals = alg_exe(alg, data, args)
     sim = make_sparse(sim)
+    cost, pca_explained_var = format_additional_vals(additional_vals)
 
     time1.append(time.time() - start)
     if mon:
         proc.send_signal(signal.SIGINT)
     # gc.enable()
     # gc.collect()
-
-    cost, pca_explained_var = format_additional_vals(additional_vals)
 
     try:
         _run.log_scalar(f"{algname}.sim.size", sim.size)
@@ -149,7 +152,7 @@ def run_alg(_alg, _data, Gt, accs, _log, _run, mall, mon=False, pstart=5):
 
     _log.debug(f"{'#':#^35}")
 
-    return time1, res2, pca_explained_var
+    return time1, res2,  pca_explained_var
 
 
 # @profile

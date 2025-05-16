@@ -11,6 +11,7 @@ import argparse
 # lib imports
 import wandb
 import yaml
+from wandb.errors import CommError, UsageError
 
 from data_analysis.utils import get_git_root
 # local imports
@@ -33,6 +34,7 @@ noises = [0.25, 0.20, 0.15, 0.10, 0.05, 0]
 iterations = 5
 
 allowed_algorithms_type = Literal['fugal', 'cugal', 'isorank', 'regal', 'grampa', 'cone']
+
 
 def generate_graphs(graph_name: str):
     """
@@ -79,7 +81,6 @@ def get_hyperparam_config(run: wandb.run) -> dict:
 def log_final_metrics(run: wandb.run, graph_accs_dict: dict, accs: list, explained_vars: dict):
     config_dict = get_hyperparam_config(run)
 
-    print(f'In logging of final metrics: {graph_accs_dict.keys()=}')
     # Log avg accuracy for each graph
     for graph in graph_accs_dict.keys():
         graph_accs = graph_accs_dict[graph]
@@ -108,7 +109,6 @@ def log_final_metrics(run: wandb.run, graph_accs_dict: dict, accs: list, explain
 
 def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums],
                            algorithm: allowed_algorithms_type):
-
     algo_id_dict = {'fugal': 12,
                     'cugal': 22,
                     'isorank': 6,
@@ -123,6 +123,7 @@ def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums
     config_dict['features'] = features
     # Add scaling to algorithms that use distance matrix.
     # No scaling for algorithms that use similarity matrix.
+    # If pca is used, scaling is automatically disregarded in FUGAL
     if algorithm in ['fugal', 'cugal', 'regal', 'cone']:
         config_dict['scaling'] = ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION
 
@@ -142,6 +143,7 @@ def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums
 def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[FeatureEnums],
           source_dict: dict, target_dict: dict):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
+
     try:
         config_dict = get_hyperparam_config(run)
 
@@ -214,7 +216,6 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
             # Remove artifact file from local machine
             if os.path.exists(artifact_file):
                 os.remove(artifact_file)
-
         log_final_metrics(run, graph_accs, all_accs, pca_explained_vars)
 
         # run summaries are logged as files in the Artifact object in run.py
@@ -281,7 +282,7 @@ if __name__ == "__main__":
                            FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER, FeatureEnums.SUM_EGO_DEG]
             trials = 15
 
-    elif (tune == 'isorank') or (tune == 'regal') or (tune =='grampa') or (tune == 'cone'):
+    elif (tune == 'isorank') or (tune == 'regal') or (tune == 'grampa') or (tune == 'cone'):
         feature_set = get_forward_selected_features()
         algorithm = tune
         trials = 50

@@ -1,9 +1,5 @@
 method: grid
 
-early_terminate:
-  type: hyperband
-  min_iter: 2
-
 metric:
   name: cum. accuracy
   goal: maximize

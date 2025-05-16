@@ -88,8 +88,18 @@ def sinkhorn(a, b, C, reg=1e-1, method='sinkhorn', maxIter=1000, tau=1e3,
         raise ValueError("Unknown method '%s'." % method)
 
 
-def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
-                   verbose=False, log=False, warm_start=None, eval_freq=10, print_freq=200, **kwargs):
+def sinkhorn_knopp(a: torch.tensor,
+                   b: torch.tensor,
+                   C: torch.tensor,
+                   reg=1e-1,
+                   maxIter=1000,
+                   stopThr=1e-9,
+                   verbose=False,
+                   log=False,
+                   warm_start=None,
+                   eval_freq=10,
+                   print_freq=200,
+                   **kwargs):
     """
     Solve the entropic regularization optimal transport
     The input should be PyTorch tensors
@@ -139,6 +149,9 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
     --------
 
     """
+    assert isinstance(a, torch.Tensor) and a.dtype == torch.float64, "a must be a float64 torch.Tensor"
+    assert isinstance(b, torch.Tensor) and b.dtype == torch.float64, "b must be a float64 torch.Tensor"
+    assert isinstance(C, torch.Tensor) and C.dtype == torch.float64, "C must be a float64 torch.Tensor"
 
     device = a.device
     na, nb = C.shape
@@ -162,9 +175,6 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
     torch.div(C, -reg, out=K)
     torch.exp(K, out=K)
 
-    #print(f'{torch.min(K)=}')
-    KTu_min = math.inf
-
     b_hat = torch.empty(b.shape, dtype=C.dtype).to(device)
 
     it = 1
@@ -182,8 +192,6 @@ def sinkhorn_knopp(a, b, C, reg=1e-1, maxIter=1000, stopThr=1e-9,
         v = torch.div(b, KTu)
         torch.matmul(K, v, out=Kv)
         u = torch.div(a, Kv)
-
-        if KTu_min > torch.min(KTu): KTu_min = torch.min(KTu)
 
         if torch.any(KTu == 0.) or torch.any(torch.isnan(u)) or torch.any(torch.isnan(v)) or \
                 torch.any(torch.isinf(u)) or torch.any(torch.isinf(v)):
