@@ -45,13 +45,13 @@ def feature_extraction(G: nx.Graph, features: list) -> np.array:
 
     neighbor_degs = [[node_degree_dict[m] for m in egonets[n].nodes if m != n]
                      if node_degree_dict[n] > 0
-                     else 0
+                     else [0]
                      for n in node_list
                      ]
 
     neighbor_cluster = [[node_clustering_dict[m] for m in egonets[n].nodes if m != n]
                         if node_degree_dict[n] > 0
-                        else 0
+                        else [0]
                         for n in node_list
                         ]
 
@@ -337,13 +337,13 @@ def feature_extraction(G: nx.Graph, features: list) -> np.array:
 
     two_hop_neighbor_degs = [[node_degree_dict[m] for m in two_hop_egonets[n].nodes if m != n]
                              if node_degree_dict[n] > 0
-                             else 0
+                             else [0]
                              for n in node_list
                              ]
 
     two_hop_neighbor_cluster = [[node_clustering_dict[m] for m in two_hop_egonets[n].nodes if m != n]
                                 if node_degree_dict[n] > 0
-                                else 0
+                                else [0]
                                 for n in node_list
                                 ]
 

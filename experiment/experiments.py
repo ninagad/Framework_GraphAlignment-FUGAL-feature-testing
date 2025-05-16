@@ -148,6 +148,8 @@ def tuning():
              #'sinkhorn_method': SinkhornMethod.STANDARD,
              'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
              'frank_wolfe_iters': 2,
+             'gammaattr': 0.03,
+             'eta': 0.85,
              #'pca_components': 4,
              }
             for x in [#[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER] #, [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.>
@@ -168,6 +170,10 @@ def tuning():
                       # [FeatureEnums.SUM_2HOP_CLUSTER], [FeatureEnums.STD_2HOP_CLUSTER], [FeatureEnums.MEDIAN_2HOP_CLUSTER], [FeatureEnums.MIN_2HOP_CLUSTER], [FeatureEnums.MAX_2HOP_CLUSTER], [FeatureEnums.RANGE_2HOP_CLUSTER], [FeatureEnums.SKEWNESS_2HOP_CLUSTER], [FeatureEnums.KURTOSIS_2HOP_CLUSTER],
                       [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG]
                       ]
+            #{'features': [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG],
+            # 'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
+            # 'dist_scalar': x,
+            # } for x in [1, 0.1, 0.01, 0.001, 0.0001]
             # {'mu': x, 'features': ['deg','cluster','avg_ego_deg', 'avg_ego_cluster','ego_edges','ego_out_edges','ego_neighbors',  # NETSIMILE features
             #        'sum_ego_cluster', 'var_ego_cluster', 'assortativity_ego', 'internal_frac_ego', # Augmented NETSIMILE features
             #      'mode_ego_degs', 'median_ego_degs', 'min_ego_degs', 'max_ego_degs', 'range_ego_degs', 'skewness_ego_degs', 'kurtosis_ego_degs',  # Statistic measures on degrees
@@ -192,10 +198,11 @@ def tuning():
         #"yeast25_Y2H1",
         #"inf-euroroad",
         #"socfb-Bowdoin47",
-        #"ia-reality",
-        #"ia-crime-moreno",
         #"DD_g501",
         #"power-685-bus",
+        #"infect-dublin",
+        #"ia-reality",
+        #"ia-crime-moreno",
         #"contacts-prox-high-school-2013_100",
         #"nws_n=1000_k=10_p=0.2",
         #"nws_n=1000_k=10_p=0.4",
@@ -235,6 +242,7 @@ def tuning():
         0.20,
         0.25,
     ]
+
     # s_trans = (2, 1, 0, 3)
     # s_trans = (0, 2, 1, 3,4)
     # xlabel = list(tmp[1][0].keys())[0]
