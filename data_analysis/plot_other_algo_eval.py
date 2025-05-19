@@ -47,24 +47,35 @@ def plot_cone_subplots(df: pd.DataFrame, source: int, axes, row: int, col: int):
 
 
 def plot_subplot(baseline: int, source: int, axes, row: int, col: int, title: str):
-    # Baseline trace color (orange)
-    #baseline_color = plt.get_cmap("Set1")(4)
-    colormap = plt.get_cmap('tab10')
-    baseline_color = colormap(1)
-    color = colormap(0)
+    #baseline_color = '#2596be'
+    baseline_color = '#8eb576'
+    # Green pair
+    baseline_color = '#b1de89'
+    color = '#31a354'
+
+    #color = '#688557'
+    #color = '#38b1d9'
+
+    #baseline_color = '#4daf4a'
+    #color = '#377eb8'
 
     graph_name = get_graph_names_from_file([source])[0]
     graph_name = strip_graph_name(graph_name)
 
-    df = compute_mean_over_iters(source)
+    df = get_acc_file_as_df(source)
+    df = df.replace(-1, np.nan)
+
+    baseline_df = get_acc_file_as_df(baseline)
+    baseline_df = baseline_df.replace(-1, np.nan)
 
     # Get noise levels
     xs = df.index.get_level_values(1).unique()
 
-    # Baseline
-    baseline_df = compute_mean_over_iters(baseline)
-
     if title == "CONE":
+        df = compute_mean_over_iters(source)
+        baseline_df = compute_mean_over_iters(baseline)
+
+        baseline_color = plt.get_cmap("Set1")(4)
         axes[row, col].plot(xs, baseline_df['mean'], label='baseline', color=baseline_color)
         plot_cone_subplots(df, source, axes, row, col)
         axes[row, col].grid(True)
@@ -74,9 +85,30 @@ def plot_subplot(baseline: int, source: int, axes, row: int, col: int, title: st
         df['type'] = 'with features'
         baseline_df['noise'] = xs
         df['noise'] = xs
+
         # Combine into one DataFrame
         df_all = pd.concat([baseline_df, df], ignore_index=True)
-        sns.barplot(data=df_all, x='noise', y='mean', hue='type', ax=axes[row, col], palette=[baseline_color, color])
+
+        # Collapse iteration columns into a single column of accuracies
+        df_all = df_all.melt(
+            id_vars=['type', 'noise'],
+            var_name='iteration',
+            value_name='accuracy')
+
+        sns.barplot(data=df_all,
+                    x='noise',
+                    y='accuracy',
+                    hue='type',
+                    ax=axes[row, col],
+                    palette=[baseline_color, color],
+                    edgecolor="black",
+                    linewidth=0.6,
+                    errorbar="sd"
+                    )
+        # make the background grid visible
+        axes[row, col].grid(True, axis="y", linestyle="--", linewidth=0.4, alpha=0.7)
+        axes[row, col].set_axisbelow(True)  # keep bars in front of the grid
+
         # hide the individual legend
         axes[row, col].legend().remove()
 
