@@ -226,6 +226,8 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
     except Exception as e:
         error_trace = traceback.format_exc()  # Get full traceback as a string
         logging.error(f'{e} \n {error_trace}')
+        print("Exception type:", type(e).__name__)
+        print("Exception message:", str(e))
         run.finish(exit_code=1)
 
 
