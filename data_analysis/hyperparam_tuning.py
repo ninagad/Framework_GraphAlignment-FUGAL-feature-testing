@@ -141,7 +141,7 @@ def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums
 
 
 def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[FeatureEnums],
-          source_dict: dict, target_dict: dict):
+          source_dict: dict, target_dict: dict, name: str = ''):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
 
     try:
@@ -163,7 +163,7 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
 
         for noise in noises:
             # Create an empty artifact file
-            artifact_file = artifact_name + f'-noise={noise}.json'
+            artifact_file = name + '-' + artifact_name + f'-noise{noise}.json'
 
             with open(artifact_file, "w") as f:
                 json.dump([], f, indent=2)
@@ -263,7 +263,7 @@ def initialize_pca_sweeps(all_algos: list):
 
     sweep_id = wandb.sweep(sweep_dict, project='pca-15-features-tuning')
     wandb.agent(sweep_id,
-                function=lambda: train('fugal', all_algos, features, source_graphs, target_graphs),
+                function=lambda: train('fugal', all_algos, features, source_graphs, target_graphs, name='pca15'),
                 count=15
                 )
 
@@ -273,7 +273,7 @@ def initialize_pca_sweeps(all_algos: list):
 
     sweep_id = wandb.sweep(sweep_dict, project='pca-all-features-tuning')
     wandb.agent(sweep_id,
-                function=lambda: train('fugal', all_algos, features, source_graphs, target_graphs),
+                function=lambda: train('fugal', all_algos, features, source_graphs, target_graphs, name='pca30'),
                 count=30
                 )
 
