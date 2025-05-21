@@ -228,7 +228,7 @@ def init1(graphs, iters):
 
     #     randcheck = path
     S_G = [
-        [loadnx(graph_path) for _ in range(iters)] for graph_path in graphs
+        [alg(*args) for _ in range(iters)] for alg, args in graphs
     ]
 
     return S_G
