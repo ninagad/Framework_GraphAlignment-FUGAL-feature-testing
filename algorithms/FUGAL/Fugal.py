@@ -128,11 +128,8 @@ def main(data,
     D = eucledian_dist(F1, F2, n)
 
     D = torch.tensor(D, dtype=torch.float64)
-    print("source graph: ", Src[0, :10], " target graph: ", Tar[0, :10])
 
     P = convex_init(A, B, D, sinkhorn_reg, nu, mu, iter, frank_wolfe_iters)
-
-    print("The resulting double stochastic matrix: ", P[0, :10])
 
     # P=convex_init1(A, B, L, mu, iter)
     # are_matrices_equal(P,P1)

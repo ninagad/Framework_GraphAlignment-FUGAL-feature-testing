@@ -799,7 +799,7 @@ def convex_init(A, B, D, reg: float, nu: float, mu: float, niter: int, fw_iters:
     for i in range(niter):  # TODO: optimize lambda later for efficiency
 
         for it in range(1, fw_iters + 1):
-            print(f'Iteration: {it}')
+            #print(f'Iteration: {it}')
             if nu is not None:
                 # TODO: consider if reg_scalar can be multiplied before loop
                 G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + D + i * reg_scalar * (
