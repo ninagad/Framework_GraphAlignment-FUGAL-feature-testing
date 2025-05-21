@@ -141,7 +141,7 @@ def setup_algorithm_params(run: wandb.run, all_algs, features: list[FeatureEnums
 
 
 def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[FeatureEnums],
-          source_dict: dict, target_dict: dict):
+          source_dict: dict, target_dict: dict, name: str = ''):
     run = wandb.init(settings=wandb.Settings(start_method="thread"))
 
     try:
@@ -163,7 +163,7 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
 
         for noise in noises:
             # Create an empty artifact file
-            artifact_file = artifact_name + f'-noise={noise}.json'
+            artifact_file = name + '-' + artifact_name + f'-noise{noise}.json'
 
             with open(artifact_file, "w") as f:
                 json.dump([], f, indent=2)
@@ -181,7 +181,7 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
                                     'iters': iterations,
                                     'xlabel': 'Noise-level',
                                     'artifact_file': artifact_file,
-                                    #'verbose': True
+                                    # 'verbose': True
                                     })
 
             # Add file to wandb after writing to it in run.py
@@ -225,8 +225,18 @@ def train(algorithm: allowed_algorithms_type, all_algs: list, feature_set: list[
 
     except Exception as e:
         error_trace = traceback.format_exc()  # Get full traceback as a string
-        logging.error(f'{e} \n {error_trace}')
+        logging.error(f'{e} \n {error_trace} \n Exception type: {type(e).__name__} \n Exception message: {str(e)}')
         run.finish(exit_code=1)
+
+
+def get_tuning_config(filename: str):
+    root = get_git_root()
+    path = os.path.join(root, 'data_analysis', 'tuning_configs', filename)
+
+    with open(path) as f:
+        sweep_config = yaml.safe_load(f)
+
+    return sweep_config
 
 
 def initialize_sweep(sweep_config: dict, sweep_count: int, all_algs: list, sweep_name: str,
@@ -240,74 +250,93 @@ def initialize_sweep(sweep_config: dict, sweep_count: int, all_algs: list, sweep
                 )
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+def initialize_pca_sweeps(all_algos: list):
+    source_graphs, target_graphs = generate_all_graph()
 
-    parser.add_argument('--tune',
-                        choices=['nu_mu_reg', 'nu_mu', 'pca_all', 'pca_15', 'isorank', 'regal', 'grampa', 'cone'],
-                        default='nu_mu_reg')
+    # Tuning over 15 features
+    features = [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.EGO_OUT_EDGES,
+                FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.MAX_EGO_CLUSTER,
+                FeatureEnums.AVG_EGO_CLUSTER, FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.RANGE_EGO_CLUSTER,
+                FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MIN_EGO_DEGS, FeatureEnums.MAX_EGO_DEGS,
+                FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER, FeatureEnums.SUM_EGO_DEG]
+    sweep_dict = get_tuning_config('pca_15.yaml')
 
-    args = parser.parse_args()
-    tune = args.tune
+    sweep_id = wandb.sweep(sweep_dict, project='pca-15-features-tuning')
+    wandb.agent(sweep_id,
+                function=lambda: train('fugal', all_algos, features, source_graphs, target_graphs, name='pca15'),
+                count=15
+                )
 
+    # Tuning over 30 features
+    features = get_all_features()
+    sweep_dict = get_tuning_config('pca_all.yaml')
+
+    sweep_id = wandb.sweep(sweep_dict, project='pca-all-features-tuning')
+    wandb.agent(sweep_id,
+                function=lambda: train('fugal', all_algos, features, source_graphs, target_graphs, name='pca30'),
+                count=30
+                )
+
+
+def main(tuning: str):
     all_algs = copy.copy(_algs)
+
+    if tuning == 'pca':
+        initialize_pca_sweeps(all_algs)
+        return
+
     algorithm: allowed_algorithms_type
-    config_file = f'{tune}.yaml'
+    config_file = f'{tuning}.yaml'
 
     # Load sweep config
-    if (tune == 'nu_mu_reg') or (tune == "nu_mu") or (tune == 'pca_all') or (tune == 'pca_15'):
+    if (tuning == 'nu_mu_reg') or (tuning == "nu_mu"):
         algorithm = 'fugal'
 
-        if tune == 'nu_mu_reg':
+        if tuning == 'nu_mu_reg':
             project_name = 'nu-mu-reg-tuning-all-features'
             feature_set = get_all_features()
             trials = 150
 
-        if tune == "nu_mu":
+        if tuning == "nu_mu":
             project_name = 'nu-mu-tuning-ego-neighbors'
             feature_set = [FeatureEnums.EGO_NEIGHBORS]
             trials = 100
 
-        if tune == 'pca_all':
-            project_name = 'pca-all-features-tuning'
-            feature_set = get_all_features()
-            trials = 30
-
-        if tune == 'pca_15':
-            project_name = 'pca-15-features-tuning'
-            feature_set = [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.EGO_OUT_EDGES,
-                           FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.MAX_EGO_CLUSTER,
-                           FeatureEnums.AVG_EGO_CLUSTER, FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.RANGE_EGO_CLUSTER,
-                           FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MIN_EGO_DEGS, FeatureEnums.MAX_EGO_DEGS,
-                           FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER, FeatureEnums.SUM_EGO_DEG]
-            trials = 15
-
-    elif (tune == 'isorank') or (tune == 'regal') or (tune == 'grampa') or (tune == 'cone'):
+    elif (tuning == 'isorank') or (tuning == 'regal') or (tuning == 'grampa') or (tuning == 'cone'):
         feature_set = get_forward_selected_features()
-        algorithm = tune
+        algorithm = tuning
         trials = 50
         project_name = ''
 
-        if tune == 'isorank':
+        if tuning == 'isorank':
             project_name = 'isorank-alpha-tuning'
 
-        if tune == 'regal':
+        if tuning == 'regal':
             project_name = 'regal-gammaattr-tuning'
 
-        if tune == 'grampa':
+        if tuning == 'grampa':
             project_name = 'grampa-eta-tuning'
 
-        if tune == 'cone':
+        if tuning == 'cone':
             project_name = 'cone-dist_scalar-tuning'
 
     else:
         raise ValueError('Unknown tuning choice')
 
-    root = get_git_root()
-    path = os.path.join(root, 'data_analysis', 'tuning_configs', config_file)
-
-    with open(path) as f:
-        sweep_config = yaml.safe_load(f)
+    sweep_config = get_tuning_config(config_file)
 
     # Initialize run
     initialize_sweep(sweep_config, trials, all_algs, project_name, feature_set, algorithm)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--tune',
+                        choices=['nu_mu_reg', 'nu_mu', 'pca', 'isorank', 'regal', 'grampa', 'cone'],
+                        default='nu_mu_reg')
+
+    args = parser.parse_args()
+    tune = args.tune
+
+    main(tune)

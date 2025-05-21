@@ -148,8 +148,8 @@ def tuning():
              #'sinkhorn_method': SinkhornMethod.STANDARD,
              'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
              'frank_wolfe_iters': 2,
-             'gammaattr': 0.03,
-             'eta': 0.85,
+             #'gammaattr': 0.03,
+             #'eta': 0.85,
              #'pca_components': 4,
              }
             for x in [#[FeatureEnums.DEG] #, [FeatureEnums.CLUSTER] #, [FeatureEnums.AVG_EGO_DEG], [FeatureEnums.AVG_EGO_CLUSTER], [FeatureEnums.EGO_EDGES], [FeatureEnums.>
@@ -373,7 +373,7 @@ def real_noise():
 
 def get_graph_paths(gnames):
     return [
-        f"data/{name}.txt" for name in gnames
+        (gen.loadnx, f"data/{name}.txt") for name in gnames
     ]
 
 
