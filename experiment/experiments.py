@@ -204,6 +204,14 @@ def tuning():
         #"ia-reality",
         #"ia-crime-moreno",
         #"contacts-prox-high-school-2013_100",
+        #"econ-mahindas",
+        #"email-dnc-corecipient-modified",
+        #"email-univ",
+        #"bio-DM-LC_no_weight",
+        #"bio-dmela",
+        #"bio-yeast",
+        #"inf-power",
+        #"inf-USAir97",
         #"nws_n=1000_k=10_p=0.2",
         #"nws_n=1000_k=10_p=0.4",
         #"nws_n=1000_k=10_p=0.6",
@@ -373,7 +381,7 @@ def real_noise():
 
 def get_graph_paths(gnames):
     return [
-        (gen.loadnx, f"data/{name}.txt") for name in gnames
+        (gen.loadnx, (f'data/{name}.txt',)) for name in gnames
     ]
 
 
