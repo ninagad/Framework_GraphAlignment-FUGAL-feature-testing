@@ -18,7 +18,7 @@ def plot_filter(baseline):
         return None
 
 def select_plots():
-    baselines = [16189, 16385, 16387, 16388, 17238, 17239, 17247, 17240]
+    baselines = [17241, 17242, 17243, 17244, 17245, 17246, 16189, 16385, 16387, 16388, 17238, 17239, 17247, 17240]
     included_baselines =[]
     for baseline in baselines:
         graph_name = plot_filter(baseline)
