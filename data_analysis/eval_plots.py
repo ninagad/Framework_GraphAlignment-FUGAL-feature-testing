@@ -95,13 +95,13 @@ def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, addi
             subplot.plot(100 * xs, 100 * lr_df['mean'], label='lr = 0', color=lr_color)
 
         baseline_color = plt.get_cmap("tab10")(1)
-        subplot.plot(100 * xs, 100 * baseline_df['mean'], label='baseline', color=baseline_color)
+        subplot.plot(100 * xs, 100 * baseline_df['mean'], label='Original', color=baseline_color)
 
         subplot.grid(True)
         subplot.set_ylim(-10, 110)
     else:
-        baseline_df['type'] = 'baseline'
-        df['type'] = 'with features'
+        baseline_df['type'] = 'Original'
+        df['type'] = 'Proposed'
         baseline_df['noise'] = xs
         df['noise'] = xs
 
