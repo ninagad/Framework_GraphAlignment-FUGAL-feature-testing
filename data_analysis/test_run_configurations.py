@@ -26,6 +26,15 @@ def test_run_has_6_noise_levels(run: int):
     assert noises == expected_noises, f'Current noise levels are {noises}. Expected {expected_noises}'
 
 
+def test_run_have_expected_mu(run: int, expected_mu: float):
+    args: list[dict] = get_algo_args(run)
+
+    for args_dict in args:
+        current_mu = args_dict['mu']
+
+        assert current_mu == expected_mu, f'Current mu is {current_mu} in run {run}. Expected mu {expected_mu}'
+
+
 def test_run_have_expected_nu_and_mu(run: int, expected_nu: float, expected_mu: float):
     args: list[dict] = get_algo_args(run)
 

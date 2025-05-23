@@ -1,5 +1,5 @@
 import numpy as np
-from utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, get_git_root
+from data_analysis.utils import get_acc_file_as_df, get_graph_names_from_file, strip_graph_name
 
 def plot_filter(baseline):
     graph_name = get_graph_names_from_file([baseline])[0]

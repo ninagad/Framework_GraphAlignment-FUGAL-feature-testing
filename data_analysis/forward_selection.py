@@ -3,8 +3,8 @@ import os
 import pandas as pd
 
 from enums.featureEnums import FeatureExtensions
-from utils import get_parameter, get_acc_file_as_df, get_git_root
-from test_run_configurations import test_configuration_graph_iters_nu_mu_sinkhorn
+from data_analysis.utils import get_parameter, get_acc_file_as_df, get_git_root
+from data_analysis.test_run_configurations import test_configuration_graph_iters_nu_mu_sinkhorn
 
 
 def top_performing_feature(sources: list[int]):

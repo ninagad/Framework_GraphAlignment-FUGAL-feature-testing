@@ -8,7 +8,7 @@ import seaborn as sns
 import pandas as pd
 from matplotlib.figure import Figure
 
-from utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, get_git_root
+from data_analysis.utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, get_git_root
 
 allowed_colormaps = Literal['Greens', 'Blues']
 

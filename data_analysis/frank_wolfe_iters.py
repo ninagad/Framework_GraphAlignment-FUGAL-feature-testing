@@ -5,8 +5,8 @@ import os
 import pandas as pd
 
 # Local import
-from utils import get_acc_file_as_df, get_git_root
-from test_run_configurations import (test_configuration_graph_iters_nu_mu_sinkhorn,
+from data_analysis.utils import get_acc_file_as_df, get_git_root
+from data_analysis.test_run_configurations import (test_configuration_graph_iters_nu_mu_sinkhorn,
                                      test_run_have_expected_frank_wolfe_iters,
                                      test_runs_have_ordered_graphs,
                                      get_training_graph_names
