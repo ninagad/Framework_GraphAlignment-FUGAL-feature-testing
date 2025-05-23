@@ -1,5 +1,5 @@
 import numpy as np
-from data_analysis.utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, get_git_root
+from utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, get_git_root
 
 def plot_filter(baseline):
     graph_name = get_graph_names_from_file([baseline])[0]
@@ -9,10 +9,8 @@ def plot_filter(baseline):
     baseline_df = baseline_df.replace(-1, np.nan)
 
     baseline_df['avg accuracy'] = baseline_df.mean(axis=1)
-    print(baseline_df)
-    print(baseline_df.iloc[0,5])
-    print(baseline_df.iloc[5,5])
-    if baseline_df.iloc[0,5] - baseline_df.iloc[5,5] > 0.3:
+
+    if baseline_df.iloc[0,5] - baseline_df.iloc[5,5] > 0.20:
         return graph_name
     else:
         return None
