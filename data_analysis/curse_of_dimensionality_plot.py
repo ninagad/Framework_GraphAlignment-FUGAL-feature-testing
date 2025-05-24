@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics.pairwise import euclidean_distances
 
 # Local imports
-from utils import get_graph, get_all_features, get_forward_selected_features, get_git_root, strip_graph_name, \
+from data_analysis.utils import get_graph, get_all_features, get_forward_selected_features, get_git_root, strip_graph_name, \
     get_fugal_features
 from algorithms.FUGAL.pred import feature_extraction
 from algorithms.FUGAL.Fugal import apply_scaling

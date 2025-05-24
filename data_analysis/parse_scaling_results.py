@@ -5,74 +5,50 @@ from tabulate import tabulate
 import numpy as np
 
 from enums.featureEnums import FeatureExtensions
+from data_analysis.utils import get_acc_file_as_df, get_git_root
+from data_analysis.test_run_configurations import test_graphs_are_training_graphs, test_run_has_5_iterations, \
+    test_run_has_6_noise_levels, test_run_have_expected_mu
 
 
-def load_data(source: int):
-    server_runs_path = os.path.join((os.path.dirname(__file__)), '..', 'Server-runs')
+def check_configuration(runs: list[int]):
+    test_graphs_are_training_graphs(runs)
 
-    path = os.path.join(server_runs_path, f'{source}', 'res', 'acc.xlsx')
-
-    # Make sure the excel file is not open in Excel! Otherwise, this fails with Errno 13 permission denied.
-    df = pd.read_excel(path, index_col=[0, 1])
-    df.index.names = ['Feature', 'noise']
-
-    return df
+    for run in runs:
+        test_run_has_5_iterations(run)
+        test_run_have_expected_mu(run, 1)
+        test_run_has_6_noise_levels(run)
 
 
-def parse(sources, baselines):
+def parse(sources):
     """
         Parse results from an experiment as follows:
         - Find the minimum data point over all iterations.
-        - Compute average deviation from baseline.
-        - Compute average deviation from baseline across all noise levels.
-        - Return average deviation from baseline for each feature across all graphs.
-
+        - Compute average min acc across all noise levels and graphs.
 
         Args:
-            sources: list of indexes of plots to include in calculation
-            baselines: indexes of plots used as baselines. Must have same length as sources.
-                       Each entry contains the baseline for the source with the corresponding entry.
-
+            sources: list of indexes of runs to include in calculation
 
         Returns:
             the result of the calculations
 
         """
-
-    if len(sources) != len(baselines):
-        raise ValueError
+    check_configuration(sources)
 
     dfs = []
-
-    for source, baseline in zip(sources, baselines):
+    for source in sources:
         # Load source and baseline
-        df = load_data(source)
+        df = get_acc_file_as_df(source)
         df = df.replace(-1, np.nan)  # Replace numeric errors with NaN, so they are excluded from the mean calculation.
-
-        baseline_df = load_data(baseline)
-        baseline_df = baseline_df.replace(-1, np.nan)
-        baseline_df['avg accuracy'] = baseline_df.mean(axis=1)
 
         # step 1: calculate the minimum data point from each iteration
         df['min'] = df.min(axis=1)
 
-        # step 2: calculate the average deviation from baseline for each graph across all noise levels
-        nr_of_features = df.index.get_level_values('Feature').nunique()
-
-        baseline_dup = pd.concat([pd.Series(baseline_df['avg accuracy'].reset_index(drop=True))] * nr_of_features,
-                                 ignore_index=True)
-
-        # Find deviation from baseline
-        df['min'] = pd.Series(
-            df['min'].to_numpy() - baseline_dup.to_numpy(),
-            index=df.index
-        )
-
-        df = df.groupby(level='Feature')['min'].mean()
+        # step 2: calculate mean of the mins over all noise levels
+        df = 100 * (df.groupby(level='Feature')['min'].mean())
 
         dfs.append(df)
 
-    # step 3: determine average deviation from baseline for each feature across all graphs
+    # step 3: determine average acc for each feature across all graphs
     combined_df = pd.concat(dfs)
     combined_df = combined_df.groupby(level='Feature').mean()
 
@@ -100,12 +76,10 @@ if __name__ == "__main__":
                                             1025, 1026, 1027, 1028]
                     }
 
-    baselines = [36, 19, 20, 60]
-
     dfs = []
     for scaling, run_indices in scaling_dict.items():
-        df1 = parse(run_indices[:4], baselines)
-        df2 = parse(run_indices[4:], baselines)
+        df1 = parse(run_indices[:4])
+        df2 = parse(run_indices[4:])
 
         df = pd.concat([df1, df2])
         df = df.rename(scaling)
@@ -133,16 +107,16 @@ if __name__ == "__main__":
     scaling_df.index = scaling_df.index.map(lambda x: FE.transform_feature_str_to_label(x))
     scaling_df = scaling_df.sort_index()
 
-    latex_table = tabulate(scaling_df.round(4), headers='keys', tablefmt='latex_booktabs')
+    latex_table = tabulate(scaling_df.round(2), headers='keys', tablefmt='latex_booktabs')
 
     # Write to file
-    file_path = os.path.join('..', 'tables', "scaling-table.txt")
-    with open(file_path, "w") as file:
-        file.write(f'Baselines: {baselines} \n')
+    root = get_git_root()
+    path = os.path.join(root, 'tables', "scaling-table.txt")
+    with open(path, "w") as file:
         file.write(str(scaling_dict))
         file.write('\n\n')
-        file.write(f"The scaling method that has the maximum average distance "
-                   f"to baseline for the most features is: {scaling_df['max'].mode()[0]}"
+        file.write(f"The scaling method that has the maximum average accuracy "
+                   f"for the most features is: {scaling_df['max'].mode()[0]}"
                    f"\n\n")
 
         file.write(latex_table)

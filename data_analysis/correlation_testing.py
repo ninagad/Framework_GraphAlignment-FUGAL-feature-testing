@@ -13,7 +13,7 @@ from enums.featureEnums import FeatureEnums, FeatureExtensions
 from enums.scalingEnums import ScalingEnums
 from algorithms.FUGAL.pred import feature_extraction
 from algorithms.FUGAL.Fugal import apply_scaling
-from utils import get_all_features, get_graph, get_git_root
+from data_analysis.utils import get_all_features, get_graph, get_git_root
 
 graph_dict = {GraphEnums.INF_EUROROAD: 'inf-euroroad.txt',
               GraphEnums.CA_NETSCIENCE: 'ca-netscience.txt',
