@@ -3,12 +3,14 @@ import os
 from typing import Literal
 
 import numpy as np
+import scipy.stats as stats
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from matplotlib.figure import Figure
 
-from data_analysis.utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, get_git_root
+from data_analysis.utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, \
+    get_git_root
 
 allowed_colormaps = Literal['Greens', 'Blues']
 
@@ -52,6 +54,20 @@ def plot_cone_subplots(df: pd.DataFrame, source: int, subplot, hue: allowed_colo
         subplot.plot(100 * xs, 100 * df['mean'], label=f'$10^{{{exponent}}}$', color=colors[idx],
                      marker=marks[idx],
                      markersize=5)
+
+
+def compute_confidence_interval(x):
+    # unique values
+    unique = np.unique(x)
+
+    # Return the lower and upper bound on the confidence interval, if there is more than one unique value.
+    # Otherwise, return the unique value as both lower and upper bound.
+    if len(unique) > 1:
+        lower, upper = stats.t.interval(confidence=0.95, df=len(x) - 1, loc=np.mean(x),
+                                                scale=np.std(x, ddof=1) / np.sqrt(len(x)))
+        return float(lower), float(upper)
+    else:
+        return None, None
 
 
 def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, additional_trace: int | None):
@@ -125,7 +141,10 @@ def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, addi
                     palette=[baseline_color, color],
                     edgecolor="black",
                     linewidth=0.6,
-                    errorbar="sd"
+                    # errorbar="sd"
+                    errorbar=lambda x: compute_confidence_interval(x),
+                    err_kws={"linewidth": 1},
+                    capsize=0.2,
                     )
         # make the background grid visible
         subplot.grid(True, axis="y", linestyle="--", linewidth=0.4, alpha=0.7)
@@ -169,7 +188,7 @@ def layout_plot(fig: Figure, axes, title: str, legend_name: str):
 
     fig.legend(handles, labels,
                loc='upper right',
-               bbox_to_anchor=(legend_x , legend_y),
+               bbox_to_anchor=(legend_x, legend_y),
                bbox_transform=fig.transFigure,
                title=legend_name)
 
