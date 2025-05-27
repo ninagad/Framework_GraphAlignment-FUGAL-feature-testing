@@ -781,9 +781,21 @@ def convex_init(A, B, D, reg: float, nu: float, mu: float, niter: int, fw_iters:
         lap_term = np.trace(P.T @ D)
         reg_term = np.trace(P.T @ (ones - P))  # Implicitly assuming lambda=1
 
-        qap_scalar = nu * (1 / qap_term)
-        lap_scalar = mu * (1 / lap_term)
-        reg_scalar = 1 / reg_term
+        if qap_term != 0:
+            qap_scalar = nu * (1 / qap_term)
+        else:
+            qap_scalar = nu
+
+        if lap_term != 0:
+            lap_scalar = mu * (1 / lap_term)
+        else:
+            lap_scalar = mu
+
+        if reg_term != 0:
+            reg_scalar = 1 / reg_term
+        else:
+            reg_scalar = 1
+
         A = A * qap_scalar
         D = D * lap_scalar
 
@@ -806,7 +818,10 @@ def convex_init(A, B, D, reg: float, nu: float, mu: float, niter: int, fw_iters:
                             mat_ones - 2 * P)
 
                 # Recommendation from here: https://pythonot.github.io/auto_examples/plot_Intro_OT.html#sphx-glr-auto-examples-plot-intro-ot-py
-                G = (G - G.min()) / (G.max() - G.min())
+                if G.max() == G.min():
+                    G -= G.max()
+                else:
+                    G = (G - G.min()) / (G.max() - G.min())
 
             else:  # Original FUGAL
                 G = -(torch.mm(torch.mm(A.T, P), B)) - (torch.mm(torch.mm(A, P), B.T)) + mu * D + i * (
