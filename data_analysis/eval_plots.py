@@ -236,22 +236,22 @@ def other_algo_eval():
     # isorank_baselines = [15274, 15276, 15279, 15280]
 
     # With degree similarity
-    isorank_baselines = [16098, 16095, 16096, 16097]
-    isorank_sources = [15272, 15258, 15260, 15269]
+    isorank_baselines = [16098, 16095, 16096, 16097] # 17268, 17269, 17270, 17274] # crime-moreno, inf-power, bio-yeast, mahindas
+    isorank_sources = [15272, 15258, 15260, 15269] # 17271, 17272, 17273, 17275] # crime-moreno, inf-power, bio-yeast, mahindas
     fig = plot_eval_graphs(isorank_baselines, isorank_sources, 'IsoRank')
     save_fig(fig, 'IsoRank-bar-eval', subdir)
 
     # REGAL
     subdir = os.path.join('Other-algorithms', 'REGAL')
-    regal_baselines = [15211, 15196, 15215, 15201]
-    regal_sources = [15126, 15129, 15142, 15123]
+    regal_baselines = [15211, 15196, 15215, 15201] # 17295, 17290, 17289, 17288] # crime-moreno, inf-power, bio-yeast, mahindas
+    regal_sources = [15126, 15129, 15142, 15123] # 17294, 17291, 17292, 17293] # crime-moreno, inf-power, bio-yeast, mahindas
     fig = plot_eval_graphs(regal_baselines, regal_sources, 'REGAL')
     save_fig(fig, 'REGAL-bar-eval', subdir)
 
     # GRAMPA
     subdir = os.path.join('Other-algorithms', 'GRAMPA')
-    grampa_baselines = [15285, 15287, 15289, 15291]
-    grampa_sources = [15233, 15235, 15239, 15240]
+    grampa_baselines = [15285, 15287, 15289, 15291] # 17280, 17281, 17282, 17283] # crime-moreno, inf-power, bio-yeast, mahindas
+    grampa_sources = [15233, 15235, 15239, 15240] # 17284, 17287, 17286, 17285] # crime-moreno, inf-power, bio-yeast, mahindas
     fig = plot_eval_graphs(grampa_baselines, grampa_sources, 'GRAMPA')
     save_fig(fig, 'GRAMPA-bar-eval', subdir)
 
@@ -267,9 +267,9 @@ def fugal_eval():
     fig = plot_eval_graphs(econ_baseline, econ_source, '')
     save_fig(fig, 'econ-eval', 'FUGAL-evaluation')
 
-    # email-univ, inf-USAir, dublin
-    appendix_baselines = [16388, 17240, 17244]
-    appendix_sources = [16377, 17237, 16087]
+    # email-univ, in-arenas, dublin, tomography
+    appendix_baselines = [16388, 17253, 17244, 17264]
+    appendix_sources = [16377, 17265, 16087, 17266]
     fig = plot_eval_graphs(appendix_baselines, appendix_sources, 'FUGAL')
     save_fig(fig, 'appendix-eval', 'FUGAL-evaluation')
 
