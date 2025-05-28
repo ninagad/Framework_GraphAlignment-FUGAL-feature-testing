@@ -19,6 +19,24 @@ def get_git_root():
         raise RuntimeError("Not a git repository")
 
 
+def get_eval_graphs():
+    graphs = ["inf-power", "ia-crime-moreno", "power-685-bus", "socfb-Bowdoin47", "bio-yeast", "DD_g501"]
+
+    return graphs
+
+
+def get_eval_graph_run_ids():
+    ids = {"inf-power": 17236,
+           "ia-crime-moreno": 16121,
+           "power-685-bus": 15142,
+           "socfb-Bowdoin47": 15126,
+           "bio-yeast": 17235,
+           "DD_g501": 15129
+           }
+
+    return ids
+
+
 def get_graph(filename: str) -> nx.Graph:
     current_dir = (os.path.dirname(__file__))
     data_dir = os.path.join(current_dir, '..', 'data')

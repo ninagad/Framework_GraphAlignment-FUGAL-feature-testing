@@ -11,6 +11,7 @@ from matplotlib.figure import Figure
 
 from data_analysis.utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, \
     get_git_root
+from data_analysis.test_run_configurations import test_graph_set_are_equal
 
 allowed_colormaps = Literal['Greens', 'Blues']
 
@@ -71,6 +72,9 @@ def compute_confidence_interval(x):
 
 
 def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, additional_trace: int | None):
+    # Check that baseline and source is computed on the same graph
+    test_graph_set_are_equal(baseline, source)
+
     # baseline_color = '#2596be'
     baseline_color = '#8eb576'
     # Green pair
@@ -147,7 +151,7 @@ def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, addi
                     capsize=0.2,
                     )
         # make the background grid visible
-        subplot.grid(True, axis="y", linestyle="--", linewidth=0.4, alpha=0.7)
+        subplot.grid(True, axis="y", linestyle="--", linewidth=0.4, alpha=1)
         subplot.set_axisbelow(True)  # keep bars in front of the grid
 
         # hide the individual legend
@@ -276,8 +280,10 @@ def other_algo_eval():
 
 
 def fugal_eval():
-    baselines = [17241, 17242, 17243, 17245, 17239, 17247]  # facebook 47, dd, bus, crime, inf-power
-    sources = [16085, 16086, 16088, 16121, 17235, 17236]  # facebook 47, dd, bus, crime, inf-power
+    # inf-power, crime, bus,
+    # facebook 47, bio-yeast, dd
+    baselines = [17247, 17245, 17243, 17241, 17239, 17242]
+    sources = [17236, 16121, 16088, 16085, 17235, 16086]
     fig = plot_eval_graphs(baselines, sources, 'FUGAL')
     save_fig(fig, 'primary-eval', 'FUGAL-evaluation')
 

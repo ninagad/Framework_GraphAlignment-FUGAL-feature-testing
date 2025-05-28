@@ -93,3 +93,9 @@ def test_configuration_graph_iters_nu_mu_sinkhorn(runs: dict, nu: float, mu: flo
             test_run_has_6_noise_levels(run)
             test_run_have_expected_nu_and_mu(run, nu, mu)
             test_run_have_expected_sinkhorn_reg(run, sinkhorn_reg)
+
+
+def test_graph_set_are_equal(run_1: int, run_2: int):
+    graph1, graph2 = get_graph_names_from_file([run_1, run_2])
+
+    assert graph1 == graph2, f'Graphs are not the same. Graph 1: {graph1}, Graph 2: {graph2}'
