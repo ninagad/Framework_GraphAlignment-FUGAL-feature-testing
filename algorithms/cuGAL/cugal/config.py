@@ -63,7 +63,7 @@ class Config:
     sinkhorn_eval_freq: int = 10
     """How many Sinhorn iterations performed between checking for the potential of stopping."""
 
-    sinkhorn_momentum: bool = False
+    sinkhorn_momentum: bool = True
     """If true, the Sinkhorn algorithm will use momentum."""
 
     mu: float = 0.5
@@ -90,11 +90,11 @@ class Config:
     use_sparse_adjacency: bool = False # sparse adjacency is not implemented
     """Use sparse matrix representation for adjacency matrices."""
 
-    use_sinkhorn_warm_start: bool = False
+    use_sinkhorn_warm_start: bool = True
 
     sinkhorn_momentum_start: Optional[int] = None
 
-    recompute_distance: bool = False
+    recompute_distance: bool = True
     """Avoid storing distance matrix by doing recalculating each iteration."""
 
     hungarian_method: HungarianMethod = HungarianMethod.SCIPY
