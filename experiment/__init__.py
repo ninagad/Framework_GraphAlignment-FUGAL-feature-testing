@@ -208,7 +208,7 @@ _ISO_args = {
     'alpha': 0.9,
     'tol': 1e-12,
     'maxiter': 100,
-    'lalpha': None,  # 10000 if include degree sim
+    'features': None,
     'weighted': True
 }
 
