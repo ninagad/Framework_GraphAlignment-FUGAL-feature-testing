@@ -66,6 +66,10 @@ if __name__ == "__main__":
     print("bio-yeast: ", density(1458, 1948), " ", decode(reg.predict(np.array([[density(1458, 1948)]]))), "\n")
     print("inf-power: ", density(4941, 6594), " ", decode(reg.predict(np.array([[density(4941, 6594)]]))), "\n")
     print("inf-USAir: ", density(332, 2126), " ", decode(reg.predict(np.array([[density(332, 2126)]]))), "\n")
+    print("hamming: ", density(256, 31616), " ", decode(reg.predict(np.array([[density(256, 31616)]]))), "\n")
+    print("mouse: ", density(213, 16242), " ", decode(reg.predict(np.array([[density(213, 16242)]]))), "\n")
+    print("aves-wildbird: ", density(131, 1444), " ", decode(reg.predict(np.array([[density(131, 1444)]]))), "\n")
+
 
     #G_e = np.loadtxt('data/rotor2.txt', int).tolist()
     #G_e = mmread('data/tomography.mtx')
