@@ -48,7 +48,7 @@ def generate_graphs(graph_name: str):
 
     """
 
-    init_tuple = get_graph_paths(graph_name)
+    init_tuple = get_graph_paths([graph_name])
     source_graphs = init1(init_tuple, iterations)
 
     target_graph_dict = {}
