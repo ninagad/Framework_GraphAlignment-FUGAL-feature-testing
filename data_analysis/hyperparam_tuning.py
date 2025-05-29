@@ -18,7 +18,7 @@ from data_analysis.utils import get_git_root
 from enums.scalingEnums import ScalingEnums
 from enums.featureEnums import FeatureEnums
 import workexp
-from experiment.experiments import alggs as get_run_list, _algs
+from experiment.experiments import alggs as get_run_list, _algs, get_graph_paths
 from experiment import run as run_file
 from generation.generate import init1, init2
 from data_analysis.utils import get_all_features, get_forward_selected_features
@@ -47,9 +47,9 @@ def generate_graphs(graph_name: str):
     Returns: a dictionary with noises as keys and graph lists as values.
 
     """
-    path = f"data/{graph_name}.txt"
 
-    source_graphs = init1([path], iterations)
+    init_tuple = get_graph_paths(graph_name)
+    source_graphs = init1(init_tuple, iterations)
 
     target_graph_dict = {}
     for noise in noises:
