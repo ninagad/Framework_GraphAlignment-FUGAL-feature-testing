@@ -83,7 +83,8 @@ def get_fugal_features() -> [FeatureEnums]:
 def get_forward_selected_features() -> [FeatureEnums]:
     feature_set = [FeatureEnums.EGO_NEIGHBORS,
                    FeatureEnums.SUM_EGO_DEG,
-                   FeatureEnums.STD_EGO_DEG]
+                   FeatureEnums.STD_EGO_DEG,
+                   FeatureEnums.DEGREE_CENTRALITY]
 
     return feature_set
 
