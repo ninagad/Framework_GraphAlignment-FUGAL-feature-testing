@@ -69,7 +69,11 @@ def run_proposed_fugal():
     ]
 
     run_eval_graphs('FUGAL-eval.txt', 'fugal', args_lst)
+    run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args_lst)
 
 
 if __name__ == '__main__':
+    run_proposed_fugal()
     run_regal()
+    run_isorank()
+    run_grampa()
