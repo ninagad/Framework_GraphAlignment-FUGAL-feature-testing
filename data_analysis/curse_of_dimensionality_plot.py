@@ -77,7 +77,7 @@ def plot_distance_histograms(graph_name: str, feature_sets: list[list[FeatureEnu
         percentile_98 = np.percentile(all_distances[i], percentile)
         if plot_count > 1:
             # Add vertical line at the 98th percentile
-            axes[i].axvline(x=percentile_98, color='grey', linestyle='--', linewidth=2, alpha=0.4,
+            axes[i].axvline(x=percentile_98, color='grey', linestyle='--', linewidth=2, alpha=0.7,
                             label=f'{percentile}th percentile')
 
         axes[i].grid(True)
