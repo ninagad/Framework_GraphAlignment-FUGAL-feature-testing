@@ -141,7 +141,8 @@ def tuning():
         #1,  # CONE
         #22, # cuGAL
         [
-            {'features': x,
+            {'features': [x],
+             #'features': [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG, FeatureEnums.DEGREE_CENTRALITY, x],
              'nu': 447.24,
              'mu': 442.66,
              'sinkhorn_reg': 0.00141,
@@ -168,7 +169,7 @@ def tuning():
                       # [FeatureEnums.AVG_2HOP_DEG], [FeatureEnums.AVG_2HOP_CLUSTER], [FeatureEnums.TWOHOP_EDGES], [FeatureEnums.TWOHOP_NEIGHBORS], [FeatureEnums.INTERNAL_FRAC_2HOP], [FeatureEnums.ASSORTATIVITY_2HOP],
                       # [FeatureEnums.SUM_2HOP_DEGS], [FeatureEnums.STD_2HOP_DEGS], [FeatureEnums.MODE_2HOP_DEGS], [FeatureEnums.MEDIAN_2HOP_DEGS], [FeatureEnums.MIN_2HOP_DEGS], [FeatureEnums.MAX_2HOP_DEGS], [FeatureEnums.RANGE_2HOP_DEGS], [FeatureEnums.SKEWNESS_2HOP_DEGS], [FeatureEnums.KURTOSIS_2HOP_DEGS],
                       # [FeatureEnums.SUM_2HOP_CLUSTER], [FeatureEnums.STD_2HOP_CLUSTER], [FeatureEnums.MEDIAN_2HOP_CLUSTER], [FeatureEnums.MIN_2HOP_CLUSTER], [FeatureEnums.MAX_2HOP_CLUSTER], [FeatureEnums.RANGE_2HOP_CLUSTER], [FeatureEnums.SKEWNESS_2HOP_CLUSTER], [FeatureEnums.KURTOSIS_2HOP_CLUSTER],
-                      [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG]
+                      [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG, FeatureEnums.DEGREE_CENTRALITY]
                       ]
             #{'features': [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG],
             # 'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
@@ -221,6 +222,11 @@ def tuning():
         # "steam2",
         # "str_600",
         # "tomography",
+        # "bn-macaque-rhesus_cerebral-cortex_1",
+        # "bn-mouse_brain_1",
+        # "brock400-1",
+        # "C500-9",
+        # "C1000-9",
         #"nws_n=1000_k=10_p=0.2",
         #"nws_n=1000_k=10_p=0.4",
         #"nws_n=1000_k=10_p=0.6",
