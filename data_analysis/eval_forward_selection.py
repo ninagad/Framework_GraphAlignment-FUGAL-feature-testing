@@ -25,7 +25,7 @@ def top_performing_feature(sources: list[int]):
             pass
 
         # For each feature+noise combination compute the mean over the iterations
-        graph_df = graph_df.mean(axis=1).rename('avg accuracy')
+        graph_df = graph_df.mean(axis=1).rename('avg. acc. (\%)')
 
         dfs.append(graph_df)
 
@@ -33,7 +33,7 @@ def top_performing_feature(sources: list[int]):
     df = pd.concat(dfs, axis=0)
 
     # Compute the mean over the different graphs and noise levels for each feature
-    df = df.groupby(level=[0]).mean()
+    df = 100 * df.groupby(level=[0]).mean()
     df = df.sort_values(ascending=False)
     df.index.name = 'Feature'
 
@@ -43,13 +43,13 @@ def top_performing_feature(sources: list[int]):
 
     # Convert feature names to labels
     fe = FeatureExtensions()
-    df['Feature'] = df['Feature'].apply(lambda x: fe.transform_feature_str_to_label(x))
+    df['Feature'] = df['Feature'].apply(lambda x: fe.transform_feature_str_to_label(x).split(', ')[-1])
 
     return df, max_feature, nu, mu, sinkhorn_reg
 
 
 def save_to_file(df, feature, sources, nu, mu, reg, round_no):
-    latex_table = pd.Series.to_latex(df, index=False)
+    latex_table = pd.Series.to_latex(df, index=False, float_format=f"{{:0.2f}}".format)
 
     # Write to file
     root = get_git_root()
