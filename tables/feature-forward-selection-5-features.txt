@@ -1,0 +1,40 @@
+sources used for computation: [17351, 17352, 17353, 17350]
+
+nu: 447.24 
+mu: 442.66 
+sinkhorn_reg: 0.0014 
+ 
+Best feature: [EGO_NEIGHBORS, SUM_EGO_DEG, STD_EGO_DEG, DEGREE_CENTRALITY, SUM_EGO_CLUSTER]
+
+\begin{tabular}{lr}
+\toprule
+Feature & avg accuracy \\
+\midrule
+ego neighbors, sum ego degs, std ego degs, degree centrality, sum ego cluster coeff & 0.762524 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, max ego cluster coeff & 0.761584 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, range ego cluster coeff & 0.760725 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, ego out edges & 0.760617 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, avg ego cluster coeff & 0.760015 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, std ego cluster coeff & 0.758773 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, ego edges & 0.758745 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, cluster coeff & 0.758373 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, min ego degs & 0.757987 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, degree & 0.757701 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, median ego cluster coeff & 0.757096 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, avg ego deg & 0.756551 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, median ego degs & 0.754895 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, max ego degs & 0.754872 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, ego assortativity & 0.754826 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, range ego degs & 0.754467 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, kurtosis ego degs & 0.754411 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, ego internal frac & 0.753697 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, min ego cluster coeff & 0.753527 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, skewness ego degs & 0.752716 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, mode ego degs & 0.752010 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, kurtosis ego cluster coeff & 0.751522 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, skewness ego cluster coeff & 0.747851 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, pagerank & 0.745244 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, closeness centrality & 0.732197 \\
+ego neighbors, sum ego degs, std ego degs, degree centrality, eigenvector centrality & 0.730572 \\
+\bottomrule
+\end{tabular}
