@@ -307,7 +307,7 @@ def run_algs(g, algs, _log, _run, prep=False, circular=False):
             summary_dict['graph'] = wandb_graph
             summary_dict['noise-level'] = wandb_noiselvl
             summary_dict['iteration'] = wandb_iteration
-            if pca_explained_variance:  # If list is non-empty, get first element
+            if pca_explained_variance and (pca_explained_variance[0] is not None):  # If list is non-empty, get first element
                 summary_dict['explained_var'] = pca_explained_variance[0]
 
             # Map enums to their string representation to make it json serializable
