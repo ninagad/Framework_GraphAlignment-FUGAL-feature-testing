@@ -20,7 +20,7 @@ def run_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst):
 def run_grampa():
     args_lst = [
         {'features': get_forward_selected_features(),
-         'eta': 0.2  # TODO
+         'eta': 0.2
          }
     ]
 
@@ -30,7 +30,7 @@ def run_grampa():
 def run_regal():
     args_lst = [
         {'features': get_forward_selected_features(),
-         'gammaattr': 0.05,  # TODO
+         'gammaattr': 0.06,
          'attributes': 1,  # Use features
          'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION
          }
@@ -42,7 +42,7 @@ def run_regal():
 def run_isorank():
     args_lst = [
         {'features': get_forward_selected_features(),
-         'alpha': 0.9  # TODO
+         'alpha': 0.88
          }
     ]
 
