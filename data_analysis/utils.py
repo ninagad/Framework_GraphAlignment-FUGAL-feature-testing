@@ -25,6 +25,12 @@ def get_eval_graphs():
     return graphs
 
 
+def get_appendix_eval_graphs():
+    graphs = ["email-univ", "in-arenas", "infect-dublin", "tomography", "econ-mahindas"]
+
+    return graphs
+
+
 def get_eval_graph_run_ids():
     ids = {"inf-power": 17236,
            "ia-crime-moreno": 16121,
@@ -32,6 +38,17 @@ def get_eval_graph_run_ids():
            "socfb-Bowdoin47": 15126,
            "bio-yeast": 17235,
            "DD_g501": 15129
+           }
+
+    return ids
+
+
+def get_appendix_eval_graph_run_ids():
+    ids = {"email-univ": 16377,
+           "in-arenas": 17253,
+           "infect-dublin": 15123,
+           "tomography": 17264,
+           "econ-mahindas": 16374
            }
 
     return ids
