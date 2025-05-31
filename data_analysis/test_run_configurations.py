@@ -74,7 +74,7 @@ def test_run_has_5_iterations(run: int):
     assert iters == 5, f'Got {iters} iterations in run {run}. Expected 5'
 
 
-def test_runs_have_ordered_graphs(grouped_runs: dict):
+def test_runs_have_ordered_analysis_graphs(grouped_runs: dict):
     training_graphs = get_training_graph_names()
 
     for runs in grouped_runs.values():

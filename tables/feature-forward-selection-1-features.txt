@@ -8,37 +8,37 @@ Best feature: [EGO_NEIGHBORS]
 
 \begin{tabular}{lr}
 \toprule
-Feature & avg accuracy \\
+Feature & avg. acc. (\%) \\
 \midrule
-ego neighbors & 0.731934 \\
-median ego degs & 0.729207 \\
-ego out edges & 0.728598 \\
-cluster coeff & 0.727302 \\
-avg ego deg & 0.726770 \\
-max ego cluster coeff & 0.724489 \\
-avg ego cluster coeff & 0.723520 \\
-sum ego cluster coeff & 0.722929 \\
-range ego cluster coeff & 0.722432 \\
-std ego cluster coeff & 0.722182 \\
-min ego degs & 0.720985 \\
-max ego degs & 0.720024 \\
-min ego cluster coeff & 0.718342 \\
-median ego cluster coeff & 0.718310 \\
-sum ego degs & 0.717906 \\
-degree & 0.714793 \\
-degree centrality & 0.714780 \\
-ego edges & 0.712968 \\
-ego internal frac & 0.712022 \\
-range ego degs & 0.711703 \\
-std ego degs & 0.711424 \\
-skewness ego cluster coeff & 0.702036 \\
-mode ego degs & 0.701469 \\
-eigenvector centrality & 0.700339 \\
-ego assortativity & 0.697750 \\
-skewness ego degs & 0.691695 \\
-pagerank & 0.685468 \\
-kurtosis ego degs & 0.676166 \\
-kurtosis ego cluster coeff & 0.675319 \\
-closeness centrality & 0.674797 \\
+ego neighbors & 73.19 \\
+median ego degs & 72.92 \\
+ego out edges & 72.86 \\
+cluster coeff & 72.73 \\
+avg ego deg & 72.68 \\
+max ego cluster coeff & 72.45 \\
+avg ego cluster coeff & 72.35 \\
+sum ego cluster coeff & 72.29 \\
+range ego cluster coeff & 72.24 \\
+std ego cluster coeff & 72.22 \\
+min ego degs & 72.10 \\
+max ego degs & 72.00 \\
+min ego cluster coeff & 71.83 \\
+median ego cluster coeff & 71.83 \\
+sum ego degs & 71.79 \\
+degree & 71.48 \\
+degree centrality & 71.48 \\
+ego edges & 71.30 \\
+ego internal frac & 71.20 \\
+range ego degs & 71.17 \\
+std ego degs & 71.14 \\
+skewness ego cluster coeff & 70.20 \\
+mode ego degs & 70.15 \\
+eigenvector centrality & 70.03 \\
+ego assortativity & 69.78 \\
+skewness ego degs & 69.17 \\
+pagerank & 68.55 \\
+kurtosis ego degs & 67.62 \\
+kurtosis ego cluster coeff & 67.53 \\
+closeness centrality & 67.48 \\
 \bottomrule
 \end{tabular}

@@ -31,7 +31,7 @@ def get_pca_df(project: Literal['pca-all-features-tuning', 'pca-15-features-tuni
 
 def generate_pca_table(project: str, df: pd.DataFrame):
     # Sort
-    df.sort_values("avg. acc. (\%)", ascending=False, inplace=True)
+    df.sort_values("components", inplace=True)
 
     root = get_git_root()
     path = os.path.join(root, 'tables', f'{project}.txt')

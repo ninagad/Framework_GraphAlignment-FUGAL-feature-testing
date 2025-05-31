@@ -1,0 +1,10 @@
+sources used for computation: {10: [19898, 19899, 19900, 19901]}
+
+\begin{tabular}{lrrrrr}
+\toprule
+ & bio-celegans & ca-netscience & inf-euroroad & voles & avg. across graphs \\
+ &  &  &  &  &  \\
+\midrule
+10 & 88.68 & 64.05 & 59.42 & 93.10 & 76.31 \\
+\bottomrule
+\end{tabular}
