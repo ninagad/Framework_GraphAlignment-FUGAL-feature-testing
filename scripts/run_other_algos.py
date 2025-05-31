@@ -51,7 +51,7 @@ def run_regal():
 def run_isorank():
     args_lst = [
         {'features': get_forward_selected_features(),
-         'alpha': 0.88
+         'alpha': 0.89
          }
     ]
 

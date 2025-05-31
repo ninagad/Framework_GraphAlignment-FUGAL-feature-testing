@@ -267,7 +267,7 @@ def other_algo_eval():
     # REGAL
     subdir = os.path.join('Other-algorithms', 'REGAL')
     regal_baselines = [15211, 15196, 15215, 15201] # 17295, 17290, 17289, 17288] # crime-moreno, inf-power, bio-yeast, mahindas
-    regal_sources = [15126, 15129, 15142, 15123] # 17294, 17291, 17292, 17293] # crime-moreno, inf-power, bio-yeast, mahindas
+    regal_sources = [19902, 19897, 19905, 15123] # 17294, 17291, 17292, 17293] # crime-moreno, inf-power, bio-yeast, mahindas
     fig = plot_eval_graphs(regal_baselines, regal_sources, 'REGAL')
     save_fig(fig, 'REGAL-bar-eval', subdir)
 
@@ -280,10 +280,9 @@ def other_algo_eval():
 
 
 def fugal_eval():
-    # inf-power, crime, bus,
-    # facebook 47, bio-yeast, dd
+    # inf-power, crime, bus, facebook 47, bio-yeast, dd
     baselines = [17247, 17245, 17243, 17241, 17239, 17242]
-    sources = [17236, 16121, 16088, 16085, 17235, 16086]
+    sources = [21209, 21476, 21485, 21490, 21574, 21612]
     fig = plot_eval_graphs(baselines, sources, 'FUGAL')
     save_fig(fig, 'primary-eval', 'FUGAL-evaluation')
 
@@ -301,4 +300,4 @@ def fugal_eval():
 
 if __name__ == '__main__':
     fugal_eval()
-    other_algo_eval()
+    #other_algo_eval()
