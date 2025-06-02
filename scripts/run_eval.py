@@ -8,35 +8,33 @@ from data_analysis.utils import get_forward_selected_features, get_git_root, get
 from enums.scalingEnums import ScalingEnums
 
 
-def run_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst):
-    all_algs = copy.copy(_algs)
+def run_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list):
     root = get_git_root()
     path = os.path.join(root, 'overview-of-runs', save_file)
 
     for graph, load_id in get_eval_graph_run_ids().items():
-        run_alg(path, algorithm, all_algs, args_lst, graph, load_id)
+        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id)
 
 
-def run_appendix_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst):
-    all_algs = copy.copy(_algs)
+def run_appendix_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list):
     root = get_git_root()
     path = os.path.join(root, 'overview-of-runs', save_file)
 
     for graph, load_id in get_appendix_eval_graph_run_ids().items():
-        run_alg(path, algorithm, all_algs, args_lst, graph, load_id)
+        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id)
 
 
-def run_grampa():
+def run_grampa(all_algs):
     args_lst = [
         {'features': get_forward_selected_features(),
          'eta': 0.2
          }
     ]
 
-    run_eval_graphs('GRAMPA-eval.txt', 'grampa', args_lst)
+    run_eval_graphs('GRAMPA-eval.txt', 'grampa', args_lst, all_algs)
 
 
-def run_regal():
+def run_regal(all_algs):
     args_lst = [
         {'features': get_forward_selected_features(),
          'gammaattr': 0.06,
@@ -45,19 +43,19 @@ def run_regal():
          }
     ]
 
-    run_eval_graphs('REGAL-eval.txt', 'regal', args_lst)
+    run_eval_graphs('REGAL-eval.txt', 'regal', args_lst, all_algs)
 
 
-def run_isorank():
+def run_isorank(all_algs):
     args_lst = [
         {'features': get_forward_selected_features(),
          'alpha': 0.89
          }
     ]
 
-    run_eval_graphs('IsoRank-eval.txt', 'isorank', args_lst)
+    run_eval_graphs('IsoRank-eval.txt', 'isorank', args_lst, all_algs)
 
-def run_proposed_fugal():
+def run_proposed_fugal(all_algs):
     args_lst = [
         {'features': get_forward_selected_features(),
          'nu': 447.24,
@@ -68,12 +66,14 @@ def run_proposed_fugal():
          }
     ]
 
-    run_eval_graphs('FUGAL-eval.txt', 'fugal', args_lst)
-    run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args_lst)
+    run_eval_graphs('FUGAL-eval.txt', 'fugal', args_lst, all_algs)
+    run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args_lst, algs_args)
 
 
 if __name__ == '__main__':
-    run_proposed_fugal()
-    run_regal()
-    run_isorank()
-    run_grampa()
+    algs_args = copy.copy(_algs)
+
+    run_regal(algs_args)
+    run_isorank(algs_args)
+    run_grampa(algs_args)
+    run_proposed_fugal(algs_args)
