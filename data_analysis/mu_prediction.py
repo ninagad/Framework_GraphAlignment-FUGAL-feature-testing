@@ -29,6 +29,7 @@ def de(method):
 if __name__ == "__main__":
     #NW = nx.newman_watts_strogatz_graph(1000,7,0.1)
     method = "linear" # "linear" to do linear regression, anything else to do exponential regression
+    #method = "exponential"
     encode = en(method)
     decode = de(method)
 
@@ -50,25 +51,25 @@ if __name__ == "__main__":
     score = reg.score(X, encode(y))
     print("The score is: ", score)
     print("The results are: \n")
-    print("Facebook: ", density(2252,84387), " ", decode(reg.predict(np.array([[density(2252,84387)]]))), "\n")
-    print("DD: ", density(429,1166), " ", decode(reg.predict(np.array([[density(429,1166)]]))), "\n")
-    print("bus: ", density(685,1967), " ", decode(reg.predict(np.array([[density(685,1967)]]))), "\n")
-    print("dublin: ", density(410,2765), " ", decode(reg.predict(np.array([[density(410,2765)]]))), "\n")
-    print("crime: ", density(829, 1475), " ", decode(reg.predict(np.array([[density(829, 1475)]]))), "\n")
-    print("terrorist: ", density(881, 8592), " ", decode(reg.predict(np.array([[density(881, 8592)]]))), "\n")
-    print("highschool: ", density(327,5818), " ", decode(reg.predict(np.array([[density(327,5818)]]))), "\n")
-    print("econ: ", density(1258, 7682), " ", decode(reg.predict(np.array([[density(1258, 7682)]]))), "\n")
-    print("email-dnc: ", density(906, 12085), " ", decode(reg.predict(np.array([[density(906, 12085)]]))), "\n")
-    print("email-univ: ", density(1098, 5451), " ", decode(reg.predict(np.array([[density(1098, 5451)]]))), "\n")
-    print("nw(1000,7,0.5): ", density(1000, 4484), " ", decode(reg.predict(np.array([[density(1000, 4484)]]))), "\n")
-    print("bio-DM-LC: ", density(658, 1129), " ", decode(reg.predict(np.array([[density(658, 1129)]]))), "\n")
-    print("bio-dmela: ", density(7393, 25569), " ", decode(reg.predict(np.array([[density(7393, 25569)]]))), "\n")
-    print("bio-yeast: ", density(1458, 1948), " ", decode(reg.predict(np.array([[density(1458, 1948)]]))), "\n")
-    print("inf-power: ", density(4941, 6594), " ", decode(reg.predict(np.array([[density(4941, 6594)]]))), "\n")
-    print("inf-USAir: ", density(332, 2126), " ", decode(reg.predict(np.array([[density(332, 2126)]]))), "\n")
-    print("hamming: ", density(256, 31616), " ", decode(reg.predict(np.array([[density(256, 31616)]]))), "\n")
-    print("mouse: ", density(213, 16242), " ", decode(reg.predict(np.array([[density(213, 16242)]]))), "\n")
-    print("aves-wildbird: ", density(131, 1444), " ", decode(reg.predict(np.array([[density(131, 1444)]]))), "\n")
+    #print("Facebook: ", density(2252,84387), " ", decode(reg.predict(np.array([[density(2252,84387)]]))), "\n")
+    #print("DD: ", density(429,1166), " ", decode(reg.predict(np.array([[density(429,1166)]]))), "\n")
+    #print("bus: ", density(685,1967), " ", decode(reg.predict(np.array([[density(685,1967)]]))), "\n")
+    #print("dublin: ", density(410,2765), " ", decode(reg.predict(np.array([[density(410,2765)]]))), "\n")
+    #print("crime: ", density(829, 1475), " ", decode(reg.predict(np.array([[density(829, 1475)]]))), "\n")
+    #print("terrorist: ", density(881, 8592), " ", decode(reg.predict(np.array([[density(881, 8592)]]))), "\n")
+    #print("highschool: ", density(327,5818), " ", decode(reg.predict(np.array([[density(327,5818)]]))), "\n")
+    #print("econ: ", density(1258, 7682), " ", decode(reg.predict(np.array([[density(1258, 7682)]]))), "\n")
+    #print("email-dnc: ", density(906, 12085), " ", decode(reg.predict(np.array([[density(906, 12085)]]))), "\n")
+    #print("email-univ: ", density(1098, 5451), " ", decode(reg.predict(np.array([[density(1098, 5451)]]))), "\n")
+    #print("nw(1000,7,0.5): ", density(1000, 4484), " ", decode(reg.predict(np.array([[density(1000, 4484)]]))), "\n")
+    #print("bio-DM-LC: ", density(658, 1129), " ", decode(reg.predict(np.array([[density(658, 1129)]]))), "\n")
+    #print("bio-dmela: ", density(7393, 25569), " ", decode(reg.predict(np.array([[density(7393, 25569)]]))), "\n")
+    #print("bio-yeast: ", density(1458, 1948), " ", decode(reg.predict(np.array([[density(1458, 1948)]]))), "\n")
+    #print("inf-power: ", density(4941, 6594), " ", decode(reg.predict(np.array([[density(4941, 6594)]]))), "\n")
+    #print("inf-USAir: ", density(332, 2126), " ", decode(reg.predict(np.array([[density(332, 2126)]]))), "\n")
+    #print("hamming: ", density(256, 31616), " ", decode(reg.predict(np.array([[density(256, 31616)]]))), "\n")
+    #print("mouse: ", density(213, 16242), " ", decode(reg.predict(np.array([[density(213, 16242)]]))), "\n")
+    #print("aves-wildbird: ", density(131, 1444), " ", decode(reg.predict(np.array([[density(131, 1444)]]))), "\n")
 
 
     #G_e = np.loadtxt('data/rotor2.txt', int).tolist()
@@ -78,7 +79,8 @@ if __name__ == "__main__":
     #print("graph: ", density(G.number_of_nodes(), G.number_of_edges()), " ", decode(reg.predict(np.array([[density(G.number_of_nodes(), G.number_of_edges())]]))), "\n")
     #print(X)
 
-    X_new = [[density(2300,84400)],[density(429,2300)], [density(685,1300)], [density(410,2800)]]
+    # X_new: inf-power, crime, power-bus, facebook Bowdoin, bio-yeast, DD, econ-mahindas
+    X_new = [[density(4941, 6594)],[density(829, 1475)], [density(685,1967)], [density(2252,84387)], [density(1458, 1948)], [density(429,1166)], [density(1258, 7682)]]
     y_new = decode(reg.predict(X_new))
 
     plt.scatter(X, y, color='blue')
@@ -105,8 +107,9 @@ if __name__ == "__main__":
             else:
                 plt.text(xi + 0.0005, yi + 0.05, label)
 
-    plt.scatter(X_new, y_new, marker='x', color='red')
+    #plt.scatter(X_new, y_new, marker='x', color='red')
     plt.plot(X, decode(reg.predict(X)), color='orange')
+    plt.grid(True, color='gray', linewidth=0.5, alpha=0.3)
     plt.ylim(0, 2.4)
     if method == "linear":
         plt.suptitle("μ predictions with Linear Regression")
