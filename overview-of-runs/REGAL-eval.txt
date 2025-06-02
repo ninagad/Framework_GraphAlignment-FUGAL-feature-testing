@@ -1,0 +1,15 @@
+
+{'algorithm': 'regal', 'graph': 'inf-power', 'run-id': '19897', 'load': [17236, 17236]}
+{'algorithm': 'regal', 'graph': 'ia-crime-moreno', 'run-id': '19902', 'load': [16121, 16121]}
+{'algorithm': 'regal', 'graph': 'power-685-bus', 'run-id': '19903', 'load': [15142, 15142]}
+{'algorithm': 'regal', 'graph': 'socfb-Bowdoin47', 'run-id': '19904', 'load': [15126, 15126]}
+{'algorithm': 'regal', 'graph': 'bio-yeast', 'run-id': '19905', 'load': [17235, 17235]}
+{'algorithm': 'regal', 'graph': 'DD_g501', 'run-id': '19906', 'load': [15129, 15129]}
+
+# algorithm was run twice. These runs are used
+{'algorithm': 'regal', 'graph': 'inf-power', 'run-id': '22296', 'load': [17236, 17236]}
+{'algorithm': 'regal', 'graph': 'ia-crime-moreno', 'run-id': '22297', 'load': [16121, 16121]}
+{'algorithm': 'regal', 'graph': 'power-685-bus', 'run-id': '22298', 'load': [15142, 15142]}
+{'algorithm': 'regal', 'graph': 'socfb-Bowdoin47', 'run-id': '22299', 'load': [15126, 15126]}
+{'algorithm': 'regal', 'graph': 'bio-yeast', 'run-id': '22300', 'load': [17235, 17235]}
+{'algorithm': 'regal', 'graph': 'DD_g501', 'run-id': '22301', 'load': [15129, 15129]}

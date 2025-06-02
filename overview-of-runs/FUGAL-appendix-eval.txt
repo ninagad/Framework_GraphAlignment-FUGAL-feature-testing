@@ -1,0 +1,6 @@
+
+{'algorithm': 'fugal', 'graph': 'email-univ', 'run-id': '22289', 'load': [16377, 16377]}
+{'algorithm': 'fugal', 'graph': 'in-arenas', 'run-id': '22290', 'load': [17253, 17253]}
+{'algorithm': 'fugal', 'graph': 'infect-dublin', 'run-id': '22291', 'load': [15123, 15123]}
+{'algorithm': 'fugal', 'graph': 'tomography', 'run-id': '22292', 'load': [17264, 17264]}
+{'algorithm': 'fugal', 'graph': 'econ-mahindas', 'run-id': '22293', 'load': [16374, 16374]}

@@ -1,0 +1,7 @@
+
+{'algorithm': 'fugal', 'graph': 'inf-power', 'run-id': '21209', 'load': [17236, 17236]}
+{'algorithm': 'fugal', 'graph': 'ia-crime-moreno', 'run-id': '21476', 'load': [16121, 16121]}
+{'algorithm': 'fugal', 'graph': 'power-685-bus', 'run-id': '21485', 'load': [15142, 15142]}
+{'algorithm': 'fugal', 'graph': 'socfb-Bowdoin47', 'run-id': '21490', 'load': [15126, 15126]}
+{'algorithm': 'fugal', 'graph': 'bio-yeast', 'run-id': '21574', 'load': [17235, 17235]}
+{'algorithm': 'fugal', 'graph': 'DD_g501', 'run-id': '21612', 'load': [15129, 15129]}
