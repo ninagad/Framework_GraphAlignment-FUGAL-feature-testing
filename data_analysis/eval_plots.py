@@ -259,24 +259,28 @@ def other_algo_eval():
     # isorank_baselines = [15274, 15276, 15279, 15280]
 
     # With degree similarity
-    isorank_baselines = [16098, 16095, 16096, 16097] # 17268, 17269, 17270, 17274] # crime-moreno, inf-power, bio-yeast, mahindas
-    isorank_sources = [15272, 15258, 15260, 15269] # 17271, 17272, 17273, 17275] # crime-moreno, inf-power, bio-yeast, mahindas
+    # inf-power, crime, bus, facebook 47, bio-yeast, dd
+    isorank_baselines = [17269, 17268, 16096, 16098, 17270, 16095]
+    isorank_sources = [22294, 22305, 22306, 22307, 22310, 22311]
     fig = plot_eval_graphs(isorank_baselines, isorank_sources, 'IsoRank')
     save_fig(fig, 'IsoRank-bar-eval', subdir)
 
     # REGAL
     subdir = os.path.join('Other-algorithms', 'REGAL')
-    regal_baselines = [15211, 15196, 15215, 15201] # 17295, 17290, 17289, 17288] # crime-moreno, inf-power, bio-yeast, mahindas
-    regal_sources = [19902, 19897, 19905, 15123] # 17294, 17291, 17292, 17293] # crime-moreno, inf-power, bio-yeast, mahindas
+    # inf-power, crime, bus, facebook 47, bio-yeast, dd
+    regal_baselines = [17290, 17295, 15215, 15211, 17289, 15196]
+    regal_sources = [22296, 22297, 22298, 22299, 22300, 22301]
     fig = plot_eval_graphs(regal_baselines, regal_sources, 'REGAL')
     save_fig(fig, 'REGAL-bar-eval', subdir)
 
+
     # GRAMPA
-    subdir = os.path.join('Other-algorithms', 'GRAMPA')
-    grampa_baselines = [15285, 15287, 15289, 15291] # 17280, 17281, 17282, 17283] # crime-moreno, inf-power, bio-yeast, mahindas
-    grampa_sources = [15233, 15235, 15239, 15240] # 17284, 17287, 17286, 17285] # crime-moreno, inf-power, bio-yeast, mahindas
-    fig = plot_eval_graphs(grampa_baselines, grampa_sources, 'GRAMPA')
-    save_fig(fig, 'GRAMPA-bar-eval', subdir)
+    #subdir = os.path.join('Other-algorithms', 'GRAMPA')
+    # inf-power, crime, bus, facebook 47, bio-yeast, dd
+    #grampa_baselines = [17281, 17280, 15289, 15285, 17282, 15287]
+    #grampa_sources = [22295, 22302, 22303, 22304, 22308, 22309]
+    #fig = plot_eval_graphs(grampa_baselines, grampa_sources, 'GRAMPA')
+    #save_fig(fig, 'GRAMPA-bar-eval', subdir)
 
 
 def fugal_eval():
@@ -287,17 +291,17 @@ def fugal_eval():
     save_fig(fig, 'primary-eval', 'FUGAL-evaluation')
 
     econ_baseline = [16385]  # econ-mahindas
-    econ_source = [16374]  # econ-mahindas
+    econ_source = [22293]  # econ-mahindas
     fig = plot_eval_graphs(econ_baseline, econ_source, '')
     save_fig(fig, 'econ-eval', 'FUGAL-evaluation')
 
     # email-univ, in-arenas, dublin, tomography
     appendix_baselines = [16388, 17253, 17244, 17264]
-    appendix_sources = [16377, 17265, 16087, 17266]
+    appendix_sources = [22289, 22290, 22291, 22292]
     fig = plot_eval_graphs(appendix_baselines, appendix_sources, 'FUGAL')
     save_fig(fig, 'appendix-eval', 'FUGAL-evaluation')
 
 
 if __name__ == '__main__':
     fugal_eval()
-    #other_algo_eval()
+    other_algo_eval()
