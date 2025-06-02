@@ -1,0 +1,11 @@
+\begin{tabular}{rrrrrr}
+\toprule
+Round & bio-celegans & ca-netscience & inf-euroroad & voles & avg. across graphs \\
+\midrule
+1 & 88.58 & 62.15 & 51.81 & 92.17 & 73.68 \\
+2 & 88.77 & 62.73 & 54.89 & 92.48 & 74.72 \\
+3 & 88.92 & 63.53 & 57.58 & 92.69 & 75.68 \\
+4 & 88.76 & 63.63 & 58.94 & 92.78 & 76.03 \\
+5 & 88.72 & 63.68 & 59.47 & 92.51 & 76.09 \\
+\bottomrule
+\end{tabular}
