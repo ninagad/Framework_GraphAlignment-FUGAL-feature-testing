@@ -15,7 +15,6 @@ def test_graphs_are_training_graphs(runs: list[int]):
     # Check lists contain the same elements regardless of the order.
     assert sorted(names) == expected_names, f'Current graphs are: {names} from runs {runs}. Expected {expected_names}'
 
-
 def test_run_has_6_noise_levels(run: int):
     config = get_config_file(run)
 
@@ -82,6 +81,16 @@ def test_runs_have_ordered_analysis_graphs(grouped_runs: dict):
         stripped_names = [strip_graph_name(name) for name in graph_names]
 
         assert stripped_names == training_graphs, f'Current graphs has order {stripped_names} in runs {runs}. Expected graphs to have order {training_graphs}.'
+
+
+def test_loaded_graphs(runs: list[int], expected: list[int]):
+    for run, expected in zip(runs, expected):
+        config = get_config_file(run)
+        load_val = list(set(config['load']))
+        if len(load_val) != 1:
+            raise NotImplementedError
+
+        assert load_val[0] == expected, f'Expected {expected}. Got {load_val}'
 
 
 def test_configuration_graph_iters_nu_mu_sinkhorn(runs: dict, nu: float, mu: float, sinkhorn_reg: float):

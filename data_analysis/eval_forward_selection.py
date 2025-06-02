@@ -6,7 +6,7 @@ from enums.featureEnums import FeatureExtensions
 from data_analysis.utils import get_parameter, get_acc_file_as_df, get_git_root, get_acc_files_as_single_df, \
     get_graph_names_from_file, strip_graph_name
 from data_analysis.test_run_configurations import test_configuration_graph_iters_nu_mu_sinkhorn, \
-    test_runs_have_ordered_analysis_graphs
+    test_loaded_graphs
 
 
 def top_performing_feature(sources: list[int]):
@@ -98,6 +98,7 @@ def round_comparison_table():
     primary = [17307, 17308, 17309, 17310]
     fifth = [17359, 17360, 17361, 17362]
 
+    test_loaded_graphs(fifth, primary)
     graph_names = get_graph_names_from_file(primary)
     graph_names = [strip_graph_name(name) for name in graph_names]
 
@@ -123,5 +124,5 @@ def round_comparison_table():
 
 
 if __name__ == "__main__":
-    # forward_feature_selection_round_tables()
+    forward_feature_selection_round_tables()
     round_comparison_table()
