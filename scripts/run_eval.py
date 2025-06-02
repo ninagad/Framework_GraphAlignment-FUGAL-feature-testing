@@ -76,7 +76,7 @@ def run_pca(all_algs):
          'mu': 442.66,
          'sinkhorn_reg': 0.00141,
          'scaling': ScalingEnums.NO_SCALING,
-         'pca': 8,
+         'pca_components': 8,
          'frank_wolfe_iters': 2,
          }
     ]
