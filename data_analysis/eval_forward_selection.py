@@ -3,8 +3,10 @@ import os
 import pandas as pd
 
 from enums.featureEnums import FeatureExtensions
-from data_analysis.utils import get_parameter, get_acc_file_as_df, get_git_root
-from data_analysis.test_run_configurations import test_configuration_graph_iters_nu_mu_sinkhorn
+from data_analysis.utils import get_parameter, get_acc_file_as_df, get_git_root, get_acc_files_as_single_df, \
+    get_graph_names_from_file, strip_graph_name
+from data_analysis.test_run_configurations import test_configuration_graph_iters_nu_mu_sinkhorn, \
+    test_loaded_graphs
 
 
 def top_performing_feature(sources: list[int]):
@@ -66,7 +68,7 @@ def save_to_file(df, feature, sources, nu, mu, reg, round_no):
         file.write(latex_table)
 
 
-def forward_feature_selection():
+def forward_feature_selection_round_tables():
     sources_dict = {1: [7522, 7523, 7524, 7525],
                     # 2: [11427, 11428, 11429, 11430],
                     # 2: [115, 116, 117, 118],  # Skadi
@@ -92,5 +94,35 @@ def forward_feature_selection():
         save_to_file(df, feature, sources, nu, mu, reg, round_no)
 
 
+def round_comparison_table():
+    primary = [17307, 17308, 17309, 17310]
+    fifth = [17359, 17360, 17361, 17362]
+
+    test_loaded_graphs(fifth, primary)
+    graph_names = get_graph_names_from_file(primary)
+    graph_names = [strip_graph_name(name) for name in graph_names]
+
+    # Compute avg acc per graph for each feature set.
+    dfs = [100 * get_acc_files_as_single_df(run).groupby(level=0).mean().mean(axis=1) for run in zip(primary, fifth)]
+
+    for df, graph in zip(dfs, graph_names):
+        df.rename(graph, inplace=True)
+
+    mean_df = pd.concat(dfs, axis=1)
+    mean_df['avg. across graphs'] = mean_df.mean(axis=1)
+
+    mean_df['Round'] = mean_df.index.map(lambda x: len(x.split(', ')))
+    mean_df.sort_values('Round', inplace=True)
+
+    # Reorder to ensure 'Feature set' is first
+    cols = ['Round'] + [col for col in mean_df.columns if col != 'Round']
+    mean_df = mean_df[cols]
+
+    root = get_git_root()
+    path = os.path.join(root, 'tables', 'forward-selection-comparison.txt')
+    mean_df.to_latex(float_format=f"{{:0.2f}}".format, buf=path, index=False)
+
+
 if __name__ == "__main__":
-    forward_feature_selection()
+    forward_feature_selection_round_tables()
+    round_comparison_table()
