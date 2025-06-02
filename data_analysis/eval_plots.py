@@ -275,12 +275,12 @@ def other_algo_eval():
 
 
     # GRAMPA
-    #subdir = os.path.join('Other-algorithms', 'GRAMPA')
+    subdir = os.path.join('Other-algorithms', 'GRAMPA')
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    #grampa_baselines = [17281, 17280, 15289, 15285, 17282, 15287]
-    #grampa_sources = [22295, 22302, 22303, 22304, 22308, 22309]
-    #fig = plot_eval_graphs(grampa_baselines, grampa_sources, 'GRAMPA')
-    #save_fig(fig, 'GRAMPA-bar-eval', subdir)
+    grampa_baselines = [22312, 22313, 22314, 22315, 22316, 22317]
+    grampa_sources = [22295, 22302, 22303, 22304, 22308, 22309]
+    fig = plot_eval_graphs(grampa_baselines, grampa_sources, 'GRAMPA')
+    save_fig(fig, 'GRAMPA-bar-eval', subdir)
 
 
 def fugal_eval():
