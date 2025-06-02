@@ -128,6 +128,17 @@ def get_acc_file_as_df(run: int) -> pd.DataFrame:
     return df
 
 
+def get_acc_files_as_single_df(runs: list[int]) -> pd.DataFrame:
+    dfs = []
+    for run in runs:
+        df = get_acc_file_as_df(run)
+        dfs.append(df)
+
+    # Stack dfs
+    df = pd.concat(dfs, axis=0)
+    return df
+
+
 def get_config_file(run: int) -> json:
     root = get_git_root()
     path = os.path.join(root, 'Server-runs', f'{run}', 'config.json')
