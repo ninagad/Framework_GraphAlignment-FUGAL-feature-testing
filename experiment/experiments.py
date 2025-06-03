@@ -141,7 +141,7 @@ def tuning():
         #1,  # CONE
         #22, # cuGAL
         [
-            {'features': [x],
+            {'features': x,
              #'features': [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.SUM_EGO_DEG, FeatureEnums.STD_EGO_DEG, FeatureEnums.DEGREE_CENTRALITY, x],
              'nu': 447.24,
              'mu': 442.66,

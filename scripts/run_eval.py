@@ -3,7 +3,7 @@ import os.path
 
 from experiment.experiments import _algs
 from scripts.run_utils import run_alg, allowed_algorithms
-from data_analysis.utils import get_forward_selected_features, get_git_root, get_eval_graph_run_ids, get_appendix_eval_graph_run_ids
+from data_analysis.utils import get_forward_selected_features, get_git_root, get_eval_graph_run_ids, get_appendix_eval_graph_run_ids, get_15_features
 
 from enums.scalingEnums import ScalingEnums
 
@@ -69,6 +69,20 @@ def run_proposed_fugal(all_algs):
     run_eval_graphs('FUGAL-eval.txt', 'fugal', args_lst, all_algs)
     run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args_lst, algs_args)
 
+def run_pca(all_algs):
+    args_lst = [
+        {'features': get_15_features(),
+         'nu': 447.24,
+         'mu': 442.66,
+         'sinkhorn_reg': 0.00141,
+         'scaling': ScalingEnums.NO_SCALING,
+         'pca_components': 8,
+         'frank_wolfe_iters': 2,
+         }
+    ]
+
+    run_eval_graphs('PCA-eval.txt', 'fugal', args_lst, all_algs)
+
 
 if __name__ == '__main__':
     algs_args = copy.copy(_algs)
@@ -77,3 +91,4 @@ if __name__ == '__main__':
     run_isorank(algs_args)
     run_grampa(algs_args)
     run_proposed_fugal(algs_args)
+    run_pca(algs_args)

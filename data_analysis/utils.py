@@ -105,6 +105,14 @@ def get_forward_selected_features() -> [FeatureEnums]:
 
     return feature_set
 
+def get_15_features() -> [FeatureEnums]:
+    features_set = [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.EGO_OUT_EDGES,
+                FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.MAX_EGO_CLUSTER,
+                FeatureEnums.AVG_EGO_CLUSTER, FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.RANGE_EGO_CLUSTER,
+                FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MIN_EGO_DEGS, FeatureEnums.MAX_EGO_DEGS,
+                FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER, FeatureEnums.SUM_EGO_DEG]
+
+    return features_set
 
 def get_training_graph_names():
     graphs = ['bio-celegans', 'ca-netscience', 'inf-euroroad', 'voles']
