@@ -4,8 +4,9 @@ import scipy.sparse as sps
 import scipy
 import networkx as nx
 from algorithms.FUGAL.pred import feature_extraction, eucledian_dist
-from algorithms.FUGAL.Fugal import apply_scaling
+from algorithms.FUGAL.Fugal import apply_pca
 from enums.scalingEnums import ScalingEnums
+
 
 
 
@@ -80,7 +81,7 @@ def create_L(A, B, lalpha=1, mind=None, weighted=True):
 # def main(A, B, L=None, alpha=0.5, tol=1e-12, maxiter=1, verbose=True):
 
 
-def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=10000, weighted=True):
+def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=10000, weighted=True, pca_components=None):
     print("Isorank")
     dtype = np.float32
     Src = data['Src']
@@ -92,8 +93,13 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=1
     n2 = Src.shape[0]
     F1 = feature_extraction(Src1, features)
     F2 = feature_extraction(Tar1, features)
-    Sim = np.ones((n1,n2))
     nr_of_features = len(features)
+
+    if pca_components is not None:
+        F1, F2, explained_var = apply_pca(F1, F2, pca_components)
+        nr_of_features = pca_components
+
+    Sim = np.ones((n1,n2))
     min = np.min([np.min(F1),np.min(F2)])
     if min < 0:
         F1 -= min

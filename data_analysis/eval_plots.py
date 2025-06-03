@@ -71,7 +71,7 @@ def compute_confidence_interval(x):
         return None, None
 
 
-def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, additional_trace: int | None):
+def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, additional_trace: int | None, additional_source: int | None):
     # Check that baseline and source is computed on the same graph
     test_graph_set_are_equal(baseline, source)
 
@@ -80,6 +80,7 @@ def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, addi
     # Green pair
     baseline_color = '#b1de89'
     color = '#31a354'
+    additional_color = '#688557'
 
     # color = '#688557'
     # color = '#38b1d9'
@@ -95,6 +96,10 @@ def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, addi
 
     baseline_df = get_acc_file_as_df(baseline)
     baseline_df = baseline_df.replace(-1, np.nan)
+
+    if additional_source is not None:
+        additional_df = get_acc_file_as_df(additional_source)
+        additional_df = additional_df.replace(-1, np.nan)
 
     # Get noise levels
     xs = df.index.get_level_values(1).unique()
@@ -124,9 +129,17 @@ def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, addi
         df['type'] = 'Proposed'
         baseline_df['noise'] = xs
         df['noise'] = xs
+        if additional_source is not None:
+            additional_df['type'] = 'PCA'
+            additional_df['noise'] = xs
 
         # Combine into one DataFrame
-        df_all = pd.concat([baseline_df, df], ignore_index=True)
+        if additional_source is None:
+            df_all = pd.concat([baseline_df, df], ignore_index=True)
+            palette = [baseline_color, color]
+        else:
+            df_all = pd.concat([baseline_df, df, additional_df], ignore_index=True)
+            palette = [baseline_color, color, additional_color]
 
         # Collapse iteration columns into a single column of accuracies
         df_all = df_all.melt(
@@ -142,7 +155,7 @@ def plot_subplot(baseline: int, source: int, subplot, col: int, title: str, addi
                     y='accuracy',
                     hue='type',
                     ax=subplot,
-                    palette=[baseline_color, color],
+                    palette=palette,
                     edgecolor="black",
                     linewidth=0.6,
                     # errorbar="sd"
@@ -203,9 +216,11 @@ def layout_plot(fig: Figure, axes, title: str, legend_name: str):
 
 
 def plot_eval_graphs(baselines: list, sources: list, title: str, legend_title: str = '',
-                     additional_trace=None):
+                     additional_trace=None, additional_sources=None):
     if additional_trace is None:
         additional_trace = len(baselines) * [None]
+    if additional_sources is None:
+        additional_sources = len(baselines) * [None]
 
     assert len(baselines) == len(sources)
     assert len(baselines) == len(additional_trace)
@@ -218,12 +233,12 @@ def plot_eval_graphs(baselines: list, sources: list, title: str, legend_title: s
                              figsize=(3.5 * cols, 3.5 * rows),
                              sharey='row')
 
-    for i, (baseline, source, additional) in enumerate(zip(baselines, sources, additional_trace)):
+    for i, (baseline, source, additional_trace, additional_source) in enumerate(zip(baselines, sources, additional_trace, additional_sources)):
         row = i // cols
         col = i % cols
 
         subplot = axes[row, col] if len(baselines) != 1 else axes
-        plot_subplot(baseline, source, subplot, col, title, additional)
+        plot_subplot(baseline, source, subplot, col, title, additional_trace, additional_source)
 
     layout_plot(fig, axes, title, legend_title)
 
@@ -295,13 +310,22 @@ def fugal_eval():
     fig = plot_eval_graphs(econ_baseline, econ_source, '')
     save_fig(fig, 'econ-eval', 'FUGAL-evaluation')
 
-    # email-univ, in-arenas, dublin, tomography
-    appendix_baselines = [16388, 17253, 17244, 17264]
-    appendix_sources = [22289, 22290, 22291, 22292]
+    # email-univ, in-arenas, dublin, ca-GrQc, bio-DM-LC, arenas-meta
+    appendix_baselines = [16388, 17253, 17244, 17251, 17238, 17254]
+    appendix_sources = [22289, 22290, 22291, 22325, 22327, 22326]
     fig = plot_eval_graphs(appendix_baselines, appendix_sources, 'FUGAL')
     save_fig(fig, 'appendix-eval', 'FUGAL-evaluation')
 
+def fugal_pca_eval():
+    # inf-power, crime, bus, facebook 47, bio-yeast, dd
+    baselines = [17247, 17245, 17243, 17241, 17239, 17242]
+    fugal_sources = [21209, 21476, 21485, 21490, 21574, 21612]
+    pca_sources = [22319, 22320, 22321, 22322, 22323, 22324]
+    fig = plot_eval_graphs(baselines, fugal_sources, 'FUGAL_and_PCA', additional_sources=pca_sources)
+    save_fig(fig, 'fugal-pca-eval', 'FUGAL-evaluation')
+
 
 if __name__ == '__main__':
-    fugal_eval()
-    other_algo_eval()
+    #fugal_eval()
+    fugal_pca_eval()
+    #other_algo_eval()
