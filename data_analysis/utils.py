@@ -47,7 +47,10 @@ def get_appendix_eval_graph_run_ids():
     ids = {"email-univ": 16377,
            "in-arenas": 17253,
            "infect-dublin": 15123,
-           "tomography": 17264,
+           "bio-DM-LC_no_weight": 17233,
+           "ca-CrQc": 17251,
+           "arenas-meta": 17253,
+           #"tomography": 17264,
            "econ-mahindas": 16374
            }
 
