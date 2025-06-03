@@ -1,5 +1,6 @@
 import numpy as np
 from algorithms.FUGAL.pred import feature_extraction, eucledian_dist
+from algorithms.FUGAL.Fugal import apply_pca
 
 #import scipy.sparse as sp
 #from scipy.optimize import linear_sum_assignment
@@ -181,7 +182,7 @@ def seigh(A):
   l = l[idx]
   u = u[:,idx]
   return l, u
-def main(data, eta,lalpha,initSim,Eigtype, features):
+def main(data, eta,lalpha,initSim,Eigtype, features, pca_components=None):
     print("GrampaS")
     os.environ["MKL_NUM_THREADS"] = "30"
     Src = data['Src']
@@ -223,11 +224,18 @@ def main(data, eta,lalpha,initSim,Eigtype, features):
         Tar1=nx.from_numpy_array(Tar)
         F1= feature_extraction(Src1,features)
         F2= feature_extraction(Tar1,features)
+        nr_of_features = len(features)
+        if pca_components is not None:
+            F1, F2, explained_var = apply_pca(F1, F2, pca_components)
+            nr_of_features = pca_components
 
         #Alternative similarity computation from IsoRank
         sim = np.empty((n,n))
-        if (np.min(F1) < 0) or (np.min(F2) < 0):
-            raise Exception('No feature values below zero allowed in similarity computation')
+        min = np.min([np.min(F1),np.min(F2)])
+        if min < 0:
+            F1 -= min
+            F2 -= min
+            #raise Exception('No feature values below zero allowed in similarity computation')
 
         for i in range(n):
             for j in range(n):
@@ -236,7 +244,7 @@ def main(data, eta,lalpha,initSim,Eigtype, features):
                 for k in np.argwhere(max == 0):
                     max[k] = 1
 
-                sim[i, j] = 1 - (np.sum(diff / max) / len(features))
+                sim[i, j] = 1 - (np.sum(diff / max) / nr_of_features)
 
         # Konstantinos' suggestion for similarity computation
         #K = eucledian_dist(F1, F2, n)

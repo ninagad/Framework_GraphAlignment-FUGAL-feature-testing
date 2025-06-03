@@ -189,7 +189,8 @@ _REGAL_args = {
     'gammastruc': 1.0,
     'gammaattr': 0,
     'numtop': 10,
-    'buckets': 2
+    'buckets': 2,
+    'pca_components': None
 }
 
 _LREA_args = {

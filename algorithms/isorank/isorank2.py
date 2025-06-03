@@ -104,7 +104,7 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=1
     if min < 0:
         F1 -= min
         F2 -= min
-        raise Exception
+        # raise Exception
 
     for i in range(n1):
         for j in range(n2):
