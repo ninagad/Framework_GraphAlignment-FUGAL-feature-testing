@@ -55,8 +55,8 @@ def get_appendix_eval_graph_run_ids():
 
 
 def get_graph(filename: str) -> nx.Graph:
-    current_dir = (os.path.dirname(__file__))
-    data_dir = os.path.join(current_dir, '..', 'data')
+    root = get_git_root()
+    data_dir = os.path.join(root, 'data')
 
     graph_path = os.path.join(data_dir, filename)
 
@@ -169,6 +169,14 @@ def get_graph_names_from_file(runs: list[int]) -> list[str]:
 
     return graph_names
 
+def get_algorithm(run: int) -> str:
+    config = get_config_file(run)
+    algorithm = set(config['algs'][0][0].values())
+    if len(algorithm) != 1:
+        raise NotImplementedError
+
+    name = str(algorithm).split('.')[1]
+    return name
 
 def get_algo_args(run: int) -> list[dict]:
     config = get_config_file(run)
