@@ -4,7 +4,7 @@ import scipy.sparse as sps
 import scipy
 import networkx as nx
 from algorithms.FUGAL.pred import feature_extraction, eucledian_dist
-from algorithms.FUGAL.Fugal import apply_pca
+from algorithms.FUGAL.Fugal import apply_pca, apply_scaling
 from enums.scalingEnums import ScalingEnums
 
 
@@ -81,7 +81,7 @@ def create_L(A, B, lalpha=1, mind=None, weighted=True):
 # def main(A, B, L=None, alpha=0.5, tol=1e-12, maxiter=1, verbose=True):
 
 
-def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=10000, weighted=True, pca_components=None):
+def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=10000, weighted=True, pca_components=None, scaling=ScalingEnums.NO_SCALING):
     print("Isorank")
     dtype = np.float32
     Src = data['Src']
@@ -98,17 +98,28 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=1
     if pca_components is not None:
         F1, F2, explained_var = apply_pca(F1, F2, pca_components)
         nr_of_features = pca_components
+    else:
+        F1, F2 = apply_scaling(F1, F2, scaling)
 
     Sim = np.ones((n1,n2))
+    D = np.ones((n1, n2, nr_of_features))
+
+    for i in range(n1):
+        for j in range(n2):
+            D[i,j] = np.absolute(F1[i,:] - F2[j,:])
+
+    max = np.max(D, axis=(0,1))
+
     min = np.min([np.min(F1),np.min(F2)])
     if min < 0:
         F1 -= min
         F2 -= min
-        # raise Exception
+        raise Exception
 
     for i in range(n1):
         for j in range(n2):
-            max = np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)
+            if scaling == ScalingEnums.NO_SCALING:
+                max = np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)
             diff = np.absolute(F1[i, :] - F2[j, :])
             for k in np.argwhere(max == 0):
                 max[k] = 1

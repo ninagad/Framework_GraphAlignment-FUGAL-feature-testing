@@ -1,6 +1,7 @@
 import numpy as np
 from algorithms.FUGAL.pred import feature_extraction, eucledian_dist
-from algorithms.FUGAL.Fugal import apply_pca
+from algorithms.FUGAL.Fugal import apply_pca, apply_scaling
+from enums.scalingEnums import ScalingEnums
 
 #import scipy.sparse as sp
 #from scipy.optimize import linear_sum_assignment
@@ -182,7 +183,7 @@ def seigh(A):
   l = l[idx]
   u = u[:,idx]
   return l, u
-def main(data, eta,lalpha,initSim,Eigtype, features, pca_components=None):
+def main(data, eta,lalpha,initSim,Eigtype, features, pca_components=None, scaling=ScalingEnums.NO_SCALING):
     print("GrampaS")
     os.environ["MKL_NUM_THREADS"] = "30"
     Src = data['Src']
@@ -222,12 +223,24 @@ def main(data, eta,lalpha,initSim,Eigtype, features, pca_components=None):
         #L = calculate_similarity_scores_from_matrices(Src,Tar)
         Src1=nx.from_numpy_array(Src)
         Tar1=nx.from_numpy_array(Tar)
+        n1 = Tar.shape[0]
+        n2 = Src.shape[0]
         F1= feature_extraction(Src1,features)
         F2= feature_extraction(Tar1,features)
         nr_of_features = len(features)
         if pca_components is not None:
             F1, F2, explained_var = apply_pca(F1, F2, pca_components)
             nr_of_features = pca_components
+        else:
+            F1, F2 = apply_scaling(F1, F2, scaling)
+
+        D = np.ones((n1, n2, nr_of_features))
+
+        for i in range(n1):
+            for j in range(n2):
+                D[i, j] = np.absolute(F1[i, :] - F2[j, :])
+
+        max = np.max(D, axis=(0, 1))
 
         #Alternative similarity computation from IsoRank
         sim = np.empty((n,n))
@@ -239,7 +252,8 @@ def main(data, eta,lalpha,initSim,Eigtype, features, pca_components=None):
 
         for i in range(n):
             for j in range(n):
-                max = np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)
+                if scaling == ScalingEnums.NO_SCALING:
+                    max = np.max(np.vstack((F1[i, :], F2[j, :])), axis=0)
                 diff = np.absolute(F1[i, :] - F2[j, :])
                 for k in np.argwhere(max == 0):
                     max[k] = 1
