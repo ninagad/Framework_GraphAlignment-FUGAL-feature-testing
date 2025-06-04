@@ -1,0 +1,7 @@
+
+{'algorithm': 'grampa', 'graph': 'inf-power', 'run-id': '22334', 'load': [17236, 17236]}
+{'algorithm': 'grampa', 'graph': 'ia-crime-moreno', 'run-id': '22340', 'load': [16121, 16121]}
+{'algorithm': 'grampa', 'graph': 'power-685-bus', 'run-id': '22341', 'load': [15142, 15142]}
+{'algorithm': 'grampa', 'graph': 'socfb-Bowdoin47', 'run-id': '22342', 'load': [15126, 15126]}
+{'algorithm': 'grampa', 'graph': 'bio-yeast', 'run-id': '22353', 'load': [17235, 17235]}
+{'algorithm': 'grampa', 'graph': 'DD_g501', 'run-id': '22354', 'load': [15129, 15129]}

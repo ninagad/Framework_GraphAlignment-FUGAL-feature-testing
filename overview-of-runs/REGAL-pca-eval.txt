@@ -1,0 +1,7 @@
+
+{'algorithm': 'regal', 'graph': 'inf-power', 'run-id': '22333', 'load': [17236, 17236]}
+{'algorithm': 'regal', 'graph': 'ia-crime-moreno', 'run-id': '22335', 'load': [16121, 16121]}
+{'algorithm': 'regal', 'graph': 'power-685-bus', 'run-id': '22336', 'load': [15142, 15142]}
+{'algorithm': 'regal', 'graph': 'socfb-Bowdoin47', 'run-id': '22337', 'load': [15126, 15126]}
+{'algorithm': 'regal', 'graph': 'bio-yeast', 'run-id': '22338', 'load': [17235, 17235]}
+{'algorithm': 'regal', 'graph': 'DD_g501', 'run-id': '22339', 'load': [15129, 15129]}

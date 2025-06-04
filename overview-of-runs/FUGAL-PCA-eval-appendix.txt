@@ -1,0 +1,9 @@
+
+{'algorithm': 'fugal', 'graph': 'email-univ', 'run-id': '22343', 'load': [16377, 16377]}
+{'algorithm': 'fugal', 'graph': 'in-arenas', 'run-id': '22344', 'load': [17253, 17253]}
+{'algorithm': 'fugal', 'graph': 'infect-dublin', 'run-id': '22346', 'load': [15123, 15123]}
+{'algorithm': 'fugal', 'graph': 'tomography', 'run-id': '22347', 'load': [17264, 17264]}
+{'algorithm': 'fugal', 'graph': 'econ-mahindas', 'run-id': '22349', 'load': [16374, 16374]}
+{'algorithm': 'fugal', 'graph': 'bio-DM-LC_no_weight', 'run-id': '22345', 'load': [17233, 17233]}
+{'algorithm': 'fugal', 'graph': 'ca-CrQc', 'run-id': '22348', 'load': [17251, 17251]}
+{'algorithm': 'fugal', 'graph': 'arenas-meta', 'run-id': '22357', 'load': [17253, 17253]}

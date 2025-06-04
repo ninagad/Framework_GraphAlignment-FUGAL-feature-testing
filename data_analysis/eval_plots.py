@@ -344,6 +344,43 @@ def other_algo_eval():
     fig = plot_eval_graphs(trace_dict, 'GRAMPA', 'GRAMPA-data.txt')
     save_fig(fig, 'GRAMPA-bar-eval', subdir)
 
+
+def other_algo_pca_eval():
+    # IsoRank
+    subdir = os.path.join('Other-algorithms', 'IsoRank')
+
+    # Without degree similarity
+    # isorank_baselines = [15274, 15276, 15279, 15280]
+
+    # With degree similarity
+    # inf-power, crime, bus, facebook 47, bio-yeast, dd
+    trace_dict = {'Original': original_isorank_ids,
+                  'Proposed': proposed_isorank_ids,
+                  'Proposed - PCA': [22331, 22350, 22351, 22352, 22355, 22356]}
+
+    fig = plot_eval_graphs(trace_dict, 'IsoRank', 'IsoRank-data.txt')
+    save_fig(fig, 'IsoRank-bar-eval-with-PCA', subdir)
+
+    # REGAL
+    subdir = os.path.join('Other-algorithms', 'REGAL')
+    # inf-power, crime, bus, facebook 47, bio-yeast, dd
+    trace_dict = {'Original': original_regal_ids,
+                  'Proposed': proposed_regal_ids,
+                  'Proposed - PCA': [22333, 22335, 22336, 22337, 22338, 22339]}
+
+    fig = plot_eval_graphs(trace_dict, 'REGAL', 'REGAL-data.txt')
+    save_fig(fig, 'REGAL-bar-eval-with-PCA', subdir)
+
+    # GRAMPA
+    subdir = os.path.join('Other-algorithms', 'GRAMPA')
+    # inf-power, crime, bus, facebook 47, bio-yeast, dd
+    trace_dict = {'Original': original_grampa_ids,
+                  'Proposed': proposed_grampa_ids,
+                  'Proposed - PCA': [22334, 22340, 22341, 22342, 22353, 22354]}
+    fig = plot_eval_graphs(trace_dict, 'GRAMPA', 'GRAMPA-data.txt')
+    save_fig(fig, 'GRAMPA-bar-eval-with-PCA', subdir)
+
+
 def fugal_pca_eval():
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
     id_dict = {'Original': original_fugal_ids,
@@ -353,10 +390,26 @@ def fugal_pca_eval():
     fig = plot_eval_graphs(id_dict, 'FUGAL', 'FUGAL-primary-data-with-pca.txt')
     save_fig(fig, 'primary-eval-with-PCA', 'FUGAL-evaluation')
 
+    # econ-mahindas
+    id_dict = {'Original': [16385],
+               'Proposed': [22293],
+               'Proposed - PCA': [22349]}
+    fig = plot_eval_graphs(id_dict, '', 'FUGAL-econ-data.txt')
+    save_fig(fig, 'econ-eval-with-PCA', 'FUGAL-evaluation')
+
+    # email-univ, in-arenas, dublin, ca-GrQc, bio-DM-LC, arenas-meta
+    id_dict = {'Original': [16388, 17253, 17244, 17251, 17238, 17254],
+               'Proposed': [22289, 22290, 22291, 22325, 22327, 22326],
+               'Proposed - PCA': [22343, 22344, 22346, 22348, 22345, 22357]}
+
+    fig = plot_eval_graphs(id_dict, 'FUGAL', 'FUGAL-appendix-data.txt')
+    save_fig(fig, 'appendix-eval-with-PCA', 'FUGAL-evaluation')
+
 def fugal_eval():
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
     id_dict = {'Original': original_fugal_ids,
                'Proposed': proposed_fugal_ids}
+
 
     fig = plot_eval_graphs(id_dict, 'FUGAL', 'FUGAL-primary-data.txt')
     save_fig(fig, 'primary-eval', 'FUGAL-evaluation')
@@ -393,6 +446,7 @@ def compare_algos():
 
 if __name__ == '__main__':
     #fugal_eval()
-    fugal_pca_eval()
-    other_algo_eval()
-    compare_algos()
+    #fugal_pca_eval()
+    #other_algo_eval()
+    other_algo_pca_eval()
+    #compare_algos()

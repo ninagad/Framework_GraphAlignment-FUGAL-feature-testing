@@ -1,0 +1,7 @@
+
+{'algorithm': 'isorank', 'graph': 'inf-power', 'run-id': '22331', 'load': [17236, 17236]}
+{'algorithm': 'isorank', 'graph': 'ia-crime-moreno', 'run-id': '22350', 'load': [16121, 16121]}
+{'algorithm': 'isorank', 'graph': 'power-685-bus', 'run-id': '22351', 'load': [15142, 15142]}
+{'algorithm': 'isorank', 'graph': 'socfb-Bowdoin47', 'run-id': '22352', 'load': [15126, 15126]}
+{'algorithm': 'isorank', 'graph': 'bio-yeast', 'run-id': '22355', 'load': [17235, 17235]}
+{'algorithm': 'isorank', 'graph': 'DD_g501', 'run-id': '22356', 'load': [15129, 15129]}
