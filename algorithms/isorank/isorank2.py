@@ -98,6 +98,11 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=1
     if pca_components is not None:
         F1, F2, explained_var = apply_pca(F1, F2, pca_components)
         nr_of_features = pca_components
+    elif scaling == ScalingEnums.NO_SCALING:
+        min = np.min([np.min(F1), np.min(F2)])
+        if min < 0:
+            F1 -= min
+            F2 -= min
     else:
         F1, F2 = apply_scaling(F1, F2, scaling)
 
@@ -109,12 +114,6 @@ def main(data, features, alpha=0.5, tol=1e-12, maxiter=1, verbose=True, lalpha=1
             D[i,j] = np.absolute(F1[i,:] - F2[j,:])
 
     max = np.max(D, axis=(0,1))
-
-    min = np.min([np.min(F1),np.min(F2)])
-    if min < 0:
-        F1 -= min
-        F2 -= min
-        raise Exception
 
     for i in range(n1):
         for j in range(n2):

@@ -231,6 +231,11 @@ def main(data, eta,lalpha,initSim,Eigtype, features, pca_components=None, scalin
         if pca_components is not None:
             F1, F2, explained_var = apply_pca(F1, F2, pca_components)
             nr_of_features = pca_components
+        elif scaling == ScalingEnums.NO_SCALING:
+            min = np.min([np.min(F1), np.min(F2)])
+            if min < 0:
+                F1 -= min
+                F2 -= min
         else:
             F1, F2 = apply_scaling(F1, F2, scaling)
 
@@ -244,11 +249,6 @@ def main(data, eta,lalpha,initSim,Eigtype, features, pca_components=None, scalin
 
         #Alternative similarity computation from IsoRank
         sim = np.empty((n,n))
-        min = np.min([np.min(F1),np.min(F2)])
-        if min < 0:
-            F1 -= min
-            F2 -= min
-            #raise Exception('No feature values below zero allowed in similarity computation')
 
         for i in range(n):
             for j in range(n):
