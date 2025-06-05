@@ -303,16 +303,16 @@ def other_algo_eval():
     cone_baselines = [281, 282, 283, 284]
     trace_dict = {'Original': cone_baselines,
                   'Proposed': [14054, 14179, 14181, 14182]}
-    fig = plot_eval_graphs(trace_dict, 'CONE - convex initialization', '', 'Dist scalar')
-    save_fig(fig, 'CONE-convex-init-dist_scalar', subdir)
+    #fig = plot_eval_graphs(trace_dict, 'CONE - convex initialization', '', 'Dist scalar')
+    #save_fig(fig, 'CONE-convex-init-dist_scalar', subdir)
 
     # CONE optimal matching
     trace_dict = {'Original': cone_baselines,
                   'Proposed': [14463, 14465, 14467, 14468],
                   'lr = 0': [15161, 15163, 15164, 15165]}
 
-    fig = plot_eval_graphs(trace_dict, 'CONE - alignment', '', 'Dist scalar')
-    save_fig(fig, 'CONE-alignment-dist_scalar', subdir)
+    #fig = plot_eval_graphs(trace_dict, 'CONE - alignment', '', 'Dist scalar')
+    #save_fig(fig, 'CONE-alignment-dist_scalar', subdir)
 
     # IsoRank
     subdir = os.path.join('Other-algorithms', 'IsoRank')
@@ -323,26 +323,28 @@ def other_algo_eval():
     # With degree similarity
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
     trace_dict = {'Original': original_isorank_ids,
-                  'Proposed': proposed_isorank_ids}
+                  #'Proposed': proposed_isorank_ids} # generalized Sim
+                  'Proposed': [22372,22378,22379,22381,22382,22383]} # scaled Sim
 
     fig = plot_eval_graphs(trace_dict, 'IsoRank', 'IsoRank-data.txt')
-    save_fig(fig, 'IsoRank-bar-eval', subdir)
+    save_fig(fig, 'IsoRank-bar-eval-scaled-Sim', subdir)
 
     # REGAL
     subdir = os.path.join('Other-algorithms', 'REGAL')
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
     trace_dict = {'Original': original_regal_ids,
                   'Proposed': proposed_regal_ids}
-    fig = plot_eval_graphs(trace_dict, 'REGAL', 'REGAL-data.txt')
-    save_fig(fig, 'REGAL-bar-eval', subdir)
+    #fig = plot_eval_graphs(trace_dict, 'REGAL', 'REGAL-data.txt')
+    #save_fig(fig, 'REGAL-bar-eval', subdir)
 
     # GRAMPA
     subdir = os.path.join('Other-algorithms', 'GRAMPA')
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
     trace_dict = {'Original': original_grampa_ids,
-                  'Proposed': proposed_grampa_ids}
+                  # 'Proposed': proposed_grampa_ids} # generalized Sim
+                  'Proposed': [22373, 22374, 22375, 22376, 22377, 22380]}  # scaled Sim
     fig = plot_eval_graphs(trace_dict, 'GRAMPA', 'GRAMPA-data.txt')
-    save_fig(fig, 'GRAMPA-bar-eval', subdir)
+    save_fig(fig, 'GRAMPA-bar-eval-scaled-Sim', subdir)
 
 
 def other_algo_pca_eval():
@@ -354,12 +356,15 @@ def other_algo_pca_eval():
 
     # With degree similarity
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    trace_dict = {'Original': original_isorank_ids,
-                  'Proposed': proposed_isorank_ids,
-                  'Proposed - PCA': [22331, 22350, 22351, 22352, 22355, 22356]}
+    trace_dict = {#'Original': original_isorank_ids,
+                  #'Proposed': proposed_isorank_ids,
+                  'Proposed PCA - generalized degree sim': [22331, 22350, 22351, 22352, 22355, 22356], # novel similarity
+                  'Proposed PCA - unscaled and np.max(D)-D': [22358, 22365, 22366, 22367, 22368, 22369], # unnormalized similarity, D=np.max(D)-D
+                  #'Proposed - Scaled Sim': [22372, 22378, 22379, 22381, 22382, 22383]}  # scaled Sim
+                  'Proposed PCA - scaled and np.max(D)-D': [22384, 22391, 22392, 22393, 22394, 22395]}  # scaled features and np.max(D) - D
 
     fig = plot_eval_graphs(trace_dict, 'IsoRank', 'IsoRank-data.txt')
-    save_fig(fig, 'IsoRank-bar-eval-with-PCA', subdir)
+    save_fig(fig, 'IsoRank-bar-eval-with-PCA-unnormalized-Sim', subdir)
 
     # REGAL
     subdir = os.path.join('Other-algorithms', 'REGAL')
@@ -368,17 +373,20 @@ def other_algo_pca_eval():
                   'Proposed': proposed_regal_ids,
                   'Proposed - PCA': [22333, 22335, 22336, 22337, 22338, 22339]}
 
-    fig = plot_eval_graphs(trace_dict, 'REGAL', 'REGAL-data.txt')
-    save_fig(fig, 'REGAL-bar-eval-with-PCA', subdir)
+    #fig = plot_eval_graphs(trace_dict, 'REGAL', 'REGAL-data.txt')
+    #save_fig(fig, 'REGAL-bar-eval-with-PCA', subdir)
 
     # GRAMPA
     subdir = os.path.join('Other-algorithms', 'GRAMPA')
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    trace_dict = {'Original': original_grampa_ids,
-                  'Proposed': proposed_grampa_ids,
-                  'Proposed - PCA': [22334, 22340, 22341, 22342, 22353, 22354]}
+    trace_dict = {#'Original': original_grampa_ids,
+                  #'Proposed': proposed_grampa_ids,
+                  'Proposed PCA - generalized degree sim': [22334, 22340, 22341, 22342, 22353, 22354], # novel similarity
+                  'Proposed PCA - unscaled and np.max(D)-D': [22359, 22360, 22361, 22362, 22363, 22364], # unnormalized Sim <- Konstantinos' suggestion
+                  #'Proposed - Scaled Sim': [22373, 22374, 22375, 22376, 22377, 22380]}  # scaled Sim, the one we came up with
+                  'Proposed PCA - scaled and np.max(D)-D': [22385, 22386, 22387, 22388, 22389, 22390]}  # scaled features and np.max(D) - D
     fig = plot_eval_graphs(trace_dict, 'GRAMPA', 'GRAMPA-data.txt')
-    save_fig(fig, 'GRAMPA-bar-eval-with-PCA', subdir)
+    save_fig(fig, 'GRAMPA-bar-eval-with-scaled-Sim', subdir)
 
 
 def fugal_pca_eval():
