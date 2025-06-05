@@ -8,20 +8,20 @@ from data_analysis.utils import get_forward_selected_features, get_git_root, get
 from enums.scalingEnums import ScalingEnums
 
 
-def run_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list):
+def run_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list, acc: int = 0):
     root = get_git_root()
     path = os.path.join(root, 'overview-of-runs', save_file)
 
     for graph, load_id in get_eval_graph_run_ids().items():
-        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id)
+        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id, acc)
 
 
-def run_appendix_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list):
+def run_appendix_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list, acc: int = 0):
     root = get_git_root()
     path = os.path.join(root, 'overview-of-runs', save_file)
 
     for graph, load_id in get_appendix_eval_graph_run_ids().items():
-        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id)
+        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id, acc)
 
 
 def run_grampa(all_algs):
@@ -66,8 +66,10 @@ def run_proposed_fugal(all_algs):
          }
     ]
 
-    run_eval_graphs('FUGAL-eval.txt', 'fugal', args_lst, all_algs)
-    run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args_lst, algs_args)
+    acc = 0
+
+    run_eval_graphs('FUGAL-eval.txt', 'fugal', args_lst, all_algs, acc)
+    run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args_lst, algs_args, acc)
 
 def run_pca(all_algs):
     args_lst = [
@@ -81,7 +83,9 @@ def run_pca(all_algs):
          }
     ]
 
-    run_eval_graphs('PCA-eval.txt', 'fugal', args_lst, all_algs)
+    acc = 0
+
+    run_eval_graphs('PCA-eval.txt', 'fugal', args_lst, all_algs, acc)
 
 
 if __name__ == '__main__':
