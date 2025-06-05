@@ -28,7 +28,9 @@ def run_alg(save_file: str,
             all_algs: list,
             algo_args: list[dict],
             graph: str,
-            load_graph: int | None = None):
+            load_graph: int | None = None,
+            noise_type: int = 1,
+            acc: int = 0):
     noises = [0, 0.05, 0.10, 0.15, 0.20, 0.25]
 
     iterations = 5
@@ -55,7 +57,9 @@ def run_alg(save_file: str,
                         'graphs': graph_wrapper,
                         'iters': iterations,
                         'xlabel': 'Noise-level',
-                        'verbose': True
+                        'verbose': True,
+                        'noise_type': [noise_type],
+                        'accs': [acc]
                         })
 
     # Log id, graph, to overview file
