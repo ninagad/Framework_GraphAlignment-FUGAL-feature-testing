@@ -66,6 +66,8 @@ def run_alg(save_file: str,
     run_id = run.info['id']
     info_dict = {'algorithm': algorithm,
                  'graph': graph,
+                 'noise_type': noise_type,
+                 'metric': acc,
                  'run-id': run_id,
                  'load': load,
                  }

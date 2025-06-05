@@ -42,6 +42,13 @@ def get_eval_graph_run_ids():
 
     return ids
 
+def get_metric_noise_graph_run_ids():
+    ids = {"inf-power": 17236,
+           "ia-crime-moreno": 16121
+           }
+
+    return ids
+
 
 def get_appendix_eval_graph_run_ids():
     ids = {"email-univ": 16377,

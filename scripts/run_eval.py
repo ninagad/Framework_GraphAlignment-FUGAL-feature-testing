@@ -3,25 +3,38 @@ import os.path
 
 from experiment.experiments import _algs
 from scripts.run_utils import run_alg, allowed_algorithms
-from data_analysis.utils import get_forward_selected_features, get_git_root, get_eval_graph_run_ids, get_appendix_eval_graph_run_ids, get_15_features
+from data_analysis.utils import get_forward_selected_features, get_git_root, get_eval_graph_run_ids, get_appendix_eval_graph_run_ids, get_15_features, get_metric_noise_graph_run_ids
 
 from enums.scalingEnums import ScalingEnums
 
 
-def run_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list, acc: int = 0):
+def run_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list):
     root = get_git_root()
     path = os.path.join(root, 'overview-of-runs', save_file)
 
     for graph, load_id in get_eval_graph_run_ids().items():
-        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id, acc)
+        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id)
 
 
-def run_appendix_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list, acc: int = 0):
+def run_appendix_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list):
     root = get_git_root()
     path = os.path.join(root, 'overview-of-runs', save_file)
 
     for graph, load_id in get_appendix_eval_graph_run_ids().items():
-        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id, acc)
+        run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id)
+
+
+def run_metric_noise_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list):
+    root = get_git_root()
+    path = os.path.join(root, 'overview-of-runs', save_file)
+
+    metrics = [3,5,6] # s3, mnc, frob
+    noise_types = [1,2,3]
+
+    for graph, load_id in get_metric_noise_graph_run_ids().items():
+        for metric in metrics:
+            for noise_type in noise_types:
+                run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id, noise_type=noise_type, acc=metric)
 
 
 def run_grampa(all_algs):
@@ -66,10 +79,9 @@ def run_proposed_fugal(all_algs):
          }
     ]
 
-    acc = 0
-
-    run_eval_graphs('FUGAL-eval.txt', 'fugal', args_lst, all_algs, acc)
-    run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args_lst, algs_args, acc)
+    run_eval_graphs('FUGAL-eval.txt', 'fugal', args_lst, all_algs)
+    run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args_lst, algs_args)
+    run_metric_noise_graphs('FUGAL-fixed-metric-noise-eval.txt', 'fugal', args_lst, all_algs)
 
 def run_pca(all_algs):
     args_lst = [
@@ -83,9 +95,8 @@ def run_pca(all_algs):
          }
     ]
 
-    acc = 0
-
-    run_eval_graphs('PCA-eval.txt', 'fugal', args_lst, all_algs, acc)
+    run_eval_graphs('PCA-eval.txt', 'fugal', args_lst, all_algs)
+    run_metric_noise_graphs('FUGAL-pca-metric-noise-eval.txt', 'fugal', args_lst, all_algs)
 
 
 if __name__ == '__main__':
