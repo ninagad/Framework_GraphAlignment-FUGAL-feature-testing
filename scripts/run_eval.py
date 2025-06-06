@@ -2,8 +2,11 @@ import copy
 import os.path
 
 from experiment.experiments import _algs
-from scripts.run_utils import run_alg, allowed_algorithms
-from data_analysis.utils import get_forward_selected_features, get_git_root, get_eval_graph_run_ids, get_appendix_eval_graph_run_ids, get_15_features, get_metric_noise_graph_run_ids
+from scripts.run_utils import run_alg, allowed_algorithms, eval_graphs, \
+    get_proposed_fugal_w_fixed_feature_set_arguments, get_proposed_fugal_w_pca_arguments, \
+    get_original_fugal_eval_graph_mus, get_original_fugal_args
+from data_analysis.utils import get_forward_selected_features, get_git_root, get_eval_graph_run_ids, \
+    get_appendix_eval_graph_run_ids, get_15_features, get_metric_noise_graph_run_ids
 
 from enums.scalingEnums import ScalingEnums
 
@@ -14,6 +17,14 @@ def run_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all
 
     for graph, load_id in get_eval_graph_run_ids().items():
         run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id)
+
+
+def run_eval_graph(graph: eval_graphs, save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list):
+    root = get_git_root()
+    path = os.path.join(root, 'overview-of-runs', save_file)
+
+    load_id = get_eval_graph_run_ids()[graph]
+    run_alg(path, algorithm, all_algs_lst, args_lst, graph, load_id)
 
 
 def run_appendix_eval_graphs(save_file: str, algorithm: allowed_algorithms, args_lst, all_algs_lst: list):
@@ -28,8 +39,8 @@ def run_metric_noise_graphs(save_file: str, algorithm: allowed_algorithms, args_
     root = get_git_root()
     path = os.path.join(root, 'overview-of-runs', save_file)
 
-    metrics = [3,5,6] # s3, mnc, frob
-    noise_types = [1,2,3]
+    metrics = [3, 5, 6]  # s3, mnc, frob
+    noise_types = [1, 2, 3]
 
     for graph, load_id in get_metric_noise_graph_run_ids().items():
         for metric in metrics:
@@ -68,35 +79,41 @@ def run_isorank(all_algs):
 
     run_eval_graphs('IsoRank-eval.txt', 'isorank', args_lst, all_algs)
 
-def run_proposed_fugal(all_algs):
-    args_lst = [
-        {'features': get_forward_selected_features(),
-         'nu': 447.24,
-         'mu': 442.66,
-         'sinkhorn_reg': 0.00141,
-         'scaling': ScalingEnums.COLLECTIVE_ROBUST_NORMALIZATION,
-         'frank_wolfe_iters': 2,
-         }
-    ]
 
-    run_eval_graphs('FUGAL-eval.txt', 'fugal', args_lst, all_algs)
-    run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args_lst, algs_args)
-    run_metric_noise_graphs('FUGAL-fixed-metric-noise-eval.txt', 'fugal', args_lst, all_algs)
+def run_proposed_fugal(all_algs):
+    args = get_proposed_fugal_w_fixed_feature_set_arguments()
+
+    run_eval_graphs('FUGAL-eval.txt', 'fugal', args, all_algs)
+    run_appendix_eval_graphs('FUGAL-appendix-eval.txt', 'fugal', args, algs_args)
+    run_metric_noise_graphs('FUGAL-fixed-metric-noise-eval.txt', 'fugal', args, all_algs)
+
 
 def run_pca(all_algs):
-    args_lst = [
-        {'features': get_15_features(),
-         'nu': 447.24,
-         'mu': 442.66,
-         'sinkhorn_reg': 0.00141,
-         'scaling': ScalingEnums.NO_SCALING,
-         'pca_components': 8,
-         'frank_wolfe_iters': 2,
-         }
-    ]
+    args = get_proposed_fugal_w_pca_arguments()
 
-    run_eval_graphs('PCA-eval.txt', 'fugal', args_lst, all_algs)
-    run_metric_noise_graphs('FUGAL-pca-metric-noise-eval.txt', 'fugal', args_lst, all_algs)
+    run_eval_graphs('PCA-eval.txt', 'fugal', args, all_algs)
+    run_metric_noise_graphs('FUGAL-pca-metric-noise-eval.txt', 'fugal', args, all_algs)
+
+
+def run_original_fugal(all_algs, save_file: str):
+    mus = get_original_fugal_eval_graph_mus()
+
+    for graph, mu in mus.items():
+        args = get_original_fugal_args(mu)
+        run_eval_graph(graph, save_file, 'fugal', args, all_algs)
+
+
+def run_fugal_time_experiment(all_algs):
+    # Proposed FUGAL with fixed feature set
+    args = get_proposed_fugal_w_fixed_feature_set_arguments()
+    run_eval_graphs('time-FUGAL-fixed-features.txt', 'fugal', args, all_algs)
+
+    # Proposed FUGAL with PCA
+    args = get_proposed_fugal_w_pca_arguments()
+    run_eval_graphs('time-FUGAL-pca.txt', 'fugal', args, all_algs)
+
+    # Original FUGAL
+    run_original_fugal(all_algs, 'time-FUGAL-original.txt')
 
 
 if __name__ == '__main__':
