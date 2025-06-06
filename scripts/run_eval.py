@@ -104,16 +104,19 @@ def run_original_fugal(all_algs, save_file: str):
 
 
 def run_fugal_time_experiment(all_algs):
-    # Proposed FUGAL with fixed feature set
-    args = get_proposed_fugal_w_fixed_feature_set_arguments()
-    run_eval_graphs('time-FUGAL-fixed-features.txt', 'fugal', args, all_algs)
+    for graph, _ in get_eval_graph_run_ids().items():
+        # Proposed FUGAL with fixed feature set
+        args = get_proposed_fugal_w_fixed_feature_set_arguments()
+        run_eval_graph(graph, 'time-FUGAL-fixed-features.txt', 'fugal', args, all_algs)
 
-    # Proposed FUGAL with PCA
-    args = get_proposed_fugal_w_pca_arguments()
-    run_eval_graphs('time-FUGAL-pca.txt', 'fugal', args, all_algs)
+        # Proposed FUGAL with PCA
+        args = get_proposed_fugal_w_pca_arguments()
+        run_eval_graph(graph,'time-FUGAL-pca.txt', 'fugal', args, all_algs)
 
-    # Original FUGAL
-    run_original_fugal(all_algs, 'time-FUGAL-original.txt')
+        # Original FUGAL
+        mu = get_original_fugal_eval_graph_mus()[graph]
+        args = get_original_fugal_args(mu)
+        run_eval_graph(graph, 'time-FUGAL-original.txt', 'fugal', args, all_algs)
 
 
 if __name__ == '__main__':
@@ -124,3 +127,4 @@ if __name__ == '__main__':
     run_grampa(algs_args)
     run_proposed_fugal(algs_args)
     run_pca(algs_args)
+    run_fugal_time_experiment(algs_args)
