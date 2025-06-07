@@ -10,7 +10,7 @@ import pandas as pd
 from matplotlib.figure import Figure
 
 from data_analysis.utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, \
-    get_git_root
+    get_git_root, eval_bar_plot_palette
 from data_analysis.test_run_configurations import test_graph_set_are_equal
 from scripts.run_utils import save_config_info
 
@@ -37,7 +37,7 @@ def get_marks():
     return marker_options
 
 
-def plot_cone_subplots(df: pd.DataFrame, source: int, subplot, hue: allowed_colormaps):
+def plot_cone_subplots(df: pd.DataFrame, source: int, subplot: plt.Axes, hue: allowed_colormaps):
     # Divide df into each run
     dfs = [df.iloc[i:i + 6] for i in range(0, len(df), 6)]
 
@@ -97,7 +97,7 @@ def save_data(df, path, graph):
     save_config_info(path, save_df.sort_values(['type', 'noise']))
 
 
-def format_CONE_plot(source_id: int, traces: dict, xs: list[float], title: str, subplot):
+def format_CONE_plot(source_id: int, traces: dict, xs: list[float], title: str, subplot: plt.Axes):
     for label, trace_df in traces.items():
         trace_df['mean'] = trace_df.mean(axis=1)
 
@@ -121,12 +121,8 @@ def format_CONE_plot(source_id: int, traces: dict, xs: list[float], title: str, 
     subplot.set_ylim(-10, 110)
 
 
-def format_barplot(traces: dict, subplot, xs: list[float], graph: str, data_save_path: str):
-    # Green pair
-    baseline_color = '#b1de89'
-    color = '#31a354'
-    pca_color = '#3e7745'
-    palette = [baseline_color, color, pca_color]
+def format_barplot(traces: dict, subplot: plt.Axes, xs: list[float], graph: str, data_save_path: str):
+    palette = eval_bar_plot_palette()
 
     for label, df in traces.items():
         df['type'] = label
@@ -159,6 +155,15 @@ def format_barplot(traces: dict, subplot, xs: list[float], graph: str, data_save
                 err_kws={"linewidth": 1},
                 capsize=0.2,
                 )
+
+    # Iterate over the error bar Line2D objects and add a white border
+    for line in subplot.lines:
+        # Add a white border by re-plotting the line thicker in white
+        xdata, ydata = line.get_xdata(), line.get_ydata()
+        subplot.plot(xdata, ydata, color='white', linewidth=1.8, zorder=line.get_zorder() - 0.1)
+        # Re-plot the original errorbar line on top
+        subplot.plot(xdata, ydata, color=line.get_color(), linewidth=line.get_linewidth())
+
     # make the background grid visible
     subplot.grid(True, axis="y", linestyle="--", linewidth=0.4, alpha=1)
     subplot.set_axisbelow(True)  # keep bars in front of the grid
@@ -168,7 +173,7 @@ def format_barplot(traces: dict, subplot, xs: list[float], graph: str, data_save
     subplot.set_ylim(0, 110)
 
 
-def format_line_plot(traces: dict, xs: list[float], subplot):
+def format_line_plot(traces: dict, xs: list[float], subplot: plt.Axes):
     marks = get_marks()
     cmap = plt.get_cmap('tab10')
     formatting = {'FUGAL': (marks[0], cmap(1)),  # Orange
@@ -188,7 +193,7 @@ def format_line_plot(traces: dict, xs: list[float], subplot):
     subplot.set_ylim(-10, 110)
 
 
-def plot_subplot(traces: dict, subplot, col: int, title: str, data_path: str):
+def plot_subplot(traces: dict, subplot: plt.Axes, col: int, title: str, data_path: str):
     # Check that baseline and source is computed on the same graph
     # TODO: add check back in
     # test_graph_set_are_equal(baseline, source)
@@ -223,11 +228,14 @@ def plot_subplot(traces: dict, subplot, col: int, title: str, data_path: str):
 def layout_plot(fig: Figure, axes, title: str, legend_name: str):
     title_fontsize = 18
 
+    # restrict tight_layout to the reduced area
     if "implementation" in title:  # CONE plots
         plt.tight_layout(rect=(0, 0, 0.82, 0.95))  # restrict tight_layout to the reduced area
         title_fontsize = 16
-    elif ' ' in title:  # comparison plots
+    elif ' ' in title:  # comparison of algo plots
         plt.tight_layout(rect=(0, 0, 1, 0.85))
+    elif title == '':  # Single plot
+        plt.tight_layout(rect=(0, 0, 1, 0.8))
     else:
         plt.tight_layout(rect=(0, 0, 1, 0.89))
 
@@ -250,8 +258,8 @@ def layout_plot(fig: Figure, axes, title: str, legend_name: str):
         handles, labels = axes.get_legend_handles_labels()
         pos = axes.get_position()
         center_x = (pos.x0 + pos.x1) / 2
-        legend_x = pos.x1 + 0.01
-        legend_y = pos.y1 + 0.23
+        legend_x = pos.x1 + 0.02
+        legend_y = pos.y1 + 0.33
 
     fig.legend(handles, labels,
                loc='upper right',
@@ -259,7 +267,6 @@ def layout_plot(fig: Figure, axes, title: str, legend_name: str):
                bbox_transform=fig.transFigure,
                title=legend_name)
 
-    # Center suptitle w.r.t. plot areas excluding the tick and axis labels.
     fig.canvas.draw()  # required to update layout info
 
     plt.suptitle(title, x=center_x, fontsize=title_fontsize)

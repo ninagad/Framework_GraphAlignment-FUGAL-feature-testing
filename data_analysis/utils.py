@@ -42,6 +42,7 @@ def get_eval_graph_run_ids():
 
     return ids
 
+
 def get_metric_noise_graph_run_ids():
     ids = {"inf-power": 17236,
            "ia-crime-moreno": 16121
@@ -57,7 +58,7 @@ def get_appendix_eval_graph_run_ids():
            "bio-DM-LC_no_weight": 17233,
            "ca-CrQc": 17251,
            "arenas-meta": 17253,
-           #"tomography": 17264,
+           # "tomography": 17264,
            "econ-mahindas": 16374
            }
 
@@ -115,14 +116,16 @@ def get_forward_selected_features() -> [FeatureEnums]:
 
     return feature_set
 
+
 def get_15_features() -> [FeatureEnums]:
     features_set = [FeatureEnums.EGO_NEIGHBORS, FeatureEnums.MEDIAN_EGO_DEGS, FeatureEnums.EGO_OUT_EDGES,
-                FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.MAX_EGO_CLUSTER,
-                FeatureEnums.AVG_EGO_CLUSTER, FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.RANGE_EGO_CLUSTER,
-                FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MIN_EGO_DEGS, FeatureEnums.MAX_EGO_DEGS,
-                FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER, FeatureEnums.SUM_EGO_DEG]
+                    FeatureEnums.CLUSTER, FeatureEnums.AVG_EGO_DEG, FeatureEnums.MAX_EGO_CLUSTER,
+                    FeatureEnums.AVG_EGO_CLUSTER, FeatureEnums.SUM_EGO_CLUSTER, FeatureEnums.RANGE_EGO_CLUSTER,
+                    FeatureEnums.STD_EGO_CLUSTER, FeatureEnums.MIN_EGO_DEGS, FeatureEnums.MAX_EGO_DEGS,
+                    FeatureEnums.MIN_EGO_CLUSTER, FeatureEnums.MEDIAN_EGO_CLUSTER, FeatureEnums.SUM_EGO_DEG]
 
     return features_set
+
 
 def get_training_graph_names():
     graphs = ['bio-celegans', 'ca-netscience', 'inf-euroroad', 'voles']
@@ -149,6 +152,23 @@ def get_acc_file_as_df(run: int) -> pd.DataFrame:
     return df
 
 
+def get_total_time_as_df(run: int) -> pd.DataFrame:
+    root = get_git_root()
+    path = os.path.join(root, 'Time-runs', f'{run}', 'res')
+    alg_time_path = os.path.join(path, 'time_alg.xlsx')
+    matching_time_path = os.path.join(path, 'time_matching.xlsx')
+
+    alg_time_df = pd.read_excel(alg_time_path, index_col=[0, 1])
+    alg_time_df.index.names = ['Feature', 'Noise']
+
+    matching_time_df = pd.read_excel(matching_time_path, index_col=[0, 1])
+    matching_time_df.index.names = ['Feature', 'Noise']
+
+    total_time_df = alg_time_df + matching_time_df
+
+    return total_time_df
+
+
 def get_acc_files_as_single_df(runs: list[int]) -> pd.DataFrame:
     dfs = []
     for run in runs:
@@ -160,19 +180,19 @@ def get_acc_files_as_single_df(runs: list[int]) -> pd.DataFrame:
     return df
 
 
-def get_config_file(run: int) -> json:
+def get_config_file(run: int, dir: Literal['Server-runs', 'Time-runs'] = 'Server-runs') -> json:
     root = get_git_root()
-    path = os.path.join(root, 'Server-runs', f'{run}', 'config.json')
+    path = os.path.join(root, dir, f'{run}', 'config.json')
 
     config = json.load(open(path))
 
     return config
 
 
-def get_graph_names_from_file(runs: list[int]) -> list[str]:
+def get_graph_names_from_file(runs: list[int], dir: Literal['Server-runs', 'Time-runs'] = 'Server-runs') -> list[str]:
     graph_names = []
     for run in runs:
-        config = get_config_file(run)
+        config = get_config_file(run, dir)
 
         names = config['graph_names']
         if len(names) != 1:
@@ -182,6 +202,7 @@ def get_graph_names_from_file(runs: list[int]) -> list[str]:
 
     return graph_names
 
+
 def get_algorithm(run: int) -> str:
     config = get_config_file(run)
     algorithm = set(config['algs'][0][0].values())
@@ -190,6 +211,7 @@ def get_algorithm(run: int) -> str:
 
     name = str(algorithm).split('.')[1]
     return name
+
 
 def get_algo_args(run: int) -> list[dict]:
     config = get_config_file(run)
@@ -209,3 +231,13 @@ def get_parameter(run: int, param: Literal['nu', 'mu', 'sinkhorn_reg']) -> list[
         return param_vals
     else:
         return param_vals[0]
+
+
+def eval_bar_plot_palette():
+    # Greens
+    baseline_color = '#b1de89'
+    fixed_color = '#31a354'
+    pca_color = '#3c5a3a'
+    palette = [baseline_color, fixed_color, pca_color]
+
+    return palette
