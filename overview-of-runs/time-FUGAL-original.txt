@@ -1,0 +1,7 @@
+
+{'algorithm': 'fugal', 'graph': 'inf-power', 'noise_type': 1, 'metric': 0, 'run-id': '17241', 'load': [17236, 17236]}
+{'algorithm': 'fugal', 'graph': 'ia-crime-moreno', 'noise_type': 1, 'metric': 0, 'run-id': '17244', 'load': [16121, 16121]}
+{'algorithm': 'fugal', 'graph': 'power-685-bus', 'noise_type': 1, 'metric': 0, 'run-id': '17247', 'load': [15142, 15142]}
+{'algorithm': 'fugal', 'graph': 'socfb-Bowdoin47', 'noise_type': 1, 'metric': 0, 'run-id': '17250', 'load': [15126, 15126]}
+{'algorithm': 'fugal', 'graph': 'bio-yeast', 'noise_type': 1, 'metric': 0, 'run-id': '17253', 'load': [17235, 17235]}
+{'algorithm': 'fugal', 'graph': 'DD_g501', 'noise_type': 1, 'metric': 0, 'run-id': '17256', 'load': [15129, 15129]}
