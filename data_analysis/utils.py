@@ -132,6 +132,9 @@ def get_training_graph_names():
 def strip_graph_name(name: str) -> str:
     if 'voles' in name:
         return 'voles'
+    if 'no_weight' in name:
+        name = name.split('_')[0]
+        return name
     else:
         return name
 
