@@ -1,4 +1,5 @@
 
+
 {'algorithm': 'fugal', 'graph': 'inf-power', 'noise_type': 1, 'metric': 0, 'run-id': '17239', 'load': [17236, 17236]}
 {'algorithm': 'fugal', 'graph': 'ia-crime-moreno', 'noise_type': 1, 'metric': 0, 'run-id': '17242', 'load': [16121, 16121]}
 {'algorithm': 'fugal', 'graph': 'power-685-bus', 'noise_type': 1, 'metric': 0, 'run-id': '17245', 'load': [15142, 15142]}
