@@ -6,5 +6,6 @@ data
 *.dat
 venv/
 Server-runs
+Time-runs
 /wandb/
 /artifacts/
