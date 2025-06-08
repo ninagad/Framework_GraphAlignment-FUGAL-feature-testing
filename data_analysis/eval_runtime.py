@@ -43,6 +43,8 @@ def save_df(df: pd.DataFrame):
     root = get_git_root()
     path = os.path.join(root, 'plot-data', 'runtime-plot.txt')
 
+    df['mean'] = df.groupby(['algorithm', 'graph'])['runtime'].transform('mean')
+
     # Configure options to save all rows and columns in save file
     pd.set_option('display.max_rows', len(df))
     pd.set_option('display.max_columns', 10)
@@ -66,14 +68,21 @@ def plot_subplot(subplot: plt.Axes, data: pd.DataFrame):
                 width=0.6  # Default is 0.8; lower values make bars thinner
                 )
 
-    subplot.set_ylabel('Time (sec)')
+    subplot.set_xlabel('Graph', fontsize=12)
+    subplot.set_ylabel('Time (sec)', fontsize=12)
+
     # make the background grid visible
     subplot.grid(True, axis="y", linestyle="--", linewidth=0.4, alpha=1)
     subplot.set_axisbelow(True)  # keep bars in front of the grid
 
+    # Change fontsize of tick labels
+    subplot.tick_params(axis='both', labelsize=12)
+
     # hide the individual legend
     subplot.legend().remove()
 
+    if data['runtime'].max() > 400:
+        subplot.set_ylim(0, 505)
 
 
 def plot_runtime(data: pd.DataFrame):
@@ -83,7 +92,7 @@ def plot_runtime(data: pd.DataFrame):
     # Create one figure with a grid of subplots
     fig, axes = plt.subplots(nrows=1,
                              ncols=2,
-                             figsize=(9, 4)
+                             figsize=(10, 4.5)
                              )
     plot_subplot(axes[0], df_small)
     plot_subplot(axes[1], df_large)
@@ -93,7 +102,7 @@ def plot_runtime(data: pd.DataFrame):
     # Create legend
     handles, labels = axes[0].get_legend_handles_labels()
     pos = [ax.get_position() for ax in axes]
-    # center_x = (pos[0].x0 + pos[-1].x1) / 2
+    center_x = (pos[0].x0 + pos[-1].x1) / 2
 
     legend_x = pos[-1].x1 + 0.01
     legend_y = pos[-1].y1 + 0.2
@@ -101,9 +110,10 @@ def plot_runtime(data: pd.DataFrame):
     fig.legend(handles, labels,
                loc='upper right',
                bbox_to_anchor=(legend_x, legend_y),
-               bbox_transform=fig.transFigure
+               bbox_transform=fig.transFigure,
+               fontsize=12
                )
-    # plt.suptitle('', x=center_x)
+    plt.suptitle('Runtimes of FUGAL variants', x=center_x, fontsize=18)
 
     root_path = get_git_root()
     path = os.path.join(root_path, 'plots', 'FUGAL-evaluation', 'runtime-plot.pdf')
@@ -116,5 +126,5 @@ if __name__ == '__main__':
                    FugalEnums.FUGAL_PCA: [17240, 17243, 17246, 17249, 17252, 17255]}
 
     df = load_data(source_dict)
-    # save_df(df)
+    #save_df(df)
     plot_runtime(df)

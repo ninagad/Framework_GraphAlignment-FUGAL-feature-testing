@@ -1,542 +1,542 @@
 
-            algorithm  Noise            graph iteration     runtime
-0    FUGAL (original)   0.00          DD_g501         1    2.728219
-1    FUGAL (original)   0.00          DD_g501         2    2.367986
-2    FUGAL (original)   0.00          DD_g501         3    2.372514
-3    FUGAL (original)   0.00          DD_g501         4    2.688640
-4    FUGAL (original)   0.00          DD_g501         5    2.448655
-5    FUGAL (original)   0.05          DD_g501         1    2.657677
-6    FUGAL (original)   0.05          DD_g501         2    2.806440
-7    FUGAL (original)   0.05          DD_g501         3    3.033113
-8    FUGAL (original)   0.05          DD_g501         4    2.776711
-9    FUGAL (original)   0.05          DD_g501         5    2.862141
-10   FUGAL (original)   0.10          DD_g501         1    3.875455
-11   FUGAL (original)   0.10          DD_g501         2    3.556738
-12   FUGAL (original)   0.10          DD_g501         3    3.686834
-13   FUGAL (original)   0.10          DD_g501         4    3.498257
-14   FUGAL (original)   0.10          DD_g501         5    4.375167
-15   FUGAL (original)   0.15          DD_g501         1    4.124967
-16   FUGAL (original)   0.15          DD_g501         2    4.169660
-17   FUGAL (original)   0.15          DD_g501         3    4.299872
-18   FUGAL (original)   0.15          DD_g501         4    4.616666
-19   FUGAL (original)   0.15          DD_g501         5    3.830927
-20   FUGAL (original)   0.20          DD_g501         1    4.381163
-21   FUGAL (original)   0.20          DD_g501         2    3.735485
-22   FUGAL (original)   0.20          DD_g501         3    3.829979
-23   FUGAL (original)   0.20          DD_g501         4    4.281951
-24   FUGAL (original)   0.20          DD_g501         5    4.675694
-25   FUGAL (original)   0.25          DD_g501         1    4.197594
-26   FUGAL (original)   0.25          DD_g501         2    1.957176
-27   FUGAL (original)   0.25          DD_g501         3    2.163064
-28   FUGAL (original)   0.25          DD_g501         4    3.307955
-29   FUGAL (original)   0.25          DD_g501         5    3.395074
-30       FUGAL w. PCA   0.00          DD_g501         1    0.868906
-31       FUGAL w. PCA   0.00          DD_g501         2    0.901273
-32       FUGAL w. PCA   0.00          DD_g501         3    1.206836
-33       FUGAL w. PCA   0.00          DD_g501         4    0.843344
-34       FUGAL w. PCA   0.00          DD_g501         5    0.873515
-35       FUGAL w. PCA   0.05          DD_g501         1    1.332516
-36       FUGAL w. PCA   0.05          DD_g501         2    1.394127
-37       FUGAL w. PCA   0.05          DD_g501         3    1.362870
-38       FUGAL w. PCA   0.05          DD_g501         4    1.021204
-39       FUGAL w. PCA   0.05          DD_g501         5    1.318164
-40       FUGAL w. PCA   0.10          DD_g501         1    3.308854
-41       FUGAL w. PCA   0.10          DD_g501         2    3.486665
-42       FUGAL w. PCA   0.10          DD_g501         3    2.076461
-43       FUGAL w. PCA   0.10          DD_g501         4    2.112469
-44       FUGAL w. PCA   0.10          DD_g501         5    3.277391
-45       FUGAL w. PCA   0.15          DD_g501         1    3.294255
-46       FUGAL w. PCA   0.15          DD_g501         2    3.161831
-47       FUGAL w. PCA   0.15          DD_g501         3    3.357096
-48       FUGAL w. PCA   0.15          DD_g501         4    3.336253
-49       FUGAL w. PCA   0.15          DD_g501         5    3.632547
-50       FUGAL w. PCA   0.20          DD_g501         1    3.339348
-51       FUGAL w. PCA   0.20          DD_g501         2    3.354784
-52       FUGAL w. PCA   0.20          DD_g501         3    3.365649
-53       FUGAL w. PCA   0.20          DD_g501         4    3.187112
-54       FUGAL w. PCA   0.20          DD_g501         5    3.331308
-55       FUGAL w. PCA   0.25          DD_g501         1    3.252297
-56       FUGAL w. PCA   0.25          DD_g501         2    3.438862
-57       FUGAL w. PCA   0.25          DD_g501         3    3.390054
-58       FUGAL w. PCA   0.25          DD_g501         4    3.282230
-59       FUGAL w. PCA   0.25          DD_g501         5    3.400068
-60     FUGAL w. fixed   0.00          DD_g501         1    0.688188
-61     FUGAL w. fixed   0.00          DD_g501         2    0.748101
-62     FUGAL w. fixed   0.00          DD_g501         3    0.692050
-63     FUGAL w. fixed   0.00          DD_g501         4    0.685725
-64     FUGAL w. fixed   0.00          DD_g501         5    0.706742
-65     FUGAL w. fixed   0.05          DD_g501         1    1.405569
-66     FUGAL w. fixed   0.05          DD_g501         2    1.585982
-67     FUGAL w. fixed   0.05          DD_g501         3    1.288886
-68     FUGAL w. fixed   0.05          DD_g501         4    1.037122
-69     FUGAL w. fixed   0.05          DD_g501         5    1.911217
-70     FUGAL w. fixed   0.10          DD_g501         1    3.232386
-71     FUGAL w. fixed   0.10          DD_g501         2    1.850594
-72     FUGAL w. fixed   0.10          DD_g501         3    3.154772
-73     FUGAL w. fixed   0.10          DD_g501         4    2.872683
-74     FUGAL w. fixed   0.10          DD_g501         5    3.099933
-75     FUGAL w. fixed   0.15          DD_g501         1    3.537142
-76     FUGAL w. fixed   0.15          DD_g501         2    3.277076
-77     FUGAL w. fixed   0.15          DD_g501         3    3.162059
-78     FUGAL w. fixed   0.15          DD_g501         4    3.241762
-79     FUGAL w. fixed   0.15          DD_g501         5    3.197858
-80     FUGAL w. fixed   0.20          DD_g501         1    3.200353
-81     FUGAL w. fixed   0.20          DD_g501         2    3.168409
-82     FUGAL w. fixed   0.20          DD_g501         3    3.142082
-83     FUGAL w. fixed   0.20          DD_g501         4    3.226660
-84     FUGAL w. fixed   0.20          DD_g501         5    3.172176
-85     FUGAL w. fixed   0.25          DD_g501         1    3.173854
-86     FUGAL w. fixed   0.25          DD_g501         2    3.171098
-87     FUGAL w. fixed   0.25          DD_g501         3    3.253091
-88     FUGAL w. fixed   0.25          DD_g501         4    3.243843
-89     FUGAL w. fixed   0.25          DD_g501         5    3.127506
-90   FUGAL (original)   0.00        bio-yeast         1   23.486315
-91   FUGAL (original)   0.00        bio-yeast         2   23.369584
-92   FUGAL (original)   0.00        bio-yeast         3   23.484817
-93   FUGAL (original)   0.00        bio-yeast         4   22.613500
-94   FUGAL (original)   0.00        bio-yeast         5   22.927413
-95   FUGAL (original)   0.05        bio-yeast         1   28.030961
-96   FUGAL (original)   0.05        bio-yeast         2   27.481631
-97   FUGAL (original)   0.05        bio-yeast         3   27.280611
-98   FUGAL (original)   0.05        bio-yeast         4   27.242752
-99   FUGAL (original)   0.05        bio-yeast         5   27.036428
-100  FUGAL (original)   0.10        bio-yeast         1   29.488949
-101  FUGAL (original)   0.10        bio-yeast         2   27.132447
-102  FUGAL (original)   0.10        bio-yeast         3   31.052809
-103  FUGAL (original)   0.10        bio-yeast         4   26.421368
-104  FUGAL (original)   0.10        bio-yeast         5   28.052138
-105  FUGAL (original)   0.15        bio-yeast         1   29.033230
-106  FUGAL (original)   0.15        bio-yeast         2   26.988044
-107  FUGAL (original)   0.15        bio-yeast         3   26.006940
-108  FUGAL (original)   0.15        bio-yeast         4   24.913972
-109  FUGAL (original)   0.15        bio-yeast         5   25.748968
-110  FUGAL (original)   0.20        bio-yeast         1   25.235841
-111  FUGAL (original)   0.20        bio-yeast         2   31.127144
-112  FUGAL (original)   0.20        bio-yeast         3   25.055439
-113  FUGAL (original)   0.20        bio-yeast         4   25.951115
-114  FUGAL (original)   0.20        bio-yeast         5   24.574637
-115  FUGAL (original)   0.25        bio-yeast         1   24.378705
-116  FUGAL (original)   0.25        bio-yeast         2   27.802685
-117  FUGAL (original)   0.25        bio-yeast         3   25.376327
-118  FUGAL (original)   0.25        bio-yeast         4   27.959626
-119  FUGAL (original)   0.25        bio-yeast         5   25.072784
-120      FUGAL w. PCA   0.00        bio-yeast         1   31.873030
-121      FUGAL w. PCA   0.00        bio-yeast         2   31.862085
-122      FUGAL w. PCA   0.00        bio-yeast         3   32.206654
-123      FUGAL w. PCA   0.00        bio-yeast         4   31.579680
-124      FUGAL w. PCA   0.00        bio-yeast         5   31.846648
-125      FUGAL w. PCA   0.05        bio-yeast         1   31.148688
-126      FUGAL w. PCA   0.05        bio-yeast         2   31.142245
-127      FUGAL w. PCA   0.05        bio-yeast         3   30.659512
-128      FUGAL w. PCA   0.05        bio-yeast         4   31.539930
-129      FUGAL w. PCA   0.05        bio-yeast         5   31.477595
-130      FUGAL w. PCA   0.10        bio-yeast         1   30.785079
-131      FUGAL w. PCA   0.10        bio-yeast         2   30.882913
-132      FUGAL w. PCA   0.10        bio-yeast         3   30.667680
-133      FUGAL w. PCA   0.10        bio-yeast         4   30.411840
-134      FUGAL w. PCA   0.10        bio-yeast         5   30.284152
-135      FUGAL w. PCA   0.15        bio-yeast         1   30.099245
-136      FUGAL w. PCA   0.15        bio-yeast         2   30.093377
-137      FUGAL w. PCA   0.15        bio-yeast         3   30.540185
-138      FUGAL w. PCA   0.15        bio-yeast         4   29.678568
-139      FUGAL w. PCA   0.15        bio-yeast         5   30.286602
-140      FUGAL w. PCA   0.20        bio-yeast         1   30.718590
-141      FUGAL w. PCA   0.20        bio-yeast         2   29.590925
-142      FUGAL w. PCA   0.20        bio-yeast         3   29.348824
-143      FUGAL w. PCA   0.20        bio-yeast         4   30.124964
-144      FUGAL w. PCA   0.20        bio-yeast         5   29.957848
-145      FUGAL w. PCA   0.25        bio-yeast         1   29.258191
-146      FUGAL w. PCA   0.25        bio-yeast         2   30.803027
-147      FUGAL w. PCA   0.25        bio-yeast         3   30.180428
-148      FUGAL w. PCA   0.25        bio-yeast         4   29.616047
-149      FUGAL w. PCA   0.25        bio-yeast         5   30.500937
-150    FUGAL w. fixed   0.00        bio-yeast         1   31.136595
-151    FUGAL w. fixed   0.00        bio-yeast         2   31.193553
-152    FUGAL w. fixed   0.00        bio-yeast         3   31.630131
-153    FUGAL w. fixed   0.00        bio-yeast         4   30.985362
-154    FUGAL w. fixed   0.00        bio-yeast         5   31.276977
-155    FUGAL w. fixed   0.05        bio-yeast         1   31.255889
-156    FUGAL w. fixed   0.05        bio-yeast         2   31.253355
-157    FUGAL w. fixed   0.05        bio-yeast         3   31.320599
-158    FUGAL w. fixed   0.05        bio-yeast         4   31.068133
-159    FUGAL w. fixed   0.05        bio-yeast         5   31.094068
-160    FUGAL w. fixed   0.10        bio-yeast         1   30.960341
-161    FUGAL w. fixed   0.10        bio-yeast         2   30.796910
-162    FUGAL w. fixed   0.10        bio-yeast         3   30.837962
-163    FUGAL w. fixed   0.10        bio-yeast         4   30.532598
-164    FUGAL w. fixed   0.10        bio-yeast         5   30.459455
-165    FUGAL w. fixed   0.15        bio-yeast         1   30.150782
-166    FUGAL w. fixed   0.15        bio-yeast         2   29.943696
-167    FUGAL w. fixed   0.15        bio-yeast         3   30.411390
-168    FUGAL w. fixed   0.15        bio-yeast         4   29.587028
-169    FUGAL w. fixed   0.15        bio-yeast         5   29.915566
-170    FUGAL w. fixed   0.20        bio-yeast         1   30.096023
-171    FUGAL w. fixed   0.20        bio-yeast         2   30.093738
-172    FUGAL w. fixed   0.20        bio-yeast         3   29.945354
-173    FUGAL w. fixed   0.20        bio-yeast         4   29.955616
-174    FUGAL w. fixed   0.20        bio-yeast         5   30.115691
-175    FUGAL w. fixed   0.25        bio-yeast         1   29.230046
-176    FUGAL w. fixed   0.25        bio-yeast         2   29.970314
-177    FUGAL w. fixed   0.25        bio-yeast         3   30.038445
-178    FUGAL w. fixed   0.25        bio-yeast         4   29.729305
-179    FUGAL w. fixed   0.25        bio-yeast         5   29.916754
-180  FUGAL (original)   0.00  ia-crime-moreno         1    7.148494
-181  FUGAL (original)   0.00  ia-crime-moreno         2    6.962487
-182  FUGAL (original)   0.00  ia-crime-moreno         3    6.985413
-183  FUGAL (original)   0.00  ia-crime-moreno         4    6.994053
-184  FUGAL (original)   0.00  ia-crime-moreno         5    7.234347
-185  FUGAL (original)   0.05  ia-crime-moreno         1    8.286794
-186  FUGAL (original)   0.05  ia-crime-moreno         2    9.433815
-187  FUGAL (original)   0.05  ia-crime-moreno         3    6.733881
-188  FUGAL (original)   0.05  ia-crime-moreno         4    9.167060
-189  FUGAL (original)   0.05  ia-crime-moreno         5    9.504602
-190  FUGAL (original)   0.10  ia-crime-moreno         1    9.385059
-191  FUGAL (original)   0.10  ia-crime-moreno         2    8.641906
-192  FUGAL (original)   0.10  ia-crime-moreno         3    7.860716
-193  FUGAL (original)   0.10  ia-crime-moreno         4    9.927544
-194  FUGAL (original)   0.10  ia-crime-moreno         5    8.408259
-195  FUGAL (original)   0.15  ia-crime-moreno         1   11.747744
-196  FUGAL (original)   0.15  ia-crime-moreno         2   10.781713
-197  FUGAL (original)   0.15  ia-crime-moreno         3   10.546256
-198  FUGAL (original)   0.15  ia-crime-moreno         4   11.698433
-199  FUGAL (original)   0.15  ia-crime-moreno         5   11.592499
-200  FUGAL (original)   0.20  ia-crime-moreno         1   11.617415
-201  FUGAL (original)   0.20  ia-crime-moreno         2   10.740216
-202  FUGAL (original)   0.20  ia-crime-moreno         3   10.288979
-203  FUGAL (original)   0.20  ia-crime-moreno         4   12.389174
-204  FUGAL (original)   0.20  ia-crime-moreno         5   11.059699
-205  FUGAL (original)   0.25  ia-crime-moreno         1   10.235252
-206  FUGAL (original)   0.25  ia-crime-moreno         2   10.472720
-207  FUGAL (original)   0.25  ia-crime-moreno         3   10.810341
-208  FUGAL (original)   0.25  ia-crime-moreno         4   10.456192
-209  FUGAL (original)   0.25  ia-crime-moreno         5   10.944906
-210      FUGAL w. PCA   0.00  ia-crime-moreno         1    5.245531
-211      FUGAL w. PCA   0.00  ia-crime-moreno         2    5.199359
-212      FUGAL w. PCA   0.00  ia-crime-moreno         3    5.164132
-213      FUGAL w. PCA   0.00  ia-crime-moreno         4    5.067053
-214      FUGAL w. PCA   0.00  ia-crime-moreno         5    5.468908
-215      FUGAL w. PCA   0.05  ia-crime-moreno         1    5.357728
-216      FUGAL w. PCA   0.05  ia-crime-moreno         2    5.042704
-217      FUGAL w. PCA   0.05  ia-crime-moreno         3    5.094988
-218      FUGAL w. PCA   0.05  ia-crime-moreno         4    5.200967
-219      FUGAL w. PCA   0.05  ia-crime-moreno         5    5.406151
-220      FUGAL w. PCA   0.10  ia-crime-moreno         1    5.323073
-221      FUGAL w. PCA   0.10  ia-crime-moreno         2    5.337803
-222      FUGAL w. PCA   0.10  ia-crime-moreno         3    4.991112
-223      FUGAL w. PCA   0.10  ia-crime-moreno         4    6.257120
-224      FUGAL w. PCA   0.10  ia-crime-moreno         5    6.221239
-225      FUGAL w. PCA   0.15  ia-crime-moreno         1    5.412805
-226      FUGAL w. PCA   0.15  ia-crime-moreno         2    5.565274
-227      FUGAL w. PCA   0.15  ia-crime-moreno         3    5.547569
-228      FUGAL w. PCA   0.15  ia-crime-moreno         4    6.150675
-229      FUGAL w. PCA   0.15  ia-crime-moreno         5    5.397262
-230      FUGAL w. PCA   0.20  ia-crime-moreno         1    5.316637
-231      FUGAL w. PCA   0.20  ia-crime-moreno         2    4.562263
-232      FUGAL w. PCA   0.20  ia-crime-moreno         3    5.291156
-233      FUGAL w. PCA   0.20  ia-crime-moreno         4    4.726148
-234      FUGAL w. PCA   0.20  ia-crime-moreno         5    5.335142
-235      FUGAL w. PCA   0.25  ia-crime-moreno         1    5.018509
-236      FUGAL w. PCA   0.25  ia-crime-moreno         2    5.410760
-237      FUGAL w. PCA   0.25  ia-crime-moreno         3    5.283620
-238      FUGAL w. PCA   0.25  ia-crime-moreno         4    5.214762
-239      FUGAL w. PCA   0.25  ia-crime-moreno         5    6.247673
-240    FUGAL w. fixed   0.00  ia-crime-moreno         1    6.115874
-241    FUGAL w. fixed   0.00  ia-crime-moreno         2    6.160906
-242    FUGAL w. fixed   0.00  ia-crime-moreno         3    5.831190
-243    FUGAL w. fixed   0.00  ia-crime-moreno         4    6.294245
-244    FUGAL w. fixed   0.00  ia-crime-moreno         5    6.234772
-245    FUGAL w. fixed   0.05  ia-crime-moreno         1    6.438439
-246    FUGAL w. fixed   0.05  ia-crime-moreno         2    6.469389
-247    FUGAL w. fixed   0.05  ia-crime-moreno         3    6.211231
-248    FUGAL w. fixed   0.05  ia-crime-moreno         4    6.575264
-249    FUGAL w. fixed   0.05  ia-crime-moreno         5    6.211660
-250    FUGAL w. fixed   0.10  ia-crime-moreno         1    6.749976
-251    FUGAL w. fixed   0.10  ia-crime-moreno         2    6.629878
-252    FUGAL w. fixed   0.10  ia-crime-moreno         3    5.916991
-253    FUGAL w. fixed   0.10  ia-crime-moreno         4    6.653642
-254    FUGAL w. fixed   0.10  ia-crime-moreno         5    6.321496
-255    FUGAL w. fixed   0.15  ia-crime-moreno         1    6.664392
-256    FUGAL w. fixed   0.15  ia-crime-moreno         2    6.661652
-257    FUGAL w. fixed   0.15  ia-crime-moreno         3    6.636759
-258    FUGAL w. fixed   0.15  ia-crime-moreno         4    6.569376
-259    FUGAL w. fixed   0.15  ia-crime-moreno         5    7.216826
-260    FUGAL w. fixed   0.20  ia-crime-moreno         1    6.511215
-261    FUGAL w. fixed   0.20  ia-crime-moreno         2    5.906030
-262    FUGAL w. fixed   0.20  ia-crime-moreno         3    6.052211
-263    FUGAL w. fixed   0.20  ia-crime-moreno         4    6.083612
-264    FUGAL w. fixed   0.20  ia-crime-moreno         5    6.005907
-265    FUGAL w. fixed   0.25  ia-crime-moreno         1    4.865178
-266    FUGAL w. fixed   0.25  ia-crime-moreno         2    5.792225
-267    FUGAL w. fixed   0.25  ia-crime-moreno         3    7.595760
-268    FUGAL w. fixed   0.25  ia-crime-moreno         4    6.203032
-269    FUGAL w. fixed   0.25  ia-crime-moreno         5    5.717253
-270  FUGAL (original)   0.00        inf-power         1  527.103523
-271  FUGAL (original)   0.00        inf-power         2  526.491171
-272  FUGAL (original)   0.00        inf-power         3  526.145344
-273  FUGAL (original)   0.00        inf-power         4  526.126633
-274  FUGAL (original)   0.00        inf-power         5  524.407073
-275  FUGAL (original)   0.05        inf-power         1  509.065374
-276  FUGAL (original)   0.05        inf-power         2  507.289038
-277  FUGAL (original)   0.05        inf-power         3  504.919183
-278  FUGAL (original)   0.05        inf-power         4  506.023238
-279  FUGAL (original)   0.05        inf-power         5  508.980603
-280  FUGAL (original)   0.10        inf-power         1  497.559069
-281  FUGAL (original)   0.10        inf-power         2  500.069123
-282  FUGAL (original)   0.10        inf-power         3  485.886787
-283  FUGAL (original)   0.10        inf-power         4  501.130678
-284  FUGAL (original)   0.10        inf-power         5  483.839106
-285  FUGAL (original)   0.15        inf-power         1  464.850177
-286  FUGAL (original)   0.15        inf-power         2  465.965137
-287  FUGAL (original)   0.15        inf-power         3  462.653054
-288  FUGAL (original)   0.15        inf-power         4  480.627578
-289  FUGAL (original)   0.15        inf-power         5  476.989198
-290  FUGAL (original)   0.20        inf-power         1  415.758166
-291  FUGAL (original)   0.20        inf-power         2  449.005396
-292  FUGAL (original)   0.20        inf-power         3  428.690274
-293  FUGAL (original)   0.20        inf-power         4  437.215168
-294  FUGAL (original)   0.20        inf-power         5  427.330656
-295  FUGAL (original)   0.25        inf-power         1  398.986917
-296  FUGAL (original)   0.25        inf-power         2  409.438564
-297  FUGAL (original)   0.25        inf-power         3  390.905456
-298  FUGAL (original)   0.25        inf-power         4  385.847390
-299  FUGAL (original)   0.25        inf-power         5  394.926520
-300      FUGAL w. PCA   0.00        inf-power         1  355.051197
-301      FUGAL w. PCA   0.00        inf-power         2  351.692034
-302      FUGAL w. PCA   0.00        inf-power         3  353.456126
-303      FUGAL w. PCA   0.00        inf-power         4  353.083533
-304      FUGAL w. PCA   0.00        inf-power         5  350.763886
-305      FUGAL w. PCA   0.05        inf-power         1  348.461300
-306      FUGAL w. PCA   0.05        inf-power         2  350.991999
-307      FUGAL w. PCA   0.05        inf-power         3  351.509218
-308      FUGAL w. PCA   0.05        inf-power         4  352.736427
-309      FUGAL w. PCA   0.05        inf-power         5  351.711196
-310      FUGAL w. PCA   0.10        inf-power         1  349.459822
-311      FUGAL w. PCA   0.10        inf-power         2  349.145557
-312      FUGAL w. PCA   0.10        inf-power         3  349.615063
-313      FUGAL w. PCA   0.10        inf-power         4  351.534662
-314      FUGAL w. PCA   0.10        inf-power         5  352.588176
-315      FUGAL w. PCA   0.15        inf-power         1  353.335944
-316      FUGAL w. PCA   0.15        inf-power         2  349.464828
-317      FUGAL w. PCA   0.15        inf-power         3  350.297003
-318      FUGAL w. PCA   0.15        inf-power         4  354.596139
-319      FUGAL w. PCA   0.15        inf-power         5  350.590020
-320      FUGAL w. PCA   0.20        inf-power         1  357.292544
-321      FUGAL w. PCA   0.20        inf-power         2  353.593955
-322      FUGAL w. PCA   0.20        inf-power         3  353.670319
-323      FUGAL w. PCA   0.20        inf-power         4  353.539118
-324      FUGAL w. PCA   0.20        inf-power         5  349.792474
-325      FUGAL w. PCA   0.25        inf-power         1  355.488173
-326      FUGAL w. PCA   0.25        inf-power         2  353.539288
-327      FUGAL w. PCA   0.25        inf-power         3  351.587730
-328      FUGAL w. PCA   0.25        inf-power         4  351.531163
-329      FUGAL w. PCA   0.25        inf-power         5  353.219663
-330    FUGAL w. fixed   0.00        inf-power         1  355.474535
-331    FUGAL w. fixed   0.00        inf-power         2  357.902526
-332    FUGAL w. fixed   0.00        inf-power         3  357.902700
-333    FUGAL w. fixed   0.00        inf-power         4  353.969734
-334    FUGAL w. fixed   0.00        inf-power         5  352.936678
-335    FUGAL w. fixed   0.05        inf-power         1  352.962122
-336    FUGAL w. fixed   0.05        inf-power         2  357.350275
-337    FUGAL w. fixed   0.05        inf-power         3  354.172217
-338    FUGAL w. fixed   0.05        inf-power         4  354.033522
-339    FUGAL w. fixed   0.05        inf-power         5  356.421992
-340    FUGAL w. fixed   0.10        inf-power         1  352.551819
-341    FUGAL w. fixed   0.10        inf-power         2  353.924299
-342    FUGAL w. fixed   0.10        inf-power         3  354.650280
-343    FUGAL w. fixed   0.10        inf-power         4  350.172515
-344    FUGAL w. fixed   0.10        inf-power         5  354.602056
-345    FUGAL w. fixed   0.15        inf-power         1  358.180991
-346    FUGAL w. fixed   0.15        inf-power         2  358.472058
-347    FUGAL w. fixed   0.15        inf-power         3  350.812080
-348    FUGAL w. fixed   0.15        inf-power         4  353.475838
-349    FUGAL w. fixed   0.15        inf-power         5  356.516600
-350    FUGAL w. fixed   0.20        inf-power         1  354.282945
-351    FUGAL w. fixed   0.20        inf-power         2  352.339078
-352    FUGAL w. fixed   0.20        inf-power         3  353.529827
-353    FUGAL w. fixed   0.20        inf-power         4  355.975517
-354    FUGAL w. fixed   0.20        inf-power         5  350.461707
-355    FUGAL w. fixed   0.25        inf-power         1  354.959654
-356    FUGAL w. fixed   0.25        inf-power         2  350.461259
-357    FUGAL w. fixed   0.25        inf-power         3  357.556744
-358    FUGAL w. fixed   0.25        inf-power         4  352.217566
-359    FUGAL w. fixed   0.25        inf-power         5  353.719665
-360  FUGAL (original)   0.00    power-685-bus         1    4.675950
-361  FUGAL (original)   0.00    power-685-bus         2    5.010982
-362  FUGAL (original)   0.00    power-685-bus         3    4.779214
-363  FUGAL (original)   0.00    power-685-bus         4    4.802004
-364  FUGAL (original)   0.00    power-685-bus         5    4.914743
-365  FUGAL (original)   0.05    power-685-bus         1    6.762610
-366  FUGAL (original)   0.05    power-685-bus         2    6.306834
-367  FUGAL (original)   0.05    power-685-bus         3    5.947914
-368  FUGAL (original)   0.05    power-685-bus         4    6.165940
-369  FUGAL (original)   0.05    power-685-bus         5    5.973991
-370  FUGAL (original)   0.10    power-685-bus         1    9.897842
-371  FUGAL (original)   0.10    power-685-bus         2    8.853273
-372  FUGAL (original)   0.10    power-685-bus         3    9.549030
-373  FUGAL (original)   0.10    power-685-bus         4    8.512385
-374  FUGAL (original)   0.10    power-685-bus         5    8.793158
-375  FUGAL (original)   0.15    power-685-bus         1    8.877585
-376  FUGAL (original)   0.15    power-685-bus         2   10.653200
-377  FUGAL (original)   0.15    power-685-bus         3    8.089897
-378  FUGAL (original)   0.15    power-685-bus         4    9.641856
-379  FUGAL (original)   0.15    power-685-bus         5    8.787992
-380  FUGAL (original)   0.20    power-685-bus         1    8.416696
-381  FUGAL (original)   0.20    power-685-bus         2    8.293834
-382  FUGAL (original)   0.20    power-685-bus         3    7.566014
-383  FUGAL (original)   0.20    power-685-bus         4    8.763048
-384  FUGAL (original)   0.20    power-685-bus         5    8.091652
-385  FUGAL (original)   0.25    power-685-bus         1    8.386076
-386  FUGAL (original)   0.25    power-685-bus         2    7.474898
-387  FUGAL (original)   0.25    power-685-bus         3    6.343558
-388  FUGAL (original)   0.25    power-685-bus         4    7.212530
-389  FUGAL (original)   0.25    power-685-bus         5    7.787148
-390      FUGAL w. PCA   0.00    power-685-bus         1    2.850824
-391      FUGAL w. PCA   0.00    power-685-bus         2    2.825006
-392      FUGAL w. PCA   0.00    power-685-bus         3    3.105411
-393      FUGAL w. PCA   0.00    power-685-bus         4    2.753405
-394      FUGAL w. PCA   0.00    power-685-bus         5    2.712876
-395      FUGAL w. PCA   0.05    power-685-bus         1    2.661001
-396      FUGAL w. PCA   0.05    power-685-bus         2    2.848797
-397      FUGAL w. PCA   0.05    power-685-bus         3    3.241785
-398      FUGAL w. PCA   0.05    power-685-bus         4    2.555328
-399      FUGAL w. PCA   0.05    power-685-bus         5    2.491374
-400      FUGAL w. PCA   0.10    power-685-bus         1    4.084071
-401      FUGAL w. PCA   0.10    power-685-bus         2    4.113685
-402      FUGAL w. PCA   0.10    power-685-bus         3    3.898309
-403      FUGAL w. PCA   0.10    power-685-bus         4    3.717142
-404      FUGAL w. PCA   0.10    power-685-bus         5    3.322782
-405      FUGAL w. PCA   0.15    power-685-bus         1    4.435785
-406      FUGAL w. PCA   0.15    power-685-bus         2    4.577967
-407      FUGAL w. PCA   0.15    power-685-bus         3    5.240898
-408      FUGAL w. PCA   0.15    power-685-bus         4    4.171395
-409      FUGAL w. PCA   0.15    power-685-bus         5    4.510598
-410      FUGAL w. PCA   0.20    power-685-bus         1    4.450992
-411      FUGAL w. PCA   0.20    power-685-bus         2    4.209193
-412      FUGAL w. PCA   0.20    power-685-bus         3    4.403545
-413      FUGAL w. PCA   0.20    power-685-bus         4    4.716013
-414      FUGAL w. PCA   0.20    power-685-bus         5    4.393943
-415      FUGAL w. PCA   0.25    power-685-bus         1    4.993960
-416      FUGAL w. PCA   0.25    power-685-bus         2    4.547875
-417      FUGAL w. PCA   0.25    power-685-bus         3    4.145433
-418      FUGAL w. PCA   0.25    power-685-bus         4    4.522986
-419      FUGAL w. PCA   0.25    power-685-bus         5    4.644345
-420    FUGAL w. fixed   0.00    power-685-bus         1    2.133157
-421    FUGAL w. fixed   0.00    power-685-bus         2    2.111496
-422    FUGAL w. fixed   0.00    power-685-bus         3    2.326062
-423    FUGAL w. fixed   0.00    power-685-bus         4    2.259378
-424    FUGAL w. fixed   0.00    power-685-bus         5    2.293890
-425    FUGAL w. fixed   0.05    power-685-bus         1    2.664709
-426    FUGAL w. fixed   0.05    power-685-bus         2    2.653692
-427    FUGAL w. fixed   0.05    power-685-bus         3    2.646422
-428    FUGAL w. fixed   0.05    power-685-bus         4    3.485221
-429    FUGAL w. fixed   0.05    power-685-bus         5    2.380800
-430    FUGAL w. fixed   0.10    power-685-bus         1    3.701244
-431    FUGAL w. fixed   0.10    power-685-bus         2    4.134146
-432    FUGAL w. fixed   0.10    power-685-bus         3    3.849818
-433    FUGAL w. fixed   0.10    power-685-bus         4    3.853608
-434    FUGAL w. fixed   0.10    power-685-bus         5    3.812327
-435    FUGAL w. fixed   0.15    power-685-bus         1    3.816387
-436    FUGAL w. fixed   0.15    power-685-bus         2    4.002583
-437    FUGAL w. fixed   0.15    power-685-bus         3    3.633757
-438    FUGAL w. fixed   0.15    power-685-bus         4    3.846612
-439    FUGAL w. fixed   0.15    power-685-bus         5    3.799531
-440    FUGAL w. fixed   0.20    power-685-bus         1    3.681341
-441    FUGAL w. fixed   0.20    power-685-bus         2    3.730456
-442    FUGAL w. fixed   0.20    power-685-bus         3    3.881021
-443    FUGAL w. fixed   0.20    power-685-bus         4    4.048485
-444    FUGAL w. fixed   0.20    power-685-bus         5    3.915771
-445    FUGAL w. fixed   0.25    power-685-bus         1    3.827060
-446    FUGAL w. fixed   0.25    power-685-bus         2    3.795341
-447    FUGAL w. fixed   0.25    power-685-bus         3    3.752224
-448    FUGAL w. fixed   0.25    power-685-bus         4    3.883168
-449    FUGAL w. fixed   0.25    power-685-bus         5    3.833092
-450  FUGAL (original)   0.00  socfb-Bowdoin47         1   76.856974
-451  FUGAL (original)   0.00  socfb-Bowdoin47         2   77.212873
-452  FUGAL (original)   0.00  socfb-Bowdoin47         3   77.273542
-453  FUGAL (original)   0.00  socfb-Bowdoin47         4   76.369549
-454  FUGAL (original)   0.00  socfb-Bowdoin47         5   76.697508
-455  FUGAL (original)   0.05  socfb-Bowdoin47         1   75.039423
-456  FUGAL (original)   0.05  socfb-Bowdoin47         2   75.789562
-457  FUGAL (original)   0.05  socfb-Bowdoin47         3   74.946363
-458  FUGAL (original)   0.05  socfb-Bowdoin47         4   74.663430
-459  FUGAL (original)   0.05  socfb-Bowdoin47         5   75.244864
-460  FUGAL (original)   0.10  socfb-Bowdoin47         1   73.191350
-461  FUGAL (original)   0.10  socfb-Bowdoin47         2   73.409274
-462  FUGAL (original)   0.10  socfb-Bowdoin47         3   72.714299
-463  FUGAL (original)   0.10  socfb-Bowdoin47         4   73.344707
-464  FUGAL (original)   0.10  socfb-Bowdoin47         5   73.805400
-465  FUGAL (original)   0.15  socfb-Bowdoin47         1   71.986108
-466  FUGAL (original)   0.15  socfb-Bowdoin47         2   71.588155
-467  FUGAL (original)   0.15  socfb-Bowdoin47         3   71.813909
-468  FUGAL (original)   0.15  socfb-Bowdoin47         4   71.853133
-469  FUGAL (original)   0.15  socfb-Bowdoin47         5   72.216636
-470  FUGAL (original)   0.20  socfb-Bowdoin47         1   69.927223
-471  FUGAL (original)   0.20  socfb-Bowdoin47         2   70.738873
-472  FUGAL (original)   0.20  socfb-Bowdoin47         3   70.412815
-473  FUGAL (original)   0.20  socfb-Bowdoin47         4   70.558252
-474  FUGAL (original)   0.20  socfb-Bowdoin47         5   70.918718
-475  FUGAL (original)   0.25  socfb-Bowdoin47         1   69.226707
-476  FUGAL (original)   0.25  socfb-Bowdoin47         2   69.128844
-477  FUGAL (original)   0.25  socfb-Bowdoin47         3   68.820537
-478  FUGAL (original)   0.25  socfb-Bowdoin47         4   69.159298
-479  FUGAL (original)   0.25  socfb-Bowdoin47         5   68.948762
-480      FUGAL w. PCA   0.00  socfb-Bowdoin47         1   96.212463
-481      FUGAL w. PCA   0.00  socfb-Bowdoin47         2   96.104725
-482      FUGAL w. PCA   0.00  socfb-Bowdoin47         3   95.052938
-483      FUGAL w. PCA   0.00  socfb-Bowdoin47         4   96.321470
-484      FUGAL w. PCA   0.00  socfb-Bowdoin47         5   96.272612
-485      FUGAL w. PCA   0.05  socfb-Bowdoin47         1   91.534782
-486      FUGAL w. PCA   0.05  socfb-Bowdoin47         2   92.558641
-487      FUGAL w. PCA   0.05  socfb-Bowdoin47         3   91.805709
-488      FUGAL w. PCA   0.05  socfb-Bowdoin47         4   92.768993
-489      FUGAL w. PCA   0.05  socfb-Bowdoin47         5   92.581824
-490      FUGAL w. PCA   0.10  socfb-Bowdoin47         1   90.249520
-491      FUGAL w. PCA   0.10  socfb-Bowdoin47         2   89.809384
-492      FUGAL w. PCA   0.10  socfb-Bowdoin47         3   91.243585
-493      FUGAL w. PCA   0.10  socfb-Bowdoin47         4   89.597899
-494      FUGAL w. PCA   0.10  socfb-Bowdoin47         5   89.948034
-495      FUGAL w. PCA   0.15  socfb-Bowdoin47         1   86.151475
-496      FUGAL w. PCA   0.15  socfb-Bowdoin47         2   85.397823
-497      FUGAL w. PCA   0.15  socfb-Bowdoin47         3   84.980933
-498      FUGAL w. PCA   0.15  socfb-Bowdoin47         4   85.506481
-499      FUGAL w. PCA   0.15  socfb-Bowdoin47         5   86.708164
-500      FUGAL w. PCA   0.20  socfb-Bowdoin47         1   82.747191
-501      FUGAL w. PCA   0.20  socfb-Bowdoin47         2   83.158802
-502      FUGAL w. PCA   0.20  socfb-Bowdoin47         3   83.880801
-503      FUGAL w. PCA   0.20  socfb-Bowdoin47         4   83.559831
-504      FUGAL w. PCA   0.20  socfb-Bowdoin47         5   83.517010
-505      FUGAL w. PCA   0.25  socfb-Bowdoin47         1   80.168538
-506      FUGAL w. PCA   0.25  socfb-Bowdoin47         2   80.528338
-507      FUGAL w. PCA   0.25  socfb-Bowdoin47         3   80.521807
-508      FUGAL w. PCA   0.25  socfb-Bowdoin47         4   79.890270
-509      FUGAL w. PCA   0.25  socfb-Bowdoin47         5   80.367670
-510    FUGAL w. fixed   0.00  socfb-Bowdoin47         1   68.730963
-511    FUGAL w. fixed   0.00  socfb-Bowdoin47         2   68.603576
-512    FUGAL w. fixed   0.00  socfb-Bowdoin47         3   68.516330
-513    FUGAL w. fixed   0.00  socfb-Bowdoin47         4   68.462989
-514    FUGAL w. fixed   0.00  socfb-Bowdoin47         5   69.316915
-515    FUGAL w. fixed   0.05  socfb-Bowdoin47         1   65.495046
-516    FUGAL w. fixed   0.05  socfb-Bowdoin47         2   66.534232
-517    FUGAL w. fixed   0.05  socfb-Bowdoin47         3   66.386457
-518    FUGAL w. fixed   0.05  socfb-Bowdoin47         4   65.618500
-519    FUGAL w. fixed   0.05  socfb-Bowdoin47         5   65.990926
-520    FUGAL w. fixed   0.10  socfb-Bowdoin47         1   63.626009
-521    FUGAL w. fixed   0.10  socfb-Bowdoin47         2   63.924931
-522    FUGAL w. fixed   0.10  socfb-Bowdoin47         3   64.521067
-523    FUGAL w. fixed   0.10  socfb-Bowdoin47         4   63.271789
-524    FUGAL w. fixed   0.10  socfb-Bowdoin47         5   64.958199
-525    FUGAL w. fixed   0.15  socfb-Bowdoin47         1   62.537400
-526    FUGAL w. fixed   0.15  socfb-Bowdoin47         2   61.947434
-527    FUGAL w. fixed   0.15  socfb-Bowdoin47         3   61.707502
-528    FUGAL w. fixed   0.15  socfb-Bowdoin47         4   62.592798
-529    FUGAL w. fixed   0.15  socfb-Bowdoin47         5   61.178717
-530    FUGAL w. fixed   0.20  socfb-Bowdoin47         1   60.680022
-531    FUGAL w. fixed   0.20  socfb-Bowdoin47         2   59.839761
-532    FUGAL w. fixed   0.20  socfb-Bowdoin47         3   59.953554
-533    FUGAL w. fixed   0.20  socfb-Bowdoin47         4   60.021654
-534    FUGAL w. fixed   0.20  socfb-Bowdoin47         5   60.843767
-535    FUGAL w. fixed   0.25  socfb-Bowdoin47         1   57.191743
-536    FUGAL w. fixed   0.25  socfb-Bowdoin47         2   59.027446
-537    FUGAL w. fixed   0.25  socfb-Bowdoin47         3   58.445168
-538    FUGAL w. fixed   0.25  socfb-Bowdoin47         4   58.430330
-539    FUGAL w. fixed   0.25  socfb-Bowdoin47         5   57.127389
+            algorithm  Noise            graph iteration     runtime        mean
+0    FUGAL (original)   0.00          DD_g501         1    2.728219    3.423393
+1    FUGAL (original)   0.00          DD_g501         2    2.367986    3.423393
+2    FUGAL (original)   0.00          DD_g501         3    2.372514    3.423393
+3    FUGAL (original)   0.00          DD_g501         4    2.688640    3.423393
+4    FUGAL (original)   0.00          DD_g501         5    2.448655    3.423393
+5    FUGAL (original)   0.05          DD_g501         1    2.657677    3.423393
+6    FUGAL (original)   0.05          DD_g501         2    2.806440    3.423393
+7    FUGAL (original)   0.05          DD_g501         3    3.033113    3.423393
+8    FUGAL (original)   0.05          DD_g501         4    2.776711    3.423393
+9    FUGAL (original)   0.05          DD_g501         5    2.862141    3.423393
+10   FUGAL (original)   0.10          DD_g501         1    3.875455    3.423393
+11   FUGAL (original)   0.10          DD_g501         2    3.556738    3.423393
+12   FUGAL (original)   0.10          DD_g501         3    3.686834    3.423393
+13   FUGAL (original)   0.10          DD_g501         4    3.498257    3.423393
+14   FUGAL (original)   0.10          DD_g501         5    4.375167    3.423393
+15   FUGAL (original)   0.15          DD_g501         1    4.124967    3.423393
+16   FUGAL (original)   0.15          DD_g501         2    4.169660    3.423393
+17   FUGAL (original)   0.15          DD_g501         3    4.299872    3.423393
+18   FUGAL (original)   0.15          DD_g501         4    4.616666    3.423393
+19   FUGAL (original)   0.15          DD_g501         5    3.830927    3.423393
+20   FUGAL (original)   0.20          DD_g501         1    4.381163    3.423393
+21   FUGAL (original)   0.20          DD_g501         2    3.735485    3.423393
+22   FUGAL (original)   0.20          DD_g501         3    3.829979    3.423393
+23   FUGAL (original)   0.20          DD_g501         4    4.281951    3.423393
+24   FUGAL (original)   0.20          DD_g501         5    4.675694    3.423393
+25   FUGAL (original)   0.25          DD_g501         1    4.197594    3.423393
+26   FUGAL (original)   0.25          DD_g501         2    1.957176    3.423393
+27   FUGAL (original)   0.25          DD_g501         3    2.163064    3.423393
+28   FUGAL (original)   0.25          DD_g501         4    3.307955    3.423393
+29   FUGAL (original)   0.25          DD_g501         5    3.395074    3.423393
+30       FUGAL w. PCA   0.00          DD_g501         1    0.868906    2.516943
+31       FUGAL w. PCA   0.00          DD_g501         2    0.901273    2.516943
+32       FUGAL w. PCA   0.00          DD_g501         3    1.206836    2.516943
+33       FUGAL w. PCA   0.00          DD_g501         4    0.843344    2.516943
+34       FUGAL w. PCA   0.00          DD_g501         5    0.873515    2.516943
+35       FUGAL w. PCA   0.05          DD_g501         1    1.332516    2.516943
+36       FUGAL w. PCA   0.05          DD_g501         2    1.394127    2.516943
+37       FUGAL w. PCA   0.05          DD_g501         3    1.362870    2.516943
+38       FUGAL w. PCA   0.05          DD_g501         4    1.021204    2.516943
+39       FUGAL w. PCA   0.05          DD_g501         5    1.318164    2.516943
+40       FUGAL w. PCA   0.10          DD_g501         1    3.308854    2.516943
+41       FUGAL w. PCA   0.10          DD_g501         2    3.486665    2.516943
+42       FUGAL w. PCA   0.10          DD_g501         3    2.076461    2.516943
+43       FUGAL w. PCA   0.10          DD_g501         4    2.112469    2.516943
+44       FUGAL w. PCA   0.10          DD_g501         5    3.277391    2.516943
+45       FUGAL w. PCA   0.15          DD_g501         1    3.294255    2.516943
+46       FUGAL w. PCA   0.15          DD_g501         2    3.161831    2.516943
+47       FUGAL w. PCA   0.15          DD_g501         3    3.357096    2.516943
+48       FUGAL w. PCA   0.15          DD_g501         4    3.336253    2.516943
+49       FUGAL w. PCA   0.15          DD_g501         5    3.632547    2.516943
+50       FUGAL w. PCA   0.20          DD_g501         1    3.339348    2.516943
+51       FUGAL w. PCA   0.20          DD_g501         2    3.354784    2.516943
+52       FUGAL w. PCA   0.20          DD_g501         3    3.365649    2.516943
+53       FUGAL w. PCA   0.20          DD_g501         4    3.187112    2.516943
+54       FUGAL w. PCA   0.20          DD_g501         5    3.331308    2.516943
+55       FUGAL w. PCA   0.25          DD_g501         1    3.252297    2.516943
+56       FUGAL w. PCA   0.25          DD_g501         2    3.438862    2.516943
+57       FUGAL w. PCA   0.25          DD_g501         3    3.390054    2.516943
+58       FUGAL w. PCA   0.25          DD_g501         4    3.282230    2.516943
+59       FUGAL w. PCA   0.25          DD_g501         5    3.400068    2.516943
+60     FUGAL w. fixed   0.00          DD_g501         1    0.688188    2.441831
+61     FUGAL w. fixed   0.00          DD_g501         2    0.748101    2.441831
+62     FUGAL w. fixed   0.00          DD_g501         3    0.692050    2.441831
+63     FUGAL w. fixed   0.00          DD_g501         4    0.685725    2.441831
+64     FUGAL w. fixed   0.00          DD_g501         5    0.706742    2.441831
+65     FUGAL w. fixed   0.05          DD_g501         1    1.405569    2.441831
+66     FUGAL w. fixed   0.05          DD_g501         2    1.585982    2.441831
+67     FUGAL w. fixed   0.05          DD_g501         3    1.288886    2.441831
+68     FUGAL w. fixed   0.05          DD_g501         4    1.037122    2.441831
+69     FUGAL w. fixed   0.05          DD_g501         5    1.911217    2.441831
+70     FUGAL w. fixed   0.10          DD_g501         1    3.232386    2.441831
+71     FUGAL w. fixed   0.10          DD_g501         2    1.850594    2.441831
+72     FUGAL w. fixed   0.10          DD_g501         3    3.154772    2.441831
+73     FUGAL w. fixed   0.10          DD_g501         4    2.872683    2.441831
+74     FUGAL w. fixed   0.10          DD_g501         5    3.099933    2.441831
+75     FUGAL w. fixed   0.15          DD_g501         1    3.537142    2.441831
+76     FUGAL w. fixed   0.15          DD_g501         2    3.277076    2.441831
+77     FUGAL w. fixed   0.15          DD_g501         3    3.162059    2.441831
+78     FUGAL w. fixed   0.15          DD_g501         4    3.241762    2.441831
+79     FUGAL w. fixed   0.15          DD_g501         5    3.197858    2.441831
+80     FUGAL w. fixed   0.20          DD_g501         1    3.200353    2.441831
+81     FUGAL w. fixed   0.20          DD_g501         2    3.168409    2.441831
+82     FUGAL w. fixed   0.20          DD_g501         3    3.142082    2.441831
+83     FUGAL w. fixed   0.20          DD_g501         4    3.226660    2.441831
+84     FUGAL w. fixed   0.20          DD_g501         5    3.172176    2.441831
+85     FUGAL w. fixed   0.25          DD_g501         1    3.173854    2.441831
+86     FUGAL w. fixed   0.25          DD_g501         2    3.171098    2.441831
+87     FUGAL w. fixed   0.25          DD_g501         3    3.253091    2.441831
+88     FUGAL w. fixed   0.25          DD_g501         4    3.243843    2.441831
+89     FUGAL w. fixed   0.25          DD_g501         5    3.127506    2.441831
+90   FUGAL (original)   0.00        bio-yeast         1   23.486315   26.344239
+91   FUGAL (original)   0.00        bio-yeast         2   23.369584   26.344239
+92   FUGAL (original)   0.00        bio-yeast         3   23.484817   26.344239
+93   FUGAL (original)   0.00        bio-yeast         4   22.613500   26.344239
+94   FUGAL (original)   0.00        bio-yeast         5   22.927413   26.344239
+95   FUGAL (original)   0.05        bio-yeast         1   28.030961   26.344239
+96   FUGAL (original)   0.05        bio-yeast         2   27.481631   26.344239
+97   FUGAL (original)   0.05        bio-yeast         3   27.280611   26.344239
+98   FUGAL (original)   0.05        bio-yeast         4   27.242752   26.344239
+99   FUGAL (original)   0.05        bio-yeast         5   27.036428   26.344239
+100  FUGAL (original)   0.10        bio-yeast         1   29.488949   26.344239
+101  FUGAL (original)   0.10        bio-yeast         2   27.132447   26.344239
+102  FUGAL (original)   0.10        bio-yeast         3   31.052809   26.344239
+103  FUGAL (original)   0.10        bio-yeast         4   26.421368   26.344239
+104  FUGAL (original)   0.10        bio-yeast         5   28.052138   26.344239
+105  FUGAL (original)   0.15        bio-yeast         1   29.033230   26.344239
+106  FUGAL (original)   0.15        bio-yeast         2   26.988044   26.344239
+107  FUGAL (original)   0.15        bio-yeast         3   26.006940   26.344239
+108  FUGAL (original)   0.15        bio-yeast         4   24.913972   26.344239
+109  FUGAL (original)   0.15        bio-yeast         5   25.748968   26.344239
+110  FUGAL (original)   0.20        bio-yeast         1   25.235841   26.344239
+111  FUGAL (original)   0.20        bio-yeast         2   31.127144   26.344239
+112  FUGAL (original)   0.20        bio-yeast         3   25.055439   26.344239
+113  FUGAL (original)   0.20        bio-yeast         4   25.951115   26.344239
+114  FUGAL (original)   0.20        bio-yeast         5   24.574637   26.344239
+115  FUGAL (original)   0.25        bio-yeast         1   24.378705   26.344239
+116  FUGAL (original)   0.25        bio-yeast         2   27.802685   26.344239
+117  FUGAL (original)   0.25        bio-yeast         3   25.376327   26.344239
+118  FUGAL (original)   0.25        bio-yeast         4   27.959626   26.344239
+119  FUGAL (original)   0.25        bio-yeast         5   25.072784   26.344239
+120      FUGAL w. PCA   0.00        bio-yeast         1   31.873030   30.638850
+121      FUGAL w. PCA   0.00        bio-yeast         2   31.862085   30.638850
+122      FUGAL w. PCA   0.00        bio-yeast         3   32.206654   30.638850
+123      FUGAL w. PCA   0.00        bio-yeast         4   31.579680   30.638850
+124      FUGAL w. PCA   0.00        bio-yeast         5   31.846648   30.638850
+125      FUGAL w. PCA   0.05        bio-yeast         1   31.148688   30.638850
+126      FUGAL w. PCA   0.05        bio-yeast         2   31.142245   30.638850
+127      FUGAL w. PCA   0.05        bio-yeast         3   30.659512   30.638850
+128      FUGAL w. PCA   0.05        bio-yeast         4   31.539930   30.638850
+129      FUGAL w. PCA   0.05        bio-yeast         5   31.477595   30.638850
+130      FUGAL w. PCA   0.10        bio-yeast         1   30.785079   30.638850
+131      FUGAL w. PCA   0.10        bio-yeast         2   30.882913   30.638850
+132      FUGAL w. PCA   0.10        bio-yeast         3   30.667680   30.638850
+133      FUGAL w. PCA   0.10        bio-yeast         4   30.411840   30.638850
+134      FUGAL w. PCA   0.10        bio-yeast         5   30.284152   30.638850
+135      FUGAL w. PCA   0.15        bio-yeast         1   30.099245   30.638850
+136      FUGAL w. PCA   0.15        bio-yeast         2   30.093377   30.638850
+137      FUGAL w. PCA   0.15        bio-yeast         3   30.540185   30.638850
+138      FUGAL w. PCA   0.15        bio-yeast         4   29.678568   30.638850
+139      FUGAL w. PCA   0.15        bio-yeast         5   30.286602   30.638850
+140      FUGAL w. PCA   0.20        bio-yeast         1   30.718590   30.638850
+141      FUGAL w. PCA   0.20        bio-yeast         2   29.590925   30.638850
+142      FUGAL w. PCA   0.20        bio-yeast         3   29.348824   30.638850
+143      FUGAL w. PCA   0.20        bio-yeast         4   30.124964   30.638850
+144      FUGAL w. PCA   0.20        bio-yeast         5   29.957848   30.638850
+145      FUGAL w. PCA   0.25        bio-yeast         1   29.258191   30.638850
+146      FUGAL w. PCA   0.25        bio-yeast         2   30.803027   30.638850
+147      FUGAL w. PCA   0.25        bio-yeast         3   30.180428   30.638850
+148      FUGAL w. PCA   0.25        bio-yeast         4   29.616047   30.638850
+149      FUGAL w. PCA   0.25        bio-yeast         5   30.500937   30.638850
+150    FUGAL w. fixed   0.00        bio-yeast         1   31.136595   30.496723
+151    FUGAL w. fixed   0.00        bio-yeast         2   31.193553   30.496723
+152    FUGAL w. fixed   0.00        bio-yeast         3   31.630131   30.496723
+153    FUGAL w. fixed   0.00        bio-yeast         4   30.985362   30.496723
+154    FUGAL w. fixed   0.00        bio-yeast         5   31.276977   30.496723
+155    FUGAL w. fixed   0.05        bio-yeast         1   31.255889   30.496723
+156    FUGAL w. fixed   0.05        bio-yeast         2   31.253355   30.496723
+157    FUGAL w. fixed   0.05        bio-yeast         3   31.320599   30.496723
+158    FUGAL w. fixed   0.05        bio-yeast         4   31.068133   30.496723
+159    FUGAL w. fixed   0.05        bio-yeast         5   31.094068   30.496723
+160    FUGAL w. fixed   0.10        bio-yeast         1   30.960341   30.496723
+161    FUGAL w. fixed   0.10        bio-yeast         2   30.796910   30.496723
+162    FUGAL w. fixed   0.10        bio-yeast         3   30.837962   30.496723
+163    FUGAL w. fixed   0.10        bio-yeast         4   30.532598   30.496723
+164    FUGAL w. fixed   0.10        bio-yeast         5   30.459455   30.496723
+165    FUGAL w. fixed   0.15        bio-yeast         1   30.150782   30.496723
+166    FUGAL w. fixed   0.15        bio-yeast         2   29.943696   30.496723
+167    FUGAL w. fixed   0.15        bio-yeast         3   30.411390   30.496723
+168    FUGAL w. fixed   0.15        bio-yeast         4   29.587028   30.496723
+169    FUGAL w. fixed   0.15        bio-yeast         5   29.915566   30.496723
+170    FUGAL w. fixed   0.20        bio-yeast         1   30.096023   30.496723
+171    FUGAL w. fixed   0.20        bio-yeast         2   30.093738   30.496723
+172    FUGAL w. fixed   0.20        bio-yeast         3   29.945354   30.496723
+173    FUGAL w. fixed   0.20        bio-yeast         4   29.955616   30.496723
+174    FUGAL w. fixed   0.20        bio-yeast         5   30.115691   30.496723
+175    FUGAL w. fixed   0.25        bio-yeast         1   29.230046   30.496723
+176    FUGAL w. fixed   0.25        bio-yeast         2   29.970314   30.496723
+177    FUGAL w. fixed   0.25        bio-yeast         3   30.038445   30.496723
+178    FUGAL w. fixed   0.25        bio-yeast         4   29.729305   30.496723
+179    FUGAL w. fixed   0.25        bio-yeast         5   29.916754   30.496723
+180  FUGAL (original)   0.00  ia-crime-moreno         1    7.148494    9.601866
+181  FUGAL (original)   0.00  ia-crime-moreno         2    6.962487    9.601866
+182  FUGAL (original)   0.00  ia-crime-moreno         3    6.985413    9.601866
+183  FUGAL (original)   0.00  ia-crime-moreno         4    6.994053    9.601866
+184  FUGAL (original)   0.00  ia-crime-moreno         5    7.234347    9.601866
+185  FUGAL (original)   0.05  ia-crime-moreno         1    8.286794    9.601866
+186  FUGAL (original)   0.05  ia-crime-moreno         2    9.433815    9.601866
+187  FUGAL (original)   0.05  ia-crime-moreno         3    6.733881    9.601866
+188  FUGAL (original)   0.05  ia-crime-moreno         4    9.167060    9.601866
+189  FUGAL (original)   0.05  ia-crime-moreno         5    9.504602    9.601866
+190  FUGAL (original)   0.10  ia-crime-moreno         1    9.385059    9.601866
+191  FUGAL (original)   0.10  ia-crime-moreno         2    8.641906    9.601866
+192  FUGAL (original)   0.10  ia-crime-moreno         3    7.860716    9.601866
+193  FUGAL (original)   0.10  ia-crime-moreno         4    9.927544    9.601866
+194  FUGAL (original)   0.10  ia-crime-moreno         5    8.408259    9.601866
+195  FUGAL (original)   0.15  ia-crime-moreno         1   11.747744    9.601866
+196  FUGAL (original)   0.15  ia-crime-moreno         2   10.781713    9.601866
+197  FUGAL (original)   0.15  ia-crime-moreno         3   10.546256    9.601866
+198  FUGAL (original)   0.15  ia-crime-moreno         4   11.698433    9.601866
+199  FUGAL (original)   0.15  ia-crime-moreno         5   11.592499    9.601866
+200  FUGAL (original)   0.20  ia-crime-moreno         1   11.617415    9.601866
+201  FUGAL (original)   0.20  ia-crime-moreno         2   10.740216    9.601866
+202  FUGAL (original)   0.20  ia-crime-moreno         3   10.288979    9.601866
+203  FUGAL (original)   0.20  ia-crime-moreno         4   12.389174    9.601866
+204  FUGAL (original)   0.20  ia-crime-moreno         5   11.059699    9.601866
+205  FUGAL (original)   0.25  ia-crime-moreno         1   10.235252    9.601866
+206  FUGAL (original)   0.25  ia-crime-moreno         2   10.472720    9.601866
+207  FUGAL (original)   0.25  ia-crime-moreno         3   10.810341    9.601866
+208  FUGAL (original)   0.25  ia-crime-moreno         4   10.456192    9.601866
+209  FUGAL (original)   0.25  ia-crime-moreno         5   10.944906    9.601866
+210      FUGAL w. PCA   0.00  ia-crime-moreno         1    5.245531    5.361937
+211      FUGAL w. PCA   0.00  ia-crime-moreno         2    5.199359    5.361937
+212      FUGAL w. PCA   0.00  ia-crime-moreno         3    5.164132    5.361937
+213      FUGAL w. PCA   0.00  ia-crime-moreno         4    5.067053    5.361937
+214      FUGAL w. PCA   0.00  ia-crime-moreno         5    5.468908    5.361937
+215      FUGAL w. PCA   0.05  ia-crime-moreno         1    5.357728    5.361937
+216      FUGAL w. PCA   0.05  ia-crime-moreno         2    5.042704    5.361937
+217      FUGAL w. PCA   0.05  ia-crime-moreno         3    5.094988    5.361937
+218      FUGAL w. PCA   0.05  ia-crime-moreno         4    5.200967    5.361937
+219      FUGAL w. PCA   0.05  ia-crime-moreno         5    5.406151    5.361937
+220      FUGAL w. PCA   0.10  ia-crime-moreno         1    5.323073    5.361937
+221      FUGAL w. PCA   0.10  ia-crime-moreno         2    5.337803    5.361937
+222      FUGAL w. PCA   0.10  ia-crime-moreno         3    4.991112    5.361937
+223      FUGAL w. PCA   0.10  ia-crime-moreno         4    6.257120    5.361937
+224      FUGAL w. PCA   0.10  ia-crime-moreno         5    6.221239    5.361937
+225      FUGAL w. PCA   0.15  ia-crime-moreno         1    5.412805    5.361937
+226      FUGAL w. PCA   0.15  ia-crime-moreno         2    5.565274    5.361937
+227      FUGAL w. PCA   0.15  ia-crime-moreno         3    5.547569    5.361937
+228      FUGAL w. PCA   0.15  ia-crime-moreno         4    6.150675    5.361937
+229      FUGAL w. PCA   0.15  ia-crime-moreno         5    5.397262    5.361937
+230      FUGAL w. PCA   0.20  ia-crime-moreno         1    5.316637    5.361937
+231      FUGAL w. PCA   0.20  ia-crime-moreno         2    4.562263    5.361937
+232      FUGAL w. PCA   0.20  ia-crime-moreno         3    5.291156    5.361937
+233      FUGAL w. PCA   0.20  ia-crime-moreno         4    4.726148    5.361937
+234      FUGAL w. PCA   0.20  ia-crime-moreno         5    5.335142    5.361937
+235      FUGAL w. PCA   0.25  ia-crime-moreno         1    5.018509    5.361937
+236      FUGAL w. PCA   0.25  ia-crime-moreno         2    5.410760    5.361937
+237      FUGAL w. PCA   0.25  ia-crime-moreno         3    5.283620    5.361937
+238      FUGAL w. PCA   0.25  ia-crime-moreno         4    5.214762    5.361937
+239      FUGAL w. PCA   0.25  ia-crime-moreno         5    6.247673    5.361937
+240    FUGAL w. fixed   0.00  ia-crime-moreno         1    6.115874    6.309879
+241    FUGAL w. fixed   0.00  ia-crime-moreno         2    6.160906    6.309879
+242    FUGAL w. fixed   0.00  ia-crime-moreno         3    5.831190    6.309879
+243    FUGAL w. fixed   0.00  ia-crime-moreno         4    6.294245    6.309879
+244    FUGAL w. fixed   0.00  ia-crime-moreno         5    6.234772    6.309879
+245    FUGAL w. fixed   0.05  ia-crime-moreno         1    6.438439    6.309879
+246    FUGAL w. fixed   0.05  ia-crime-moreno         2    6.469389    6.309879
+247    FUGAL w. fixed   0.05  ia-crime-moreno         3    6.211231    6.309879
+248    FUGAL w. fixed   0.05  ia-crime-moreno         4    6.575264    6.309879
+249    FUGAL w. fixed   0.05  ia-crime-moreno         5    6.211660    6.309879
+250    FUGAL w. fixed   0.10  ia-crime-moreno         1    6.749976    6.309879
+251    FUGAL w. fixed   0.10  ia-crime-moreno         2    6.629878    6.309879
+252    FUGAL w. fixed   0.10  ia-crime-moreno         3    5.916991    6.309879
+253    FUGAL w. fixed   0.10  ia-crime-moreno         4    6.653642    6.309879
+254    FUGAL w. fixed   0.10  ia-crime-moreno         5    6.321496    6.309879
+255    FUGAL w. fixed   0.15  ia-crime-moreno         1    6.664392    6.309879
+256    FUGAL w. fixed   0.15  ia-crime-moreno         2    6.661652    6.309879
+257    FUGAL w. fixed   0.15  ia-crime-moreno         3    6.636759    6.309879
+258    FUGAL w. fixed   0.15  ia-crime-moreno         4    6.569376    6.309879
+259    FUGAL w. fixed   0.15  ia-crime-moreno         5    7.216826    6.309879
+260    FUGAL w. fixed   0.20  ia-crime-moreno         1    6.511215    6.309879
+261    FUGAL w. fixed   0.20  ia-crime-moreno         2    5.906030    6.309879
+262    FUGAL w. fixed   0.20  ia-crime-moreno         3    6.052211    6.309879
+263    FUGAL w. fixed   0.20  ia-crime-moreno         4    6.083612    6.309879
+264    FUGAL w. fixed   0.20  ia-crime-moreno         5    6.005907    6.309879
+265    FUGAL w. fixed   0.25  ia-crime-moreno         1    4.865178    6.309879
+266    FUGAL w. fixed   0.25  ia-crime-moreno         2    5.792225    6.309879
+267    FUGAL w. fixed   0.25  ia-crime-moreno         3    7.595760    6.309879
+268    FUGAL w. fixed   0.25  ia-crime-moreno         4    6.203032    6.309879
+269    FUGAL w. fixed   0.25  ia-crime-moreno         5    5.717253    6.309879
+270  FUGAL (original)   0.00        inf-power         1  527.103523  470.807520
+271  FUGAL (original)   0.00        inf-power         2  526.491171  470.807520
+272  FUGAL (original)   0.00        inf-power         3  526.145344  470.807520
+273  FUGAL (original)   0.00        inf-power         4  526.126633  470.807520
+274  FUGAL (original)   0.00        inf-power         5  524.407073  470.807520
+275  FUGAL (original)   0.05        inf-power         1  509.065374  470.807520
+276  FUGAL (original)   0.05        inf-power         2  507.289038  470.807520
+277  FUGAL (original)   0.05        inf-power         3  504.919183  470.807520
+278  FUGAL (original)   0.05        inf-power         4  506.023238  470.807520
+279  FUGAL (original)   0.05        inf-power         5  508.980603  470.807520
+280  FUGAL (original)   0.10        inf-power         1  497.559069  470.807520
+281  FUGAL (original)   0.10        inf-power         2  500.069123  470.807520
+282  FUGAL (original)   0.10        inf-power         3  485.886787  470.807520
+283  FUGAL (original)   0.10        inf-power         4  501.130678  470.807520
+284  FUGAL (original)   0.10        inf-power         5  483.839106  470.807520
+285  FUGAL (original)   0.15        inf-power         1  464.850177  470.807520
+286  FUGAL (original)   0.15        inf-power         2  465.965137  470.807520
+287  FUGAL (original)   0.15        inf-power         3  462.653054  470.807520
+288  FUGAL (original)   0.15        inf-power         4  480.627578  470.807520
+289  FUGAL (original)   0.15        inf-power         5  476.989198  470.807520
+290  FUGAL (original)   0.20        inf-power         1  415.758166  470.807520
+291  FUGAL (original)   0.20        inf-power         2  449.005396  470.807520
+292  FUGAL (original)   0.20        inf-power         3  428.690274  470.807520
+293  FUGAL (original)   0.20        inf-power         4  437.215168  470.807520
+294  FUGAL (original)   0.20        inf-power         5  427.330656  470.807520
+295  FUGAL (original)   0.25        inf-power         1  398.986917  470.807520
+296  FUGAL (original)   0.25        inf-power         2  409.438564  470.807520
+297  FUGAL (original)   0.25        inf-power         3  390.905456  470.807520
+298  FUGAL (original)   0.25        inf-power         4  385.847390  470.807520
+299  FUGAL (original)   0.25        inf-power         5  394.926520  470.807520
+300      FUGAL w. PCA   0.00        inf-power         1  355.051197  352.111285
+301      FUGAL w. PCA   0.00        inf-power         2  351.692034  352.111285
+302      FUGAL w. PCA   0.00        inf-power         3  353.456126  352.111285
+303      FUGAL w. PCA   0.00        inf-power         4  353.083533  352.111285
+304      FUGAL w. PCA   0.00        inf-power         5  350.763886  352.111285
+305      FUGAL w. PCA   0.05        inf-power         1  348.461300  352.111285
+306      FUGAL w. PCA   0.05        inf-power         2  350.991999  352.111285
+307      FUGAL w. PCA   0.05        inf-power         3  351.509218  352.111285
+308      FUGAL w. PCA   0.05        inf-power         4  352.736427  352.111285
+309      FUGAL w. PCA   0.05        inf-power         5  351.711196  352.111285
+310      FUGAL w. PCA   0.10        inf-power         1  349.459822  352.111285
+311      FUGAL w. PCA   0.10        inf-power         2  349.145557  352.111285
+312      FUGAL w. PCA   0.10        inf-power         3  349.615063  352.111285
+313      FUGAL w. PCA   0.10        inf-power         4  351.534662  352.111285
+314      FUGAL w. PCA   0.10        inf-power         5  352.588176  352.111285
+315      FUGAL w. PCA   0.15        inf-power         1  353.335944  352.111285
+316      FUGAL w. PCA   0.15        inf-power         2  349.464828  352.111285
+317      FUGAL w. PCA   0.15        inf-power         3  350.297003  352.111285
+318      FUGAL w. PCA   0.15        inf-power         4  354.596139  352.111285
+319      FUGAL w. PCA   0.15        inf-power         5  350.590020  352.111285
+320      FUGAL w. PCA   0.20        inf-power         1  357.292544  352.111285
+321      FUGAL w. PCA   0.20        inf-power         2  353.593955  352.111285
+322      FUGAL w. PCA   0.20        inf-power         3  353.670319  352.111285
+323      FUGAL w. PCA   0.20        inf-power         4  353.539118  352.111285
+324      FUGAL w. PCA   0.20        inf-power         5  349.792474  352.111285
+325      FUGAL w. PCA   0.25        inf-power         1  355.488173  352.111285
+326      FUGAL w. PCA   0.25        inf-power         2  353.539288  352.111285
+327      FUGAL w. PCA   0.25        inf-power         3  351.587730  352.111285
+328      FUGAL w. PCA   0.25        inf-power         4  351.531163  352.111285
+329      FUGAL w. PCA   0.25        inf-power         5  353.219663  352.111285
+330    FUGAL w. fixed   0.00        inf-power         1  355.474535  354.399627
+331    FUGAL w. fixed   0.00        inf-power         2  357.902526  354.399627
+332    FUGAL w. fixed   0.00        inf-power         3  357.902700  354.399627
+333    FUGAL w. fixed   0.00        inf-power         4  353.969734  354.399627
+334    FUGAL w. fixed   0.00        inf-power         5  352.936678  354.399627
+335    FUGAL w. fixed   0.05        inf-power         1  352.962122  354.399627
+336    FUGAL w. fixed   0.05        inf-power         2  357.350275  354.399627
+337    FUGAL w. fixed   0.05        inf-power         3  354.172217  354.399627
+338    FUGAL w. fixed   0.05        inf-power         4  354.033522  354.399627
+339    FUGAL w. fixed   0.05        inf-power         5  356.421992  354.399627
+340    FUGAL w. fixed   0.10        inf-power         1  352.551819  354.399627
+341    FUGAL w. fixed   0.10        inf-power         2  353.924299  354.399627
+342    FUGAL w. fixed   0.10        inf-power         3  354.650280  354.399627
+343    FUGAL w. fixed   0.10        inf-power         4  350.172515  354.399627
+344    FUGAL w. fixed   0.10        inf-power         5  354.602056  354.399627
+345    FUGAL w. fixed   0.15        inf-power         1  358.180991  354.399627
+346    FUGAL w. fixed   0.15        inf-power         2  358.472058  354.399627
+347    FUGAL w. fixed   0.15        inf-power         3  350.812080  354.399627
+348    FUGAL w. fixed   0.15        inf-power         4  353.475838  354.399627
+349    FUGAL w. fixed   0.15        inf-power         5  356.516600  354.399627
+350    FUGAL w. fixed   0.20        inf-power         1  354.282945  354.399627
+351    FUGAL w. fixed   0.20        inf-power         2  352.339078  354.399627
+352    FUGAL w. fixed   0.20        inf-power         3  353.529827  354.399627
+353    FUGAL w. fixed   0.20        inf-power         4  355.975517  354.399627
+354    FUGAL w. fixed   0.20        inf-power         5  350.461707  354.399627
+355    FUGAL w. fixed   0.25        inf-power         1  354.959654  354.399627
+356    FUGAL w. fixed   0.25        inf-power         2  350.461259  354.399627
+357    FUGAL w. fixed   0.25        inf-power         3  357.556744  354.399627
+358    FUGAL w. fixed   0.25        inf-power         4  352.217566  354.399627
+359    FUGAL w. fixed   0.25        inf-power         5  353.719665  354.399627
+360  FUGAL (original)   0.00    power-685-bus         1    4.675950    7.511062
+361  FUGAL (original)   0.00    power-685-bus         2    5.010982    7.511062
+362  FUGAL (original)   0.00    power-685-bus         3    4.779214    7.511062
+363  FUGAL (original)   0.00    power-685-bus         4    4.802004    7.511062
+364  FUGAL (original)   0.00    power-685-bus         5    4.914743    7.511062
+365  FUGAL (original)   0.05    power-685-bus         1    6.762610    7.511062
+366  FUGAL (original)   0.05    power-685-bus         2    6.306834    7.511062
+367  FUGAL (original)   0.05    power-685-bus         3    5.947914    7.511062
+368  FUGAL (original)   0.05    power-685-bus         4    6.165940    7.511062
+369  FUGAL (original)   0.05    power-685-bus         5    5.973991    7.511062
+370  FUGAL (original)   0.10    power-685-bus         1    9.897842    7.511062
+371  FUGAL (original)   0.10    power-685-bus         2    8.853273    7.511062
+372  FUGAL (original)   0.10    power-685-bus         3    9.549030    7.511062
+373  FUGAL (original)   0.10    power-685-bus         4    8.512385    7.511062
+374  FUGAL (original)   0.10    power-685-bus         5    8.793158    7.511062
+375  FUGAL (original)   0.15    power-685-bus         1    8.877585    7.511062
+376  FUGAL (original)   0.15    power-685-bus         2   10.653200    7.511062
+377  FUGAL (original)   0.15    power-685-bus         3    8.089897    7.511062
+378  FUGAL (original)   0.15    power-685-bus         4    9.641856    7.511062
+379  FUGAL (original)   0.15    power-685-bus         5    8.787992    7.511062
+380  FUGAL (original)   0.20    power-685-bus         1    8.416696    7.511062
+381  FUGAL (original)   0.20    power-685-bus         2    8.293834    7.511062
+382  FUGAL (original)   0.20    power-685-bus         3    7.566014    7.511062
+383  FUGAL (original)   0.20    power-685-bus         4    8.763048    7.511062
+384  FUGAL (original)   0.20    power-685-bus         5    8.091652    7.511062
+385  FUGAL (original)   0.25    power-685-bus         1    8.386076    7.511062
+386  FUGAL (original)   0.25    power-685-bus         2    7.474898    7.511062
+387  FUGAL (original)   0.25    power-685-bus         3    6.343558    7.511062
+388  FUGAL (original)   0.25    power-685-bus         4    7.212530    7.511062
+389  FUGAL (original)   0.25    power-685-bus         5    7.787148    7.511062
+390      FUGAL w. PCA   0.00    power-685-bus         1    2.850824    3.838224
+391      FUGAL w. PCA   0.00    power-685-bus         2    2.825006    3.838224
+392      FUGAL w. PCA   0.00    power-685-bus         3    3.105411    3.838224
+393      FUGAL w. PCA   0.00    power-685-bus         4    2.753405    3.838224
+394      FUGAL w. PCA   0.00    power-685-bus         5    2.712876    3.838224
+395      FUGAL w. PCA   0.05    power-685-bus         1    2.661001    3.838224
+396      FUGAL w. PCA   0.05    power-685-bus         2    2.848797    3.838224
+397      FUGAL w. PCA   0.05    power-685-bus         3    3.241785    3.838224
+398      FUGAL w. PCA   0.05    power-685-bus         4    2.555328    3.838224
+399      FUGAL w. PCA   0.05    power-685-bus         5    2.491374    3.838224
+400      FUGAL w. PCA   0.10    power-685-bus         1    4.084071    3.838224
+401      FUGAL w. PCA   0.10    power-685-bus         2    4.113685    3.838224
+402      FUGAL w. PCA   0.10    power-685-bus         3    3.898309    3.838224
+403      FUGAL w. PCA   0.10    power-685-bus         4    3.717142    3.838224
+404      FUGAL w. PCA   0.10    power-685-bus         5    3.322782    3.838224
+405      FUGAL w. PCA   0.15    power-685-bus         1    4.435785    3.838224
+406      FUGAL w. PCA   0.15    power-685-bus         2    4.577967    3.838224
+407      FUGAL w. PCA   0.15    power-685-bus         3    5.240898    3.838224
+408      FUGAL w. PCA   0.15    power-685-bus         4    4.171395    3.838224
+409      FUGAL w. PCA   0.15    power-685-bus         5    4.510598    3.838224
+410      FUGAL w. PCA   0.20    power-685-bus         1    4.450992    3.838224
+411      FUGAL w. PCA   0.20    power-685-bus         2    4.209193    3.838224
+412      FUGAL w. PCA   0.20    power-685-bus         3    4.403545    3.838224
+413      FUGAL w. PCA   0.20    power-685-bus         4    4.716013    3.838224
+414      FUGAL w. PCA   0.20    power-685-bus         5    4.393943    3.838224
+415      FUGAL w. PCA   0.25    power-685-bus         1    4.993960    3.838224
+416      FUGAL w. PCA   0.25    power-685-bus         2    4.547875    3.838224
+417      FUGAL w. PCA   0.25    power-685-bus         3    4.145433    3.838224
+418      FUGAL w. PCA   0.25    power-685-bus         4    4.522986    3.838224
+419      FUGAL w. PCA   0.25    power-685-bus         5    4.644345    3.838224
+420    FUGAL w. fixed   0.00    power-685-bus         1    2.133157    3.391760
+421    FUGAL w. fixed   0.00    power-685-bus         2    2.111496    3.391760
+422    FUGAL w. fixed   0.00    power-685-bus         3    2.326062    3.391760
+423    FUGAL w. fixed   0.00    power-685-bus         4    2.259378    3.391760
+424    FUGAL w. fixed   0.00    power-685-bus         5    2.293890    3.391760
+425    FUGAL w. fixed   0.05    power-685-bus         1    2.664709    3.391760
+426    FUGAL w. fixed   0.05    power-685-bus         2    2.653692    3.391760
+427    FUGAL w. fixed   0.05    power-685-bus         3    2.646422    3.391760
+428    FUGAL w. fixed   0.05    power-685-bus         4    3.485221    3.391760
+429    FUGAL w. fixed   0.05    power-685-bus         5    2.380800    3.391760
+430    FUGAL w. fixed   0.10    power-685-bus         1    3.701244    3.391760
+431    FUGAL w. fixed   0.10    power-685-bus         2    4.134146    3.391760
+432    FUGAL w. fixed   0.10    power-685-bus         3    3.849818    3.391760
+433    FUGAL w. fixed   0.10    power-685-bus         4    3.853608    3.391760
+434    FUGAL w. fixed   0.10    power-685-bus         5    3.812327    3.391760
+435    FUGAL w. fixed   0.15    power-685-bus         1    3.816387    3.391760
+436    FUGAL w. fixed   0.15    power-685-bus         2    4.002583    3.391760
+437    FUGAL w. fixed   0.15    power-685-bus         3    3.633757    3.391760
+438    FUGAL w. fixed   0.15    power-685-bus         4    3.846612    3.391760
+439    FUGAL w. fixed   0.15    power-685-bus         5    3.799531    3.391760
+440    FUGAL w. fixed   0.20    power-685-bus         1    3.681341    3.391760
+441    FUGAL w. fixed   0.20    power-685-bus         2    3.730456    3.391760
+442    FUGAL w. fixed   0.20    power-685-bus         3    3.881021    3.391760
+443    FUGAL w. fixed   0.20    power-685-bus         4    4.048485    3.391760
+444    FUGAL w. fixed   0.20    power-685-bus         5    3.915771    3.391760
+445    FUGAL w. fixed   0.25    power-685-bus         1    3.827060    3.391760
+446    FUGAL w. fixed   0.25    power-685-bus         2    3.795341    3.391760
+447    FUGAL w. fixed   0.25    power-685-bus         3    3.752224    3.391760
+448    FUGAL w. fixed   0.25    power-685-bus         4    3.883168    3.391760
+449    FUGAL w. fixed   0.25    power-685-bus         5    3.833092    3.391760
+450  FUGAL (original)   0.00  socfb-Bowdoin47         1   76.856974   72.795236
+451  FUGAL (original)   0.00  socfb-Bowdoin47         2   77.212873   72.795236
+452  FUGAL (original)   0.00  socfb-Bowdoin47         3   77.273542   72.795236
+453  FUGAL (original)   0.00  socfb-Bowdoin47         4   76.369549   72.795236
+454  FUGAL (original)   0.00  socfb-Bowdoin47         5   76.697508   72.795236
+455  FUGAL (original)   0.05  socfb-Bowdoin47         1   75.039423   72.795236
+456  FUGAL (original)   0.05  socfb-Bowdoin47         2   75.789562   72.795236
+457  FUGAL (original)   0.05  socfb-Bowdoin47         3   74.946363   72.795236
+458  FUGAL (original)   0.05  socfb-Bowdoin47         4   74.663430   72.795236
+459  FUGAL (original)   0.05  socfb-Bowdoin47         5   75.244864   72.795236
+460  FUGAL (original)   0.10  socfb-Bowdoin47         1   73.191350   72.795236
+461  FUGAL (original)   0.10  socfb-Bowdoin47         2   73.409274   72.795236
+462  FUGAL (original)   0.10  socfb-Bowdoin47         3   72.714299   72.795236
+463  FUGAL (original)   0.10  socfb-Bowdoin47         4   73.344707   72.795236
+464  FUGAL (original)   0.10  socfb-Bowdoin47         5   73.805400   72.795236
+465  FUGAL (original)   0.15  socfb-Bowdoin47         1   71.986108   72.795236
+466  FUGAL (original)   0.15  socfb-Bowdoin47         2   71.588155   72.795236
+467  FUGAL (original)   0.15  socfb-Bowdoin47         3   71.813909   72.795236
+468  FUGAL (original)   0.15  socfb-Bowdoin47         4   71.853133   72.795236
+469  FUGAL (original)   0.15  socfb-Bowdoin47         5   72.216636   72.795236
+470  FUGAL (original)   0.20  socfb-Bowdoin47         1   69.927223   72.795236
+471  FUGAL (original)   0.20  socfb-Bowdoin47         2   70.738873   72.795236
+472  FUGAL (original)   0.20  socfb-Bowdoin47         3   70.412815   72.795236
+473  FUGAL (original)   0.20  socfb-Bowdoin47         4   70.558252   72.795236
+474  FUGAL (original)   0.20  socfb-Bowdoin47         5   70.918718   72.795236
+475  FUGAL (original)   0.25  socfb-Bowdoin47         1   69.226707   72.795236
+476  FUGAL (original)   0.25  socfb-Bowdoin47         2   69.128844   72.795236
+477  FUGAL (original)   0.25  socfb-Bowdoin47         3   68.820537   72.795236
+478  FUGAL (original)   0.25  socfb-Bowdoin47         4   69.159298   72.795236
+479  FUGAL (original)   0.25  socfb-Bowdoin47         5   68.948762   72.795236
+480      FUGAL w. PCA   0.00  socfb-Bowdoin47         1   96.212463   87.971590
+481      FUGAL w. PCA   0.00  socfb-Bowdoin47         2   96.104725   87.971590
+482      FUGAL w. PCA   0.00  socfb-Bowdoin47         3   95.052938   87.971590
+483      FUGAL w. PCA   0.00  socfb-Bowdoin47         4   96.321470   87.971590
+484      FUGAL w. PCA   0.00  socfb-Bowdoin47         5   96.272612   87.971590
+485      FUGAL w. PCA   0.05  socfb-Bowdoin47         1   91.534782   87.971590
+486      FUGAL w. PCA   0.05  socfb-Bowdoin47         2   92.558641   87.971590
+487      FUGAL w. PCA   0.05  socfb-Bowdoin47         3   91.805709   87.971590
+488      FUGAL w. PCA   0.05  socfb-Bowdoin47         4   92.768993   87.971590
+489      FUGAL w. PCA   0.05  socfb-Bowdoin47         5   92.581824   87.971590
+490      FUGAL w. PCA   0.10  socfb-Bowdoin47         1   90.249520   87.971590
+491      FUGAL w. PCA   0.10  socfb-Bowdoin47         2   89.809384   87.971590
+492      FUGAL w. PCA   0.10  socfb-Bowdoin47         3   91.243585   87.971590
+493      FUGAL w. PCA   0.10  socfb-Bowdoin47         4   89.597899   87.971590
+494      FUGAL w. PCA   0.10  socfb-Bowdoin47         5   89.948034   87.971590
+495      FUGAL w. PCA   0.15  socfb-Bowdoin47         1   86.151475   87.971590
+496      FUGAL w. PCA   0.15  socfb-Bowdoin47         2   85.397823   87.971590
+497      FUGAL w. PCA   0.15  socfb-Bowdoin47         3   84.980933   87.971590
+498      FUGAL w. PCA   0.15  socfb-Bowdoin47         4   85.506481   87.971590
+499      FUGAL w. PCA   0.15  socfb-Bowdoin47         5   86.708164   87.971590
+500      FUGAL w. PCA   0.20  socfb-Bowdoin47         1   82.747191   87.971590
+501      FUGAL w. PCA   0.20  socfb-Bowdoin47         2   83.158802   87.971590
+502      FUGAL w. PCA   0.20  socfb-Bowdoin47         3   83.880801   87.971590
+503      FUGAL w. PCA   0.20  socfb-Bowdoin47         4   83.559831   87.971590
+504      FUGAL w. PCA   0.20  socfb-Bowdoin47         5   83.517010   87.971590
+505      FUGAL w. PCA   0.25  socfb-Bowdoin47         1   80.168538   87.971590
+506      FUGAL w. PCA   0.25  socfb-Bowdoin47         2   80.528338   87.971590
+507      FUGAL w. PCA   0.25  socfb-Bowdoin47         3   80.521807   87.971590
+508      FUGAL w. PCA   0.25  socfb-Bowdoin47         4   79.890270   87.971590
+509      FUGAL w. PCA   0.25  socfb-Bowdoin47         5   80.367670   87.971590
+510    FUGAL w. fixed   0.00  socfb-Bowdoin47         1   68.730963   63.182754
+511    FUGAL w. fixed   0.00  socfb-Bowdoin47         2   68.603576   63.182754
+512    FUGAL w. fixed   0.00  socfb-Bowdoin47         3   68.516330   63.182754
+513    FUGAL w. fixed   0.00  socfb-Bowdoin47         4   68.462989   63.182754
+514    FUGAL w. fixed   0.00  socfb-Bowdoin47         5   69.316915   63.182754
+515    FUGAL w. fixed   0.05  socfb-Bowdoin47         1   65.495046   63.182754
+516    FUGAL w. fixed   0.05  socfb-Bowdoin47         2   66.534232   63.182754
+517    FUGAL w. fixed   0.05  socfb-Bowdoin47         3   66.386457   63.182754
+518    FUGAL w. fixed   0.05  socfb-Bowdoin47         4   65.618500   63.182754
+519    FUGAL w. fixed   0.05  socfb-Bowdoin47         5   65.990926   63.182754
+520    FUGAL w. fixed   0.10  socfb-Bowdoin47         1   63.626009   63.182754
+521    FUGAL w. fixed   0.10  socfb-Bowdoin47         2   63.924931   63.182754
+522    FUGAL w. fixed   0.10  socfb-Bowdoin47         3   64.521067   63.182754
+523    FUGAL w. fixed   0.10  socfb-Bowdoin47         4   63.271789   63.182754
+524    FUGAL w. fixed   0.10  socfb-Bowdoin47         5   64.958199   63.182754
+525    FUGAL w. fixed   0.15  socfb-Bowdoin47         1   62.537400   63.182754
+526    FUGAL w. fixed   0.15  socfb-Bowdoin47         2   61.947434   63.182754
+527    FUGAL w. fixed   0.15  socfb-Bowdoin47         3   61.707502   63.182754
+528    FUGAL w. fixed   0.15  socfb-Bowdoin47         4   62.592798   63.182754
+529    FUGAL w. fixed   0.15  socfb-Bowdoin47         5   61.178717   63.182754
+530    FUGAL w. fixed   0.20  socfb-Bowdoin47         1   60.680022   63.182754
+531    FUGAL w. fixed   0.20  socfb-Bowdoin47         2   59.839761   63.182754
+532    FUGAL w. fixed   0.20  socfb-Bowdoin47         3   59.953554   63.182754
+533    FUGAL w. fixed   0.20  socfb-Bowdoin47         4   60.021654   63.182754
+534    FUGAL w. fixed   0.20  socfb-Bowdoin47         5   60.843767   63.182754
+535    FUGAL w. fixed   0.25  socfb-Bowdoin47         1   57.191743   63.182754
+536    FUGAL w. fixed   0.25  socfb-Bowdoin47         2   59.027446   63.182754
+537    FUGAL w. fixed   0.25  socfb-Bowdoin47         3   58.445168   63.182754
+538    FUGAL w. fixed   0.25  socfb-Bowdoin47         4   58.430330   63.182754
+539    FUGAL w. fixed   0.25  socfb-Bowdoin47         5   57.127389   63.182754
