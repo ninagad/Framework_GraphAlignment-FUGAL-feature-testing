@@ -68,15 +68,15 @@ def plot_subplot(subplot: plt.Axes, data: pd.DataFrame):
                 width=0.6  # Default is 0.8; lower values make bars thinner
                 )
 
-    subplot.set_xlabel('Graph', fontsize=12)
-    subplot.set_ylabel('Time (sec)', fontsize=12)
+    subplot.set_xlabel('Graph', fontsize=14)
+    subplot.set_ylabel('Time (sec)', fontsize=14)
 
     # make the background grid visible
     subplot.grid(True, axis="y", linestyle="--", linewidth=0.4, alpha=1)
     subplot.set_axisbelow(True)  # keep bars in front of the grid
 
     # Change fontsize of tick labels
-    subplot.tick_params(axis='both', labelsize=12)
+    subplot.tick_params(axis='both', labelsize=14)
 
     # hide the individual legend
     subplot.legend().remove()
@@ -92,12 +92,12 @@ def plot_runtime(data: pd.DataFrame):
     # Create one figure with a grid of subplots
     fig, axes = plt.subplots(nrows=1,
                              ncols=2,
-                             figsize=(10, 4.5)
+                             figsize=(11.5, 4.5)
                              )
     plot_subplot(axes[0], df_small)
     plot_subplot(axes[1], df_large)
 
-    plt.tight_layout(rect=(0, 0, 1, 0.85))  # restrict tight_layout to the reduced area
+    plt.tight_layout(rect=(0, 0, 1, 0.81))  # restrict tight_layout to the reduced area
 
     # Create legend
     handles, labels = axes[0].get_legend_handles_labels()
@@ -105,15 +105,15 @@ def plot_runtime(data: pd.DataFrame):
     center_x = (pos[0].x0 + pos[-1].x1) / 2
 
     legend_x = pos[-1].x1 + 0.01
-    legend_y = pos[-1].y1 + 0.2
+    legend_y = pos[-1].y1 + 0.25
 
     fig.legend(handles, labels,
                loc='upper right',
                bbox_to_anchor=(legend_x, legend_y),
                bbox_transform=fig.transFigure,
-               fontsize=12
+               fontsize=14
                )
-    plt.suptitle('Runtimes of FUGAL variants', x=center_x, fontsize=18)
+    plt.suptitle('Runtimes of FUGAL variants', x=center_x, fontsize=22)
 
     root_path = get_git_root()
     path = os.path.join(root_path, 'plots', 'FUGAL-evaluation', 'runtime-plot.pdf')
