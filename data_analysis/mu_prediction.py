@@ -8,6 +8,9 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import networkx as nx
 
+from data_analysis.utils import get_git_root
+
+
 def density(nodes: int, edges: int):
     return (2*edges) / (nodes*(nodes-1))
 
@@ -83,6 +86,7 @@ if __name__ == "__main__":
     X_new = [[density(4941, 6594)],[density(829, 1475)], [density(685,1967)], [density(2252,84387)], [density(1458, 1948)], [density(429,1166)], [density(1258, 7682)]]
     y_new = decode(reg.predict(X_new))
 
+    plt.figure(figsize=(5,4))
     plt.scatter(X, y, color='blue')
 
     labels = ['Arenas', 'inf-euroroad', 'bio-celegans', 'ca-netscience', 'ACM', 'MultiMagna', 'HighSchool', 'NW', 'Voles']
@@ -99,11 +103,11 @@ if __name__ == "__main__":
             elif (i == 5):
                 plt.text(xi + 0.0005, yi - 0.12, label)
             elif (i == 6):
-                plt.text(xi - 0.015, yi + 0.05, label)
+                plt.text(xi - 0.02, yi + 0.05, label)
             elif (i == 7):
                 plt.text(xi + 0.0005, yi - 0.12, label)
             elif (i == 8):
-                plt.text(xi, yi + 0.05, label)
+                plt.text(xi, yi + 0.04, label)
             else:
                 plt.text(xi + 0.0005, yi + 0.05, label)
 
@@ -112,10 +116,13 @@ if __name__ == "__main__":
     plt.grid(True, color='gray', linewidth=0.5, alpha=0.3)
     plt.ylim(0, 2.4)
     if method == "linear":
-        plt.suptitle("μ predictions with Linear Regression")
+        plt.suptitle("Linear Regression for μ")
     else:
-        plt.suptitle("μ predictions with Exponential Regression")
+        plt.suptitle("Exponential Regression for μ")
     plt.title(f"R\u00b2: {round(score,6)}", fontsize=10)
     plt.xlabel("Graph density")
-    plt.ylabel("μ value")
-    plt.show()
+    plt.ylabel("μ")
+
+    root = get_git_root()
+    path = os.path.join(root, 'plots', 'FUGAL-evaluation', 'regression-plot.pdf')
+    plt.savefig(path)
