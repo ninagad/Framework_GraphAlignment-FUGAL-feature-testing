@@ -1,4 +1,5 @@
 import subprocess
+from enum import Enum
 from pathlib import Path
 import os
 import json
@@ -9,6 +10,24 @@ import networkx as nx
 import pandas as pd
 
 from enums.featureEnums import FeatureEnums
+
+
+class AlgorithmEnums(Enum):
+    ORIGINAL_FUGAL = 'FUGAL (original)'
+    FUGAL_FIXED = 'FUGAL w. fixed'
+    FUGAL_PCA = 'FUGAL w. PCA'
+
+    ORIGINAL_REGAL = 'REGAL (original)'
+    REGAL_FIXED = 'REGAL w. fixed'
+    REGAL_PCA = 'REGAL w. PCA'
+
+    ORIGINAL_GRAMPA = 'GRAMPA (original)'
+    GRAMPA_FIXED = 'GRAMPA w. fixed'
+    GRAMPA_PCA = 'GRAMPA w. PCA'
+
+    ORIGINAL_ISORANK = 'IsoRank (original)'
+    ISORANK_FIXED = 'IsoRank w. fixed'
+    ISORANK_PCA = 'IsoRank w. PCA'
 
 
 def get_git_root():
@@ -142,9 +161,9 @@ def strip_graph_name(name: str) -> str:
         return name
 
 
-def get_acc_file_as_df(run: int) -> pd.DataFrame:
+def get_acc_file_as_df(run: int, dir: Literal['Skadi-runs', 'Server-runs'] = 'Server-runs') -> pd.DataFrame:
     root = get_git_root()
-    path = os.path.join(root, 'Server-runs', f'{run}', 'res', 'acc.xlsx')
+    path = os.path.join(root, dir, f'{run}', 'res', 'acc.xlsx')
 
     df = pd.read_excel(path, index_col=[0, 1])
     df.index.names = ['Feature', 'Noise']
@@ -180,7 +199,7 @@ def get_acc_files_as_single_df(runs: list[int]) -> pd.DataFrame:
     return df
 
 
-def get_config_file(run: int, dir: Literal['Server-runs', 'Time-runs'] = 'Server-runs') -> json:
+def get_config_file(run: int, dir: Literal['Server-runs', 'Time-runs', 'Skadi-runs'] = 'Server-runs') -> json:
     root = get_git_root()
     path = os.path.join(root, dir, f'{run}', 'config.json')
 
@@ -189,7 +208,40 @@ def get_config_file(run: int, dir: Literal['Server-runs', 'Time-runs'] = 'Server
     return config
 
 
-def get_graph_names_from_file(runs: list[int], dir: Literal['Server-runs', 'Time-runs'] = 'Server-runs') -> list[str]:
+def get_metric(run: int, dir: Literal['Server-runs', 'Skadi-runs'] = 'Server-runs') -> str:
+    config = get_config_file(run, dir)
+    metric = config['accs']
+
+    if len(metric) != 1:
+        raise ValueError(f'Expected a single metric, but got {metric}')
+
+    metric_names = {0: 'Accuracy',
+                    3: '$S^3$',
+                    5: 'MNC',
+                    6: 'Frobenius norm'}
+
+    return metric_names[metric[0]]
+
+
+def get_noise_type(run: int, dir: Literal['Server-runs', 'Skadi-runs']='Server-runs'):
+    config = get_config_file(run, dir)
+    try:
+        noise_type = config['noise_type']
+    except KeyError:
+        # If the noise-type is not specified, it is one-way (default).
+        return 'One-way'
+
+    if len(noise_type) != 1:
+        raise ValueError(f'Expected a single noise type, but got {noise_type}')
+
+    noise_type_names = {1: 'One-way',
+                        2: 'Multi-modal',
+                        3: 'Two-way'}
+
+    return noise_type_names[noise_type[0]]
+
+
+def get_graph_names_from_file(runs: list[int], dir: Literal['Server-runs', 'Time-runs', 'Skadi-runs'] = 'Server-runs') -> list[str]:
     graph_names = []
     for run in runs:
         config = get_config_file(run, dir)

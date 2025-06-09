@@ -10,7 +10,7 @@ import pandas as pd
 from matplotlib.figure import Figure
 
 from data_analysis.utils import get_acc_file_as_df, get_algo_args, get_graph_names_from_file, strip_graph_name, \
-    get_git_root, eval_bar_plot_palette
+    get_git_root, eval_bar_plot_palette, AlgorithmEnums
 from data_analysis.test_run_configurations import test_graph_set_are_equal
 from scripts.run_utils import save_config_info
 
@@ -33,7 +33,7 @@ def get_color_map(traces: int, hue: allowed_colormaps):
 
 
 def get_marks():
-    marker_options = ['o', 's', 'D', '^', 'x', 'P', 'd']
+    marker_options = ['o', 's', 'D', '^', 'x', 'P', 'd', '*']
     return marker_options
 
 
@@ -118,14 +118,14 @@ def format_CONE_plot(source_id: int, traces: dict, xs: list[float], title: str, 
     subplot.plot(100 * xs, 100 * baseline['mean'], label='Original', color=baseline_color)
 
     subplot.grid(True)
-    subplot.set_ylim(-10, 110)
+    subplot.set_ylim(-1, 110)
 
 
 def format_barplot(traces: dict, subplot: plt.Axes, xs: list[float], graph: str, data_save_path: str):
     palette = eval_bar_plot_palette()
 
-    for label, df in traces.items():
-        df['type'] = label
+    for algorithm, df in traces.items():
+        df['type'] = algorithm.value
         df['noise'] = xs
 
     # Combine into one DataFrame
@@ -140,7 +140,7 @@ def format_barplot(traces: dict, subplot: plt.Axes, xs: list[float], graph: str,
     df_all['accuracy'] = 100 * df_all['accuracy']
     df_all['noise'] = (100 * df_all['noise']).astype(int)
 
-    save_data(df_all, data_save_path, graph)
+    #save_data(df_all, data_save_path, graph)
 
     sns.barplot(data=df_all,
                 x='noise',
@@ -152,17 +152,9 @@ def format_barplot(traces: dict, subplot: plt.Axes, xs: list[float], graph: str,
                 linewidth=0.6,
                 # errorbar="sd"
                 errorbar=lambda x: compute_confidence_interval(x),
-                err_kws={"linewidth": 1},
+                err_kws={"linewidth": 1, 'color': 'black'},
                 capsize=0.2,
                 )
-
-    # Iterate over the error bar Line2D objects and add a white border
-    for line in subplot.lines:
-        # Add a white border by re-plotting the line thicker in white
-        xdata, ydata = line.get_xdata(), line.get_ydata()
-        subplot.plot(xdata, ydata, color='white', linewidth=1.8, zorder=line.get_zorder() - 0.1)
-        # Re-plot the original errorbar line on top
-        subplot.plot(xdata, ydata, color=line.get_color(), linewidth=line.get_linewidth())
 
     # make the background grid visible
     subplot.grid(True, axis="y", linestyle="--", linewidth=0.4, alpha=1)
@@ -173,24 +165,29 @@ def format_barplot(traces: dict, subplot: plt.Axes, xs: list[float], graph: str,
     subplot.set_ylim(0, 110)
 
 
-def format_line_plot(traces: dict, xs: list[float], subplot: plt.Axes):
+def format_line_plot(traces: dict[AlgorithmEnums, pd.DataFrame], xs: list[float], subplot: plt.Axes):
     marks = get_marks()
-    cmap = plt.get_cmap('tab10')
-    formatting = {'FUGAL': (marks[0], cmap(1)),  # Orange
-                  'FUGAL w. PCA': (marks[1], cmap(3)),  # Red
-                  'GRAMPA': (marks[2], cmap(0)),  # Blue
-                  'IsoRank': (marks[3], cmap(2)),  # Green
-                  'REGAL': (marks[4], cmap(4))  # Purple
+    cmap = plt.get_cmap('tab20')
+    formatting = {#AlgorithmEnums.ORIGINAL_FUGAL: (marks[0], cmap(1)),  # Orange
+                  AlgorithmEnums.FUGAL_PCA: (marks[1], cmap(6)),  # Red
+                  AlgorithmEnums.GRAMPA_FIXED: (marks[2], cmap(0)),  # Blue
+                  AlgorithmEnums.ISORANK_PCA: (marks[3], cmap(4)),  # Green
+                  AlgorithmEnums.REGAL_PCA: (marks[4], cmap(8)),  # Purple
+
+                  AlgorithmEnums.ORIGINAL_FUGAL: (marks[5], cmap(6)),
+                  AlgorithmEnums.ORIGINAL_GRAMPA: (marks[6], cmap(0)),
+                  AlgorithmEnums.ORIGINAL_ISORANK: (marks[7], cmap(4)),
+                  AlgorithmEnums.ORIGINAL_REGAL: (marks[0], cmap(8))
                   }
 
-    for label, df in traces.items():
+    for algorithm, df in traces.items():
         df['mean'] = 100 * df.mean(axis=1)
 
-        mark, color = formatting[label]
-        subplot.plot(100 * xs, df['mean'], label=label, color=color, marker=mark)
+        mark, color = formatting[algorithm]
+        subplot.plot(100 * xs, df['mean'], label=algorithm.value, color=color, marker=mark)
 
     subplot.grid(True)
-    subplot.set_ylim(-10, 110)
+    subplot.set_ylim(-1, 110)
 
 
 def plot_subplot(traces: dict, subplot: plt.Axes, col: int, title: str, data_path: str):
@@ -316,11 +313,17 @@ original_grampa_ids = [22312, 22313, 22314, 22315, 22316, 22317]
 original_regal_ids = [17290, 17295, 15215, 15211, 17289, 15196]
 original_isorank_ids = [17269, 17268, 16096, 16098, 17270, 16095]
 
-proposed_fugal_ids = [21209, 21476, 21485, 21490, 21574, 21612]
+proposed_fugal_fixed_ids = [21209, 21476, 21485, 21490, 21574, 21612]
 proposed_fugal_pca_ids = [22319, 22320, 22321, 22322, 22323, 22324]
-proposed_grampa_ids = [22295, 22302, 22303, 22304, 22308, 22309]
-proposed_regal_ids = [22296, 22297, 22298, 22299, 22300, 22301]
-proposed_isorank_ids = [22294, 22305, 22306, 22307, 22310, 22311]
+
+proposed_grampa_fixed_ids = [22295, 22302, 22303, 22304, 22308, 22309]
+proposed_grampa_pca_ids = [22359, 22360, 22361, 22362, 22363, 22364]
+
+proposed_regal_fixed_ids = [22296, 22297, 22298, 22299, 22300, 22301]
+proposed_regal_pca_ids = [22333, 22335, 22336, 22337, 22338, 22339]
+
+proposed_isorank_fixed_ids = [22294, 22305, 22306, 22307, 22310, 22311]
+proposed_isorank_pca_ids = [22358, 22365, 22366, 22367, 22368, 22369]
 
 
 def cone_eval():
@@ -345,129 +348,83 @@ def other_algo_eval():
     # IsoRank
     subdir = os.path.join('Other-algorithms', 'IsoRank')
 
-    # Without degree similarity
-    # isorank_baselines = [15274, 15276, 15279, 15280]
-
     # With degree similarity
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    trace_dict = {'Original': original_isorank_ids,
-                  # 'Proposed': proposed_isorank_ids} # generalized Sim
-                  'Proposed': [22372, 22378, 22379, 22381, 22382, 22383]}  # scaled Sim
+    trace_dict = {AlgorithmEnums.ORIGINAL_ISORANK: original_isorank_ids,
+                  AlgorithmEnums.ISORANK_FIXED: proposed_isorank_fixed_ids,
+                  AlgorithmEnums.ISORANK_PCA: proposed_isorank_pca_ids}
 
     fig = plot_eval_graphs(trace_dict, 'IsoRank', 'IsoRank-data.txt')
-    save_fig(fig, 'IsoRank-bar-eval-scaled-Sim', subdir)
+    save_fig(fig, 'IsoRank-bar-eval', subdir)
 
     # REGAL
     subdir = os.path.join('Other-algorithms', 'REGAL')
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    trace_dict = {'Original': original_regal_ids,
-                  'Proposed': proposed_regal_ids}
+    trace_dict = {AlgorithmEnums.ORIGINAL_REGAL: original_regal_ids,
+                  AlgorithmEnums.REGAL_FIXED: proposed_regal_fixed_ids,
+                  AlgorithmEnums.REGAL_PCA: proposed_regal_pca_ids}
+
     fig = plot_eval_graphs(trace_dict, 'REGAL', 'REGAL-data.txt')
     save_fig(fig, 'REGAL-bar-eval', subdir)
 
     # GRAMPA
     subdir = os.path.join('Other-algorithms', 'GRAMPA')
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    trace_dict = {'Original': original_grampa_ids,
-                  # 'Proposed': proposed_grampa_ids} # generalized Sim
-                  'Proposed': [22373, 22374, 22375, 22376, 22377, 22380]}  # scaled Sim
+    trace_dict = {AlgorithmEnums.ORIGINAL_GRAMPA: original_grampa_ids,
+                  AlgorithmEnums.GRAMPA_FIXED: proposed_grampa_fixed_ids,
+                  AlgorithmEnums.GRAMPA_PCA: proposed_grampa_pca_ids}
+
     fig = plot_eval_graphs(trace_dict, 'GRAMPA', 'GRAMPA-data.txt')
-    save_fig(fig, 'GRAMPA-bar-eval-scaled-Sim', subdir)
+    save_fig(fig, 'GRAMPA-bar-eval', subdir)
 
 
-def regal_eval():
-    # REGAL
-    subdir = os.path.join('Other-algorithms', 'REGAL')
+def fugal_eval():
     # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    trace_dict = {'Original': original_regal_ids,
-                  'Proposed w. fixed': proposed_regal_ids,
-                  'Proposed w. PCA': [22333, 22335, 22336, 22337, 22338, 22339]}
-
-    fig = plot_eval_graphs(trace_dict, 'REGAL', 'REGAL-data.txt')
-    save_fig(fig, 'REGAL-bar-eval-with-PCA', subdir)
-
-
-def other_algo_pca_eval():
-    # IsoRank
-    subdir = os.path.join('Other-algorithms', 'IsoRank')
-
-    # Without degree similarity
-    # isorank_baselines = [15274, 15276, 15279, 15280]
-
-    # With degree similarity
-    # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    trace_dict = {  # 'Original': original_isorank_ids,
-        # 'Proposed w. fixed': proposed_isorank_ids,
-        'Proposed PCA w. generalized degree sim': [22331, 22350, 22351, 22352, 22355, 22356],  # novel similarity
-        'Proposed PCA w. unscaled and np.max(D)-D': [22358, 22365, 22366, 22367, 22368, 22369],
-        # unnormalized similarity, D=np.max(D)-D
-        # 'Proposed w. Scaled Sim': [22372, 22378, 22379, 22381, 22382, 22383]}  # scaled Sim
-        'Proposed PCA w. scaled and np.max(D)-D': [22384, 22391, 22392, 22393, 22394,
-                                                   22395]}  # scaled features and np.max(D) - D
-
-    fig = plot_eval_graphs(trace_dict, 'IsoRank', 'IsoRank-data.txt')
-    save_fig(fig, 'IsoRank-bar-eval-with-PCA-unnormalized-sim', subdir)
-
-    # GRAMPA
-    subdir = os.path.join('Other-algorithms', 'GRAMPA')
-    # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    trace_dict = {  # 'Original': original_grampa_ids,
-        # 'Proposed w. fixed': proposed_grampa_ids,
-        'Proposed PCA w. generalized degree sim': [22334, 22340, 22341, 22342, 22353, 22354],  # novel similarity
-        'Proposed PCA w. unscaled and np.max(D)-D': [22359, 22360, 22361, 22362, 22363, 22364],
-        # unnormalized Sim <- Konstantinos' suggestion
-        # 'Proposed w. Scaled Sim': [22373, 22374, 22375, 22376, 22377, 22380]}  # scaled Sim, the one we came up with
-        'Proposed PCA w. scaled and np.max(D)-D': [22385, 22386, 22387, 22388, 22389,
-                                                   22390]}  # scaled features and np.max(D) - D
-    fig = plot_eval_graphs(trace_dict, 'GRAMPA', 'GRAMPA-data.txt')
-    save_fig(fig, 'GRAMPA-bar-eval-with-scaled-Sim', subdir)
-
-
-def fugal_pca_eval():
-    # inf-power, crime, bus, facebook 47, bio-yeast, dd
-    id_dict = {'Original': original_fugal_ids,
-               'Proposed w. fixed': proposed_fugal_ids,
-               'Proposed w. PCA': proposed_fugal_pca_ids}
+    id_dict = {AlgorithmEnums.ORIGINAL_FUGAL: original_fugal_ids,
+               AlgorithmEnums.FUGAL_FIXED: proposed_fugal_fixed_ids,
+               AlgorithmEnums.FUGAL_PCA: proposed_fugal_pca_ids}
 
     fig = plot_eval_graphs(id_dict, 'FUGAL', 'FUGAL-primary-data-with-pca.txt')
-    save_fig(fig, 'primary-eval-with-PCA', 'FUGAL-evaluation')
+    save_fig(fig, 'primary-eval', 'FUGAL-evaluation')
 
     # econ-mahindas
-    id_dict = {'Original': [16385],
-               'Proposed w. fixed': [22293],
-               'Proposed w. PCA': [22349]}
+    id_dict = {AlgorithmEnums.ORIGINAL_FUGAL: [16385],
+               AlgorithmEnums.FUGAL_FIXED: [22293],
+               AlgorithmEnums.FUGAL_PCA: [22349]}
     fig = plot_eval_graphs(id_dict, '', 'FUGAL-econ-data.txt')
-    save_fig(fig, 'econ-eval-with-PCA', 'FUGAL-evaluation')
+    save_fig(fig, 'econ-eval', 'FUGAL-evaluation')
 
     # email-univ, in-arenas, dublin, ca-GrQc, bio-DM-LC, arenas-meta
-    id_dict = {'Original': [16388, 17253, 17244, 17251, 17238, 17254],
-               'Proposed w. fixed': [22289, 22290, 22291, 22325, 22327, 22326],
-               'Proposed w. PCA': [22343, 22344, 22346, 22348, 22345, 22357]}
+    id_dict = {AlgorithmEnums.ORIGINAL_FUGAL: [16388, 17253, 17244, 17251, 17238, 17254],
+               AlgorithmEnums.FUGAL_FIXED: [22289, 22290, 22291, 22325, 22327, 22326],
+               AlgorithmEnums.FUGAL_PCA: [22343, 22344, 22346, 22348, 22345, 22357]}
 
     fig = plot_eval_graphs(id_dict, 'FUGAL', 'FUGAL-appendix-data.txt')
-    save_fig(fig, 'appendix-eval-with-PCA', 'FUGAL-evaluation')
+    save_fig(fig, 'appendix-eval', 'FUGAL-evaluation')
 
 
 def compare_algos():
-    id_dict = {'FUGAL w. PCA': proposed_fugal_pca_ids,
-               'GRAMPA': proposed_grampa_ids,
-               'IsoRank': proposed_isorank_ids,
-               'REGAL': proposed_regal_ids}
+    # FUGAL w. PCA,
+    # GRAMPA w. fixed
+    # IsoRank w. PCA
+    # REGAL w. PCA
+    id_dict = {AlgorithmEnums.FUGAL_PCA: proposed_fugal_pca_ids,
+               AlgorithmEnums.GRAMPA_FIXED: proposed_grampa_fixed_ids,
+               AlgorithmEnums.ISORANK_PCA: proposed_isorank_pca_ids,
+               AlgorithmEnums.REGAL_PCA: proposed_regal_pca_ids}
     fig = plot_eval_graphs(id_dict, 'Proposed algorithms', '')
     save_fig(fig, 'comparison-proposed-algos', '')
 
-    id_dict = {'FUGAL': original_fugal_ids,
-               'GRAMPA': original_grampa_ids,
-               'IsoRank': original_isorank_ids,
-               'REGAL': original_regal_ids}
+    id_dict = {AlgorithmEnums.ORIGINAL_FUGAL: original_fugal_ids,
+               AlgorithmEnums.ORIGINAL_GRAMPA: original_grampa_ids,
+               AlgorithmEnums.ORIGINAL_ISORANK: original_isorank_ids,
+               AlgorithmEnums.ORIGINAL_REGAL: original_regal_ids}
     fig = plot_eval_graphs(id_dict, 'Original algorithms', '')
     save_fig(fig, 'comparison-original-algos', '')
 
 
 if __name__ == '__main__':
-    fugal_pca_eval()
+    fugal_eval()
     # cone_eval()
-    # regal_eval()
-    # other_algo_eval()
-    # other_algo_pca_eval()
-    #compare_algos()
+    other_algo_eval()
+    compare_algos()

@@ -8,15 +8,10 @@ import seaborn as sns
 
 from data_analysis.utils import get_total_time_as_df, get_graph_names_from_file, get_git_root, eval_bar_plot_palette
 from run_tests import save_config_info
+from data_analysis.utils import AlgorithmEnums
 
 
-class FugalEnums(Enum):
-    ORIGINAL_FUGAL = 'FUGAL (original)'
-    FUGAL_FIXED = 'FUGAL w. fixed'
-    FUGAL_PCA = 'FUGAL w. PCA'
-
-
-def load_data(sources: dict[FugalEnums, list[int]]):
+def load_data(sources: dict[AlgorithmEnums, list[int]]):
     dfs = []
     for alg, runs in sources.items():
         for run in runs:
@@ -121,9 +116,9 @@ def plot_runtime(data: pd.DataFrame):
 
 
 if __name__ == '__main__':
-    source_dict = {FugalEnums.ORIGINAL_FUGAL: [17241, 17244, 17247, 17250, 17253, 17256],
-                   FugalEnums.FUGAL_FIXED: [17239, 17242, 17245, 17248, 17251, 17254],
-                   FugalEnums.FUGAL_PCA: [17240, 17243, 17246, 17249, 17252, 17255]}
+    source_dict = {AlgorithmEnums.ORIGINAL_FUGAL: [17241, 17244, 17247, 17250, 17253, 17256],
+                   AlgorithmEnums.FUGAL_FIXED: [17239, 17242, 17245, 17248, 17251, 17254],
+                   AlgorithmEnums.FUGAL_PCA: [17240, 17243, 17246, 17249, 17252, 17255]}
 
     df = load_data(source_dict)
     #save_df(df)
