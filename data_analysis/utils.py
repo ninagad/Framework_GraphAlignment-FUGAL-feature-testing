@@ -161,7 +161,7 @@ def strip_graph_name(name: str) -> str:
         return name
 
 
-def get_acc_file_as_df(run: int, dir: Literal['Skadi-runs', 'Server-runs'] = 'Server-runs') -> pd.DataFrame:
+def get_acc_file_as_df(run: int, dir: Literal['Server-runs'] = 'Server-runs') -> pd.DataFrame:
     root = get_git_root()
     path = os.path.join(root, dir, f'{run}', 'res', 'acc.xlsx')
 
@@ -199,7 +199,7 @@ def get_acc_files_as_single_df(runs: list[int]) -> pd.DataFrame:
     return df
 
 
-def get_config_file(run: int, dir: Literal['Server-runs', 'Time-runs', 'Skadi-runs'] = 'Server-runs') -> json:
+def get_config_file(run: int, dir: Literal['Server-runs', 'Time-runs'] = 'Server-runs') -> json:
     root = get_git_root()
     path = os.path.join(root, dir, f'{run}', 'config.json')
 
@@ -208,7 +208,7 @@ def get_config_file(run: int, dir: Literal['Server-runs', 'Time-runs', 'Skadi-ru
     return config
 
 
-def get_metric(run: int, dir: Literal['Server-runs', 'Skadi-runs'] = 'Server-runs') -> str:
+def get_metric(run: int, dir: Literal['Server-runs'] = 'Server-runs') -> str:
     config = get_config_file(run, dir)
     metric = config['accs']
 
@@ -223,7 +223,7 @@ def get_metric(run: int, dir: Literal['Server-runs', 'Skadi-runs'] = 'Server-run
     return metric_names[metric[0]]
 
 
-def get_noise_type(run: int, dir: Literal['Server-runs', 'Skadi-runs']='Server-runs'):
+def get_noise_type(run: int, dir: Literal['Server-runs'] = 'Server-runs'):
     config = get_config_file(run, dir)
     try:
         noise_type = config['noise_type']
@@ -231,17 +231,20 @@ def get_noise_type(run: int, dir: Literal['Server-runs', 'Skadi-runs']='Server-r
         # If the noise-type is not specified, it is one-way (default).
         return 'One-way'
 
-    if len(noise_type) != 1:
-        raise ValueError(f'Expected a single noise type, but got {noise_type}')
+    if type(noise_type) == list:
+        if len(noise_type) != 1:
+            raise ValueError(f'Expected a single noise type, but got {noise_type}')
+
+        noise_type = noise_type[0]
 
     noise_type_names = {1: 'One-way',
                         2: 'Multi-modal',
                         3: 'Two-way'}
 
-    return noise_type_names[noise_type[0]]
+    return noise_type_names[noise_type]
 
 
-def get_graph_names_from_file(runs: list[int], dir: Literal['Server-runs', 'Time-runs', 'Skadi-runs'] = 'Server-runs') -> list[str]:
+def get_graph_names_from_file(runs: list[int], dir: Literal['Server-runs', 'Time-runs'] = 'Server-runs') -> list[str]:
     graph_names = []
     for run in runs:
         config = get_config_file(run, dir)

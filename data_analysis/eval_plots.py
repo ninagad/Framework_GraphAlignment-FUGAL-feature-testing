@@ -266,7 +266,9 @@ def layout_plot(fig: Figure, axes, title: str, legend_name: str):
 
     fig.canvas.draw()  # required to update layout info
 
-    plt.suptitle(title, x=center_x, fontsize=title_fontsize)
+    # Only add super title for CONE plots
+    if 'implementation' in title:
+        plt.suptitle(title, x=center_x, fontsize=title_fontsize)
 
 
 def plot_eval_graphs(grouped_traces: dict, title: str, data_file_path, legend_title: str = ''):
