@@ -1,4 +1,4 @@
-# Extended FUGAL: Feature-Fortified Unrestricted Graph Alignment
+# Extending FUGAL and Other Graph Alignment Algorithms
 
 **Master's Thesis — Aarhus University, Department of Computer Science**  
 **Authors:** Nina Gad Lauridsen (202005129), Pi Bohlbro (202004918)  
