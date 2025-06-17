@@ -143,8 +143,8 @@ BibTeX:
 ## Contact
 
 For questions, suggestions, or collaborations:
-- Nina Gad Lauridsen — [Email](mailto:ninagad@cs.au.dk)
-- Pi Bohlbro — [Email](mailto:plibohlbro@cs.au.dk)
+- Nina Gad Lauridsen — 202005129@post.au.dk
+- Pi Bohlbro — 202004918@post.au.dk
 
 
 ## Acknowledgements
